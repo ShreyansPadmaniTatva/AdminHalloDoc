@@ -13,6 +13,13 @@
     background-color:rgb(33,37,41) !important;
   }
 }
+#table {
+    display: block;
+}
+
+#accordionFlushExample {
+    display: none;
+} 
 .bg-body{
   background-color: var(--body-color) !important;
 }
@@ -328,6 +335,13 @@ th:nth-child(6) {
 
 
 @media only  screen and (max-width: 800px) {
+    #table {
+        display: none;
+    }
+
+    #accordionFlushExample {
+        display: block;
+    }
   .btn.active.a-primary::after{
     border-width: 0px;
   }
@@ -378,4 +392,16 @@ th:nth-child(6) {
   .all{
     display: none;
   }
+}
+.accordion-button {
+    background-color: var(--bs-info-bg-subtle);
+    display: block;
+}
+
+.accordion-item {
+    border-color: #CECECE;
+}
+
+.accordion-body {
+    background-color: var(--bs-info-border-subtle);
 }
