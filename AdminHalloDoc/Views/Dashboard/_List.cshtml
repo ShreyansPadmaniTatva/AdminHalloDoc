@@ -1,4 +1,6 @@
-﻿<div class="justify-content-between d-flex my-3">
+﻿@model IEnumerable<AdminHalloDoc.Entities.Models.Request>
+
+<div class="justify-content-between d-flex my-3">
     <div class="heading ">
         <h3 class="mb-0 pb-0 top-heading">Patient</h3>  <span class="align-bottom  top-side-heading d-flex flex-column justify-content-end pb-1 px-2 text-primary-emphasis fw-bolder"> (Close)</span>
     </div>
@@ -105,7 +107,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <div class="pb-3">
-                                    Testp Testp
+                                  Testp Tesp
                                 </div>
                                 <div>
                                     123, baltime , mayloan 2802
@@ -244,35 +246,40 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-success  ">
-                    <td scope="col ">
-                        <div class="text-end d-flex justify-content-between">
-                            <div class="text-start d-grid">
-                                ramesh karotiya
-                            </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
-                                <i class="bi bi-envelope"></i>
+                @foreach (var item in Model)
+                {
+                    <tr class="bg-success  ">
+                        <td scope="col ">
+                            <div class="text-end d-flex justify-content-between">
+                                <div class="text-start d-grid">
+                                    @item.Firstname
+                                </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                    <i class="bi bi-envelope"></i>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                    <td scope="col">Jun, 16, 2003</td>
-                    <td scope="col">Patient informati</td>
-                    <td scope="col">Jun, 16, 2003</td>
-                    <td scope="col">
-                        <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +91 9532653265 </div>
-                        <span>
-                            (Patient)
-                        </span>
-                        <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +91 9532653265</div>
-                        <span>
-                            (Patient)
-                        </span>
-                    </td>
-                    <td scope="col">7, Devidayal Chawl, Kv Rd, Kanjur Marg (east)</td>
-                    <td scope="col">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's </td>
-                    <td scope="col"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-person-workspace"></i> Provider </div></td>
-                    <td scope="col"><div class="border border-1 p-1 rounded-2 text-center w-75 py-1">Actions </div></td>
-                </tr>
+                        </td>
+                        <td scope="col">Jun, 16, 2003</td>
+                        <td scope="col">Patient informati</td>
+                        <td scope="col">Jun, 16, 2003</td>
+                        <td scope="col">
+                            <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +91 9532653265 </div>
+                            <span>
+                                (Patient)
+                            </span>
+                            <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +91 9532653265</div>
+                            <span>
+                                (Patient)
+                            </span>
+                        </td>
+                        <td scope="col">7, Devidayal Chawl, Kv Rd, Kanjur Marg (east)</td>
+                        <td scope="col">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's </td>
+                        <td scope="col"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-person-workspace"></i> Provider </div></td>
+                        <td scope="col"><div class="border border-1 p-1 rounded-2 text-center w-75 py-1">Actions </div></td>
+                    </tr>
 
+                }
+
+               
                 <tr class="bg-primary  ">
                     <td scope="col ">
                         <div class="text-end d-flex justify-content-between">
@@ -299,7 +306,21 @@
                     <td scope="col">7, Devidayal Chawl, Kv Rd, Kanjur Marg (east)</td>
                     <td scope="col">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's </td>
                     <td scope="col"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-person-workspace"></i> Provider </div></td>
-                    <td scope="col"><div class="border border-1 p-1 rounded-2 text-center w-75 py-1">Actions </div></td>
+                    <td scope="col">
+                        <div class="dropdown ">
+                            <button class="btn border border-1 p-1 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu ">
+                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
 
                 <tr class="bg-success  ">
@@ -328,7 +349,21 @@
                     <td scope="col">7, Devidayal Chawl, Kv Rd, Kanjur Marg (east)</td>
                     <td scope="col">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's </td>
                     <td scope="col"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-person-workspace"></i> Provider </div></td>
-                    <td scope="col"><div class="border border-1 p-1 rounded-2 text-center w-75 py-1">Actions </div></td>
+                    <td scope="col">
+                        <div class="dropdown ">
+                            <button class="btn border border-1 p-1 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu ">
+                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>

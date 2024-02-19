@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AdminHallDoc.Repositories\AdminHalloDoc.Repositories.csproj" />
     <ProjectReference Include="..\AdminHalloDoc.Entities\AdminHalloDoc.Entities.csproj" />
-    <ProjectReference Include="..\AdminHalloDoc.Repositories\AdminHalloDoc.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

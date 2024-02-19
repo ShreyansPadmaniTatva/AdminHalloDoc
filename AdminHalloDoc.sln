@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminHalloDoc", "AdminHalloDoc\AdminHalloDoc.csproj", "{0B4CA228-B0E5-456B-A27A-66AB8A9F524F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminHalloDoc", "AdminHalloDoc\AdminHalloDoc.csproj", "{0B4CA228-B0E5-456B-A27A-66AB8A9F524F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminHalloDoc.Entities", "AdminHalloDoc.Entities\AdminHalloDoc.Entities.csproj", "{46727472-F7E4-4B4C-BD7B-AEEC69A42004}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminHalloDoc.Entities", "AdminHalloDoc.Entities\AdminHalloDoc.Entities.csproj", "{46727472-F7E4-4B4C-BD7B-AEEC69A42004}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminHalloDoc.Repositories", "AdminHalloDoc.Repositories\AdminHalloDoc.Repositories.csproj", "{7A2AC042-D5C6-4927-8EDF-9FCF3858CD33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminHalloDoc.Repositories", "AdminHallDoc.Repositories\AdminHalloDoc.Repositories.csproj", "{25B1ACD7-224A-4B79-B4A2-008F376FDF0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{46727472-F7E4-4B4C-BD7B-AEEC69A42004}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46727472-F7E4-4B4C-BD7B-AEEC69A42004}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46727472-F7E4-4B4C-BD7B-AEEC69A42004}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A2AC042-D5C6-4927-8EDF-9FCF3858CD33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A2AC042-D5C6-4927-8EDF-9FCF3858CD33}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A2AC042-D5C6-4927-8EDF-9FCF3858CD33}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A2AC042-D5C6-4927-8EDF-9FCF3858CD33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25B1ACD7-224A-4B79-B4A2-008F376FDF0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25B1ACD7-224A-4B79-B4A2-008F376FDF0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25B1ACD7-224A-4B79-B4A2-008F376FDF0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25B1ACD7-224A-4B79-B4A2-008F376FDF0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,14 @@
+using AdminHalloDoc.Entities;
+using AdminHalloDoc.Entities.Data;
+using AdminHalloDoc.Repositories.Repository;
+using AdminHalloDoc.Repositories.Repository.Interface;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ApplicationDbContext>();
+builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 
 var app = builder.Build();
 

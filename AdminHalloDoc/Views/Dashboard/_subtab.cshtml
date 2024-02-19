@@ -1,4 +1,6 @@
-﻿<form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+﻿
+
+<form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
               data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
       asp-action="_SearchResult" asp-controller="Dashboard" novalidate="novalidate">
             @Html.AntiForgeryToken()
@@ -10,7 +12,7 @@
                     <i class="bi bi-plus-circle"></i>
                 </span> New
                 <div>
-                    <b class="fw-bold fs-3">21332</b>
+                        <b class="fw-bold fs-3">@ViewBag.CountNewRequest</b>
                 </div>
             </button>
         </div>
