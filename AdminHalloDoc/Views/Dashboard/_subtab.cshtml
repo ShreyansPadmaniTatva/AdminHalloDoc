@@ -1,0 +1,72 @@
+﻿<form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+              data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
+      asp-action="_SearchResult" asp-controller="Dashboard" novalidate="novalidate">
+            @Html.AntiForgeryToken()
+            <div class="tab ">
+    <div class="row">
+        <div class="col-md-2 col-sm-4 col-4 ">
+                <button type="submit"  class="btn alert alert-primary  btn-outline-primary w-100 text-start text-uppercase  a-primary t-tab">
+                <span class="mx-2 top-icon">
+                    <i class="bi bi-plus-circle"></i>
+                </span> New
+                <div>
+                    <b class="fw-bold fs-3">21332</b>
+                </div>
+            </button>
+        </div>
+        <div class="col-md-2 col-sm-4 col-4 position-relative">
+            <button type="submit" class="btn alert alert-info btn-outline-info w-100 text-start text-uppercase   a-info t-tab">
+                <span class="mx-2 top-icon">
+                    <i class="bi bi-person-workspace"></i>
+                </span> Panding
+                <div>
+                    <b class="fw-bold fs-3">21332</b>
+                </div>
+            </button>
+        </div>
+        <div class="col-md-2 col-sm-4 col-4 position-relative">
+                <button type="submit" class="btn alert alert-success btn-outline-success w-100 text-start text-uppercase active a-success t-tab">
+                <span class="mx-2 top-icon">
+                    <i class="bi bi-arrow-up-right-circle"></i>
+                </span> Panding
+                <div>
+                    <b class="fw-bold fs-3">21332</b>
+                </div>
+            </button>
+
+        </div>
+        <div class="col-md-2 col-sm-4 col-4 position-relative">
+              <button type="submit" class="btn alert alert-warning  btn-outline-warning w-100 text-start text-uppercase  a-warning t-tab">
+                <span class="mx-2 top-icon">
+                    <i class="bi bi-clock-history"></i>
+                </span> Conclude
+                <div>
+                    <b class="fw-bold fs-3">21332</b>
+                </div>
+            </button>
+        </div>
+        <div class="col-md-2 col-sm-4 col-4 position-relative">
+                <button type="submit" class="btn alert alert-danger btn-outline-danger w-100 text-start text-uppercase  a-danger t-tab">
+                <span class="mx-2 top-icon">
+                    <i class="bi bi-envelope-paper"></i>
+                </span> To Close
+                <div>
+                    <b class="fw-bold fs-3">21332</b>
+                </div>
+            </button>
+        </div>
+        <div class="col-md-2 col-sm-4 col-4  position-relative">
+                <button type="submit" class="btn alert alert-success btn-outline-success w-100 text-start text-uppercase  a-success t-tab">
+
+                <span class="mx-2 top-icon">
+                    <i class="bi bi-currency-dollar"></i>
+                </span> Unpaid
+                <div>
+                    <b class="fw-bold fs-3">21332</b>
+                </div>
+            </button>
+        </div>
+        <input type="submit" value="564" />
+    </div>
+</div>
+</form>
