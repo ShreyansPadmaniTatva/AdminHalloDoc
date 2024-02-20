@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AdminHalloDoc.Entities.Models.Request>
+﻿@model IEnumerable<AdminHalloDoc.Entities.ViewModel.ViewDashboardList>
 
 <div class="justify-content-between d-flex my-3">
     <div class="heading ">
@@ -47,7 +47,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2 w-100" type="search" placeholder="Search" aria-label="Search">
+                        <input class="form-control mr-sm-2 w-100" id="myInput" onkeyup="myFunction()" type="text" placeholder="Search" aria-label="Search">
                     </form>
                 </div>
                 <div class="col-md-6 ">
@@ -68,33 +68,28 @@
         </div>
         <div class="ending-bar d-flex text-center">
             <div class="top-tollbar">
-                <button type="button" class="btn btn-light mx-1 border border-1 text-light-emphasis mx-3 f-tollbar all">All</button>
+                <button type="button" class="btn btn-light mx-1 border border-1 text-light-emphasis mx-3 f-tollbar all" onclick="filterSelection('all')">All</button>
             </div>
 
             <div class="top-tollbar">
                 <div class="p-success">
                 </div>
-                <div type="button" class="btn btn- f-tollbar p-0">Patient</div>
+                <div type="button" class="btn btn- f-tollbar p-0" onclick="filterSelection('bg-2')">Patient</div>
             </div>
             <div class="top-tollbar">
                 <div class=" p-warning ">
                 </div>
-                <button type="button" class="btn btn- f-tollbar p-0">Family/Friend</button>
+                <button type="button" class="btn btn- f-tollbar p-0" onclick="filterSelection('bg-3')">Family/Friend</button>
             </div>
             <div class="top-tollbar">
                 <div class=" p-primary">
                 </div>
-                <button type="button" class="btn btn- f-tollbar">Business</button>
+                <button type="button" class="btn btn- f-tollbar" onclick="filterSelection('bg-1')">Business</button>
             </div>
             <div class="top-tollbar">
                 <div class=" p-info">
                 </div>
-                <button type="button" class="btn btn- f-tollbar">Concierge</button>
-            </div>
-            <div class="top-tollbar">
-                <div class=" p-vip">
-                </div>
-                <button type="button" class="btn btn- f-tollbar">Vip</button>
+                <button type="button" class="btn btn- f-tollbar" onclick="filterSelection('bg-4')">Concierge</button>
             </div>
 
         </div>
@@ -193,16 +188,12 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
                     </div>
                 </div>
             </div>
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingTwo">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                    <button class="accordion-button collapsed"  type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
                         Accordion Item #2
                     </button>
                 </h2>
@@ -248,21 +239,21 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr class="bg-success  ">
-                        <td scope="col ">
+                    <tr class="bg-@item.RequestTypeID  filterDiv">
+                        <td scope="col">
                             <div class="text-end d-flex justify-content-between">
                                 <div class="text-start d-grid">
-                                    @item.Firstname
+                                    @item.PatientName
                                 </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
                                     <i class="bi bi-envelope"></i>
                                 </div>
                             </div>
                         </td>
                         <td scope="col">Jun, 16, 2003</td>
-                        <td scope="col">Patient informati</td>
-                        <td scope="col">Jun, 16, 2003</td>
+                        <td scope="col">@item.Requestor</td>
+                        <td scope="col">@item.Dob</td>
                         <td scope="col">
-                            <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +91 9532653265 </div>
+                            <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.PhoneNumber </div>
                             <span>
                                 (Patient)
                             </span>
@@ -271,8 +262,8 @@
                                 (Patient)
                             </span>
                         </td>
-                        <td scope="col">7, Devidayal Chawl, Kv Rd, Kanjur Marg (east)</td>
-                        <td scope="col">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's </td>
+                        <td scope="col">@item.Address</td>
+                        <td scope="col">@item.Notes </td>
                         <td scope="col"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-person-workspace"></i> Provider </div></td>
                         <td scope="col"><div class="border border-1 p-1 rounded-2 text-center w-75 py-1">Actions </div></td>
                     </tr>
@@ -280,92 +271,62 @@
                 }
 
                
-                <tr class="bg-primary  ">
-                    <td scope="col ">
-                        <div class="text-end d-flex justify-content-between">
-                            <div class="text-start d-grid">
-                                ramesh karotiya
-                            </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
-                                <i class="bi bi-envelope"></i>
-                            </div>
-                        </div>
-                    </td>
-                    <td scope="col">Jun, 16, 2003</td>
-                    <td scope="col">Patient informati</td>
-                    <td scope="col">Jun, 16, 2003</td>
-                    <td scope="col">
-                        <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +91 9532653265 </div>
-                        <span>
-                            (Patient)
-                        </span>
-                        <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +91 9532653265</div>
-                        <span>
-                            (Patient)
-                        </span>
-                    </td>
-                    <td scope="col">7, Devidayal Chawl, Kv Rd, Kanjur Marg (east)</td>
-                    <td scope="col">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's </td>
-                    <td scope="col"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-person-workspace"></i> Provider </div></td>
-                    <td scope="col">
-                        <div class="dropdown ">
-                            <button class="btn border border-1 p-1 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Actions
-                            </button>
-                            <ul class="dropdown-menu ">
-                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
-                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
-                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
-                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
-                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
-                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr class="bg-success  ">
-                    <td scope="col ">
-                        <div class="text-end d-flex justify-content-between">
-                            <div class="text-start d-grid">
-                                ramesh karotiya
-                            </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
-                                <i class="bi bi-envelope"></i>
-                            </div>
-                        </div>
-                    </td>
-                    <td scope="col">Jun, 16, 2003</td>
-                    <td scope="col">Patient informati</td>
-                    <td scope="col">Jun, 16, 2003</td>
-                    <td scope="col">
-                        <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +91 9532653265 </div>
-                        <span>
-                            (Patient)
-                        </span>
-                        <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +91 9532653265</div>
-                        <span>
-                            (Patient)
-                        </span>
-                    </td>
-                    <td scope="col">7, Devidayal Chawl, Kv Rd, Kanjur Marg (east)</td>
-                    <td scope="col">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's </td>
-                    <td scope="col"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-person-workspace"></i> Provider </div></td>
-                    <td scope="col">
-                        <div class="dropdown ">
-                            <button class="btn border border-1 p-1 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Actions
-                            </button>
-                            <ul class="dropdown-menu ">
-                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
-                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
-                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
-                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
-                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
-                                <li><a class="dropdown-item text-dark-emphasis" href="#"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
             </tbody>
         </table>
     </div>
 </div>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    filterSelection("all")
+    function filterSelection(c) {
+        var x, i;
+        x = document.getElementsByClassName("filterDiv");
+        if (c == "all") c = "";
+        for (i = 0; i < x.length; i++) {
+            w3RemoveClass(x[i], "show");
+            if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+        }
+    }
+
+    function w3AddClass(element, name) {
+        var i, arr1, arr2;
+        arr1 = element.className.split(" ");
+        arr2 = name.split(" ");
+        for (i = 0; i < arr2.length; i++) {
+            if (arr1.indexOf(arr2[i]) == -1) { element.className += " " + arr2[i]; }
+        }
+    }
+
+    function w3RemoveClass(element, name) {
+        var i, arr1, arr2;
+        arr1 = element.className.split(" ");
+        arr2 = name.split(" ");
+        for (i = 0; i < arr2.length; i++) {
+            while (arr1.indexOf(arr2[i]) > -1) {
+                arr1.splice(arr1.indexOf(arr2[i]), 1);
+            }
+        }
+        element.className = arr1.join(" ");
+    }
+
+</script>

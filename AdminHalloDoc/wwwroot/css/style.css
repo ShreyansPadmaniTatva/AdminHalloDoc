@@ -13,10 +13,27 @@
     background-color:rgb(33,37,41) !important;
   }
 }
-#table {
-    display: block;
+.bg-2 {
+    background-color: #60BC60;
+}
+.bg-3 {
+    background-color: #ED9124;
+}
+.bg-1 {
+    background-color: #DA0F82;
+}
+.bg-4 {
+    background-color: #0579BA;
+}
+.filterDiv {
+
+    display: none;
 }
 
+.show {
+    display: table-row;
+    
+}
 #accordionFlushExample {
     display: none;
 } 
