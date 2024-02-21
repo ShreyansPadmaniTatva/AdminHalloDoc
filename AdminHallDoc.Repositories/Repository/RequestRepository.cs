@@ -6,7 +6,7 @@ using System.Net;
 using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
-using AdminHalloDoc.Entities.ViewModel.AdminViewsModel;
+using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -103,6 +103,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                   .Where(p => priceList.Contains(p.Requests.Status))
                   .Select(req => new ViewDashboardList()
                   {
+                      RequestClientid = req.Requestclients.Requestclientid,
+                      Requestid = req.Requests.Requestid,
                       RequestTypeID = req.Requests.Requesttypeid,
                       Requestor = req.Requests.Firstname + " " + req.Requests.Lastname,
                       PatientName = req.Requestclients.Firstname + " " + req.Requestclients.Lastname,
@@ -116,6 +118,59 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                       RequestorPhoneNumber = req.Requests.Phonenumber
                   })
                   .ToListAsync(); 
+        }
+      
+        public async Task<Viewcase> GetRequestDetails(int? RequestClientid)
+        {
+
+
+            var requestDetails = await (
+                from requestclients in _context.Requestclients
+                join requests in _context.Requests
+                on requestclients.Requestid equals requests.Requestid
+                where requestclients.Requestclientid == RequestClientid
+                select new Viewcase()
+                {
+                    RequesClientid = requestclients.Requestclientid,
+                    Requestid = requests.Requestid,
+                    RequestTypeID = requests.Requesttypeid,
+                    FirstName = requestclients.Firstname,
+                    LastName = requestclients.Lastname,
+                    Email = requestclients.Email,
+                    Notes = requestclients.Notes,
+                    // BirthDate = new DateTime((int)requestclients.Intyear, DateTime.ParseExact(requestclients.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)requestclients.Intdate),
+                    PhoneNumber = requestclients.Phonenumber,
+                    Address = requestclients.Address + "," + requestclients.Street + "," + requestclients.City + "," + requestclients.State + "," + requestclients.Zipcode,
+                   
+                    RegionID = requestclients.Regionid
+                }
+            ).FirstOrDefaultAsync();
+
+            return requestDetails;
+        }
+
+        public async Task<Boolean> PutViewcase(Viewcase viewcase)
+        {
+            try
+            {
+
+                var requestclient = await _context.Requestclients.Where(r => r.Requestclientid == viewcase.RequesClientid).FirstAsync();
+
+                requestclient.Firstname = viewcase.FirstName;
+                requestclient.Lastname = viewcase.LastName;
+                requestclient.Phonenumber = viewcase.PhoneNumber;
+                requestclient.Email = viewcase.Email;
+                _context.Requestclients.Update(requestclient);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+               
+                    throw;
+                
+            }
+
+            return true;
         }
     }
 }

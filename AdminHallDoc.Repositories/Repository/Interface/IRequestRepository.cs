@@ -1,6 +1,6 @@
 ﻿using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
-using AdminHalloDoc.Entities.ViewModel.AdminViewsModel;
+using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
 {
@@ -14,5 +14,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<int> CountToCloseRequest();
         Task<int> CountUnPaidRequest();
         Task<List<ViewDashboardList>> GetContactAsync(string status);
+        Task<Viewcase> GetRequestDetails(int? Requestid);
+        Task<Boolean> PutViewcase(Viewcase viewcase);
     }
 }

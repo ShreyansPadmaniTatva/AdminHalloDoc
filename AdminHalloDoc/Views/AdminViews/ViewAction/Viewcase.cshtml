@@ -1,0 +1,115 @@
+﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Viewcase;
+@{
+    ViewData["Title"] = "View Case";
+}
+<div class="container" >
+    <div class="justify-content-between d-flex container-fluid my-5 position-relative ">
+        <div class="">
+            <h1>  View Patient request <span class="badge badge-success p-2">Success</span> </h1>
+        </div>
+        <div>
+            <a asp-action="Index" asp-controller="SubmitRequest" class="btn btn-outline-info"> ❮  Back </a>
+        </div>
+    </div>
+    <div class="card border-0 shadow p-4 mb-5  rounded">
+        <form asp-action="SaveViewcase" asp-controller="ViewAction" class="row g-3 " enctype="multipart/form-data">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <h4 class=" my-4">Patient Information</h4>
+            <input asp-for="RequesClientid" name="RequesClientid" type="hidden">
+
+            <div class="col-md-12 form-floating  my-1">
+                <textarea asp-for="Notes" disabled class="form-control rounded" name="Symptoms" type="text" rows="4" cols="50" placeholder=Suchtext autocomplete=off></textarea>
+                <label asp-for="Notes" for="Symptoms"> Patient Notes </label>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <hr/>
+            <div class="col-md-6 form-floating  ">
+                <input asp-for="FirstName" class="form-control rounded" name="FirstName" type="text" placeholder="First Name" autocomplete=off>
+                <label class="" for="floatingInput">First Name </label>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="LastName" class="form-control rounded" name="LastName" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Last Name </label>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="BirthDate" class="form-control rounded" name="BirthDate" type="date" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Birth Date </label>
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+            <div class="col-md-5 form-floating ">
+                <input asp-for="PhoneNumber" id="phone" type="tel" name="PhoneNumber" class="form-control rounded" autocomplete=off>
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="col-md-1">
+                <div class=" border border-1 border-info text-info text-center rounded-3 ">
+                    <a class="text-info" href="tel:"><i class="bi bi-telephone fs-2 "></i></a>
+                </div>
+            </div>
+            <div class="col-md-6 form-floating ">
+                <input id="email" asp-for="Email" class="form-control rounded" name="Email" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Email </label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class=" col-md-6  my-4">
+                <div id="editprofile" onclick="toggleFormElements('false')" class="btn btn-outline-info  p-3"> Edit </div>
+                <input id="submit" type="submit" class="btn btn-info text-white p-2" value="save">
+            </div>
+
+            <h4 class=" my-4">Patient Contact Information</h4>
+            <div class="col-md-6 form-floating ">
+                <input asp-for="Address" class="form-control rounded" name="Street" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Street </label>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating  ">
+                <input asp-for="RoomSite" class="form-control rounded" name="RoomSite" type="text"  placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Room / site ( Optional )</label>
+                <span asp-validation-for="RoomSite" class="text-danger"></span>
+            </div>
+
+           
+
+        </form>
+        <div class="text-end my-4">
+            <input type="submit" class="btn btn-info text-white" value="Create">
+            <button class="btn btn-outline-info"> cancel </button>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script>
+        function toggleFormElements(bDisabled) {
+            var inputs = document.getElementsByTagName("input");
+            var submit = document.getElementById("submit");
+            var editprofile = document.getElementById("editprofile");
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].disabled = !inputs[i].disabled;
+            }
+            if (inputs[0].disabled) {
+                submit.style.display = "none";
+                editprofile.style.display = "inline-block";
+            } else {
+                submit.style.display = "inline-block";
+                editprofile.style.display = "none";
+            }
+        }
+        window.onload = function (e) {
+            toggleFormElements('true')
+        }
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $("form").submit(function () {
+                var full_number = phoneInput.getNumber(intlTelInputUtils.numberFormat.E164);
+                $("input[name='PhoneNumber']").val(full_number);
+
+            });
+        });
+
+    </script>
+}

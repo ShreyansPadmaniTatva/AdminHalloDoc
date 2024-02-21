@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace AdminHalloDoc.Entities.ViewModel.AdminViewsModel
+namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
     public class ViewDashboardList
     {
+        public int Requestid { get; set; }
+        public int RequestClientid { get; set; }
         public string? PatientName { get; set; }
         public DateTime? Dob { get; set; }
         public string? PatientId { get; set; }

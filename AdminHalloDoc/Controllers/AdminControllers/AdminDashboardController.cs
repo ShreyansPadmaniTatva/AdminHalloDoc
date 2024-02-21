@@ -1,4 +1,5 @@
-﻿using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+﻿using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
@@ -11,6 +12,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
             _requestRepository = requestRepository;
         }
+
+        #region DashBoard_Index
         public async Task<IActionResult> Index()
         {
             ViewBag.CountNewRequest = await _requestRepository.CountNewRequest();
@@ -23,6 +26,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
             return View("../AdminViews/AdminDashboard/Index");
         }
+        #endregion
 
         #region _SearchResult
         [HttpPost]
@@ -36,6 +40,14 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
             var r = await _requestRepository.GetContactAsync(status);
             return PartialView("../AdminViews/AdminDashboard/_List", r);
+        }
+        #endregion
+
+        #region View_Case
+        public async Task<IActionResult> Viewcase(int? id)
+        {
+            Viewcase v =  await _requestRepository.GetRequestDetails(id);
+            return View("../AdminViews/ViewAction/Viewcase",v);
         }
         #endregion
     }
