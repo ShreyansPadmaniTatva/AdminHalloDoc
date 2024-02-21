@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace AdminHalloDoc.Entities.ViewModel
+namespace AdminHalloDoc.Entities.ViewModel.AdminViewsModel
 {
-     public class ViewDashboardList
+    public class ViewDashboardList
     {
         public string? PatientName { get; set; }
         public DateTime? Dob { get; set; }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AdminHalloDoc.Entities.ViewModel.ViewDashboardList>
+﻿@model IEnumerable<AdminHalloDoc.Entities.ViewModel.AdminViewsModel.ViewDashboardList>
 
 <div class="justify-content-between d-flex my-3">
     <div class="heading ">
@@ -52,14 +52,10 @@
                 </div>
                 <div class="col-md-6 ">
                     <div class="dropdown ">
-                        <button class="btn w-100 btn-light border-1 text-light-emphasis border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-search"></i>  Dropdown button
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
+                      
+                        <select class="form-select form-select-sm " data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                            <option>All Region</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -257,10 +253,29 @@
                             <span>
                                 (Patient)
                             </span>
-                            <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +91 9532653265</div>
-                            <span>
-                                (Patient)
-                            </span>
+                            @{
+                                if (item.RequestTypeID == 3)
+                                {
+                                    <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.RequestorPhoneNumber </div>
+                                    <span>
+                                        (Family/Friend)
+                                    </span>
+                                }
+                                else if (item.RequestTypeID == 4)
+                                {
+                                    <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.RequestorPhoneNumber </div>
+                                    <span>
+                                        (Concierge)
+                                    </span>
+                                }
+                                else if (item.RequestTypeID == 1)
+                                {
+                                    <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.RequestorPhoneNumber </div>
+                                    <span>
+                                        (Business Partner)
+                                    </span>
+                                }
+                            }
                         </td>
                         <td scope="col">@item.Address</td>
                         <td scope="col">@item.Notes </td>
@@ -295,7 +310,10 @@
         }
     }
 </script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
 
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js">
+</script>
 <script>
     filterSelection("all")
     function filterSelection(c) {
@@ -328,5 +346,15 @@
         }
         element.className = arr1.join(" ");
     }
-
+  $(document)
+        .ready(function () {
+            $('#table')
+                .DataTable(
+                    { 
+                        searching: false
+                        , info: false
+                    }
+                );
+            $("#table_length").hide();
+        });
 </script>

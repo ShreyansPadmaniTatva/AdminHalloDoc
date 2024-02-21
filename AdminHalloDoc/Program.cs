@@ -1,13 +1,19 @@
 using AdminHalloDoc.Entities;
 using AdminHalloDoc.Entities.Data;
-using AdminHalloDoc.Repositories.Repository;
-using AdminHalloDoc.Repositories.Repository.Interface;
+using AdminHalloDoc.Entities.ViewModel;
+using AdminHalloDoc.Repositories.Admin.Repository;
+using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>();
+var emailConfig = builder.Configuration
+        .GetSection("EmailConfiguration")
+        .Get<EmailConfiguration>();
+
+builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 
 var app = builder.Build();
@@ -20,7 +26,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -29,6 +35,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+    pattern: "{controller=AdminDashboard}/{action=Index}/{id?}");
 
 app.Run();

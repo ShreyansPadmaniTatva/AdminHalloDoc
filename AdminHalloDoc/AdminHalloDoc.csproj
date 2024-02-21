@@ -21,8 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AdminHallDoc.Repositories\AdminHalloDoc.Repositories.csproj" />
+    <ProjectReference Include="..\AdminHallDoc.Repositories\AdminHalloDoc.Repositories.Admin.csproj" />
     <ProjectReference Include="..\AdminHalloDoc.Entities\AdminHalloDoc.Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Shared\AdminPanel\" />
   </ItemGroup>
 
 </Project>

@@ -1,13 +1,12 @@
-﻿using AdminHalloDoc.Repositories.Repository;
-using AdminHalloDoc.Repositories.Repository.Interface;
+﻿using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AdminHalloDoc.Controllers
+namespace AdminHalloDoc.Controllers.AdminControllers
 {
-    public class DashboardController : Controller
+    public class AdminDashboardController : Controller
     {
         private readonly IRequestRepository _requestRepository;
-        public DashboardController(IRequestRepository requestRepository)
+        public AdminDashboardController(IRequestRepository requestRepository)
         {
 
             _requestRepository = requestRepository;
@@ -21,7 +20,8 @@ namespace AdminHalloDoc.Controllers
             ViewBag.CountToCloseRequest = await _requestRepository.CountToCloseRequest();
             ViewBag.CountUnPaidRequest = await _requestRepository.CountUnPaidRequest();
 
-            return View();
+
+            return View("../AdminViews/AdminDashboard/Index");
         }
 
         #region _SearchResult
@@ -29,12 +29,13 @@ namespace AdminHalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _SearchResultAsync(string status)
         {
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             if (status == null)
             {
                 status = "1";
             }
             var r = await _requestRepository.GetContactAsync(status);
-            return PartialView("_List",r );
+            return PartialView("../AdminViews/AdminDashboard/_List", r);
         }
         #endregion
     }

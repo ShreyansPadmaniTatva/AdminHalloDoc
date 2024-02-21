@@ -1,0 +1,75 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model AdminHalloDoc.Entities.Models.Aspnetuser
+@{
+    ViewData["Title"] = "Login ";
+}
+<div class="text-center ">
+    <div class="my-3 top-0 end-0 mt-3 mx-5 position-absolute border border-1 text-info border-info rounded-3">
+        <button class="btn btn-outline-info" onclick="mode()">
+            <i class="bi bi-moon"></i>
+        </button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 position-relative text-center" style="min-height: 100vh;">
+        <div class="n-background w-100 h-100">
+            <div class="main-login  position-relative ">
+                <div class="logo">
+                    <img src="/images/Fig56. Patient site 1.png" class="img-fluid my-5 bg-white " />
+                </div>
+                @ViewData["error"]
+                @ViewData["EmailCheck"]
+                <div class="content m-5">
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" asp-controller="Home" class="text-primary text-decoration-none py-2 fw-bolder">
+                            ❮ &nbsp; Back
+                        </a>
+                    </div>
+                    <form asp-action="CheckAccessLogin" asp-controller="Login">
+                        <h1 class="login fs-1 fw-bolder">Login To Your Account</h1>
+                        <div class="form-floating input-group with-icon mb-3">
+                            <input class="form-control rounded" asp-for="Username" type="text" placeholder=Suchtext
+                                   autocomplete=off required>
+                            <i class="bi bi-person"></i>
+                            <label for="floatingInput">Email </label>
+                        </div>
+                            <span asp-validation-for="Username" class="text-danger" ></span>
+                                   
+                        <div class="form-floating input-group with-icon mb-3">
+                            <input class="form-control rounded" asp-for="Passwordhash" type="password" placeholder=Suchtext
+                                   autocomplete=off required>
+                            <i class="bi bi-eye"></i>
+                            <label for="floatingInput" class="bg-transparent">Password</label>
+                        </div>
+                        <span asp-validation-for="Passwordhash" class="text-danger"></span>
+
+                        <div class="form-floating my-3">
+                            <input class="btn btn-info fs-4 text-white w-100" type="submit" value="Submit">
+                        </div>
+                    </form>
+                    <a asp-action="ForgotPassword" asp-controller="Login" class="text-center  text-decoration-none text-primary">
+                        Forgot Password ?
+                    </a>
+                </div>
+                <div class=" justify-content-center position-fixed text-dark-emphasis  w-100  left-0 align-self-end d-flex align-items-end  bottom-0 py-5 align-text-bottom align-items-end">
+                    <div class="text-center">
+
+                        <span class="text-center mx-2">
+                            Term Of Condition
+                        </span>
+                        <span>
+                            I
+                        </span>
+                        <span class="mx-2">
+                            Privacy Policy
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>

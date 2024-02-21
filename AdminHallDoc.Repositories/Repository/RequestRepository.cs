@@ -6,12 +6,13 @@ using System.Net;
 using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
-using AdminHalloDoc.Repositories.Repository.Interface;
+using AdminHalloDoc.Entities.ViewModel.AdminViewsModel;
+using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 
-namespace AdminHalloDoc.Repositories.Repository
+namespace AdminHalloDoc.Repositories.Admin.Repository
 {
-	public class RequestRepository : IRequestRepository
+    public class RequestRepository : IRequestRepository
 	{
 		private readonly ApplicationDbContext _context;
 
@@ -19,6 +20,16 @@ namespace AdminHalloDoc.Repositories.Repository
 		{
 			_context = context;
 		}
+
+        public async Task<List<RegionComboBox>> RegionComboBox()
+        {
+            return await _context.Regions.Select(req => new RegionComboBox()
+                {
+                   RegionId =req.Regionid,
+                   RegionName =req.Name
+                })
+                .ToListAsync();
+        }
 
         public async Task<int> CountNewRequest()
         {
