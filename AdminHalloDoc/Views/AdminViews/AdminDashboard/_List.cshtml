@@ -5,7 +5,7 @@
         <h3 class="mb-0 pb-0 top-heading">Patient</h3>  <span class="align-bottom  top-side-heading d-flex flex-column justify-content-end pb-1 px-2 text-primary-emphasis fw-bolder"> (Close)</span>
     </div>
     <din>
-        <div class="btn btn-info text-white">
+        <div class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#sendlink">
             <i class="bi bi-send"></i>
             <span class="top-btn">
                 send link
@@ -53,7 +53,7 @@
                 <div class="col-md-6 ">
                     <div class="dropdown ">
                       
-                        <select class="form-select form-select-sm " data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                        <select class="form-select form-select-sm " data-allow-clear="true" tabindex="-1" id="Region" onchange="myFunction()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                             <option>All Region</option>
                         </select>
                     </div>
@@ -235,7 +235,7 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr class="bg-@item.RequestTypeID  filterDiv">
+                    <tr class="bg-@item.RequestTypeID  filterDiv @item.RegionID">
                         <td scope="col">
                             <div class="text-end d-flex justify-content-between">
                                 <div class="text-start d-grid">
@@ -287,7 +287,7 @@
                                 </button>
                                 <ul class="dropdown-menu ">
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
-                                    <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                    <li><a class="dropdown-item text-dark-emphasis" data-bs-toggle="modal" data-bs-target="#Cancelcase" data-bs-requestid="@item.Requestid" data-bs-patientname="@item.PatientName" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
@@ -301,6 +301,29 @@
         </table>
     </div>
 </div>
+<partial name="../ViewAction/_allPartialAction.cshtml" />
+
+<script>
+    const Cancelcase = document.getElementById('Cancelcase')
+    if (Cancelcase) {
+        Cancelcase.addEventListener('show.bs.modal', event => {
+            // Button that triggered the modal
+            const button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            const patientname = button.getAttribute('data-bs-patientname')
+            const requestid = button.getAttribute('data-bs-requestid')
+            // If necessary, you could initiate an Ajax request here
+            // and then do the updating in a callback.
+
+            // Update the modal's content.
+            const modalTitle = Cancelcase.querySelector('#patientname')
+            const modalBodyInput = Cancelcase.querySelector('#requestid')
+
+            modalTitle.textContent = patientname
+            modalBodyInput.value = requestid
+        })
+    }
+    </script>
 <script>
     function myFunction() {
         var input, filter, table, tr, td, i, txtValue;
@@ -321,12 +344,21 @@
         }
     }
 </script>
-
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js">
 </script>
 <script>
+    function myFunction() {
+        var x = document.getElementById("Region").value;
+        console.log(x);
+        if (x != 'All Region') {
+            filterSelection(x)
+        }else{
+            filterSelection("all")
+        }
+        
+    }
     filterSelection("all")
     function filterSelection(c) {
         var x, i;

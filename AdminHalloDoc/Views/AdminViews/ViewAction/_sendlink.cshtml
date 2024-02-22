@@ -1,0 +1,45 @@
+﻿<div class="modal fade" id="sendlink" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header  bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Send Mail To  Patient for Submitting request</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="SendLink" asp-controller="ViewAction">
+                    <div class=" form-floating  my-2">
+                        <input class="form-control rounded" name="firstname" type="text" placeholder="First Name" autocomplete=off>
+                        <label class="" for="floatingInput">First Name </label>
+                    </div>
+                    <div class="form-floating my-2">
+                        <input class="form-control rounded" name="lastname" type="text" placeholder=Suchtext autocomplete=off>
+                        <label for="floatingInput">Last Name </label>
+                    </div>
+                    <div class=" form-floating my-2">
+                        <input id="phone11" type="tel" name="phonenumber" class="form-control rounded" autocomplete=off>
+                    </div>
+                    <div class=" form-floating my-2">
+                        <input class="form-control rounded" name="email" type="text" placeholder=Suchtext autocomplete=off>
+                        <label for="floatingInput">Email </label>
+                    </div>
+                    <input type="submit" value="s"/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class=" btn btn-info text-white">Confirm</button>
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const phoneInputField11 = document.querySelector("#phone11");
+    const phoneInput11 = window.intlTelInput(phoneInputField11, {
+        separateDialCode: true,
+        hiddenInput: "full",
+        preferredCountries: ["us", "co", "in", "de"],
+        utilsScript:
+            "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
+</script>

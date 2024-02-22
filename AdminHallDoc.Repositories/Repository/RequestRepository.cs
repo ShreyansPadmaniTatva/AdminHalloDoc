@@ -73,51 +73,32 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             List<int> priceList = status.Split(',').Select(int.Parse).ToList();
 
 
-           return await _context.Requests
-                    .Join(
-                  _context.Requestclients,
-                  requestclients => requestclients.Requestid,
-                  requests => requests.Requestid,
-                  (requests, requestclients) => new  { Requests = requests  , Requestclients = requestclients  }
-                  )
-                  // .Join(
-                  //  _context.Physicians,
-                  //  join => join.Requests.Physicianid,
-                  //  physicianid => physicianid.Physicianid,
-                  //  (join, physicianid) => new { Join = join, Physicians = physicianid }
-                  // )
-                  //.Where(p => priceList.Contains(p.Join.Requests.Status))
-                  //.Select(req => new ViewDashboardList()
-                  //{
-                  //    RequestTypeID = req.Join.Requests.Requesttypeid,
-                  //    Requestor = req.Join.Requests.Firstname + " " + req.Join.Requests.Lastname,
-                  //    PatientName = req.Join.Requestclients.Firstname + " " + req.Join.Requestclients.Lastname,
-                  //    Dob = new DateTime((int)req.Join.Requestclients.Intyear, DateTime.ParseExact(req.Join.Requestclients.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)req.Join.Requestclients.Intdate),
-                  //    RequestedDate = req.Join.Requests.Createddate,
-                  //    PhoneNumber = req.Join.Requestclients.Phonenumber,
-                  //    Address = req.Join.Requestclients.Address + "," + req.Join.Requestclients.Street + "," + req.Join.Requestclients.City + "," + req.Join.Requestclients.State + "," + req.Join.Requestclients.Zipcode,
-                  //    Notes = req.Join.Requestclients.Notes,
-                  //    ProviderID = req.Join.Requests.Physicianid,
-                  //    RequestorPhoneNumber = req.Join.Requests.Phonenumber
-                  //})
-                  .Where(p => priceList.Contains(p.Requests.Status))
-                  .Select(req => new ViewDashboardList()
-                  {
-                      RequestClientid = req.Requestclients.Requestclientid,
-                      Requestid = req.Requests.Requestid,
-                      RequestTypeID = req.Requests.Requesttypeid,
-                      Requestor = req.Requests.Firstname + " " + req.Requests.Lastname,
-                      PatientName = req.Requestclients.Firstname + " " + req.Requestclients.Lastname,
-                      //Dob = new DateTime((int)req.Requestclients.Intyear, DateTime.ParseExact(req.Requestclients.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)req.Requestclients.Intdate),
-                      RequestedDate = req.Requests.Createddate,
-                      PhoneNumber = req.Requestclients.Phonenumber,
-                      Address = req.Requestclients.Address + "," + req.Requestclients.Street + "," + req.Requestclients.City + "," + req.Requestclients.State + "," + req.Requestclients.Zipcode,
-                      Notes = req.Requestclients.Notes,
-                      ProviderID = req.Requests.Physicianid,
-                      RegionID = req.Requestclients.Regionid,
-                      RequestorPhoneNumber = req.Requests.Phonenumber
-                  })
-                  .ToListAsync(); 
+            return await (from req in _context.Requests
+                    join reqClient in _context.Requestclients
+                    on req.Requestid equals reqClient.Requestid into reqClientGroup
+                    from rc in reqClientGroup.DefaultIfEmpty()
+                    join phys in _context.Physicians
+                    on req.Physicianid equals phys.Physicianid into physGroup
+                    from p in physGroup.DefaultIfEmpty()
+                    where priceList.Contains(req.Status)
+                    select new ViewDashboardList
+                    {
+                        RequestClientid = rc.Requestclientid,
+                        Requestid = req.Requestid,
+                        RequestTypeID = req.Requesttypeid,
+                        Requestor = req.Firstname + " " + req.Lastname,
+                        PatientName = rc.Firstname + rc.Lastname,
+                        RequestedDate = req.Createddate,
+                        Dob = new DateTime((int)rc.Intyear,(int) Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
+                        PhoneNumber = rc.Phonenumber,
+                        Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.Zipcode,
+                        Notes = rc.Notes,
+                        ProviderID = req.Physicianid,
+                        RegionID = rc.Regionid,
+                        RequestorPhoneNumber = req.Phonenumber
+                    }).ToListAsync();
+
+           
         }
       
         public async Task<Viewcase> GetRequestDetails(int? RequestClientid)
@@ -138,7 +119,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     LastName = requestclients.Lastname,
                     Email = requestclients.Email,
                     Notes = requestclients.Notes,
-                    // BirthDate = new DateTime((int)requestclients.Intyear, DateTime.ParseExact(requestclients.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)requestclients.Intdate),
+                     BirthDate = new DateTime((int)requestclients.Intyear, Convert.ToInt32(requestclients.Strmonth), (int)requestclients.Intdate),
                     PhoneNumber = requestclients.Phonenumber,
                     Address = requestclients.Address + "," + requestclients.Street + "," + requestclients.City + "," + requestclients.State + "," + requestclients.Zipcode,
                    
@@ -155,11 +136,14 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             {
 
                 var requestclient = await _context.Requestclients.Where(r => r.Requestclientid == viewcase.RequesClientid).FirstAsync();
-
+                DateTime sd = viewcase.BirthDate.Value;
                 requestclient.Firstname = viewcase.FirstName;
                 requestclient.Lastname = viewcase.LastName;
                 requestclient.Phonenumber = viewcase.PhoneNumber;
                 requestclient.Email = viewcase.Email;
+                requestclient.Intdate = sd.Day;
+                requestclient.Intyear = sd.Year;
+                requestclient.Strmonth = sd.Month.ToString();
                 _context.Requestclients.Update(requestclient);
                 await _context.SaveChangesAsync();
             }
@@ -169,7 +153,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     throw;
                 
             }
-
             return true;
         }
     }
