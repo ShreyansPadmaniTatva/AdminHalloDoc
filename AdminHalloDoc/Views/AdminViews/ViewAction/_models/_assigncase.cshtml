@@ -1,0 +1,71 @@
+﻿<div class="modal fade" id="Assigncase" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header  bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Concellation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> </span></h3>
+                <form asp-action="" asp-controller="">
+                    <input value="" type="hidden" name="requestid" id="requestid" />
+                    <div class="mb-4">
+                        <select class="form-select form-select-sm " data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                            <option>All Region</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <select class="form-select form-select-sm " data-allow-clear="true" tabindex="-1" id="p"  asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                            <option>All Region</option>
+                        </select>
+                    </div>
+                    <div class="mb-4 form-floating ">
+                        <textarea class="form-control rounded" name="notes" cols="50" type="text" rows="5" placeholder=Suchtext autocomplete=off></textarea>
+                        <label for="floatingInput">Symptoms </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class=" btn btn-info text-white">Confirm</button>
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function myFunction(){
+        var email = $("#region2").val();
+        console.log(email);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ProviderbyRegion")?Regionid=' + email,
+            cache: false,
+            success: function (response) {
+                var flag = response.message == 'False';
+                var userId = response.data;
+                console.log(response);
+                if (flag) {
+                    // Show the username and password fields
+                    $("#password").show();
+                } else {
+                    $("#password").hide();
+                    // Check if userId is defined not for evey one
+                    document.getElementById("UserId").value = userId;
+                }
+            },
+            error: function () {
+                alert("Error while checking email.");
+            }
+        });
+    }
+
+    $(function () {
+
+        $("#region2").change(function () {
+           
+        });
+    });
+
+</script>

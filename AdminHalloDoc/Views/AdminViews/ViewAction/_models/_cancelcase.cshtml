@@ -10,7 +10,7 @@
                 <form asp-action="" asp-controller="" >
                     <input value="" type="hidden" name="requestid" id="requestid" />
                     <div class="mb-4">
-                        <select class="form-select form-select-sm p-3 mt-3 fs-6" name="RegionId" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                        <select class="form-select form-select-sm " data-allow-clear="true" tabindex="-1" id="Region" onchange="myFunction()" asp-items="@(new SelectList(ViewBag.CaseReasonComboBox,"CaseReasonId","CaseReasonName"))" data-control="select2" data-placeholder="Cancel Reason">
                             <option>All Region</option>
                         </select>
                     </div>

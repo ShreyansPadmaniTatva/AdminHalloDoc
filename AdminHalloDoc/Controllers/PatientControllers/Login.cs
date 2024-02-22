@@ -40,6 +40,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
 
 
         #region Login
+
         public IActionResult Index()
         {
             return View();

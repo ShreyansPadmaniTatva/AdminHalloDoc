@@ -32,7 +32,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         public IActionResult SubmitForSomeoneElse()
         {
            
-            return View();
+            return View("../PatientViews/RequestByPatient/SubmitForSomeoneElse");
         }
         public IActionResult SubmitForMe()
         {

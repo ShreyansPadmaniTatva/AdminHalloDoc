@@ -1,7 +1,9 @@
-﻿using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+﻿using AdminHalloDoc.Entities.Models;
+using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -32,5 +34,16 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             return View("../AdminViews/ViewAction/Viewcase");
         }
         #endregion
+
+        #region UploadDoc_Files
+        public IActionResult UploadDoc(int Requestid, IFormFile file)
+        {
+
+            _viewActionRepository.SaveDoc(Requestid, file);
+            return RedirectToAction("ViewUpload", "AdminDashboard", new { id = Requestid });
+        }
+        #endregion
+
+        
     }
 }

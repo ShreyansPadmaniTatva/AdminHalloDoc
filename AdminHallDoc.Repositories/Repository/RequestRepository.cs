@@ -30,6 +30,15 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 })
                 .ToListAsync();
         }
+        public async Task<List<CaseReasonComboBox>> CaseReasonComboBox()
+        {
+            return await _context.Casetags.Select(req => new CaseReasonComboBox()
+            {
+                CaseReasonId = req.Casetagid,
+                CaseReasonName = req.Name
+            })
+                .ToListAsync();
+        }
 
         public async Task<int> CountNewRequest()
         {

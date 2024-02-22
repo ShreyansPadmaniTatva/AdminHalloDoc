@@ -341,10 +341,10 @@ padding-left: 1.7rem;
   border-radius: 50%;
   display: inline-block;
 }
-td{
-  background-color: transparent !important;
-  color: white !important;
-  vertical-align: middle;
+.filterDiv td {
+    background-color: transparent !important;
+    color: white !important;
+    vertical-align: middle;
 }
 tr {
     border-color: bisque!important;
@@ -470,4 +470,54 @@ th:nth-child(6) {
 .form-control:disabled {
     background-color: var(--bs-secondary-bg) !important;
     opacity: 1;
+}
+
+.navbar-expand-lg .navbar-nav .nav-link:focus-within {
+    color: var(--nav-active);
+    font-weight: 600;
+    border-bottom: 3px solid var(--nav-active);
+}
+
+.file-upload-wrapper1 {
+    position: relative;
+    width: 100%;
+    height: 50px;
+}
+
+    .file-upload-wrapper1:after {
+        content: attr(data-text);
+        font-size: 18px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: var(--bs-body-bg);
+        padding: 5px 15px;
+        display: block;
+        width: calc(100% - 40px);
+        pointer-events: none;
+        z-index: 20;
+        height: 40px;
+        line-height: 40px;
+        color: var(--bs-body-color);
+        border-radius: 5px 10px 10px 5px;
+        font-weight: 300;
+    }
+
+    .file-upload-wrapper1 input {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 99;
+        height: 40px;
+        margin: 0;
+        padding: 0;
+        display: block;
+        cursor: pointer;
+        width: 100%;
+    }
+
+@media only screen and (max-width: 767px) {
 }

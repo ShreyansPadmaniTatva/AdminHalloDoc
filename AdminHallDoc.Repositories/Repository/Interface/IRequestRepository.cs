@@ -7,6 +7,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
     public interface IRequestRepository
 	{
         Task<List<RegionComboBox>> RegionComboBox();
+        Task<List<CaseReasonComboBox>> CaseReasonComboBox();
         Task<int> CountNewRequest();
         Task<int> CountPandingRequest();
         Task<int> CountActiveRequest();

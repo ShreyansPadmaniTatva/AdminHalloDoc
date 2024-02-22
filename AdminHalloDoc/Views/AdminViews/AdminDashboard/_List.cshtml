@@ -47,7 +47,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2 w-100" id="myInput" onkeyup="myFunction()" type="text" placeholder="Search" aria-label="Search">
+                        <input class="form-control mr-sm-2 w-100" id="myInput" onkeyup="myFunctiona()" type="text" placeholder="Search" aria-label="Search">
                     </form>
                 </div>
                 <div class="col-md-6 ">
@@ -287,8 +287,9 @@
                                 </button>
                                 <ul class="dropdown-menu ">
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                    <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" data-bs-toggle="modal" data-bs-target="#Cancelcase" data-bs-requestid="@item.Requestid" data-bs-patientname="@item.PatientName" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
-                                    <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                    <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller="" ><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journals"></i>Encounter</a></li>
@@ -325,20 +326,24 @@
     }
     </script>
 <script>
-    function myFunction() {
+    function myFunctiona() {
         var input, filter, table, tr, td, i, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("table");
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[0];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
+            if (tr[i].style.display != "none") {
+
+            
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td  ) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
                 }
             }
         }
