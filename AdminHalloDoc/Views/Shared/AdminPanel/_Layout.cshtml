@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - AdminHalloDoc</title>
     <link href="~/css/main.css" rel="stylesheet" asp-append-version="true" />
-    <link href="@Url.Content("~/plugins/global/plugins.bundle.css")" rel="stylesheet" type="text/css" />
     @*<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">*@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@sweetalert2/theme-dark@5/dark.css" />
+    <link href="~/css/sweetalert2.css" rel="stylesheet" />
 </head>
 <body data-bs-theme="light">
     <partial name="_Partial/_header.cshtml" />
@@ -24,7 +25,12 @@
     <script src="@Url.Content("~/plugins/mvc-jquery-ajax/jquery.unobtrusive-ajax.js")"></script>
     <script src="@Url.Content("~/plugins/mvc-jquery-validate/jquery.validate.js")"></script>
     <script src="@Url.Content("~/plugins/mvc-jquery-validate/jquery.validate.unobtrusive.js")"></script>
-    <script src="~/js/main.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="~/js/custom.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

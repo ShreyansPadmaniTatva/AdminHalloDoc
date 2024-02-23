@@ -1,6 +1,11 @@
 ﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Viewcase;
 @{
     ViewData["Title"] = "View Case";
+    var status = "null";
+    if (ViewData["Status"] != null)
+    {
+     status = ViewData["Status"].ToString();
+    }
 }
 <div class="container" >
     <div class="justify-content-between d-flex container-fluid my-5 position-relative ">
@@ -74,6 +79,7 @@
 
         </form>
         <div class="text-end my-4">
+           
             <a data-bs-toggle="modal" data-bs-target="#Assigncase" data-bs-requestid="@Model.Requestid" data-bs-patientname="@Model.FirstName" class="btn btn-outline-info"> Assign </a>
             <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-outline-info"> View Notes </a>
             <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-dager"> Cancel </a>
@@ -82,6 +88,37 @@
 </div>
 <partial name="_models/_assigncase.cshtml" />
 <script>
+    function toggleFormElements(bDisabled) {
+        var inputs = document.getElementsByTagName("input");
+        var submit = document.getElementById("submit");
+        var editprofile = document.getElementById("editprofile");
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = !inputs[i].disabled;
+        }
+        if (inputs[0].disabled) {
+            submit.style.display = "none";
+            editprofile.style.display = "inline-block";
+        } else {
+            submit.style.display = "inline-block";
+            editprofile.style.display = "none";
+        }
+    }
+    window.onload = function (e) {
+        console.log(5);
+        toggleFormElements('true');
+
+        if ("@status" === "True") {
+            savealt("Record saved successfully..!")
+        }
+    }
+    
+    </script>
+@section Scripts
+    {
+<script>
+     
+ 
+
     const Cancelcase = document.getElementById('Assigncase')
     if (Cancelcase) {
         Cancelcase.addEventListener('show.bs.modal', event => {
@@ -101,8 +138,6 @@
             modalBodyInput.value = requestid
         })
     }
-</script>
-<script type="text/javascript">
 
 
     $(function () {
@@ -134,31 +169,7 @@
         });
     });
 
-</script>
-@section Scripts
-    {
-    <script>
-        function toggleFormElements(bDisabled) {
-            var inputs = document.getElementsByTagName("input");
-            var submit = document.getElementById("submit");
-            var editprofile = document.getElementById("editprofile");
-            for (var i = 0; i < inputs.length; i++) {
-                inputs[i].disabled = !inputs[i].disabled;
-            }
-            if (inputs[0].disabled) {
-                submit.style.display = "none";
-                editprofile.style.display = "inline-block";
-            } else {
-                submit.style.display = "inline-block";
-                editprofile.style.display = "none";
-            }
-        }
-        window.onload = function (e) {
-            toggleFormElements('true')
-        }
-    </script>
-    <script type="text/javascript">
-        $(function () {
+    $(function () {
             $("form").submit(function () {
                 var full_number = phoneInput.getNumber(intlTelInputUtils.numberFormat.E164);
                 $("input[name='PhoneNumber']").val(full_number);

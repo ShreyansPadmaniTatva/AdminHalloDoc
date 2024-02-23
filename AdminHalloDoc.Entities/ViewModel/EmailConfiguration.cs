@@ -1,4 +1,9 @@
-﻿using System.Net.Mail;
+﻿
+//using MailKit.Net.Smtp;
+//using MimeKit;
+//using System.Net.Mail;
+//using System.Net;
+using System.Net.Mail;
 using System.Net;
 
 namespace AdminHalloDoc.Entities.ViewModel
@@ -11,6 +16,35 @@ namespace AdminHalloDoc.Entities.ViewModel
         public int Port { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
+
+        //#region SendMail
+        //public async void SendMail(String To, String Subject, String Body)
+        //{
+        //    try
+        //    {
+        //        var message = new MimeMessage();
+        //        message.From.Add(new MailboxAddress("", From));
+        //        message.To.Add(new MailboxAddress("", To));
+        //        message.Subject = Subject;
+        //        message.Body = new TextPart("html")
+        //        {
+        //            Text = Body
+        //        };
+        //        using (var client = new SmtpClient())
+        //        {
+        //            await client.ConnectAsync(SmtpServer, Port, false);
+        //            await client.AuthenticateAsync(UserName, Password);
+        //            await client.SendAsync(message);
+        //            await client.DisconnectAsync(true);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+        //#endregion
+
 
         #region SendMail
         public Boolean SendMail(String To, String Subject, String Body)
@@ -43,7 +77,7 @@ namespace AdminHalloDoc.Entities.ViewModel
             byte[] encoded = System.Text.Encoding.UTF8.GetBytes(encodeMe);
             return Convert.ToBase64String(encoded);
         }
-        public  string Decode(string decodeMe)
+        public string Decode(string decodeMe)
         {
             byte[] encoded = Convert.FromBase64String(decodeMe);
             return System.Text.Encoding.UTF8.GetString(encoded);

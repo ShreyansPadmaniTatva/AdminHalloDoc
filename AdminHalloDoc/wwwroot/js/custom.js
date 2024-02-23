@@ -27,19 +27,23 @@ $(function () {
 
 });
 
-function oops() {
+function oops(title) {
     Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Something went wrong!"
+        text: title
     });
 }
-function savealt() {
+function savealt(title) {
     const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
         showConfirmButton: false,
-        timer: 3000,
+        timer: 30000,
+        iconColor: 'white',
+        customClass: {
+            popup: 'colored-toast',
+        },
         timerProgressBar: true,
         didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
@@ -48,9 +52,10 @@ function savealt() {
     });
     Toast.fire({
         icon: "success",
-        title: "Signed in successfully"
+        title: title
     });
 }
+
 const phoneInputField = document.querySelector("#phone");
 const phoneInput = window.intlTelInput(phoneInputField, {
     separateDialCode: true,
@@ -90,3 +95,52 @@ function showPosition(position) {
     document.getElementById("longitude").value = position.coords.longitude;
 }
 
+const Transfercase = document.getElementById('Transfercase')
+if (Transfercase) {
+    Transfercase.addEventListener('show.bs.modal', event => {
+        // Button that triggered the modal
+        const button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        const patientname = button.getAttribute('data-bs-patientname')
+        const requestid = button.getAttribute('data-bs-requestid')
+        const providerId = button.getAttribute('data-bs-providerId')
+        // If necessary, you could initiate an Ajax request here
+        // and then do the updating in a callback.
+
+        // Update the modal's content.
+        const modalTitle = Transfercase.querySelector('#patientname')
+        const modalBodyInput = Transfercase.querySelector('#requestid')
+        const modalBodyInput1 = Transfercase.querySelector('#providerId')
+
+        modalTitle.textContent = patientname
+        modalBodyInput.value = requestid
+        modalBodyInput1.value = providerId
+    })
+}
+const phoneInputField11 = document.querySelector("#phone11");
+const phoneInput11 = window.intlTelInput(phoneInputField11, {
+    separateDialCode: true,
+    hiddenInput: "full",
+    preferredCountries: ["us", "co", "in", "de"],
+    utilsScript:
+        "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+});
+const Cancelcase = document.getElementById('Cancelcase')
+if (Cancelcase) {
+    Cancelcase.addEventListener('show.bs.modal', event => {
+        // Button that triggered the modal
+        const button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        const patientname = button.getAttribute('data-bs-patientname')
+        const requestid = button.getAttribute('data-bs-requestid')
+        // If necessary, you could initiate an Ajax request here
+        // and then do the updating in a callback.
+
+        // Update the modal's content.
+        const modalTitle = Cancelcase.querySelector('#patientname')
+        const modalBodyInput = Cancelcase.querySelector('#requestid')
+
+        modalTitle.textContent = patientname
+        modalBodyInput.value = requestid
+    })
+}

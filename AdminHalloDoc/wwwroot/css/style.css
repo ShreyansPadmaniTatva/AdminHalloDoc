@@ -355,7 +355,10 @@ th:nth-child(7) {
 th:nth-child(6) {
   width: 10%;
 }
-
+.colored-toast {
+    background-color: #a5dc86 !important;
+    color: black !important;
+}
 
 @media only  screen and (max-width: 800px) {
     #table {

@@ -16,7 +16,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 {
     public class ViewActionRepository : IViewActionRepository
     {
-        #region Configuration
+        #region Constructor
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly EmailConfiguration _emailConfig;
         private readonly ApplicationDbContext _context;
@@ -28,6 +28,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
+        #region GetDocumentByRequest
         public async Task<List<ViewPatientDashboard>> GetDocumentByRequest(int? id)
         {
 
@@ -43,8 +44,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         })
                         .ToList(); 
         }
+        #endregion
 
-
+        #region Send_Link
         public Boolean SendLink(string firstname, string lastname, string email, string phonenumber)
         {
             var baseUrl = httpContextAccessor.HttpContext?.Request.Host;
@@ -53,7 +55,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             return true;
         }
+        #endregion
 
+        #region Save_Document
         public Boolean SaveDoc(int Requestid, IFormFile file)
         {
             string UploadDoc = CM.UploadDoc(file, Requestid);
@@ -69,6 +73,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             return true;
         }
+        #endregion
+
+        #region Provider_By_Region
         public async Task<List<Physician>> ProviderbyRegion(int? regionid)
         {
             var result = await _context.Physicians
@@ -78,6 +85,55 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             return result;
         }
+        #endregion
 
+        #region Assign_Provider
+        public async Task<Boolean> AssignProvider(int RequestId, int ProviderId, string notes)
+        {
+            
+                var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == (int)RequestId);
+                request.Physicianid = ProviderId;
+                _context.Requests.Update(request);
+                _context.SaveChanges();
+
+                Requeststatuslog rsl = new Requeststatuslog();
+                rsl.Requestid = RequestId;
+                rsl.Physicianid = ProviderId;
+                rsl.Notes = notes;
+                rsl.Createddate = DateTime.Now;
+                rsl.Status = 1;
+                _context.Requeststatuslogs.Update(rsl);
+                _context.SaveChanges();
+
+                return true;
+           
+            
+        }
+        #endregion
+
+        #region Transfer_Provider
+        public async Task<Boolean> TransferToProvider(int RequestId, int ProviderId, string notes, int TransferToProviderId)
+        {
+
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == (int)RequestId);
+            request.Physicianid = ProviderId;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            Requeststatuslog rsl = new Requeststatuslog();
+            rsl.Requestid = RequestId;
+            rsl.Physicianid = ProviderId;
+            rsl.Transtophysicianid = TransferToProviderId;
+            rsl.Notes = notes;
+            rsl.Createddate = DateTime.Now;
+            rsl.Status = 1;
+            _context.Requeststatuslogs.Update(rsl);
+            _context.SaveChanges();
+
+            return true;
+
+
+        }
+        #endregion
     }
 }

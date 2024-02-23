@@ -15,5 +15,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         public  Task<List<ViewPatientDashboard>> GetDocumentByRequest(int? id);
         public Boolean SaveDoc(int Requestid, IFormFile file);
         public Task<List<Physician>> ProviderbyRegion(int? regionid);
+         Task<Boolean> AssignProvider(int RequestId, int ProviderId, string notes);
+        Task<Boolean> TransferToProvider(int RequestId, int ProviderId, string notes, int TransferToProviderId);
     }
 }

@@ -20,6 +20,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region DashBoard_Index
         public async Task<IActionResult> Index()
         {
+            TempData["Status"] = TempData["Status"];
             ViewBag.CountNewRequest = await _requestRepository.CountNewRequest();
             ViewBag.CountPandingRequest = await _requestRepository.CountPandingRequest();
             ViewBag.CountActiveRequest = await _requestRepository.CountActiveRequest();
@@ -63,11 +64,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             return View("../AdminViews/ViewAction/ViewUpload", v);
         }
         #endregion
+
         #region UploadDoc_Files
         public async Task<IActionResult> ProviderbyRegion(int? Regionid)
         {
             var v = await _viewActionRepository.ProviderbyRegion(Regionid);
-            return RedirectToAction("ViewUpload");
+            return Json(v);
         }
         #endregion
     }

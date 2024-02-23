@@ -21,17 +21,21 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region Save_Viewcase
         public async Task<IActionResult> SaveViewcase(Viewcase viewcase)
         {
-           Boolean fr = await _requestRepository.PutViewcase(viewcase);
-
-            return View("../AdminViews/ViewAction/Viewcase");
+            ViewData["Status"]  = await _requestRepository.PutViewcase(viewcase);
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            return View("../AdminViews/ViewAction/Viewcase", viewcase);
         }
         #endregion
 
         #region Send_Link
         public IActionResult SendLink(string firstname,string lastname, string email, string phonenumber)
         {
-            _viewActionRepository.SendLink( firstname,  lastname,  email,  phonenumber);
-            return View("../AdminViews/ViewAction/Viewcase");
+            if (_viewActionRepository.SendLink( firstname,  lastname,  email,  phonenumber))
+            {
+                
+                TempData["Status"] = "Link Send In mail Successfully..!";
+            }
+            return RedirectToAction("Index", "AdminDashboard"); 
         }
         #endregion
 
@@ -44,6 +48,32 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        
+
+        #region AssignProvider
+        public async Task<IActionResult> AssignProvider(int requestid, int ProviderId, string Notes)
+        {
+           if( await _viewActionRepository.AssignProvider(requestid, ProviderId, Notes))
+            {
+                TempData["Status"] = "Assign Provider Successfully..!";
+            }
+            
+
+            return RedirectToAction("Index", "AdminDashboard");
+        }
+        #endregion
+
+        #region TransferToProvider
+        public async Task<IActionResult> TransferToProvider(int requestid, int ProviderId, string Notes, int TProviderId)
+        {
+            if (await _viewActionRepository.TransferToProvider(requestid, ProviderId, Notes, TProviderId))
+            {
+                TempData["Status"] = "Transfer Provider Successfully..!";
+            }
+
+            return RedirectToAction("Index", "AdminDashboard");
+        }
+        # endregion
+
+
     }
 }

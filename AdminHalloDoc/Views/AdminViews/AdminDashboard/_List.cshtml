@@ -288,7 +288,8 @@
                                 <ul class="dropdown-menu ">
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
-                                    <li><a class="dropdown-item text-dark-emphasis" data-bs-toggle="modal" data-bs-target="#Cancelcase" data-bs-requestid="@item.Requestid" data-bs-patientname="@item.PatientName" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                    <li><a class="dropdown-item text-dark-emphasis" data-bs-toggle="modal" data-bs-target="#Cancelcase" data-bs-requestid="@item.Requestid" data-bs-patientname="@item.PatientName" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-plus"></i>Cance lcase </a></li>
+                                    <li><a class="dropdown-item text-dark-emphasis" data-bs-toggle="modal" data-bs-target="#Transfercase" data-bs-providerId="@item.ProviderID" data-bs-requestid="@item.Requestid" data-bs-patientname="@item.PatientName" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-plus"></i>Trans to physician </a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller="" ><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
@@ -305,27 +306,6 @@
 <partial name="../ViewAction/_allPartialAction.cshtml" />
 
 <script>
-    const Cancelcase = document.getElementById('Cancelcase')
-    if (Cancelcase) {
-        Cancelcase.addEventListener('show.bs.modal', event => {
-            // Button that triggered the modal
-            const button = event.relatedTarget
-            // Extract info from data-bs-* attributes
-            const patientname = button.getAttribute('data-bs-patientname')
-            const requestid = button.getAttribute('data-bs-requestid')
-            // If necessary, you could initiate an Ajax request here
-            // and then do the updating in a callback.
-
-            // Update the modal's content.
-            const modalTitle = Cancelcase.querySelector('#patientname')
-            const modalBodyInput = Cancelcase.querySelector('#requestid')
-
-            modalTitle.textContent = patientname
-            modalBodyInput.value = requestid
-        })
-    }
-    </script>
-<script>
     function myFunctiona() {
         var input, filter, table, tr, td, i, txtValue;
         input = document.getElementById("myInput");
@@ -333,7 +313,7 @@
         table = document.getElementById("table");
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
-            if (tr[i].style.display != "none") {
+            //if (tr[i].style.display != "none") {
 
             
                 td = tr[i].getElementsByTagName("td")[0];
@@ -345,7 +325,7 @@
                         tr[i].style.display = "none";
                     }
                 }
-            }
+           // }
         }
     }
 </script>
