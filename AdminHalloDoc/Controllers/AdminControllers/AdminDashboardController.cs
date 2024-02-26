@@ -8,14 +8,19 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 {
     public class AdminDashboardController : Controller
     {
+        #region Constructor
         private readonly IRequestRepository _requestRepository;
         private readonly IViewActionRepository _viewActionRepository;
-        public AdminDashboardController(IRequestRepository requestRepository, IViewActionRepository viewActionRepository)
+        private readonly IViewNotesRepository _viewNotesRepository;
+        public AdminDashboardController(IRequestRepository requestRepository, IViewActionRepository viewActionRepository, IViewNotesRepository viewNotesRepository)
         {
 
             _requestRepository = requestRepository;
             _viewActionRepository = viewActionRepository;
+            _viewNotesRepository = viewNotesRepository;
         }
+        #endregion
+
         // [Authorize(Roles = "Admin")]
         #region DashBoard_Index
         public async Task<IActionResult> Index()
@@ -54,6 +59,44 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             Viewcase v =  await _requestRepository.GetRequestDetails(id);
             return View("../AdminViews/ViewAction/Viewcase",v);
+        }
+        #endregion
+
+        #region View_Notes
+        public async Task<IActionResult> ViewNotes(int? id)
+        {
+            TempData["Status"] = TempData["Status"];
+            var n = await _viewNotesRepository.GetNotesByRequest(id);
+            return View("../AdminViews/ViewAction/ViewNotes",n);
+        }
+        #endregion
+
+        #region ChangeNotes
+
+        [HttpPost]
+        public IActionResult ChangeNotes(int? RequestID, string? adminnotes, string? physiciannotes)
+        {
+            if (adminnotes != null || physiciannotes != null)
+            {
+                bool result = _viewNotesRepository.PutNotes(adminnotes, physiciannotes, RequestID);
+
+                if (result)
+                {
+                    TempData["Status"] = "Change Successfully..!";
+                    return RedirectToAction("ViewNotes", new { id = RequestID });
+                }
+                else
+                {
+                    TempData["Status"] = "Not Change In Note";
+                    return RedirectToAction("ViewNotes", new { id = RequestID });
+                }
+            }
+            else
+            {
+                TempData["Status"] = "Please Select one of the note!!";
+                return RedirectToAction("ViewNotes", new { id = RequestID });
+            }
+
         }
         #endregion
 

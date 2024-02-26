@@ -290,7 +290,7 @@
                                     <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" data-bs-toggle="modal" data-bs-target="#Cancelcase" data-bs-requestid="@item.Requestid" data-bs-patientname="@item.PatientName" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-plus"></i>Cance lcase </a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" data-bs-toggle="modal" data-bs-target="#Transfercase" data-bs-providerId="@item.ProviderID" data-bs-requestid="@item.Requestid" data-bs-patientname="@item.PatientName" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-plus"></i>Trans to physician </a></li>
-                                    <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller="" ><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                    <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewNotes" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journals"></i>Encounter</a></li>
@@ -306,6 +306,7 @@
 <partial name="../ViewAction/_allPartialAction.cshtml" />
 
 <script>
+
     function myFunctiona() {
         var input, filter, table, tr, td, i, txtValue;
         input = document.getElementById("myInput");

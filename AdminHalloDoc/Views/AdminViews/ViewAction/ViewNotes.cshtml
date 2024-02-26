@@ -1,0 +1,158 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var status = "null";
+    if (TempData["Status"] == null)
+    {
+        status = "null";
+    }
+    else
+    {
+        status = TempData["Status"].ToString();
+
+    }
+}
+
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewNotesModel;
+<div class="container">
+
+        <div class="card-header  border-0  bg-transparent text-end mt-2">
+            <div class=" d-flex align-items-center justify-content-between">
+                <div class="text-start">
+                    <h4 class="form-title mt-3 mx-2">Notes</h4>
+
+                </div>
+
+
+                <div class="text-end">
+                    <a asp-controller="Dashboard" asp-action="Index"
+                       class="btn btn-outline-info btn-back">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                             fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                        </svg></i>Back
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+    <div class="row align-items-center  justify-content-around my-3 " >
+            @foreach (var item in Model.transfernotes)
+            {
+            <div class="col-md-6" style="min-height:100px" >
+                <div class="card border-0 shadow" style="cursor:pointer">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <img src="~/images/transfer-alt-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" /> <b>
+                                Transfer Notes
+                            </b>
+                        </h5>
+                        <hr/>
+                        <p class="card-text p-2">
+                            @item.Notes
+                        </p>
+                    </div>
+                </div>
+                </div>
+            }
+        </div>
+        <div class="row align-items-center  justify-content-around  ">
+        <div class="col-md-6">
+            <div class="card border-0 shadow" style="cursor:pointer" onclick="adminnotestext()">
+                <div class="card-body">
+                    <h5 class="card-title"><img src="~/images/health-care-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" /> <b>
+                        Admin Notes
+                    </b> </h5>
+                    <hr />
+                    <p class="card-text p-2" id="adminnotestext">
+                        @Model.Adminnotes
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow po " onclick="phynotetext()" style="cursor:pointer">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <img src="~/images/doctor-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" /> <b> Physician Notes</b>
+                    </h5>
+                    <hr />
+                    <p class="card-text" id="phynotetext">
+                        @Model.Physiciannotes
+                    </p>
+                </div>
+            </div>
+        </div>
+            
+
+        <div class="col-md-12" >
+            <form method="post" asp-action="ChangeNotes" asp-controller="AdminDashboard">
+                <div class="  align-items-center d-flex justify-content-around mb-2 mt-3 " style="cursor:pointer">
+
+                    <div class="col-md-12 shadow rounded  ">
+                        <div class="card-body">
+                            <div class="inputs-control w-100 mt-2 p-2">
+                                <input type="hidden" name="RequestID" value="@Model.Requestid" />
+                                <textarea id="changenote" placeholder=" " rows="5" name="" class="input-outline w-100 fs-6 " type="text"></textarea>
+
+                                <label class="inputs-lable inputs-lable-textarea fs-6 badge text-bg-primary" id="notedata">Notes</label>
+                            </div>
+                            
+                            <div class="text-end m-3">
+                                <input type="submit" class="btn btn-info text-white mt-2" value="Save Changes" >
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+        </div>
+        
+      
+
+
+    
+
+</div>
+
+<script>
+    window.onload = function () {
+        console.log("@status  d");
+        if ("@status" != "null") {
+            savealt("@status")
+        }
+    };
+    function phynotetext() {
+        var text = $('#phynotetext').html().trim();
+        $("#changenote").val(text);
+
+        $("#changenote").attr("name", "physiciannotes");
+        $("#notedata").html("Physician Note");
+    }
+    function adminnotestext() {
+        var text = $('#adminnotestext').html().trim();
+        console.log(text);
+        $("#changenote").val(text);
+        $("#changenote").attr("name", "adminnotes");
+        $("#notedata").html("Admin Note");
+    }
+
+
+    function enable_disable() {
+        $(".edit-frm").prop("readonly", false);
+        $("#save").prop("readonly", false);
+        $("#cancel").prop("readonly", false);
+        $("#save").css("display", "block");
+        $("#cancel").css("display", "block");
+        $("#edit").css("display", "none");
+        $(".edit-frm").css("background-color", "transparent");
+
+    }
+
+</script>

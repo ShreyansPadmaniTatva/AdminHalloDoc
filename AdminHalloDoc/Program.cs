@@ -18,6 +18,7 @@ var emailConfig = builder.Configuration
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IViewActionRepository, ViewActionRepository>();
+builder.Services.AddScoped<IViewNotesRepository, ViewNotesRepository>();
 
 var app = builder.Build();
 

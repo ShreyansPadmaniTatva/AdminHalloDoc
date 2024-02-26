@@ -88,6 +88,26 @@
 </div>
 <partial name="_models/_assigncase.cshtml" />
 <script>
+    const Assigncase = document.getElementById('Assigncase')
+    if (Assigncase) {
+        Assigncase.addEventListener('show.bs.modal', event => {
+            // Button that triggered the modal
+            const button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            const patientname = button.getAttribute('data-bs-patientname')
+            const requestid = button.getAttribute('data-bs-requestid')
+            // If necessary, you could initiate an Ajax request here
+            // and then do the updating in a callback.
+
+            // Update the modal's content.
+            const modalTitle = Assigncase.querySelector('#patientname')
+            const modalBodyInput = Assigncase.querySelector('#requestid')
+
+            modalTitle.textContent = patientname
+            modalBodyInput.value = requestid
+        })
+    }
+
     function toggleFormElements(bDisabled) {
         var inputs = document.getElementsByTagName("input");
         var submit = document.getElementById("submit");
@@ -117,27 +137,7 @@
     {
 <script>
      
- 
 
-    const Cancelcase = document.getElementById('Assigncase')
-    if (Cancelcase) {
-        Cancelcase.addEventListener('show.bs.modal', event => {
-            // Button that triggered the modal
-            const button = event.relatedTarget
-            // Extract info from data-bs-* attributes
-            const patientname = button.getAttribute('data-bs-patientname')
-            const requestid = button.getAttribute('data-bs-requestid')
-            // If necessary, you could initiate an Ajax request here
-            // and then do the updating in a callback.
-
-            // Update the modal's content.
-            const modalTitle = Cancelcase.querySelector('#patientname')
-            const modalBodyInput = Cancelcase.querySelector('#requestid')
-
-            modalTitle.textContent = patientname
-            modalBodyInput.value = requestid
-        })
-    }
 
 
     $(function () {

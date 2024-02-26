@@ -357,7 +357,7 @@ th:nth-child(6) {
 }
 .colored-toast {
     background-color: #a5dc86 !important;
-    color: black !important;
+    color: white !important;
 }
 
 @media only  screen and (max-width: 800px) {
