@@ -72,6 +72,15 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
             return RedirectToAction("Index", "AdminDashboard");
         }
+        #endregion
+
+        #region TransferToProvider
+        public async Task<IActionResult> _Cancelcase(int? requestid)
+        {
+            
+
+            return PartialView("../AdminViews/ViewAction/_modelS/_cancelcase");
+        }
         # endregion
 
 

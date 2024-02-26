@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
     public class ViewDashboardList
-    {
+    {   
+
         public int? Requestid { get; set; }
         public int? RequestClientid { get; set; }
         public int Status { get; set; }
@@ -29,6 +30,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? Notes { get; set; }
 
         public int? ProviderID { get; set; }
+        public string? Physician { get; set;}
 
     }
 }

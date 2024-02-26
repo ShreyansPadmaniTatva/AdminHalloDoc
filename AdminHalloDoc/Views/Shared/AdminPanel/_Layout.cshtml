@@ -18,7 +18,7 @@
     <main role="main" class="container-fluid py-1 g-3 min-vh-100 ">
         @RenderBody()
     </main>
-
+    <div id="modal-placeholder"></div>
     <partial name="_Partial/_footer.cshtml" />
 
     <script src="@Url.Content("~/plugins/global/plugins.bundle.js")"></script>
@@ -31,6 +31,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="~/js/custom.js"></script>
+    <script src="@Url.Content("~/js/custom2/UI_Bootbox.js")"></script>
+    <script src="@Url.Content("~/js/custom2/UI_ModalEvents.js")"></script>
+    <script src="@Url.Content("~/js/custom2/UI_BlockUI.js")"></script>
+    <script src="@Url.Content("~/js/custom2/InitMain.js")"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

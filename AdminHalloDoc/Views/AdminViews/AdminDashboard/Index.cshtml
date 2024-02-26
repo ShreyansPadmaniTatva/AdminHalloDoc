@@ -71,9 +71,18 @@
     }
 </script>
     <script>
-   
+    function initDataTable(tableSelector) {
+        $(tableSelector).DataTable({
+            "scrollY": "300px",
+            "scrollCollapse": true,
+            "paging": false,
+            "order": [],
+            //"scroller": true,
+            //"stateSave": true,
+            "scrollX": true
+        });
+    }
 
-    $(function () {
 
 
       

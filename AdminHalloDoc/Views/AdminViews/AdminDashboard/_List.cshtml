@@ -1,18 +1,22 @@
 ﻿@model List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDashboardList>
 @using static AdminHalloDoc.Entities.ViewModel.Constant
-@{
-    Dictionary<int, List<string>> statusTdHtmlMap = new Dictionary<int, List<string>>
+@{var Status = -1;
+    if (Model.Count > 0)
     {
-        { 1, new List<string> { "<div>Value1</div>", "<div>Value2</div>", "<div>Value3</div>", "<div>Value4</div>", "<div>Value5</div>" } }, // Values for status 1
-        { 2, new List<string> { "<div>Value1</div>", "<div>Value2</div>", "<div>Value3</div>" } }, // Values for status 2
-        // Add more mappings as needed
-    };
-}
+        Status = Model[0].Status;
+    }
+    List<string> tdHtmlValues = statusTdHtmlMap.ContainsKey(Status) ? statusTdHtmlMap[Status] : new List<string>();
+}   
+
 <div class="justify-content-between d-flex my-3">
     <div class="heading ">
         <h3 class="mb-0 pb-0 top-heading">Patient</h3>  <span class="align-bottom  top-side-heading d-flex flex-column justify-content-end pb-1 px-2 text-primary-emphasis fw-bolder"> (Close)</span>
     </div>
     <din>
+        <span data-bs-toggle="tooltip" data-bs-placement="left" title="Edit">
+            
+        </span>
+
         <div class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#sendlink">
             <i class="bi bi-send"></i>
             <span class="top-btn">
@@ -229,28 +233,17 @@
         <table class="table table-responsive" id="table">
             <thead class="fw-lighter">
                 <tr>
-                    @{
-                        List<string> tdHtmlValues = statusTdHtmlMap.ContainsKey(Model[0].Status) ? statusTdHtmlMap[Model[0].Status] : new List<string>();
-                    }
                     @foreach (var htmlValue in tdHtmlValues)
                     {
                         <th scope="col">@Html.Raw(htmlValue)</th>
                     }
-                    <th scope="col">Name</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Rqequestor</th>
-                    <th scope="col">Request Date</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Notes</th>
-                    <th scope="col">Chat With</th>
-                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr class="bg-@item.RequestTypeID  filterDiv @item.RegionID">
+
                         <td scope="col">
                             <div class="text-end d-flex justify-content-between">
                                 <div class="text-start d-grid">
@@ -260,26 +253,47 @@
                                 </div>
                             </div>
                         </td>
-                        <td scope="col">Jun, 16, 2003</td>
-                        <td scope="col">@item.Requestor</td>
-                        <td scope="col">@item.Dob</td>
-                        <td scope="col">
-                            <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.PhoneNumber </div>
-                            <span>
-                                (Patient)
-                            </span>
-                            @{
-                                if (item.RequestTypeID != 2)
-                                {
-                                    <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.RequestorPhoneNumber </div>
-                                    <span>
-                                        @Enum.GetName(typeof(RequestType), item.RequestTypeID)
-                                    </span>
+                        @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 5)
+                        {
+                            <td scope="col" >@item.Dob </td>
+                        }
+                        @if (Status == 1 || Status == 2 || Status == 3)
+                        {
+                            <td scope="col">@item.Requestor</td>
+                        }
+                        @if (Status == 2 || Status == 3 || Status == 4 || Status == 5 || Status == 6)
+                        {
+                            <td>@item.Physician</td>
+                        }
+                        
+                            <td>20-2-25</td>
+                        
+                        @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 6)
+                        {
+                            <td scope="col">
+                                <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.PhoneNumber </div>
+                                <span>
+                                    (Patient)
+                                </span>
+                                @{
+                                    if (item.RequestTypeID != 2)
+                                    {
+                                        <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.RequestorPhoneNumber </div>
+                                        <span>
+                                            @Enum.GetName(typeof(RequestType), item.RequestTypeID)
+                                        </span>
+                                    }
                                 }
-                            }
-                        </td>
+                                
+                            </td>
+                        }
                         <td scope="col">@item.Address</td>
-                        <td scope="col">@item.Notes </td>
+                         @if (Status == 1 || Status == 2 || Status == 3 || Status == 5)
+                         {
+                         
+                             <td scope="col">@item.Notes </td>
+                        
+                         }
                         <td scope="col"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-person-workspace"></i> Provider </div></td>
                        
                         
@@ -291,6 +305,14 @@
                                 <ul class="dropdown-menu ">
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                    <li>
+                                        <button class="btn btn-primary btn-icon btn-elevate btn-sm js-stkModal-btn"
+                                            data-form-id="formEdit_UMS"
+                                                data-url='@Url.Action("_Cancelcase", "ViewAction", new {requestid = @item.Requestid})'
+                                            data-modal-size="lg">
+                                        <i class="la la-edit"></i> edit
+                                    </button>
+                                    </li>
                                     <li><a class="dropdown-item text-dark-emphasis" data-bs-toggle="modal" data-bs-target="#Cancelcase" data-bs-requestid="@item.Requestid" data-bs-patientname="@item.PatientName" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-plus"></i>Cance lcase </a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" data-bs-toggle="modal" data-bs-target="#Transfercase" data-bs-providerId="@item.ProviderID" data-bs-requestid="@item.Requestid" data-bs-patientname="@item.PatientName" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-plus"></i>Trans to physician </a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewNotes" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
@@ -306,8 +328,9 @@
         </table>
     </div>
 </div>
-<partial name="../ViewAction/_allPartialAction.cshtml" />
+<div  >
 
+</div>
 <script>
 
     function myFunctiona() {

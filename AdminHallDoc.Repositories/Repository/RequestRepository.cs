@@ -92,6 +92,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     where priceList.Contains(req.Status)
                     select new ViewDashboardList
                     {
+                        Physician = p.Firstname + " " + p.Lastname,
                         RequestClientid = rc.Requestclientid,
                         Status = req.Status,
                         Requestid = req.Requestid,
