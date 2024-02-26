@@ -93,6 +93,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     select new ViewDashboardList
                     {
                         RequestClientid = rc.Requestclientid,
+                        Status = req.Status,
                         Requestid = req.Requestid,
                         RequestTypeID = req.Requesttypeid,
                         Requestor = req.Firstname + " " + req.Lastname,

@@ -12,7 +12,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
     {
         public int? Requestid { get; set; }
         public int? RequestClientid { get; set; }
-        public int? Status { get; set; }
+        public int Status { get; set; }
         public string? PatientName { get; set; }
         public DateTime? Dob { get; set; }
         public string? PatientId { get; set; }

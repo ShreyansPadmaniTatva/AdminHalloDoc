@@ -1,5 +1,13 @@
-﻿@model IEnumerable<AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDashboardList>
-
+﻿@model List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDashboardList>
+@using static AdminHalloDoc.Entities.ViewModel.Constant
+@{
+    Dictionary<int, List<string>> statusTdHtmlMap = new Dictionary<int, List<string>>
+    {
+        { 1, new List<string> { "<div>Value1</div>", "<div>Value2</div>", "<div>Value3</div>", "<div>Value4</div>", "<div>Value5</div>" } }, // Values for status 1
+        { 2, new List<string> { "<div>Value1</div>", "<div>Value2</div>", "<div>Value3</div>" } }, // Values for status 2
+        // Add more mappings as needed
+    };
+}
 <div class="justify-content-between d-flex my-3">
     <div class="heading ">
         <h3 class="mb-0 pb-0 top-heading">Patient</h3>  <span class="align-bottom  top-side-heading d-flex flex-column justify-content-end pb-1 px-2 text-primary-emphasis fw-bolder"> (Close)</span>
@@ -221,6 +229,13 @@
         <table class="table table-responsive" id="table">
             <thead class="fw-lighter">
                 <tr>
+                    @{
+                        List<string> tdHtmlValues = statusTdHtmlMap.ContainsKey(Model[0].Status) ? statusTdHtmlMap[Model[0].Status] : new List<string>();
+                    }
+                    @foreach (var htmlValue in tdHtmlValues)
+                    {
+                        <th scope="col">@Html.Raw(htmlValue)</th>
+                    }
                     <th scope="col">Name</th>
                     <th scope="col">Date</th>
                     <th scope="col">Rqequestor</th>
@@ -254,25 +269,11 @@
                                 (Patient)
                             </span>
                             @{
-                                if (item.RequestTypeID == 3)
+                                if (item.RequestTypeID != 2)
                                 {
                                     <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.RequestorPhoneNumber </div>
                                     <span>
-                                        (Family/Friend)
-                                    </span>
-                                }
-                                else if (item.RequestTypeID == 4)
-                                {
-                                    <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.RequestorPhoneNumber </div>
-                                    <span>
-                                        (Concierge)
-                                    </span>
-                                }
-                                else if (item.RequestTypeID == 1)
-                                {
-                                    <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.RequestorPhoneNumber </div>
-                                    <span>
-                                        (Business Partner)
+                                        @Enum.GetName(typeof(RequestType), item.RequestTypeID)
                                     </span>
                                 }
                             }
@@ -280,6 +281,8 @@
                         <td scope="col">@item.Address</td>
                         <td scope="col">@item.Notes </td>
                         <td scope="col"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-person-workspace"></i> Provider </div></td>
+                       
+                        
                         <td scope="col">
                             <div class="dropdown ">
                                 <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
