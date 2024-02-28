@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.102.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.16">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,6 +24,10 @@
   <ItemGroup>
     <ProjectReference Include="..\AdminHallDoc.Repositories\AdminHalloDoc.Repositories.Admin.csproj" />
     <ProjectReference Include="..\AdminHalloDoc.Entities\AdminHalloDoc.Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Upload\59\" />
   </ItemGroup>
 
 </Project>

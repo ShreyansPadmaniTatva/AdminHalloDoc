@@ -22,5 +22,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<bool> CancelCase(ViewActions v);
         Task<bool> BlockCase(ViewActions v);
         Task<bool> AssignPhysician(ViewActions v);
+        Task<bool> DeleteDocumentByRequest(string ids);
+        Task<bool> SendFilEmail(string ids);
     }
 }

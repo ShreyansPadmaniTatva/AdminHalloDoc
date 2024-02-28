@@ -3,7 +3,18 @@
 *@
 
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDocuments
+@{
+    var status = "null";
+    if (TempData["Status"] == null)
+    {
+        status = "null";
+    }
+    else
+    {
+        status = TempData["Status"].ToString();
 
+    }
+}
 <link href="~/css/style.css" rel="stylesheet" />
 <div class="container">
     <div class="card bg-transparent border-0 p-2" style="border-radius: 15px;">
@@ -32,17 +43,17 @@
             <div class="col-md-12 mt-3">
 
                 <form method="post" id="myForm" asp-action="UploadDoc" asp-controller="ViewAction" enctype="multipart/form-data">
-                        <div class="col-md-12 form-floating d-flex ">
-                            <div class="file-upload-wrapper1 border border-1" data-text="Select your file!">
-                                     <input type="hidden" name="Requestid" value="@Model.RequestID" />
-                                <input name="file" type="file" class="file-upload-field" id="file" value="">
+                    <div class="col-md-12 form-floating d-flex ">
+                        <div class="file-upload-wrapper1 border border-1" data-text="Select your file!">
+                            <input type="hidden" name="Requestid" value="@Model.RequestID" />
+                            <input name="file" type="file" class="file-upload-field" id="file" value="">
 
-                            </div>
-                        <input type="submit" class="btn text-light btn-info rounded-right " id="fileupload" value="upload" />
-                            <!-- <input class="form-control rounded" name="suche" type="file" placeholder=Suchtext autocomplete=off> -->
                         </div>
-                    </form>
-                
+                        <input type="submit" class="btn text-light btn-info rounded-right " id="fileupload" value="upload" />
+                        <!-- <input class="form-control rounded" name="suche" type="file" placeholder=Suchtext autocomplete=off> -->
+                    </div>
+                </form>
+
 
 
                 <div class="card-header-2 mt-3 d-flex justify-content-between  border-0  bg-transparent ">
@@ -51,9 +62,21 @@
                     </div>
                     <div class="text-end">
                         <div id="downloadAll" class="btn btn-outline-info btn-back text-end">
-                            Downlode all</a>
+                            <i class="fa-solid fa-download"></i>  Downlode all
+                        </div>
+                        <form method="post" id="deleted" asp-action="AllFilesDelete" asp-controller="ViewAction" >
+                            <input type="hidden" id="deleteids" name="deleteids" />
+                            <input type="hidden" value="@Model.RequestID" name="Requestid" />
+                                <a  id="delete" class="btn btn-outline-info btn-back text-end">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>  Delete
+                                </a>
+                        </form>
+                         <a class="btn btn-sm  btn-outline-info " asp-action="SendFilEmail" asp-controller="ViewAction"  asp-route-Requestid="@Model.RequestID">
+                        <div class="btn btn-outline-info btn-back text-end">
+                            <i class="fa-solid fa-mail"></i>  Send Mail
+                        </div>
+                        </a>
                     </div>
-                </div>
                 </div>
                 <div class="table-responsive mt-3 ">
                     <table class="table">
@@ -61,7 +84,7 @@
                             <tr class="table-secondary">
                                 <th scope="col" class="table-text-header px-3">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox"  id="topflexCheckDefault">
+                                        <input class="form-check-input" type="checkbox" id="topflexCheckDefault">
                                     </div>
                                 </th>
                                 <th scope="col" class="table-text-header px-3">File Name</th>
@@ -78,9 +101,10 @@
                                     <td class="table-text px-3">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                            <input class="form-check-input RequestwisefilesId" type="hidden" value="@item2.RequestwisefilesId">
                                         </div>
                                     </td>
-                                    <td class="table-text  px-3">@item2.Filename</td>
+                                    <td class="table-text  px-3 flnamae"> <span> @item2.Filename </span></td>
                                     <td class="table-text  px-3">@item2.Status</td>
                                     <td class="table-text  px-3">@item2.Createddate</td>
 
@@ -91,6 +115,9 @@
                                                 <path fill-rule="evenodd"
                                                       d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z" />
                                             </svg>
+                                        </a>
+                                        <a class="btn btn-sm  btn-outline-info " asp-action="DeleteFile" asp-controller="ViewAction" asp-route-id="@item2.RequestwisefilesId" asp-route-Requestid="@Model.RequestID">
+                                            <i class="fa fa-trash" aria-hidden="true">  </i>
                                         </a>
 
                                     </td>
@@ -107,10 +134,34 @@
 </div>
 @section Scripts
     {
-     <script type="text/javascript" >
-     
-     $(function () {
-         $('#downloadAll').click(function () {
+    <script src="https://kit.fontawesome.com/1d989daaf7.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            console.log("@status  d");
+            if ("@status" != "null") {
+                savealt("@status")
+            }
+        };
+
+        $(function () {
+
+            $('.flnamae').each(function () {
+                var fileName = $(this).text().trim();
+                if (fileName.endsWith('.pdf')) {
+                    $(this).prepend('<i class="fa-solid fa-file-pdf" style="color: #be2323;font-size:1rem"></i> ');
+                } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
+                    $(this).prepend('<i class="fa-solid fa-file-doc" style="color: #74C0FC;font-size:1rem"></i> ');
+                } else if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif') || fileName.endsWith('.svg')) {
+                    $(this).prepend('<i class="fa-solid fa-images" style="color: #B197FC;font-size:1rem"></i> ');
+                }else{
+                    $(this).prepend(' <i class="fa-solid fa-file" > </i>');
+                }
+
+            });
+
+
+            $('#downloadAll').click(function () {
                 $('tbody tr').each(function () {
                     if ($(this).find('.form-check-input').prop('checked')) {
                         var downloadLink = $(this).find('.document-button').attr('href');
@@ -125,33 +176,73 @@
                     }
                 });
             });
-     
-         $('#topflexCheckDefault').change(function () {
+
+            $('#delete').click(function () {
+                $('tbody tr').each(function () {
+                    if ($(this).find('.form-check-input').prop('checked')) {
+                        var downloadLink = $(this).find('.RequestwisefilesId').val();
+                        var deleteids = $('#deleteids').val();
+                        console.log(deleteids);
+                        if (deleteids=='') {
+
+                            $('#deleteids').val(downloadLink);
+                        }else{
+                            $('#deleteids').val(deleteids + ',' + downloadLink);
+
+                        }
+                        console.log($('#deleteids').val());
+
+                    }
+                });
+
+                Swal.fire({
+                    title: "Do you want to Delete That file ?",
+                    showDenyButton: false,
+                    showCancelButton: true,
+                    confirmButtonText: "Save",
+                    denyButtonText: `Don't save`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#deleted').submit();
+                    }
+                    console.log(result);
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        Swal.fire("Delete!", "", "success");
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
+                });
+            });
+
+
+
+            $('#topflexCheckDefault').change(function () {
                 $('.table tbody input[type="checkbox"]').prop('checked', $(this).is(':checked'));
             });
-     
-         // Uncheck main checkbox in header when any checkbox in table body is unchecked
-         $('.table tbody input[type="checkbox"]').change(function () {
+
+            // Uncheck main checkbox in header when any checkbox in table body is unchecked
+            $('.table tbody input[type="checkbox"]').change(function () {
                 if (!$(this).is(':checked')) {
                     $('#topflexCheckDefault').prop('checked', false);
                 }
             });
-     
-         $("#fileupload").submit(function (e) {
-             e.preventDefault();
-             if ($('#file')[0].files[0] == undefined) {
-                 swal.fire({
-                     title: "Oops..",
-                     text: "Oops!☹️ Please Select One File ",
-                     icon: "error",
-                     showCancelButton: true,
-                     showConfirmButton: false,
-                     cancelButtonText: "Okay",
-                     cancelButtonColor: "#01BBE7",
-                 })
-                 return;
-             }
-         })
-     });
-     </script>
+
+            $("#fileupload").submit(function (e) {
+                e.preventDefault();
+                if ($('#file')[0].files[0] == undefined) {
+                    swal.fire({
+                        title: "Oops..",
+                        text: "Oops!☹️ Please Select One File ",
+                        icon: "error",
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelButtonText: "Okay",
+                        cancelButtonColor: "#01BBE7",
+                    })
+                    return;
+                }
+            })
+        });
+    </script>
 }

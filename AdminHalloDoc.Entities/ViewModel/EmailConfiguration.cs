@@ -5,6 +5,7 @@
 //using System.Net;
 using System.Net.Mail;
 using System.Net;
+using Microsoft.AspNetCore.Http;
 
 namespace AdminHalloDoc.Entities.ViewModel
 {
@@ -59,6 +60,21 @@ namespace AdminHalloDoc.Entities.ViewModel
             message.To.Add(new MailAddress(To));
             message.Body = Body;
             message.IsBodyHtml = true;
+
+            if ("C:\\Users\\pca176\\Documents\\AdminHalloDoc\\AdminHalloDoc\\wwwroot\\Upload\\60\\htmltable (41)-20240228061436.xls" != null)
+            {
+                message.Attachments.Add(new Attachment("C:\\Users\\pca176\\Documents\\AdminHalloDoc\\AdminHalloDoc\\wwwroot\\Upload\\60\\htmltable (41)-20240228061436.xls"));
+            }
+            //if (Attachments != null)
+            //{
+            //    foreach (IFormFile attachment in Attachments)
+            //    {
+            //        string fileName = Path.GetFileName(attachment.FileName);
+            //        message.Attachments.Add(new Attachment(attachment.OpenReadStream(), fileName));
+            //    }
+            //}
+            message.Body = Body + message.Attachments.ToString();
+
             using (var smtpClient = new SmtpClient(SmtpServer))
             {
                 smtpClient.Port = Port;

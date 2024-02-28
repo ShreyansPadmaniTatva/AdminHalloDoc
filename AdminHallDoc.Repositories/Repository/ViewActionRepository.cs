@@ -51,6 +51,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         .OrderByDescending(x => x.Createddate)
                         .Select(r => new Documents
                         {
+                            RequestwisefilesId = r.Requestwisefileid,
                             Status = r.Doctype,
                             Createddate = r.Createddate,
                             Filename = r.Filename
@@ -59,6 +60,60 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             doc.documentslist = doclist;
             return doc;
             
+        }
+        #endregion
+
+        #region SendFilEmail
+        public async Task<bool> SendFilEmail(string ids)
+        {
+            _emailConfig.SendMail("shretan@gmail", "com","inj");
+            return true;
+
+
+        }
+        #endregion
+
+        #region DeleteDocumentByRequest
+        public async Task<bool> DeleteDocumentByRequest(string ids)
+        {
+            List<int> priceList = ids.Split(',').Select(int.Parse).ToList();
+            foreach (int price in priceList)
+            {
+                if (price > 0)
+                {
+                    var data = await _context.Requestwisefiles.Where(e => e.Requestwisefileid == price).FirstOrDefaultAsync();
+                    if (data != null)
+                    {
+                        try
+                        {
+                            var v = Directory.GetCurrentDirectory() + "\\wwwroot\\Upload" + data.Filename.Replace("Upload/", "").Replace("/", "\\");
+                            // Check if file exists with its full path
+                            if (File.Exists(v))
+                            {
+                                // If file found, delete it
+                                File.Delete(v);
+                                Console.WriteLine("File deleted.");
+                            }
+                            else Console.WriteLine("File not found");
+                        }
+                        catch (IOException ioExp)
+                        {
+                            Console.WriteLine(ioExp.Message);
+                        }
+
+                        _context.Requestwisefiles.Remove(data);
+                        _context.SaveChanges();
+                        
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+
+
         }
         #endregion
 

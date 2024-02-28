@@ -87,7 +87,7 @@
                     }
                     else
                     {
-                    <p>not add</p>
+                        <p id="adminnotestext" >-</p>
                     }
 
                 </div>
@@ -108,7 +108,7 @@
                     }
                     else
                     {
-                    <p>not add</p>
+                        <p id="phynotetext" >-</p>
                     }
                     
                 </div>
@@ -157,15 +157,13 @@
         }
     };
     function phynotetext() {
-        var text = $('#phynotetext').html();
+        var text = $('#phynotetext').html().trim();
         $("#changenote").val(text);
-
         $("#changenote").attr("name", "physiciannotes");
         $("#notedata").html("Physician Note");
     }
     function adminnotestext() {
-        var text = $('#adminnotestext').html();
-        console.log(text);
+        var text = $('#adminnotestext').html().trim();
         $("#changenote").val(text);
         $("#changenote").attr("name", "adminnotes");
         $("#notedata").html("Admin Note");

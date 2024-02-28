@@ -73,6 +73,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 {
                      notes = new ViewNotesModel();
                     notes.Requestid = id;
+                    notes.Physiciannotes = "-";
+                    notes.Administrativenotes = "-";
+                    notes.Adminnotes = "-";
                 }
                 
 
@@ -106,8 +109,18 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         return true;
                     }
                     else
+
                     {
-                        return false;
+                        Requestnote rn = new Requestnote
+                        {
+                            Requestid = (int)RequestID,
+                            Physiciannotes = physiciannotes,
+                            Createddate = DateTime.Now,
+                            Createdby = "001e35a5 - cd12 - 4ec8 - a077 - 95db9d54da0f"
+                        };
+                        _context.Requestnotes.Add(rn);
+                        _context.SaveChangesAsync();
+                        return true;
                     }
                 }
                 else if (adminnotes != null)
@@ -124,15 +137,22 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     }
                     else
                     {
-                        return false;
+                        Requestnote rn = new Requestnote
+                        {
+                            Requestid = (int)RequestID,
+                            Adminnotes = adminnotes,
+                            Createddate = DateTime.Now,
+                            Createdby = "001e35a5 - cd12 - 4ec8 - a077 - 95db9d54da0f"
+                        };
+                        _context.Requestnotes.Add(rn);
+                        _context.SaveChangesAsync();
+                        return true;
                     }
                 }
                 else
                 {
                     return false;
                 }
-
-
             }
             catch (Exception ex)
             {

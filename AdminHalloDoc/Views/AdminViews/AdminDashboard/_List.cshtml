@@ -39,14 +39,52 @@
 
         </div>
         <div class="btn btn-info text-white">
-            <i class="bi bi-forward-fill"></i>
-            <span class="top-btn">
-                export all
-            </span>
+            <form id="filterForm"
+                  asp-action="ExporttoExcel" asp-controller="Report" novalidate="novalidate">
+                <input type="hidden" name="HtmlTable"/>
+                <button type="submit" value="1" id="btnsubmit" name="status" class="btn btn-transpernt text-white">
+                    <i class="bi bi-forward-fill"></i>
+                    <span class="top-btn">
+                        export all
+                    </span>
 
+                </button>
+            </form>
         </div>
     </din>
 </div>
+<script>
+
+    $(function () {
+
+        $("#btnsubmit").click(function () {
+            document.querySelectorAll('.action').forEach(function (el) {
+                el.style.display = 'none';
+            });
+
+            // Using callback function
+            $("input[name='HtmlTable']").val($("#a1a").html(function () {
+                document.querySelectorAll('.action').forEach(function (el) {
+                    el.style.display = 'none';
+                });
+                // Second line of code runs after the first one is completed
+                // Place the code here that you want to execute after the first line completes
+            }));
+
+            // Using promise
+            $("input[name='HtmlTable']").val($("#a1a").html()).promise().done(function () {
+                document.querySelectorAll('.action').forEach(function (el) {
+                    el.style.display = 'none';
+                });
+                // Second line of code runs after the first one is completed
+                // Place the code here that you want to execute after the first line completes
+            });
+            $(".action").show();
+
+        });
+
+    });
+</script>
 <div class="card border-0 shadow py-2 my-3">
     <div class="d-flex justify-content-between m-2 table-menu">
         <div class="starting-bar d-flex">
@@ -98,255 +136,241 @@
     </div>
     <div class="table-responsive">
         <div class="accordion accordion-flush" id="accordionFlushExample">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingOne">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="pb-3">
-                                  Testp Tesp
-                                </div>
-                                <div>
-                                    123, baltime , mayloan 2802
-                                </div>
-                            </div>
-                            <div>
-                                <div class="pb-2">
-                                    Patient  <div class="p-success">
+            @foreach (var item in Model)
+            {
+                    <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-heading-@item.Requestid">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-@item.Requestid" aria-expanded="false" aria-controls="collapse_@item.Requestid">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="pb-3">
+                                         @item.PatientName
+                                        </div>
+                                        <div>
+                                        @item.Address
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="pb-2">
+                                            Patient  <div class="p-success">
+                                            </div>
+                                        </div>
+                                        <div class="btn btn-outline-info rounded-4 p-1 fs-6 px-2">
+                                        <a href=""> map location </a>
+                                    </div>
                                     </div>
                                 </div>
-                                <div class="btn btn-outline-info rounded-4 p-1 fs-6 px-2">
-                                    map location
+                            </button>
+                        </h2>
+                    <div id="flush-@item.Requestid" class="accordion-collapse collapse" aria-labelledby="@item.Requestid" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <div class="d-flex align-items-center py-0 position-relative">
+                                    <div class="border border-1 border-info d-flex rounded-5 ro">
+                                        <i class="bi bi-calendar3 p-2 py-1  fa-sm"></i>
+                                    </div>
+                                    <div class="px-2 ">
+                                        <span class="text-start text-light-emphasis"> Date Of birth:  </span>
+                                        <span class="text-end text-dark"> Jun 28, 1991(33)  </span>
+                                    </div>
+                                    <div class="btn btn-light rounded-4 p-1 fs-6 px-3 my-2 position-absolute top-0  end-0">
+                                        View Case
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </button>
-                </h2>
-                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <div class="d-flex align-items-center py-0 position-relative">
-                            <div class="border border-1 border-info d-flex rounded-5 ro">
-                                <i class="bi bi-calendar3 p-2 py-1  fa-sm"></i>
-                            </div>
-                            <div class="px-2 ">
-                                <span class="text-start text-light-emphasis"> Date Of birth:  </span>
-                                <span class="text-end text-dark"> Jun 28, 1991(33)  </span>
-                            </div>
-                            <div class="btn btn-light rounded-4 p-1 fs-6 px-3 my-2 position-absolute top-0  end-0">
-                                View Case
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center py-0">
-                            <div class="border border-1 border-info d-flex rounded-5 mb-1 ">
-                                <i class="bi bi-envelope p-2 py-1 fa-sm"></i>
-                            </div>
-                            <div class="px-2 ">
-                                <span class="text-start text-light-emphasis">Email :  </span>
-                                <span class="text-end text-dark">shreyans Padmani  </span>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center py-0">
-                            <div class="border border-1 border-info d-flex rounded-5  mb-1">
-                                <i class="bi bi-telephone p-2 py-1  fa-sm"></i>
-                            </div>
-                            <div class="px-2 ">
-                                <span class="text-start text-light-emphasis"> patient:  </span>
-                                <span class="text-end text-dark"> +1 3263 526 </span>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center pb-1">
-                            <div class="border border-1 border-info d-flex rounded-5  mb-1">
-                                <i class="bi bi-person p-2 py-1  fa-sm"></i>
-                            </div>
-                            <div class="px-2 ">
-                                <span class="text-start text-light-emphasis"> Requestor:  </span>
-                                <span class="text-end text-dark"> shreyans padmani </span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="btn btn-info rounded-4 p-1 fs-6 px-5 my-2">
-                                    Assign Case
+                                <div class="d-flex align-items-center py-0">
+                                    <div class="border border-1 border-info d-flex rounded-5 mb-1 ">
+                                        <i class="bi bi-envelope p-2 py-1 fa-sm"></i>
+                                    </div>
+                                    <div class="px-2 ">
+                                        <span class="text-start text-light-emphasis">Email :  </span>
+                                        <span class="text-end text-dark">shreyans Padmani  </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="btn btn-danger rounded-4 p-1 fs-6  px-5 my-2">
-                                    cancel case
+                                <div class="d-flex align-items-center py-0">
+                                    <div class="border border-1 border-info d-flex rounded-5  mb-1">
+                                        <i class="bi bi-telephone p-2 py-1  fa-sm"></i>
+                                    </div>
+                                    <div class="px-2 ">
+                                        <span class="text-start text-light-emphasis"> patient:  </span>
+                                        <span class="text-end text-dark"> +1 3263 526 </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="btn btn-info rounded-4 p-1 fs-6  px-5 my-2">
-                                    view Notes
+                                <div class="d-flex align-items-center pb-1">
+                                    <div class="border border-1 border-info d-flex rounded-5  mb-1">
+                                        <i class="bi bi-person p-2 py-1  fa-sm"></i>
+                                    </div>
+                                    <div class="px-2 ">
+                                        <span class="text-start text-light-emphasis"> Requestor:  </span>
+                                        <span class="text-end text-dark"> shreyans padmani </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="btn btn-danger rounded-4 p-1 fs-6 px-5  my-2">
-                                    block patient
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="btn btn-success rounded-4 p-1 fs-6 px-5 my-2">
-                                    email
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="btn btn-info rounded-4 p-1 fs-6 px-5 my-2">
+                                            Assign Case
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="btn btn-danger rounded-4 p-1 fs-6  px-5 my-2">
+                                            cancel case
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="btn btn-info rounded-4 p-1 fs-6  px-5 my-2">
+                                            view Notes
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="btn btn-danger rounded-4 p-1 fs-6 px-5  my-2">
+                                            block patient
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="btn btn-success rounded-4 p-1 fs-6 px-5 my-2">
+                                            email
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingTwo">
-                    <button class="accordion-button collapsed"  type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                        Accordion Item #2
-                    </button>
-                </h2>
-                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingThree">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                        Accordion Item #3
-                    </button>
-                </h2>
-                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingThreea">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThreea" aria-expanded="false" aria-controls="flush-collapseThreea">
-                        Accordion Item #3
-                    </button>
-                </h2>
-                <div id="flush-collapseThreea" class="accordion-collapse collapse" aria-labelledby="flush-headingThreea" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
-                </div>
-            </div>
+            }
         </div>
-        <table class="table table-responsive" id="table">
-            <thead class="fw-lighter">
-                <tr>
-                    @foreach (var htmlValue in tdHtmlValues)
-                    {
-                        <th scope="col">@Html.Raw(htmlValue)</th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr class="bg-@item.RequestTypeID  filterDiv @item.RegionID">
-
-                        <td scope="col">
-                            <div class="text-end d-flex justify-content-between">
-                                <div class="text-start d-grid">
-                                    @item.PatientName
-                                </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
-                                    <a class="text-light" href="mailto: @item.Email">  <i class="bi bi-envelope"></i> </a>
-                                </div>
-                            </div>
-                        </td>
-                        @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 5)
+        <div id="a1a" >
+            <table class="table table-responsive" id="table" border="2">
+                <thead class="fw-lighter">
+                    <tr>
+                        <th class="d-none"> No. </th>
+                        @foreach (var htmlValue in tdHtmlValues)
                         {
-                            <td scope="col" >@item.Dob </td>
+                            <th scope="col">@Html.Raw(htmlValue)</th>
                         }
-                        @if (Status == 1 || Status == 2 || Status == 3)
-                        {
-                            <td scope="col">@item.Requestor</td>
-                        }
-                        @if (Status == 2 || Status == 3 || Status == 4 || Status == 5 || Status == 6)
-                        {
-                            <td>@item.Physician</td>
-                        }
-                        
-                            <td>20-2-25</td>
-                        
-                        @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 6)
-                        {
-                            <td scope="col">
-                                <a class="text-light"  href="tel:@item.PhoneNumber"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.PhoneNumber </div>  </a>
-                                <span>
-                                    (Patient)
-                                </span>
-                                @{
-                                    if (item.RequestTypeID != 2)
-                                    {
-                                        <a class="text-light" href="tel: @item.RequestorPhoneNumber">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.RequestorPhoneNumber </div> </a>
-                                        <span>
-                                            @Enum.GetName(typeof(RequestType), item.RequestTypeID)
-                                        </span>
-                                    }
-                                }
-                                
-                            </td>
-                        }
-                        <td scope="col">@item.Address</td>
-                         @if (Status == 1 || Status == 2 || Status == 3 || Status == 5)
-                         {
-                         
-                             <td scope="col">@item.Notes </td>
-                        
-                         }
-                         <td>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Primary
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    <li><hr class="dropdown-divider" /></li>
-                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-                        </td>
-                       
-                       
-                        <td scope="col">
-                            <div class="dropdown ">
-                                <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Actions
-                                </button>
-                                <ul class="dropdown-menu ">
-                                    <li>
-                                        <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
-                                           data-form-id="formEdit_UMS"
-                                           data-url='@Url.Action("_AssignPhysician", "ViewAction", new {requestid = @item.Requestid})'
-                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
-                                    </li>
-                                    <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
-                                    <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
-                                    <li>
-                                        <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
-                                           data-form-id="formEdit_UMS"
-                                           data-url='@Url.Action("_Cancelcase", "ViewAction", new {requestid = @item.Requestid})'
-                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
-                                           data-form-id="formEdit_UMS"
-                                           data-url='@Url.Action("_Blockcase", "ViewAction", new {requestid = @item.Requestid})'
-                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
-                                           data-form-id="formEdit_UMS"
-                                           data-url='@Url.Action("_TransferToProvider", "ViewAction", new {requestid = @item.Requestid})'
-                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
-                                    </li>
-                                    <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewNotes" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
-                                    <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewOrder" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
-                                    <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
-                                    <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journals"></i>Encounter</a></li>
-                                </ul>
-                            </div>
-                        </td>
+                        @*<th class="d-none" style="background-color:antiquewhite" >  @Enum.GetName(typeof(AdminDashStatus), Status) </th>*@
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr class="bg-@item.RequestTypeID  filterDiv @item.RegionID">
+                            <td class="d-none"> @i @{
+                                    i = i + 1;
+                                }  </td>
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        @item.PatientName
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto: @item.Email">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                            @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 5)
+                            {
+                                <td scope="col">@item.Dob </td>
+                            }
+                            @if (Status == 1 || Status == 2 || Status == 3)
+                            {
+                                <td scope="col">@item.Requestor</td>
+                            }
+                            @if (Status == 2 || Status == 3 || Status == 4 || Status == 5 || Status == 6)
+                            {
+                                <td>@item.Physician</td>
+                            }
+
+                            <td>20-2-25</td>
+
+                            @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 6)
+                            {
+                                <td scope="col">
+                                    <a class="text-light" href="tel:@item.PhoneNumber"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.PhoneNumber </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+                                    @{
+                                        if (item.RequestTypeID != 2)
+                                        {
+                                            <a class="text-light" href="tel: @item.RequestorPhoneNumber">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.RequestorPhoneNumber </div> </a>
+                                            <span>
+                                                @Enum.GetName(typeof(RequestType), item.RequestTypeID)
+                                            </span>
+                                        }
+                                    }
+
+                                </td>
+                            }
+                            <td scope="col">@item.Address</td>
+                            @if (Status == 1 || Status == 2 || Status == 3 || Status == 5)
+                            {
+
+                                <td scope="col">@item.Notes </td>
+
+                            }
+                            <td scope="col" class="action">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                 
+                                    <ul class="dropdown-menu ">
+                                        <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewNotes" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        @if (item.Status == 1)
+                                        {
+                                            <li>
+                                                <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
+                                                data-form-id="formEdit_UMS"
+                                                data-url='@Url.Action("_AssignPhysician", "ViewAction", new {requestid = @item.Requestid})'
+                                                data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
+                                                data-form-id="formEdit_UMS"
+                                                data-url='@Url.Action("_Cancelcase", "ViewAction", new {requestid = @item.Requestid})'
+                                                data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
+                                                data-form-id="formEdit_UMS"
+                                                data-url='@Url.Action("_Blockcase", "ViewAction", new {requestid = @item.Requestid})'
+                                                data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                            </li>
+                                        }
+                                          @if (item.Status == 2)
+                                        {
+                                            <li>
+                                                <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
+                                                data-form-id="formEdit_UMS"
+                                                data-url='@Url.Action("_TransferToProvider", "ViewAction", new {requestid = @item.Requestid})'
+                                                data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                            </li>
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journals"></i>Send Agrement</a></li>
+                                        }
+                                        @if (item.Status == 3 || item.Status == 5)
+                                        {
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journals"></i>Clear Case</a></li>
+
+
+                                        }                                        @if (item.Status == 2 || item.Status == 4 || item.Status == 5)
+                                        {
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewOrder" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                        }
+                                        @if (item.Status > 1)
+                                        {
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+      
     </div>
 </div>
 <div  >

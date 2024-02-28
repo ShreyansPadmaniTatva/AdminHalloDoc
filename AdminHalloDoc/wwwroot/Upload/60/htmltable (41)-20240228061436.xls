@@ -1,0 +1,854 @@
+
+            <tb class="d-none"> 1   </tb><tb class="d-none"> 2   </tb><tb class="d-none"> 3   </tb><tb class="d-none"> 4   </tb><tb class="d-none"> 5   </tb><tb class="d-none"> 6   </tb><tb class="d-none"> 7   </tb><tb class="d-none"> 8   </tb><tb class="d-none"> 9   </tb><tb class="d-none"> 10   </tb><tb class="d-none"> 11   </tb><tb class="d-none"> 12   </tb><tb class="d-none"> 13   </tb><tb class="d-none"> 14   </tb><tb class="d-none"> 15   </tb><table class="table table-responsive dataTable no-footer" id="table">
+                <thead class="fw-lighter">
+                    <tr>
+                        <th class="d-none">  New </th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Date of Birth</th>
+                            <th scope="col">Requestor</th>
+                            <th scope="col">Requested Date</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Notes</th>
+                            <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr class="bg-2  filterDiv 3 show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        jntfyjhnyhftj
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">jntfyjhn yhftj</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:135"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 135 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+
+                                </td>
+                            <td scope="col">hyhry,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=18" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/14"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/18"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=18" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=18" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=18" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/18"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/18"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-4  filterDiv show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        Concierge InformationConcierge Information
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col">2/14/2024 12:00:00 AM </td>
+                                <td scope="col">Concierge Information Concierge Information</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:+11532212"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +11532212 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+                                            <a class="text-light" href="tel: +11532212">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +11532212 </div> </a>
+                                            <span>
+                                                Concierge
+                                            </span>
+
+                                </td>
+                            <td scope="col">Concierge Information,Concierge Information,Concierge Information,Concierge Information,Concierge Information,Concierge Information,Concierge Information,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=68" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/53"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/68"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=68" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=68" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=68" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/68"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/68"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-4  filterDiv 3 show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        santossantos
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">santos santos</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:12323"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 12323 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+                                            <a class="text-light" href="tel: 12323">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 12323 </div> </a>
+                                            <span>
+                                                Concierge
+                                            </span>
+
+                                </td>
+                            <td scope="col">santos,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=23" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/19"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/23"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=23" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=23" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=23" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/23"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/23"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-2  filterDiv 2 show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        abhiseabhise
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">abhise abhise</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:123"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 123 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+
+                                </td>
+                            <td scope="col">abhise,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=24" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/20"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/24"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=24" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=24" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=24" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/24"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/24"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-4  filterDiv 5 show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        hh
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">h h</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:1"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 1 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+                                            <a class="text-light" href="tel: 1">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 1 </div> </a>
+                                            <span>
+                                                Concierge
+                                            </span>
+
+                                </td>
+                            <td scope="col">h,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=29" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/25"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/29"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=29" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=29" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=29" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/29"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/29"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-2  filterDiv 2 show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        44
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">4 4</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:4"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 4 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+
+                                </td>
+                            <td scope="col">4,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=32" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/28"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/32"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=32" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=32" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=32" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/32"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/32"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-1  filterDiv 4 show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        123132
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">123 132</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:123456"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 123456 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+                                            <a class="text-light" href="tel: 123456">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 123456 </div> </a>
+                                            <span>
+                                                Business
+                                            </span>
+
+                                </td>
+                            <td scope="col">123,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=33" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/29"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/33"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=33" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=33" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=33" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/33"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/33"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-2  filterDiv 3 show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        11
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">1 1</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:1"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 1 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+
+                                </td>
+                            <td scope="col">1,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=34" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/30"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/34"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=34" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=34" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=34" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/34"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/34"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-3  filterDiv 4 show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        11
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">1 1</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:1"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 1 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+                                            <a class="text-light" href="tel: 1">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 1 </div> </a>
+                                            <span>
+                                                Family
+                                            </span>
+
+                                </td>
+                            <td scope="col">11,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=35" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/31"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/35"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=35" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=35" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=35" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/35"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/35"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-4  filterDiv 4 show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        11
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">1 1</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:1"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 1 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+                                            <a class="text-light" href="tel: 1">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 1 </div> </a>
+                                            <span>
+                                                Concierge
+                                            </span>
+
+                                </td>
+                            <td scope="col">1,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=36" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/32"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/36"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=36" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=36" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=36" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/36"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/36"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-2  filterDiv 4 show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        new businessnew business
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">new business new business</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:+1123"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +1123 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+
+                                </td>
+                            <td scope="col">,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=56" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/41"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/56"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=56" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=56" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=56" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/56"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/56"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-3  filterDiv show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        Patient Family Patient Family 
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">Patient Family  Patient Family </td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:2"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 2 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+                                            <a class="text-light" href="tel: 2">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> 2 </div> </a>
+                                            <span>
+                                                Family
+                                            </span>
+
+                                </td>
+                            <td scope="col">Patient Family ,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=63" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/48"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/63"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=63" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=63" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=63" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/63"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/63"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-3  filterDiv show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        Patient InformationPatient Information
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">Patient Information Patient Information</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:+195326523"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +195326523 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+                                            <a class="text-light" href="tel: +195326523">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +195326523 </div> </a>
+                                            <span>
+                                                Family
+                                            </span>
+
+                                </td>
+                            <td scope="col">Patient Information,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=64" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/49"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/64"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=64" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=64" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=64" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/64"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/64"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-3  filterDiv show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        Family / Friend InformationFamily / Friend Information
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">Family / Friend Information Family / Friend Information</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:+1526"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +1526 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+                                            <a class="text-light" href="tel: +1526">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +1526 </div> </a>
+                                            <span>
+                                                Family
+                                            </span>
+
+                                </td>
+                            <td scope="col">Family / Friend Information,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=65" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/50"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/65"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=65" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=65" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=65" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/65"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/65"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bg-3  filterDiv show">
+                            
+                            <td scope="col">
+                                <div class="text-end d-flex justify-content-between">
+                                    <div class="text-start d-grid">
+                                        Family / Friend InformationFamily / Friend Information
+                                    </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto:">  <i class="bi bi-envelope"></i> </a>
+                                    </div>
+                                </div>
+                            </td>
+                                <td scope="col"> </td>
+                                <td scope="col">Family / Friend Information Family / Friend Information</td>
+
+                            <td>20-2-25</td>
+
+                                <td scope="col">
+                                    <a class="text-light" href="tel:+18541651"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +18541651 </div>  </a>
+                                    <span>
+                                        (Patient)
+                                    </span>
+                                            <a class="text-light" href="tel: +18541651">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> +18541651 </div> </a>
+                                            <span>
+                                                Family
+                                            </span>
+
+                                </td>
+                            <td scope="col">Family / Friend Information,,,,</td>
+                                <td scope="col"> </td>
+                            <td scope="col" class="action" style="display: none;">
+                                <div class="dropdown ">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu ">
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_AssignPhysician?requestid=66" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/Viewcase/51"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewUpload/66"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Cancelcase?requestid=66" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_Blockcase?requestid=66" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn" data-form-id="formEdit_UMS" data-url="/ViewAction/_TransferToProvider?requestid=66" data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                        </li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewNotes/66"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/AdminDashboard/ViewOrder/66"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        

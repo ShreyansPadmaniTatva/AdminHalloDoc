@@ -19,6 +19,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
             public int? Status { get; set; }
             public string? Filename { get; set; }
             public DateTime Createddate { get; set; }
+            public int? RequestwisefilesId { get; set;}
 
         }
     }
