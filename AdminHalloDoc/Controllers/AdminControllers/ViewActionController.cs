@@ -62,10 +62,21 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        #region TransferToProvider
-        public async Task<IActionResult> TransferToProvider(int requestid, int ProviderId, string Notes, int TProviderId)
+        #region _TransferToProvider
+        public async Task<IActionResult> _TransferToProvider(int? requestid)
         {
-            if (await _viewActionRepository.TransferToProvider(requestid, ProviderId, Notes, TProviderId))
+            var v = await _viewActionRepository.GetRequestDetails(requestid);
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            return PartialView("../AdminViews/ViewAction/_modelS/_transferrequest", v);
+        }
+        #endregion
+
+        #region _TransferToProviderPost
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _TransferToProviderPost(ViewActions v)
+        {
+            if (await _viewActionRepository.TransferToProvider(v))
             {
                 TempData["Status"] = "Transfer Provider Successfully..!";
             }
@@ -74,15 +85,82 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        #region TransferToProvider
+        #region _Cancelcase
         public async Task<IActionResult> _Cancelcase(int? requestid)
         {
-            
-
-            return PartialView("../AdminViews/ViewAction/_modelS/_cancelcase");
+            var v = await _viewActionRepository.GetRequestDetails(requestid);
+            ViewBag.CaseReasonComboBox = await _requestRepository.CaseReasonComboBox();
+            return PartialView("../AdminViews/ViewAction/_modelS/_cancelcase",v);
         }
-        # endregion
+        #endregion
 
+        #region _CaseReasonPost
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _CaseReasonPost(ViewActions v)
+        {
+            if (await _viewActionRepository.CancelCase(v))
+            {
+                TempData["Status"] = "Cancel Request Provider Successfully..!";
+            }
+
+            return RedirectToAction("Index", "AdminDashboard");
+        }
+        #endregion
+
+        #region _Blockcase
+        public async Task<IActionResult> _Blockcase(int? requestid)
+        {
+            var v = await _viewActionRepository.GetRequestDetails(requestid);
+            ViewBag.CaseReasonComboBox = await _requestRepository.CaseReasonComboBox();
+            return PartialView("../AdminViews/ViewAction/_modelS/_blockcase", v);
+        }
+        #endregion
+
+        #region _BlockcasePost
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _BlockcasePost(ViewActions v)
+        {
+            if (await _viewActionRepository.BlockCase(v))
+            {
+                TempData["Status"] = "Block  Request  Successfully..!";
+            }
+
+            return RedirectToAction("Index", "AdminDashboard");
+        }
+        #endregion
+
+        #region _AssignPhysician
+        public async Task<IActionResult> _AssignPhysician(int? requestid)
+        {
+            var v = await _viewActionRepository.GetRequestDetails(requestid);
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            return PartialView("../AdminViews/ViewAction/_modelS/_assign_case", v);
+        }
+        #endregion
+
+        #region _AssignPhysicianPost
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _AssignPhysicianPost(ViewActions v)
+        {
+            if (await _viewActionRepository.AssignPhysician(v))
+            {
+                TempData["Status"] = "Assign  Physician  Successfully..!";
+            }
+
+            return RedirectToAction("Index", "AdminDashboard");
+        }
+        #endregion
+
+        #region ViewOrder
+        public async Task<IActionResult> ViewOrder(int? id)
+        {
+            ViewBag.VenderTypeComboBox = await _requestRepository.VenderTypeComboBox();
+            return View("../AdminViews/ViewAction/ViewOrder");
+        }
+        #endregion
 
     }
 }

@@ -20,6 +20,15 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 		{
 			_context = context;
 		}
+        public async Task<List<VenderTypeComboBox>> VenderTypeComboBox()
+        {
+            return await _context.Healthprofessionaltypes.Select(req => new VenderTypeComboBox()
+            {
+                VenderTypeId = req.Healthprofessionalid,
+                Name = req.Professionname
+            })
+                .ToListAsync();
+        }
 
         public async Task<List<RegionComboBox>> RegionComboBox()
         {
@@ -55,19 +64,19 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         public async Task<int> CountActiveRequest()
         {
             int count = 0;
-            count = _context.Requests.Where(n => ( n.Status == 5 || n.Status == 6)).Count();
+            count = _context.Requests.Where(n => ( n.Status == 4 || n.Status == 5)).Count();
             return count;
         }
         public async Task<int> CountConcludeRequest()
         {
             int count = 0;
-            count = _context.Requests.Count(e => e.Status == 7); 
+            count = _context.Requests.Count(e => e.Status == 6); 
             return count;
         }
         public async Task<int> CountToCloseRequest()
         {
             int count = 0;
-            count = _context.Requests.Count(e => e.Status == 8); 
+            count = _context.Requests.Count(e =>( e.Status == 3 || e.Status == 7 || e.Status == 8)); 
             return count;
         }
         public async Task<int> CountUnPaidRequest()
@@ -130,7 +139,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     LastName = requestclients.Lastname,
                     Email = requestclients.Email,
                     Notes = requestclients.Notes,
-                     BirthDate = new DateTime((int)requestclients.Intyear, Convert.ToInt32(requestclients.Strmonth), (int)requestclients.Intdate),
+                     //BirthDate = new DateTime((int)requestclients.Intyear, Convert.ToInt32(requestclients.Strmonth), (int)requestclients.Intdate),
                     PhoneNumber = requestclients.Phonenumber,
                     Address = requestclients.Address + "," + requestclients.Street + "," + requestclients.City + "," + requestclients.State + "," + requestclients.Zipcode,
                    

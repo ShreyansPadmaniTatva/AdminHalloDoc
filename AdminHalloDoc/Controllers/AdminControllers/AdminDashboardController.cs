@@ -63,7 +63,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region View_Notes
-        public async Task<IActionResult> ViewNotes(int? id)
+        public async Task<IActionResult> ViewNotes(int id)
         {
             TempData["Status"] = TempData["Status"];
             var n = await _viewNotesRepository.GetNotesByRequest(id);
@@ -103,8 +103,18 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region View_Upload
         public async Task<IActionResult> ViewUpload(int? id)
         {
-           List<ViewPatientDashboard> v = await _viewActionRepository.GetDocumentByRequest(id);
+           ViewDocuments v = await _viewActionRepository.GetDocumentByRequest(id);
             return View("../AdminViews/ViewAction/ViewUpload", v);
+        }
+        #endregion
+
+        #region ViewOrder
+        public async Task<IActionResult> ViewOrder(int? id)
+        {
+            ViewBag.VenderTypeComboBox = await _requestRepository.VenderTypeComboBox();
+            ViewOrder v = new ViewOrder();
+            v.RequestId = (int)id;
+            return View("../AdminViews/ViewAction/ViewOrder",v);
         }
         #endregion
 

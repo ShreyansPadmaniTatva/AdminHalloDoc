@@ -46,6 +46,6 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 
         public string? Administrativenotes { get; set; }
 
-        public List<TransfernotesModel> transfernotes { get; set; } = null!;
+        public List<TransfernotesModel>? transfernotes { get; set; } = null!;
     }
 }

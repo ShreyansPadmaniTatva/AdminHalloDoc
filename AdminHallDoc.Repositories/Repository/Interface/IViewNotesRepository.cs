@@ -1,4 +1,5 @@
-﻿using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+﻿using AdminHalloDoc.Entities.ViewModel;
+using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
 {
     public interface IViewNotesRepository
     {
-        Task<ViewNotesModel> GetNotesByRequest(int? id);
+        Task<ViewNotesModel> GetNotesByRequest(int id);
         bool PutNotes(string? adminnotes, string? physiciannotes, int? RequestID);
+        Task<List<VenderComboBox>> FindVenderByVenderType(int? id);
+        Task<ViewOrder> FindVenderByVenderID(int? id);
+        Task<bool> SaveViewOrder(ViewOrder viewOrder);
     }
 }

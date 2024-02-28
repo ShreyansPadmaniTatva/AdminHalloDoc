@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDocuments;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -29,20 +30,57 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region GetDocumentByRequest
-        public async Task<List<ViewPatientDashboard>> GetDocumentByRequest(int? id)
+        public async Task<ViewDocuments> GetDocumentByRequest(int? id)
         {
+            ViewDocuments doc = await (from req in _context.Requests
+                                       join reqClient in _context.Requestclients
+                                       on req.Requestid equals reqClient.Requestid into reqClientGroup
+                                       from rc in reqClientGroup.DefaultIfEmpty()
+                                       where req.Requestid == id
+                                       select new ViewDocuments
+                                       {
+                                           ConfirmationNumber = req.Confirmationnumber,
+                                           Firstanme = rc.Firstname ,
+                                           Lastanme = rc.Lastname,
+                                           RequestID = req.Requestid
 
-            return _context.Requestwisefiles
+                                       }).FirstAsync();
+
+            List<Documents> doclist = _context.Requestwisefiles
                         .Where(r => r.Requestid == id)
                         .OrderByDescending(x => x.Createddate)
-                        .Select(r => new ViewPatientDashboard
+                        .Select(r => new Documents
                         {
-                            Requestid = r.Requestid,
+                            Status = r.Doctype,
                             Createddate = r.Createddate,
                             Filename = r.Filename
 
-                        })
-                        .ToList(); 
+                        }).ToList();
+            doc.documentslist = doclist;
+            return doc;
+            
+        }
+        #endregion
+
+        #region GetRequestDetails
+        public async Task<ViewActions> GetRequestDetails(int? id)
+        {
+
+            return await (from req in _context.Requests
+                        join reqClient in _context.Requestclients
+                        on req.Requestid equals reqClient.Requestid into reqClientGroup
+                        from rc in reqClientGroup.DefaultIfEmpty()
+                          join phys in _context.Physicians
+                        on req.Physicianid equals phys.Physicianid into physGroup
+                          from p in physGroup.DefaultIfEmpty()
+                          where req.Requestid == id
+                        select new ViewActions
+                        {
+                            ProviderId = p.Physicianid,
+                            PatientName = rc.Firstname + rc.Lastname,
+                            RequestID = req.Requestid
+
+                        }).FirstAsync();
         }
         #endregion
 
@@ -112,21 +150,125 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Transfer_Provider
-        public async Task<Boolean> TransferToProvider(int RequestId, int ProviderId, string notes, int TransferToProviderId)
+        public async Task<bool> TransferToProvider(ViewActions v)
         {
 
-            var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == (int)RequestId);
-            request.Physicianid = ProviderId;
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == v.RequestID);
+            request.Physicianid = v.ProviderId;
             _context.Requests.Update(request);
             _context.SaveChanges();
 
             Requeststatuslog rsl = new Requeststatuslog();
-            rsl.Requestid = RequestId;
-            rsl.Physicianid = ProviderId;
-            rsl.Transtophysicianid = TransferToProviderId;
-            rsl.Notes = notes;
+            rsl.Requestid = (int)v.RequestID;
+            rsl.Physicianid = v.ProviderId;
+            rsl.Transtophysicianid = v.TransferToProviderId;
+            rsl.Notes = v.Notes;
             rsl.Createddate = DateTime.Now;
             rsl.Status = 1;
+            _context.Requeststatuslogs.Update(rsl);
+            _context.SaveChanges();
+
+            return true;
+
+
+        }
+        #endregion
+
+        #region CancelCase
+
+        public async Task<bool> CancelCase(ViewActions v)
+        {
+            try
+            {
+                var requestData = await _context.Requests.Where(e => e.Requestid == v.RequestID).FirstAsync();
+                if (requestData != null)
+                {
+                    requestData.Casetag = v.ReasonTag;
+                    requestData.Status = 8;
+                    _context.Requests.Update(requestData);
+                    _context.SaveChanges();
+
+                    Requeststatuslog rsl = new Requeststatuslog
+                    {
+                        Requestid = (int)v.RequestID,
+                        Notes = v.Notes,
+                        Status = 8,
+                        Createddate = DateTime.Now
+                    };
+                    _context.Requeststatuslogs.Add(rsl);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else { return false; }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
+        #endregion
+
+        #region BlockCase
+        public async Task<bool> BlockCase(ViewActions v)
+        {
+
+            try
+            {
+                var requestData = await _context.Requests.Where(e => e.Requestid == v.RequestID).FirstAsync();
+                if (requestData != null)
+                {
+
+                    requestData.Status = 11;
+                    _context.Requests.Update(requestData);
+                    _context.SaveChanges();
+                    Blockrequest blc = new Blockrequest
+                    {
+                        Requestid = requestData.Requestid.ToString(),
+                        Phonenumber = requestData.Phonenumber,
+                        Email = requestData.Email,
+                        Reason = v.Notes,
+                        Createddate = DateTime.Now,
+                        Modifieddate = DateTime.Now
+
+
+                    };
+                    _context.Blockrequests.Add(blc);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
+        }
+        #endregion
+
+        #region Assign_Physician
+        public async Task<bool> AssignPhysician(ViewActions v)
+        {
+
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == v.RequestID);
+            request.Physicianid = v.ProviderId;
+            request.Status = 2;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            Requeststatuslog rsl = new Requeststatuslog();
+            rsl.Requestid = (int)v.RequestID;
+            rsl.Physicianid = v.ProviderId;
+            rsl.Notes = v.Notes;
+            rsl.Createddate = DateTime.Now;
+            rsl.Status = 2;
             _context.Requeststatuslogs.Update(rsl);
             _context.SaveChanges();
 

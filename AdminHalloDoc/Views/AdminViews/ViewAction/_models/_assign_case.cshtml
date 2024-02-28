@@ -1,6 +1,6 @@
 ﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewActions
 <div class="modal-header  bg-info text-white">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">Transfer Physician </h1>
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Assign Physician </h1>
     <button type="button" class=" btn-elevate btn-icon btn-sm" data-bs-dismiss="modal" aria-label="Close">
         <i class="bi bi-x-circle"></i>
     </button>
@@ -10,10 +10,9 @@
     <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> @Model.PatientName </span></h3>
     <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post"
           data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
-          asp-action="_TransferToProviderPost" asp-controller="ViewAction">
+          asp-action="_AssignPhysicianPost" asp-controller="ViewAction">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="RequestID" />
-        <input type="hidden" asp-for="ProviderId" />
 
         <div class="mb-4">
             <select class="form-select form-select-sm mt-3 p-2" required asp-for="RegionID" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
@@ -21,7 +20,7 @@
             </select>
         </div>
         <div class="mb-4">
-            <select class="form-select form-select-sm p-2" required asp-for="TransferToProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
+            <select class="form-select form-select-sm p-2" required asp-for="ProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
                 <option>All Provider</option>
             </select>
         </div>

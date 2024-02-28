@@ -72,9 +72,7 @@ $(document).on("click", ".js-btn-modal-form-submit", function (e) {
 
     if (vSubmitModalForm) {
         $(btn).closest('form').submit(function (event) {
-            if ($(this).valid()) {
                 $(hdModalId).modal('hide');
-            }
         });
         $(btn).closest('form').submit();
     }

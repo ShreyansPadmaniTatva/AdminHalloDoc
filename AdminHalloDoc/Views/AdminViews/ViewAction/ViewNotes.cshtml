@@ -40,24 +40,36 @@
 
 
     <div class="row align-items-center  justify-content-around my-3 " >
-            @foreach (var item in Model.transfernotes)
-            {
-            <div class="col-md-6" style="min-height:100px" >
-                <div class="card border-0 shadow" style="cursor:pointer">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <img src="~/images/transfer-alt-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" /> <b>
-                                Transfer Notes
-                            </b>
-                        </h5>
-                        <hr/>
-                        <p class="card-text p-2">
-                            @item.Notes
-                        </p>
+       
+                <div class="col-md-6" style="min-height:100px">
+                    <div class="card border-0 shadow" style="cursor:pointer">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <img src="~/images/transfer-alt-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" /> <b>
+                                    Transfer Notes
+                                </b>
+                            </h5>
+                            <hr />
+                            <p class="card-text p-2">
+                                @{
+                            int i = 1;
+                                }
+
+                        @if (Model.transfernotes != null)
+                        {
+                            
+                            @foreach (var item in Model.transfernotes)
+                            {
+                              @item.Notes
+
+                            }
+                        }
+                            </p>
+                        </div>
                     </div>
                 </div>
-                </div>
-            }
+           
+            
         </div>
         <div class="row align-items-center  justify-content-around  ">
         <div class="col-md-6">
@@ -67,9 +79,17 @@
                         Admin Notes
                     </b> </h5>
                     <hr />
-                    <p class="card-text p-2" id="adminnotestext">
-                        @Model.Adminnotes
-                    </p>
+                    @if (Model.Adminnotes != null)
+                    {
+                        <p class="card-text p-2" id="adminnotestext">
+                            @Model.Adminnotes
+                        </p>
+                    }
+                    else
+                    {
+                    <p>not add</p>
+                    }
+
                 </div>
             </div>
         </div>
@@ -80,9 +100,17 @@
                         <img src="~/images/doctor-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" /> <b> Physician Notes</b>
                     </h5>
                     <hr />
-                    <p class="card-text" id="phynotetext">
-                        @Model.Physiciannotes
-                    </p>
+                    @if (Model.Physiciannotes != null)
+                    {
+                        <p class="card-text" id="phynotetext">
+                            @Model.Physiciannotes
+                        </p>
+                    }
+                    else
+                    {
+                    <p>not add</p>
+                    }
+                    
                 </div>
             </div>
         </div>
@@ -129,14 +157,14 @@
         }
     };
     function phynotetext() {
-        var text = $('#phynotetext').html().trim();
+        var text = $('#phynotetext').html();
         $("#changenote").val(text);
 
         $("#changenote").attr("name", "physiciannotes");
         $("#notedata").html("Physician Note");
     }
     function adminnotestext() {
-        var text = $('#adminnotestext').html().trim();
+        var text = $('#adminnotestext').html();
         console.log(text);
         $("#changenote").val(text);
         $("#changenote").attr("name", "adminnotes");

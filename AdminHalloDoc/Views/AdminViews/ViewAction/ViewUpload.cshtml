@@ -1,9 +1,9 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
-@model List<AdminHalloDoc.Entities.ViewModel.PatientViewModel.ViewPatientDashboard>
+
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDocuments
+
 <link href="~/css/style.css" rel="stylesheet" />
 <div class="container">
     <div class="card bg-transparent border-0 p-2" style="border-radius: 15px;">
@@ -22,7 +22,8 @@
             </div>
         </div>
         <div class="card-body bg-white m-1 shadow" style="border-radius: 15px;">
-            <div class="doc-text-card">Patient name</div>
+            <h2 class="my-3">@Model.ConfirmationNumber</h2>
+            <div class="doc-text-card">@Model.Firstanme  @Model.Lastanme</div>
             <div class="doc-text-card mt-2">
                 check here for any files that you or the
                 doctor of yours subsequents requestors have attached for yo to
@@ -33,7 +34,7 @@
                 <form method="post" id="myForm" asp-action="UploadDoc" asp-controller="ViewAction" enctype="multipart/form-data">
                         <div class="col-md-12 form-floating d-flex ">
                             <div class="file-upload-wrapper1 border border-1" data-text="Select your file!">
-                                     <input type="hidden" name="Requestid" value="@Model[0].Requestid" />
+                                     <input type="hidden" name="Requestid" value="@Model.RequestID" />
                                 <input name="file" type="file" class="file-upload-field" id="file" value="">
 
                             </div>
@@ -71,7 +72,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item2 in Model)
+                            @foreach (var item2 in Model.documentslist)
                             {
                                 <tr>
                                     <td class="table-text px-3">

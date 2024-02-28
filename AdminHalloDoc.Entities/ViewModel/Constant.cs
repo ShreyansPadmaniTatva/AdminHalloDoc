@@ -25,26 +25,54 @@ namespace AdminHalloDoc.Entities.ViewModel
             ToClose,
             UnPaid
         }
+
+        public static int FindStatus(int status)
+        {
+            if (status == 1)
+            {
+                return 1;
+            } else if (status == 2)
+            {
+                return 2;
+            }
+            else if (status == 3 || status ==  7|| status == 8  )
+            {
+                return 5;
+            }
+            else if (status == 4 || status == 5)
+            {
+                return 3;
+            }
+            else if (status == 6)
+            {
+                return 4;
+            }else
+            {
+                return 9;
+            }
+
+        }
+
        public static Dictionary<int, List<string>> statusTdHtmlMap = new Dictionary<int, List<string>>
     {
            // New
-        { 1, new List<string> { "Name", "Date of Birth", "Requestor", "Requested Date", "Phone" ,"Address", "Notes" , "Chat With" , "Actions" } }, 
+        { 1, new List<string> { "Name", "Date of Birth", "Requestor", "Requested Date", "Phone" ,"Address", "Notes" ,  "Actions" } }, 
         // Panding
-        { 2, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name",  "Date Of Service", "Phone" ,"Address", "Notes" , "Chat With" , "Actions" } }, 
+        { 2, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name",  "Date Of Service", "Phone" ,"Address", "Notes" , "Actions" } }, 
         // Active
-        { 4, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name", "Date Of Service", "Phone", "Address", "Notes" , "Chat With" , "Actions" } }, 
-        { 5, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name", "Date Of Service", "Phone", "Address", "Notes" , "Chat With" , "Actions" } }, 
+        { 3, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name", "Date Of Service", "Phone", "Address", "Notes" , "Actions" } }, 
+        //{ 5, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name", "Date Of Service", "Phone", "Address", "Notes" , "Chat With" , "Actions" } }, 
         
         //Conclude
-        { 6, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service", "Phone", "Address" , "Chat With" , "Actions" } }, 
+        { 4, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service", "Phone", "Address" , "Actions" } }, 
 
         // to close 
-        { 3, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Chat With" , "Actions" } }, 
-        { 7, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Chat With" , "Actions" } }, 
-        { 8, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Chat With" , "Actions" } }, 
+        { 5, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Actions" } }, 
+       // { 7, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Chat With" , "Actions" } }, 
+        //{ 8, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Chat With" , "Actions" } }, 
 
         //un paid
-        { 9, new List<string> { "Name", "Physician Name", "Date Of Service", "Phone" ,"Address" , "Chat With" , "Actions" } }, 
+        { 6, new List<string> { "Name", "Physician Name", "Date Of Service", "Phone" ,"Address" , "Actions" } }, 
         
     };
     }

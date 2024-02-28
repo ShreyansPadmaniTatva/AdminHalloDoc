@@ -1,78 +1,33 @@
-﻿
-
-<form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
-             
-      asp-action="_SearchResult" asp-controller="AdminDashboard" novalidate="novalidate">
-            @Html.AntiForgeryToken()
-            <div class="tab ">
-    <div class="row">
-        <div class="col-md-2 col-sm-4 col-4 ">
-                <button type="submit" id="watchButton" value="1" name="status" class="btn alert alert-primary  btn-outline-primary w-100 text-start text-uppercase  a-primary t-tab">
-                <span class="mx-2 top-icon">
-                    <i class="bi bi-plus-circle"></i>
-                </span> New
-                <div>
-                        <b class="fw-bold fs-3">@ViewBag.CountNewRequest</b>
-                </div>
-            </button>
-        </div>
-        <div class="col-md-2 col-sm-4 col-4 position-relative">
-                <button type="submit" value="2" name="status" class="btn alert alert-info btn-outline-info w-100 text-start text-uppercase   a-info t-tab">
-                <span class="mx-2 top-icon">
-                    <i class="bi bi-person-workspace"></i>
-                </span> Panding
-                <div>
-                        <b class="fw-bold fs-3">@ViewBag.CountPandingRequest</b>
-                </div>
-            </button>
-        </div>
-        <div class="col-md-2 col-sm-4 col-4 position-relative">
-                <button type="submit" value="5,6" name="status" class="btn alert alert-success btn-outline-success w-100 text-start text-uppercase  a-success t-tab">
-                <span class="mx-2 top-icon">
-                    <i class="bi bi-arrow-up-right-circle"></i>
-                </span> Active
-                <div>
-                        <b class="fw-bold fs-3">@ViewBag.CountActiveRequest</b>
-                </div>
-            </button>
-
-        </div>
-        <div class="col-md-2 col-sm-4 col-4 position-relative">
-                <button type="submit" value="7" name="status" class="btn alert alert-warning  btn-outline-warning w-100 text-start text-uppercase  a-warning t-tab">
-                <span class="mx-2 top-icon">
-                    <i class="bi bi-clock-history"></i>
-                </span> Conclude
-                <div>
-                        <b class="fw-bold fs-3">@ViewBag.CountConcludeRequest</b>
-                </div>
-            </button>
-        </div>
-        <div class="col-md-2 col-sm-4 col-4 position-relative">
-                <button type="submit" value="8" name="status" class="btn alert alert-danger btn-outline-danger w-100 text-start text-uppercase  a-danger t-tab">
-                <span class="mx-2 top-icon">
-                    <i class="bi bi-envelope-paper"></i>
-                </span> To Close
-                <div>
-                        <b class="fw-bold fs-3">@ViewBag.CountToCloseRequest</b>
-                </div>
-            </button>
-        </div>
-        <div class="col-md-2 col-sm-4 col-4  position-relative">
-                <button type="submit" value="9" name="status" class="btn alert alert-success btn-outline-success w-100 text-start text-uppercase  a-success t-tab">
-
-                <span class="mx-2 top-icon">
-                    <i class="bi bi-currency-dollar"></i>
-                </span> Unpaid
-                <div>
-                        <b class="fw-bold fs-3">@ViewBag.CountUnPaidRequest</b>
-                </div>
-            </button>
-        </div>
-    </div>
+﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewActions
+<div class="modal-header  bg-info text-white">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Block</h1>
+    <button type="button" class=" btn-elevate btn-icon btn-sm" data-bs-dismiss="modal" aria-label="Close">
+        <i class="bi bi-x-circle"></i>
+    </button>
 </div>
-</form>
-<script type="text/javascript" >
-    window.onload = function () {
-        document.getElementById("watchButton").click();
-    };
-</script>
+
+<div class=" modal-body">
+    <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> @Model.PatientName </span></h3>
+    <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post"
+          data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
+          asp-action="_BlockcasePost" asp-controller="ViewAction">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="RequestID" />
+
+        <div class="form-group row my-3">
+            <div class="col-md-12">
+                <textarea class="form-control rounded" asp-for="Notes" cols="50" type="text" rows="5" placeholder=Symptoms autocomplete=off></textarea>
+
+
+            </div>
+        </div>
+        <hr class="form-button-divider" />
+        <div class="row">
+            <div class="offset-md-4 col-md-8">
+                <input type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" />
+                <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
+

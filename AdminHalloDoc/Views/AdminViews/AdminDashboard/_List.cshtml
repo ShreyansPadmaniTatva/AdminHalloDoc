@@ -1,9 +1,10 @@
 ﻿@model List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDashboardList>
 @using static AdminHalloDoc.Entities.ViewModel.Constant
-@{var Status = -1;
+@{
+    var Status = -1;
     if (Model.Count > 0)
     {
-        Status = Model[0].Status;
+        Status = FindStatus(Model[0].Status);
     }
     List<string> tdHtmlValues = statusTdHtmlMap.ContainsKey(Status) ? statusTdHtmlMap[Status] : new List<string>();
 }   
@@ -41,13 +42,6 @@
             <i class="bi bi-forward-fill"></i>
             <span class="top-btn">
                 export all
-            </span>
-
-        </div>
-        <div class="btn btn-info text-white">
-            <i class="bi bi-person-square"></i>
-            <span class="top-btn">
-                Request DTY Support
             </span>
 
         </div>
@@ -249,7 +243,7 @@
                                 <div class="text-start d-grid">
                                     @item.PatientName
                                 </div> <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
-                                    <i class="bi bi-envelope"></i>
+                                    <a class="text-light" href="mailto: @item.Email">  <i class="bi bi-envelope"></i> </a>
                                 </div>
                             </div>
                         </td>
@@ -271,14 +265,14 @@
                         @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 6)
                         {
                             <td scope="col">
-                                <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.PhoneNumber </div>
+                                <a class="text-light"  href="tel:@item.PhoneNumber"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.PhoneNumber </div>  </a>
                                 <span>
                                     (Patient)
                                 </span>
                                 @{
                                     if (item.RequestTypeID != 2)
                                     {
-                                        <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.RequestorPhoneNumber </div>
+                                        <a class="text-light" href="tel: @item.RequestorPhoneNumber">  <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.RequestorPhoneNumber </div> </a>
                                         <span>
                                             @Enum.GetName(typeof(RequestType), item.RequestTypeID)
                                         </span>
@@ -294,29 +288,56 @@
                              <td scope="col">@item.Notes </td>
                         
                          }
-                        <td scope="col"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-person-workspace"></i> Provider </div></td>
+                         <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Primary
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
+                                </ul>
+                            </div>
+                        </td>
                        
-                        
+                       
                         <td scope="col">
                             <div class="dropdown ">
                                 <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Actions
                                 </button>
                                 <ul class="dropdown-menu ">
+                                    <li>
+                                        <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
+                                           data-form-id="formEdit_UMS"
+                                           data-url='@Url.Action("_AssignPhysician", "ViewAction", new {requestid = @item.Requestid})'
+                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
+                                    </li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
                                     <li>
-                                        <button class="btn btn-primary btn-icon btn-elevate btn-sm js-stkModal-btn"
-                                            data-form-id="formEdit_UMS"
-                                                data-url='@Url.Action("_Cancelcase", "ViewAction", new {requestid = @item.Requestid})'
-                                            data-modal-size="lg">
-                                        <i class="la la-edit"></i> edit
-                                    </button>
+                                        <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
+                                           data-form-id="formEdit_UMS"
+                                           data-url='@Url.Action("_Cancelcase", "ViewAction", new {requestid = @item.Requestid})'
+                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Cancel case </a>
                                     </li>
-                                    <li><a class="dropdown-item text-dark-emphasis" data-bs-toggle="modal" data-bs-target="#Cancelcase" data-bs-requestid="@item.Requestid" data-bs-patientname="@item.PatientName" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-plus"></i>Cance lcase </a></li>
-                                    <li><a class="dropdown-item text-dark-emphasis" data-bs-toggle="modal" data-bs-target="#Transfercase" data-bs-providerId="@item.ProviderID" data-bs-requestid="@item.Requestid" data-bs-patientname="@item.PatientName" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-plus"></i>Trans to physician </a></li>
+                                    <li>
+                                        <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
+                                           data-form-id="formEdit_UMS"
+                                           data-url='@Url.Action("_Blockcase", "ViewAction", new {requestid = @item.Requestid})'
+                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
+                                           data-form-id="formEdit_UMS"
+                                           data-url='@Url.Action("_TransferToProvider", "ViewAction", new {requestid = @item.Requestid})'
+                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
+                                    </li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewNotes" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
-                                    <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                    <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewOrder" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
                                     <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journals"></i>Encounter</a></li>
                                 </ul>
@@ -331,6 +352,7 @@
 <div  >
 
 </div>
+<partial name="../ViewAction/_models/_sendlink.cshtml" />
 <script>
 
     function myFunctiona() {
@@ -404,6 +426,29 @@
     }
   $(document)
         .ready(function () {
+            // On dropdown open
+            $(document).on('shown.bs.dropdown', function (event) {
+                var dropdown = $(event.target);
+
+                // Set aria-expanded to true
+                dropdown.find('.dropdown-menu').attr('aria-expanded', true);
+
+                // Set focus on the first link in the dropdown
+                setTimeout(function () {
+                    dropdown.find('.dropdown-menu li:first-child a').focus();
+                }, 10);
+            });
+
+            // On dropdown close
+            $(document).on('hidden.bs.dropdown', function (event) {
+                var dropdown = $(event.target);
+
+                // Set aria-expanded to false
+                dropdown.find('.dropdown-menu').attr('aria-expanded', false);
+
+                // Set focus back to dropdown toggle
+                dropdown.find('.dropdown-toggle').focus();
+            });
             $('#table')
                 .DataTable(
                     { 
