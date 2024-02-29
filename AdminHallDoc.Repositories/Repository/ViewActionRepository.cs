@@ -255,14 +255,14 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         #region CancelCase
 
-        public async Task<bool> CancelCase(ViewActions v)
+        public async Task<bool> CancelCase(ViewActions v,string ReasonTag)
         {
             try
             {
                 var requestData = await _context.Requests.Where(e => e.Requestid == v.RequestID).FirstAsync();
                 if (requestData != null)
                 {
-                    requestData.Casetag = v.ReasonTag;
+                    requestData.Casetag = ReasonTag;
                     requestData.Status = 8;
                     _context.Requests.Update(requestData);
                     _context.SaveChanges();

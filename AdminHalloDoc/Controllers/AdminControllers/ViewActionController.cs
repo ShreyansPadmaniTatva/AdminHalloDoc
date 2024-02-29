@@ -104,9 +104,9 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region _CaseReasonPost
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> _CaseReasonPost(ViewActions v)
+        public async Task<IActionResult> _CaseReasonPost(ViewActions v,string ReasonTag)
         {
-            if (await _viewActionRepository.CancelCase(v))
+            if (await _viewActionRepository.CancelCase(v, ReasonTag))
             {
                 TempData["Status"] = "Cancel Request Provider Successfully..!";
             }

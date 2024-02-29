@@ -1,46 +1,13 @@
 ﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewActions
+
+<link href="~/css/ss.css" rel="stylesheet" />
+<link href="~/css/chosen.css" rel="stylesheet" />
 <div class="modal-header  bg-info text-white">
     <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Concellation</h1>
     <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
         <i class="bi bi-x-circle"></i>
     </button>
 </div>
-<style>
-
-    .custom-select {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ced4da;
-        border-radius: 5px;
-        background-color: #fff;
-        font-size: 14px;
-        line-height: 1.5;
-    }
-
-        .custom-select:focus {
-            border-color: #80bdff;
-            outline: 0;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
-
-        .custom-select option {
-            font-weight: normal;
-        }
-
-        .custom-select[multiple] {
-            height: auto;
-        }
-
-            .custom-select[multiple] option {
-                padding: 6px 10px;
-            }
-
-                .custom-select[multiple] option:checked {
-                    background-color: #007bff;
-                    color: #fff;
-                }
-
-</style>
 <div class=" modal-body">
     <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> @Model.PatientName </span></h3>
     <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post"
@@ -51,22 +18,13 @@
 
         <div class=" form-group row my-2">
             <div class="col-md-12 dropdown-container">
-                   <select name="field1" id="field1" multiple onchange="console.log(Array.from(this.selectedOptions).map(x=>x.value??x.text))" multiselect-hide-x="true">
-          <option value="1">Audi</option>
-          <option selected value="2">BMW</option>
-          <option selected value="3">Mercedes</option>
-          <option value="4">Volvo</option>
-          <option value="5">Lexus</option>
-          <option value="6">Tesla</option>
-        </select>
-                <select class="form-select form-select-sm p-2 custom-select" data-allow-clear="true" tabindex="-1" id="dropdown" data-control="select2" data-placeholder="Cancel Reason">
-                    <option>All Case Reason</option>
-                    @foreach (var reason in ViewBag.CaseReasonComboBox)
-                    {
-                        <option value="@reason.CaseReasonId">@reason.CaseReasonName</option>
-                    }
-                </select>
-            <div id="selectedOptions" class="selected-options">Selected Options: <span id="selectedOptionsText"></span></div>
+                
+
+                <input type="hidden" name="ReasonTag" id="ReasonTag" />
+                <select data-placeholder="Select Categories"  id="cansele" asp-items="@(new SelectList(ViewBag.CaseReasonComboBox,"CaseReasonId","CaseReasonName"))" multiple class="chosen-select" tabindex="8">
+                                    
+                                </select>
+
             </div>
         </div>
         <div class="form-group row my-2">
@@ -85,4 +43,20 @@
         </div>
     </form>
 </div>
-<script src="~/js/custom - copy.js"></script>
+
+
+
+<script src="~/js/chosen.jquery.min.js"></script>
+<script src="~/js/dropdown.js"></script>
+
+        <script>
+    $(function () {
+
+        $('#cansele').change(function () {
+            console.log($(this).val());
+            $(ReasonTag).val($(this).val());
+            console.log($(ReasonTag).val());
+        });
+
+    });
+        </script>

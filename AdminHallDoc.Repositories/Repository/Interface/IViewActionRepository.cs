@@ -20,7 +20,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
          Task<Boolean> AssignProvider(int RequestId, int ProviderId, string notes);
         Task<ViewActions> GetRequestDetails(int? id);
         Task<bool> TransferToProvider(ViewActions v);
-        Task<bool> CancelCase(ViewActions v);
+        Task<bool> CancelCase(ViewActions v,string ReasonTag);
         Task<bool> BlockCase(ViewActions v);
         Task<bool> AssignPhysician(ViewActions v);
         Task<bool> DeleteDocumentByRequest(string ids);
