@@ -2,6 +2,7 @@
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using Microsoft.AspNetCore.Http;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<bool> BlockCase(ViewActions v);
         Task<bool> AssignPhysician(ViewActions v);
         Task<bool> DeleteDocumentByRequest(string ids);
-        Task<bool> SendFilEmail(string ids);
+        Task<bool> SendFilEmail(string ids,int Requestid);
+        Boolean SendAgreement(ViewActions v);
+        Boolean SendAgreement_accept(int RequestID);
+        Boolean SendAgreement_Reject(int RequestID, string Notes);
     }
 }

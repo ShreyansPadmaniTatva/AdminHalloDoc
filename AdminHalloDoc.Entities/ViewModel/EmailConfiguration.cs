@@ -87,6 +87,49 @@ namespace AdminHalloDoc.Entities.ViewModel
         }
         #endregion
 
+        #region SendMail
+        public bool SendMail(String To, String Subject, String Body, List<string> Attachments)
+        {
+            ServicePointManager.ServerCertificateValidationCallback =
+                (sender, certificate, chain, sslPolicyErrors) => true;
+
+            //send mail
+            MailMessage message = new MailMessage();
+            message.From = new MailAddress(From);
+            message.Subject = Subject;
+            message.To.Add(new MailAddress(To));
+            message.Body = Body;
+            message.IsBodyHtml = true;
+
+            if (Attachments != null)
+            {
+                foreach (string attachment in Attachments)
+                {
+                    if (attachment != null)
+                    {
+                        if (File.Exists(attachment))
+                        {
+                            // If file found, Send  it
+                            message.Attachments.Add(new Attachment(attachment));
+                        }
+                    }
+                }
+            }
+
+            message.Body = Body + message.Attachments.ToString();
+
+            using (var smtpClient = new SmtpClient(SmtpServer))
+            {
+                smtpClient.Port = Port;
+                smtpClient.Credentials = new NetworkCredential(UserName, Password);
+                smtpClient.EnableSsl = true;
+
+                smtpClient.Send(message);
+            }
+            return true;
+        }
+        #endregion
+
         #region Encode_Decode
         public string Encode(string encodeMe)
         {

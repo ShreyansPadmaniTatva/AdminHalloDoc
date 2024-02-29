@@ -6,12 +6,16 @@ using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Ocsp;
+using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using static AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDocuments;
+using Request = Org.BouncyCastle.Asn1.Ocsp.Request;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -64,11 +68,29 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region SendFilEmail
-        public async Task<bool> SendFilEmail(string ids)
+        public async Task<bool> SendFilEmail(string ids,int Requestid)
         {
-            _emailConfig.SendMail("shretan@gmail", "com","inj");
-            return true;
 
+            var v = await GetRequestDetails(Requestid);
+
+            List<int> priceList = ids.Split(',').Select(int.Parse).ToList();
+            List<string> files = new List<string>();
+            foreach (int price in priceList)
+            {
+                if (price > 0)
+                {
+                    var data = await _context.Requestwisefiles.Where(e => e.Requestwisefileid == price).FirstOrDefaultAsync();
+                    files.Add(Directory.GetCurrentDirectory() + "\\wwwroot\\Upload" + data.Filename.Replace("Upload/", "").Replace("/", "\\"));
+                }
+            }
+
+           if( _emailConfig.SendMail(v.Email, "All Document Of Your Request "+v.PatientName,"Heeyy " + v.PatientName+" Kindly Check your Attachments", files))
+            {
+                return true;
+            }
+            else {
+                return false;
+            }
 
         }
         #endregion
@@ -131,9 +153,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                           where req.Requestid == id
                         select new ViewActions
                         {
+                            PhoneNumber = rc.Phonenumber,
                             ProviderId = p.Physicianid,
                             PatientName = rc.Firstname + rc.Lastname,
-                            RequestID = req.Requestid
+                            RequestID = req.Requestid,
+                            Email = rc.Email
 
                         }).FirstAsync();
         }
@@ -332,5 +356,70 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         }
         #endregion
+
+        #region SendAgreement
+        public Boolean SendAgreement(ViewActions v)
+        {
+
+            var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == v.RequestID);
+
+            var agreementUrl = "https://localhost:44376/SendAgreement?RequestID="+ v.RequestID;
+
+            _emailConfig.SendMail(res.Email, "Agreement for your request", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
+            return true;
+        }
+        #endregion
+
+        #region SendAgreement_accept
+        public Boolean SendAgreement_accept(int RequestID)
+        {
+            var request = _context.Requests.Find(RequestID);
+            if (request != null)
+            {
+                request.Status = 4;
+                _context.Requests.Update(request);
+                _context.SaveChanges();
+
+                Requeststatuslog rsl = new Requeststatuslog();
+                rsl.Requestid = RequestID;
+
+                rsl.Status = 4;
+
+                rsl.Createddate = DateTime.Now;
+
+                _context.Requeststatuslogs.Add(rsl);
+                _context.SaveChanges();
+
+            }
+            return true;
+        }
+        #endregion
+
+        #region SendAgreement_Reject
+        public Boolean SendAgreement_Reject(int RequestID, string Notes)
+        {
+            var request = _context.Requests.Find(RequestID);
+            if (request != null)
+            {
+                request.Status = 7;
+                _context.Requests.Update(request);
+                _context.SaveChanges();
+
+                Requeststatuslog rsl = new Requeststatuslog();
+                rsl.Requestid = RequestID;
+
+                rsl.Status = 7;
+                rsl.Notes = Notes;
+
+                rsl.Createddate = DateTime.Now;
+
+                _context.Requeststatuslogs.Add(rsl);
+                _context.SaveChanges();
+
+            }
+            return true;
+        }
+        #endregion
+
     }
 }

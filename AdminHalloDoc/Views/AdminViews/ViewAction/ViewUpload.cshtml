@@ -71,11 +71,14 @@
                                     <i class="fa fa-trash" aria-hidden="true"></i>  Delete
                                 </a>
                         </form>
-                         <a class="btn btn-sm  btn-outline-info " asp-action="SendFilEmail" asp-controller="ViewAction"  asp-route-Requestid="@Model.RequestID">
-                        <div class="btn btn-outline-info btn-back text-end">
+                        <form method="post" id="sendmails" asp-action="SendFilEmail" asp-controller="ViewAction">
+                            <input type="hidden" value="@Model.RequestID" name="Requestid" />
+                            <input type="hidden" id="mailids" name="mailids" />
+
+                            <div id="sendmail"  class="btn btn-outline-info btn-back text-end">
                             <i class="fa-solid fa-mail"></i>  Send Mail
                         </div>
-                        </a>
+                        </form>
                     </div>
                 </div>
                 <div class="table-responsive mt-3 ">
@@ -176,6 +179,45 @@
                     }
                 });
             });
+
+            $('#sendmail').click(function () {
+                $('tbody tr').each(function () {
+                    if ($(this).find('.form-check-input').prop('checked')) {
+                        var downloadLink = $(this).find('.RequestwisefilesId').val();
+                        var deleteids = $('#mailids').val();
+                        console.log(deleteids);
+                        if (deleteids == '') {
+
+                            $('#mailids').val(downloadLink);
+                        } else {
+                            $('#mailids').val(deleteids + ',' + downloadLink);
+
+                        }
+                        console.log($('#mailids').val());
+
+                    }
+                });
+
+                Swal.fire({
+                    title: "Do you want to Send Mail That file ?",
+                    showDenyButton: false,
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                    denyButtonText: `Don't save`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#sendmails').submit();
+                    }
+                    console.log(result);
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        Swal.fire("Sending Mail!", "", "success");
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
+                });
+            });
+
 
             $('#delete').click(function () {
                 $('tbody tr').each(function () {

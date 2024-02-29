@@ -340,19 +340,23 @@
                                           @if (item.Status == 2)
                                         {
                                             <li>
-                                                <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
+                                                <a class="btn dropdown-item text-dark-emphasis js-stkModal-btn"
                                                 data-form-id="formEdit_UMS"
                                                 data-url='@Url.Action("_TransferToProvider", "ViewAction", new {requestid = @item.Requestid})'
                                                 data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Trans to physician  </a>
                                             </li>
-                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journals"></i>Send Agrement</a></li>
+                                            <li>
+                                                 <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
+                                                data-form-id="formEdit_UMS"
+                                                   data-url='@Url.Action("_SendAgreement", "SendAgreement", new {requestid = @item.Requestid})'
+                                                   data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Send Agrement  </a></li>
                                         }
-                                        @if (item.Status == 3 || item.Status == 5)
+                                        @if (item.Status == 2 || item.Status == 5)
                                         {
                                             <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journals"></i>Clear Case</a></li>
 
 
-                                        }                                        @if (item.Status == 2 || item.Status == 4 || item.Status == 5)
+                                        }                                        @if (item.Status == 3 || item.Status == 4 || item.Status == 5)
                                         {
                                             <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewOrder" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
                                             <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>

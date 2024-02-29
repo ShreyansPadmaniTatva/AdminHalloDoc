@@ -10,7 +10,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 {
     public class ViewActionController : Controller
     {
-
+        #region Constructor
         private readonly IRequestRepository _requestRepository;
         private readonly IViewActionRepository _viewActionRepository;
         public ViewActionController(IRequestRepository requestRepository, IViewActionRepository viewActionRepository)
@@ -19,7 +19,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             _requestRepository = requestRepository;
             _viewActionRepository = viewActionRepository;
         }
-        
+        #endregion
+
         #region Save_Viewcase
         public async Task<IActionResult> SaveViewcase(Viewcase viewcase)
         {
@@ -198,11 +199,14 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-
         #region SendFilEmail
-        public async Task<IActionResult> SendFilEmail(string deleteids, int Requestid)
+        public async Task<IActionResult> SendFilEmail(string mailids, int Requestid)
         {
-            await _viewActionRepository.SendFilEmail(deleteids);
+            if(await _viewActionRepository.SendFilEmail(mailids, Requestid))
+            {
+
+                TempData["Status"] = "Send File in Mail Successfully..!";
+            }
             return RedirectToAction("ViewUpload", "AdminDashboard", new { id = Requestid });
         }
         #endregion
