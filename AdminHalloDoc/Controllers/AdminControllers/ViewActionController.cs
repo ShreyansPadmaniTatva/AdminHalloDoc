@@ -117,6 +117,19 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         #endregion
 
+        #region _ClearCase
+        
+        public async Task<IActionResult> _ClearCase(int RequestId)
+        {
+            if (await _viewActionRepository.ClearCase(RequestId))
+            {
+                TempData["Status"] = "Clear Request Successfully..!";
+            }
+            ViewBag.CountToCloseRequest = await _requestRepository.CountToCloseRequest();
+            return Json(true);
+        }
+        #endregion
+
         #region _Blockcase
         public async Task<IActionResult> _Blockcase(int? requestid)
         {

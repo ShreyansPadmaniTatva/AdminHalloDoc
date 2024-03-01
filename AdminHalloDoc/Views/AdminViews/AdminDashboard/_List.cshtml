@@ -316,7 +316,7 @@
                                     <ul class="dropdown-menu ">
                                         <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
                                         <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewNotes" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
-                                        @if (item.Status == 1)
+                                        @if (Status == 1)
                                         {
                                             <li>
                                                 <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
@@ -337,7 +337,7 @@
                                                 data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Block Case  </a>
                                             </li>
                                         }
-                                          @if (item.Status == 2)
+                                        @if (Status == 2)
                                         {
                                             <li>
                                                 <a class="btn dropdown-item text-dark-emphasis js-stkModal-btn"
@@ -351,18 +351,23 @@
                                                    data-url='@Url.Action("_SendAgreement", "SendAgreement", new {requestid = @item.Requestid})'
                                                    data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Send Agrement  </a></li>
                                         }
-                                        @if (item.Status == 2 || item.Status == 5)
+                                        @if (Status == 2 || Status == 5)
                                         {
-                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journals"></i>Close Case</a></li>
+                                            <li><div class="dropdown-item text-dark-emphasis ClearCase" data-bs-id="@item.Requestid" ><i class="px-2 bi bi-journals"></i>Clear Case</div></li>
 
 
-                                        }                                        @if (item.Status == 3 || item.Status == 4 || item.Status == 5)
+                                        }
+                                        @if (Status == 5)
+                                        {
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="CloseCase" asp-route-id="@item.Requestid" asp-controller="SubmitForm"><i class="px-2 bi bi-journal"></i>Close Case </a></li>
+                                        }
+                                        @if (Status == 3 || Status == 4 || Status == 5)
                                         {
                                             <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewOrder" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
                                             <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
                                             <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journals"></i>Encounter</a></li>
                                         }
-                                        @if (item.Status > 1)
+                                        @if (Status > 1)
                                         {
                                             <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
                                         }
@@ -411,6 +416,46 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js">
 </script>
 <script>
+    $(function () {
+        $('.ClearCase').click(function () {
+           
+
+            Swal.fire({
+                title: "Do you want to Clear That requesr ?",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "Clear",
+                denyButtonText: `Don't save`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var email = this.getAttribute('data-bs-id')
+                    
+                    console.log(email);
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("_ClearCase","ViewAction")?RequestId=' + email,
+                        cache: false,
+                        success: function (response) {
+
+                            console.log(response);
+                        },
+                        error: function () {
+                            alert("Error while checking email.");
+                        }
+                    });
+                }
+                console.log(result);
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    Swal.fire("Clear !", "", "success");
+                    location.reload();
+
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+            });
+        });
+    });
     function myFunction() {
         var x = document.getElementById("Region").value;
         console.log(x);

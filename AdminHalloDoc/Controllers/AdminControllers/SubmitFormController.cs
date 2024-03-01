@@ -1,5 +1,6 @@
 ﻿using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Utilities;
 
@@ -47,5 +48,31 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             return RedirectToAction("Index", "AdminDashboard");
         }
         #endregion
+
+        #region Close_Case
+        public async Task<IActionResult> CloseCase(int? id)
+        {
+            ViewDocuments v = await _viewActionRepository.GetDocumentByRequest(id);
+            return View("../AdminViews/ViewAction/CloseCase", v);
+        }
+        #endregion
+
+        #region Upadte_Request
+        public async Task<IActionResult> UpadteRequest(ViewDocuments viewdocuments)
+        {
+            Viewcase viewcase = new Viewcase();
+            viewcase.Email= viewdocuments.Email;
+            viewcase.PhoneNumber= viewdocuments.PhoneNumber;
+            viewcase.RequesClientid= viewdocuments.RequesClientid;
+            if (await _requestRepository.PutViewcase(viewcase))
+            {
+
+                TempData["Status"] = "Save Successfully..!";
+            }
+
+            return RedirectToAction("CloseCase", new { id = viewdocuments.RequestID });
+        }
+        #endregion
+
     }
 }

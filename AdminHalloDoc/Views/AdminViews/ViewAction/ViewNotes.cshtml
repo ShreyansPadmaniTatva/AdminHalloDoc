@@ -13,7 +13,7 @@
 
     }
 }
-
+@using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewNotesModel;
 <div class="container">
 
@@ -40,7 +40,8 @@
 
 
     <div class="row align-items-center  justify-content-around my-3 " >
-       
+       @if (Model.transfernotes.Count > 0)
+                        {
                 <div class="col-md-6" style="min-height:100px">
                     <div class="card border-0 shadow" style="cursor:pointer">
                         <div class="card-body">
@@ -54,21 +55,42 @@
                                 @{
                             int i = 1;
                                 }
-
-                        @if (Model.transfernotes != null)
-                        {
                             
                             @foreach (var item in Model.transfernotes)
                             {
-                              @item.Notes
-
+                                <b>( @i ) </b> @Html.Raw(System.Web.HttpUtility.HtmlDecode(item.TransferNotes))   <br />
+                                
+                                    i = i + 1;
+                                
                             }
-                        }
+                      
                             </p>
                         </div>
                     </div>
                 </div>
-           
+        }
+        @if (Model.cancelnotes != null)
+        {
+            @foreach (var item in Model.cancelnotes)
+            {
+                    <div class="col-md-6" style="min-height:100px">
+                        <div class="card border-0 shadow" style="cursor:pointer">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fa fa-window-close" aria-hidden="true"></i>
+                                    <b>
+                                        <td>@Enum.GetName(typeof(Status), item.Status)</td> 
+                                    </b>
+                                </h5>
+                                <hr />
+                                <p class="card-text p-2">
+                                        @item.Notes
+                            </p>
+                        </div>
+                    </div>
+                </div>
+           }
+        }
             
         </div>
         <div class="row align-items-center  justify-content-around  ">
@@ -79,16 +101,9 @@
                         Admin Notes
                     </b> </h5>
                     <hr />
-                    @if (Model.Adminnotes != null)
-                    {
                         <p class="card-text p-2" id="adminnotestext">
                             @Model.Adminnotes
                         </p>
-                    }
-                    else
-                    {
-                        <p id="adminnotestext" >-</p>
-                    }
 
                 </div>
             </div>
@@ -100,16 +115,9 @@
                         <img src="~/images/doctor-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" /> <b> Physician Notes</b>
                     </h5>
                     <hr />
-                    @if (Model.Physiciannotes != null)
-                    {
                         <p class="card-text" id="phynotetext">
                             @Model.Physiciannotes
                         </p>
-                    }
-                    else
-                    {
-                        <p id="phynotetext" >-</p>
-                    }
                     
                 </div>
             </div>

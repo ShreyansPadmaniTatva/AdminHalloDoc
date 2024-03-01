@@ -118,7 +118,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        #region UploadDoc_Files
+        #region ProviderbyRegion
         public async Task<IActionResult> ProviderbyRegion(int? Regionid)
         {
             var v = await _viewActionRepository.ProviderbyRegion(Regionid);

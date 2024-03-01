@@ -11,6 +11,7 @@ using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,9 +45,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                        select new ViewDocuments
                                        {
                                            ConfirmationNumber = req.Confirmationnumber,
+                                           Email = rc.Email,
+                                           PhoneNumber = rc.Phonenumber,
+                                           DOB = new DateTime((int)rc.Intyear, (int)Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
                                            Firstanme = rc.Firstname ,
                                            Lastanme = rc.Lastname,
-                                           RequestID = req.Requestid
+                                           RequestID = req.Requestid,
+                                           RequesClientid = rc.Requestclientid
 
                                        }).FirstAsync();
 
@@ -243,7 +248,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             rsl.Transtophysicianid = v.TransferToProviderId;
             rsl.Notes = v.Notes;
             rsl.Createddate = DateTime.Now;
-            rsl.Status = 1;
+            rsl.Status = 2;
             _context.Requeststatuslogs.Update(rsl);
             _context.SaveChanges();
 
@@ -418,6 +423,39 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             }
             return true;
+        }
+        #endregion
+
+        #region Clear_Case
+        public async Task<bool> ClearCase(int RequestID)
+        {
+            try
+            {
+                var requestData = await _context.Requests.Where(e => e.Requestid == RequestID).FirstOrDefaultAsync();
+                if (requestData != null)
+                {
+
+                    requestData.Status = 10;
+                    _context.Requests.Update(requestData);
+                    await _context.SaveChangesAsync();
+
+                    Requeststatuslog rsl = new Requeststatuslog
+                    {
+                        Requestid = RequestID,
+                        Status = 10,
+                        Createddate = DateTime.Now
+                    };
+                    _context.Requeststatuslogs.Add(rsl);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else { return false; }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
         #endregion
 

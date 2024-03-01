@@ -140,34 +140,7 @@
 
 
 
-    $(function () {
 
-        $("#region").change(function () {
-            var email = $("#region").val();
-            console.log(email);
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("CheckEmail")?email=' + email,
-                cache: false,
-                success: function (response) {
-                    var flag = response.message == 'False';
-                    var userId = response.data;
-                    console.log(response);
-                    if (flag) {
-                        // Show the username and password fields
-                        $("#password").show();
-                    } else {
-                        $("#password").hide();
-                        // Check if userId is defined not for evey one
-                        document.getElementById("UserId").value = userId;
-                    }
-                },
-                error: function () {
-                    alert("Error while checking email.");
-                }
-            });
-        });
-    });
 
     $(function () {
             $("form").submit(function () {

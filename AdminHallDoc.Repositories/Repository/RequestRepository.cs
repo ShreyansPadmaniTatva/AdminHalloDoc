@@ -156,14 +156,20 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             {
 
                 var requestclient = await _context.Requestclients.Where(r => r.Requestclientid == viewcase.RequesClientid).FirstAsync();
-                DateTime sd = viewcase.BirthDate.Value;
-                requestclient.Firstname = viewcase.FirstName;
-                requestclient.Lastname = viewcase.LastName;
+                DateTime dt = new DateTime(2008, 3, 9, 16, 5, 7, 123);
+                DateTime sd = viewcase.BirthDate != null  ? viewcase.BirthDate.Value : dt;
+                
+                requestclient.Firstname = viewcase.FirstName != null ? viewcase.FirstName : requestclient.Firstname;
+                requestclient.Lastname = viewcase.LastName != null ? viewcase.LastName : requestclient.Lastname;
                 requestclient.Phonenumber = viewcase.PhoneNumber;
                 requestclient.Email = viewcase.Email;
-                requestclient.Intdate = sd.Day;
-                requestclient.Intyear = sd.Year;
-                requestclient.Strmonth = sd.Month.ToString();
+                if (sd != dt)
+                {
+                    requestclient.Intdate = sd.Day;
+                    requestclient.Intyear = sd.Year;
+                    requestclient.Strmonth = sd.Month.ToString();
+                }
+               
                 _context.Requestclients.Update(requestclient);
                 await _context.SaveChangesAsync();
             }

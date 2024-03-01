@@ -8,12 +8,13 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
     public class ViewNotesModel
     {
+        
         public int? Requestnotesid { get; set; }
 
 
         public int? Requestid { get; set; }
 
-
+        public short? Status { get; set; }
         public string? Strmonth { get; set; }
 
 
@@ -47,5 +48,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? Administrativenotes { get; set; }
 
         public List<TransfernotesModel>? transfernotes { get; set; } = null!;
+        public List<TransfernotesModel>? cancelnotes { get; set; } = null!;
+
     }
 }

@@ -25,7 +25,12 @@ namespace AdminHalloDoc.Entities.ViewModel
             ToClose,
             UnPaid
         }
+        public enum Status
+        {
+            Unassigne = 1,            Accepted ,            Cancelled,            MDEnRoute   ,            MDONSite,            Conclude  ,            CancelledByPatients,            Closed        ,            Unpaid      ,            Clear,
+            Block
 
+        }
         public static int FindStatus(int status)
         {
             if (status == 1)
@@ -48,7 +53,7 @@ namespace AdminHalloDoc.Entities.ViewModel
                 return 4;
             }else
             {
-                return 9;
+                return 6;
             }
 
         }
@@ -72,8 +77,8 @@ namespace AdminHalloDoc.Entities.ViewModel
         //{ 8, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Chat With" , "Actions" } }, 
 
         //un paid
-        { 6, new List<string> { "Name", "Physician Name", "Date Of Service", "Phone" ,"Address" , "Actions" } }, 
-        
+        { 6, new List<string> { "Name", "Physician Name", "Date Of Service", "Phone" ,"Address" , "Actions" } }
+
     };
     }
 }
