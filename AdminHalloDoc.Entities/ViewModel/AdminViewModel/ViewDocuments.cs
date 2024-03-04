@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,8 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
             public int? Status { get; set; }
             public string? Filename { get; set; }
             public DateTime Createddate { get; set; }
-            public int? RequestwisefilesId { get; set;}
+            public int? RequestwisefilesId { get; set; }
+            public string isDeleted { get; set; }
 
         }
     }

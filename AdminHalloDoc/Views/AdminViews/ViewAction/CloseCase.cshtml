@@ -82,17 +82,17 @@
                 <input asp-for="RequestID" name="RequestID" type="hidden">
 
                 <div class="col-md-6 form-floating  ">
-                    <input asp-for="Firstanme" class="form-control rounded" name="Firstanme" type="text" placeholder="First Name" autocomplete=off>
+                    <input disabled asp-for="Firstanme" class="form-control rounded" name="Firstanme" type="text" placeholder="First Name" autocomplete=off>
                     <label class="" for="floatingInput">First Name </label>
                     <span asp-validation-for="Firstanme" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 form-floating">
-                    <input asp-for="Lastanme" class="form-control rounded" name="Lastanme" type="text" placeholder=Suchtext autocomplete=off>
+                    <input disabled asp-for="Lastanme" class="form-control rounded" name="Lastanme" type="text" placeholder=Suchtext autocomplete=off>
                     <label for="floatingInput">Last Name </label>
                     <span asp-validation-for="Lastanme" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 form-floating">
-                    <input asp-for="DOB" class="form-control rounded" name="BirthDate" type="date" placeholder=Suchtext autocomplete=off>
+                    <input disabled asp-for="DOB" class="form-control rounded" name="BirthDate" type="date" placeholder=Suchtext autocomplete=off>
                     <label for="floatingInput">Birth Date </label>
                     <span asp-validation-for="DOB" class="text-danger"></span>
                 </div>
@@ -102,17 +102,18 @@
                 </div>
                 <div class="col-md-1">
                     <div class=" border border-1 border-info text-info text-center rounded-3 ">
-                        <a class="text-info" href="tel:"><i class="bi bi-telephone fs-2 "></i></a>
+                        <a class="text-info" href="tel:@Model.PhoneNumber"><i class="bi bi-telephone fs-2 "></i></a>
                     </div>
                 </div>
                 <div class="col-md-6 form-floating ">
-                    <input id="email" asp-for="Email" class="form-control rounded" name="Email" type="text" placeholder=Suchtext autocomplete=off>
+                    <input id="email" asp-for="Email" id="email" class="form-control rounded" name="Email" type="text" placeholder=Suchtext autocomplete=off>
                     <label for="floatingInput">Email </label>
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class=" col-md-6 text-end my-5">
                     <div id="editprofile" onclick="toggleFormElements('false')" class="btn btn-info text-white  "> Edit </div>
-                    <a asp-action="CloseCase" asp-controller="SubmitForm" asp-route-id="@Model.RequestID" class="btn btn-outline-info  "> Close case </a>
+                    <a id="closecase" asp-action="CloseCaseChangge" asp-controller="SubmitForm" asp-route-id="@Model.RequestID" class="btn btn-outline-info  "> Close case </a>
+                    <a id="cancel" onclick="toggleFormElements('false')" class="btn btn-outline-info  "> cancel </a>
                     <input id="submit" type="submit" class="btn btn-info text-white p-2" value="save">
                 </div>
 
@@ -129,17 +130,26 @@
 
 
     function toggleFormElements(bDisabled) {
-        var inputs = document.getElementsByTagName("input");
+        var phone = document.getElementById("phone");
+        var email = document.getElementById("email");
+
         var submit = document.getElementById("submit");
         var editprofile = document.getElementById("editprofile");
-        for (var i = 0; i < inputs.length; i++) {
-            inputs[i].disabled = !inputs[i].disabled;
-        }
-        if (inputs[0].disabled) {
+        var closecase = document.getElementById("closecase");
+        var cancel = document.getElementById("cancel");
+
+        phone.disabled = !phone.disabled;
+        email.disabled = !email.disabled;
+      
+        if (phone.disabled) {
             submit.style.display = "none";
+            cancel.style.display = "none";
+            closecase.style.display = "inline-block";
             editprofile.style.display = "inline-block";
         } else {
             submit.style.display = "inline-block";
+            cancel.style.display = "inline-block";
+            closecase.style.display = "none";
             editprofile.style.display = "none";
         }
     }

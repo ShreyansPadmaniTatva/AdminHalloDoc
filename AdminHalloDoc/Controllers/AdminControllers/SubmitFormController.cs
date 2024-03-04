@@ -55,6 +55,19 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             ViewDocuments v = await _viewActionRepository.GetDocumentByRequest(id);
             return View("../AdminViews/ViewAction/CloseCase", v);
         }
+
+        #region Close_Case_Changge
+        public async Task<IActionResult> CloseCaseChangge(int id)
+        {
+            if (await _viewActionRepository.CloseCase(id))
+            {
+
+                TempData["Status"] = "Close Request Successfully..!";
+            }
+            return RedirectToAction("Index", "AdminDashboard");
+        }
+        #endregion
+
         #endregion
 
         #region Upadte_Request
@@ -71,6 +84,15 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
 
             return RedirectToAction("CloseCase", new { id = viewdocuments.RequestID });
+        }
+        #endregion
+
+        #region Encounter
+        public async Task<IActionResult> Encounter()
+        {
+
+            //ViewDocuments v = await _viewActionRepository.GetDocumentByRequest(id);
+            return View("../AdminViews/ViewAction/Encounter");
         }
         #endregion
 

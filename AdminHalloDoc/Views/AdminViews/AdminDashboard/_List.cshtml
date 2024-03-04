@@ -365,7 +365,7 @@
                                         {
                                             <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewOrder" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
                                             <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journal"></i>Documnet notes</a></li>
-                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="" asp-controller=""><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid" asp-action="Encounter" asp-controller="SubmitForm"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
                                         }
                                         @if (Status > 1)
                                         {

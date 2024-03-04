@@ -1,11 +1,11 @@
 ﻿
-//using MailKit.Net.Smtp;
-//using MimeKit;
-//using System.Net.Mail;
-//using System.Net;
+using MailKit.Net.Smtp;
+using MimeKit;
 using System.Net.Mail;
 using System.Net;
-using Microsoft.AspNetCore.Http;
+//using System.Net.Mail;
+//using System.Net;
+//using Microsoft.AspNetCore.Http;
 
 namespace AdminHalloDoc.Entities.ViewModel
 {
@@ -18,118 +18,169 @@ namespace AdminHalloDoc.Entities.ViewModel
         public string UserName { get; set; }
         public string Password { get; set; }
 
-        //#region SendMail
-        //public async void SendMail(String To, String Subject, String Body)
-        //{
-        //    try
-        //    {
-        //        var message = new MimeMessage();
-        //        message.From.Add(new MailboxAddress("", From));
-        //        message.To.Add(new MailboxAddress("", To));
-        //        message.Subject = Subject;
-        //        message.Body = new TextPart("html")
-        //        {
-        //            Text = Body
-        //        };
-        //        using (var client = new SmtpClient())
-        //        {
-        //            await client.ConnectAsync(SmtpServer, Port, false);
-        //            await client.AuthenticateAsync(UserName, Password);
-        //            await client.SendAsync(message);
-        //            await client.DisconnectAsync(true);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
-        //#endregion
-
-
         #region SendMail
-        public Boolean SendMail(String To, String Subject, String Body)
+        public async void SendMail(String To, String Subject, String Body)
         {
-            ServicePointManager.ServerCertificateValidationCallback =
-                (sender, certificate, chain, sslPolicyErrors) => true;
-
-            //send mail
-            MailMessage message = new MailMessage();
-            message.From = new MailAddress(From);
-            message.Subject = Subject;
-            message.To.Add(new MailAddress(To));
-            message.Body = Body;
-            message.IsBodyHtml = true;
-
-            if ("C:\\Users\\pca176\\Documents\\AdminHalloDoc\\AdminHalloDoc\\wwwroot\\Upload\\60\\htmltable (41)-20240228061436.xls" != null)
+            try
             {
-                message.Attachments.Add(new Attachment("C:\\Users\\pca176\\Documents\\AdminHalloDoc\\AdminHalloDoc\\wwwroot\\Upload\\60\\htmltable (41)-20240228061436.xls"));
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("", From));
+                message.To.Add(new MailboxAddress("", To));
+                message.Subject = Subject;
+                message.Body = new TextPart("html")
+                {
+                    Text = Body
+                };
+                using (var client = new MailKit.Net.Smtp.SmtpClient())
+                {
+                    await client.ConnectAsync(SmtpServer, Port, false);
+                    await client.AuthenticateAsync(UserName, Password);
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
+                }
             }
-            //if (Attachments != null)
-            //{
-            //    foreach (IFormFile attachment in Attachments)
-            //    {
-            //        string fileName = Path.GetFileName(attachment.FileName);
-            //        message.Attachments.Add(new Attachment(attachment.OpenReadStream(), fileName));
-            //    }
-            //}
-            message.Body = Body + message.Attachments.ToString();
-
-            using (var smtpClient = new SmtpClient(SmtpServer))
+            catch (Exception ex)
             {
-                smtpClient.Port = Port;
-                smtpClient.Credentials = new NetworkCredential(UserName, Password);
-                smtpClient.EnableSsl = true;
-
-                smtpClient.Send(message);
+                throw ex;
             }
-            return true;
         }
         #endregion
 
-        #region SendMail
-        public bool SendMail(String To, String Subject, String Body, List<string> Attachments)
-        {
-            ServicePointManager.ServerCertificateValidationCallback =
-                (sender, certificate, chain, sslPolicyErrors) => true;
 
-            //send mail
-            MailMessage message = new MailMessage();
-            message.From = new MailAddress(From);
+        //#region SendMail
+        //public Boolean SendMail(String To, String Subject, String Body)
+        //{
+        //    ServicePointManager.ServerCertificateValidationCallback =
+        //        (sender, certificate, chain, sslPolicyErrors) => true;
+
+        //    //send mail
+        //    MailMessage message = new MailMessage();
+        //    message.From = new MailAddress(From);
+        //    message.Subject = Subject;
+        //    message.To.Add(new MailAddress(To));
+        //    message.Body = Body;
+        //    message.IsBodyHtml = true;
+
+        //    if ("C:\\Users\\pca176\\Documents\\AdminHalloDoc\\AdminHalloDoc\\wwwroot\\Upload\\60\\htmltable (41)-20240228061436.xls" != null)
+        //    {
+        //        message.Attachments.Add(new Attachment("C:\\Users\\pca176\\Documents\\AdminHalloDoc\\AdminHalloDoc\\wwwroot\\Upload\\60\\htmltable (41)-20240228061436.xls"));
+        //    }
+        //    //if (Attachments != null)
+        //    //{
+        //    //    foreach (IFormFile attachment in Attachments)
+        //    //    {
+        //    //        string fileName = Path.GetFileName(attachment.FileName);
+        //    //        message.Attachments.Add(new Attachment(attachment.OpenReadStream(), fileName));
+        //    //    }
+        //    //}
+        //    message.Body = Body + message.Attachments.ToString();
+
+        //    using (var smtpClient = new SmtpClient(SmtpServer))
+        //    {
+        //        smtpClient.Port = Port;
+        //        smtpClient.Credentials = new NetworkCredential(UserName, Password);
+        //        smtpClient.EnableSsl = true;
+
+        //        smtpClient.Send(message);
+        //    }
+        //    return true;
+        //}
+        //#endregion
+
+        #region SendMail
+        public async Task<bool> SendMailAsync(string To, string Subject, string Body, List<string> Attachments)
+        {
+            MimeMessage message = new MimeMessage();
+            message.From.Add(new MailboxAddress("", From));
+            message.To.Add(new MailboxAddress("", "pehek11482@fashlend.com"));
             message.Subject = Subject;
-            message.To.Add(new MailAddress(To));
-            message.Body = Body;
-            message.IsBodyHtml = true;
+
+            // Create the multipart/mixed container to hold the message body and attachments
+            var multipart = new Multipart("mixed");
+
+            // Create HTML body part
+            var bodyPart = new TextPart("html")
+            {
+                Text = Body
+            };
+            multipart.Add(bodyPart);
 
             if (Attachments != null)
             {
-                foreach (string attachment in Attachments)
+                foreach (string attachmentPath in Attachments)
                 {
-                    if (attachment != null)
+                    if (!string.IsNullOrEmpty(attachmentPath) && File.Exists(attachmentPath))
                     {
-                        if (File.Exists(attachment))
+                        // Create MimePart for attachment
+                        var attachment = new MimePart()
                         {
-                            // If file found, Send  it
-                            message.Attachments.Add(new Attachment(attachment));
-                        }
+                            Content = new MimeContent(File.OpenRead(attachmentPath), ContentEncoding.Default),
+                            ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
+                            ContentTransferEncoding = ContentEncoding.Base64,
+                            FileName = Path.GetFileName(attachmentPath)
+                        };
+
+                        // Add attachment to multipart container
+                        multipart.Add(attachment);
                     }
                 }
             }
 
-            message.Body = Body + message.Attachments.ToString();
+            // Set the message body to the multipart container
+            message.Body = multipart;
 
-            using (var smtpClient = new SmtpClient(SmtpServer))
+            using (var client = new MailKit.Net.Smtp.SmtpClient())
             {
-                smtpClient.Port = Port;
-                smtpClient.Credentials = new NetworkCredential(UserName, Password);
-                smtpClient.EnableSsl = true;
-
-                smtpClient.Send(message);
+                await client.ConnectAsync(SmtpServer, Port, false);
+                await client.AuthenticateAsync(UserName, Password);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
             }
+
             return true;
         }
-        #endregion
 
+        #endregion
+        //public async Task<bool> SendMailAsync(String To, String Subject, String Body, List<string> Attachments)
+        //{
+        //    MimeMessage message = new MimeMessage();
+        //    message.From.Add(new MailboxAddress("", From));
+        //    message.To.Add(new MailboxAddress("", To));
+        //    message.Subject = Subject;
+        //    message.Body = new TextPart("html")
+        //    {
+        //        Text = Body
+        //    };
+
+
+
+        //    if (Attachments != null)
+        //    {
+        //        foreach (string attachment in Attachments)
+        //        {
+        //            if (attachment != null)
+        //            {
+        //                if (File.Exists(attachment))
+        //                {
+        //                    // If file found, Send  it
+        //                    message.Attachments.Add(new Attachment(attachment));
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    message.Body = Body;
+
+        //    using (var client = new MailKit.Net.Smtp.SmtpClient())
+        //    {
+        //        await client.ConnectAsync(SmtpServer, Port, false);
+        //        await client.AuthenticateAsync(UserName, Password);
+        //        await client.SendAsync(message);
+        //        await client.DisconnectAsync(true);
+        //    }
+
+        //    return true;
+        //}
         #region Encode_Decode
         public string Encode(string encodeMe)
         {

@@ -60,14 +60,14 @@
                     <div class="mt-2">
                         <h6> Document</h6>
                     </div>
-                    <div class="text-end">
-                        <div id="downloadAll" class="btn btn-outline-info btn-back text-end">
+                    <div class="text-end d-flex ">
+                        <div id="downloadAll" class="btn btn-outline-info btn-back text-end mx-1">
                             <i class="fa-solid fa-download"></i>  Downlode all
                         </div>
                         <form method="post" id="deleted" asp-action="AllFilesDelete" asp-controller="ViewAction" >
                             <input type="hidden" id="deleteids" name="deleteids" />
                             <input type="hidden" value="@Model.RequestID" name="Requestid" />
-                                <a  id="delete" class="btn btn-outline-info btn-back text-end">
+                                <a  id="delete" class="btn btn-outline-info btn-back text-end mx-1">
                                     <i class="fa fa-trash" aria-hidden="true"></i>  Delete
                                 </a>
                         </form>
@@ -75,7 +75,7 @@
                             <input type="hidden" value="@Model.RequestID" name="Requestid" />
                             <input type="hidden" id="mailids" name="mailids" />
 
-                            <div id="sendmail"  class="btn btn-outline-info btn-back text-end">
+                            <div id="sendmail"  class="btn btn-outline-info btn-back text-end mx-1">
                             <i class="fa-solid fa-mail"></i>  Send Mail
                         </div>
                         </form>
@@ -108,7 +108,7 @@
                                         </div>
                                     </td>
                                     <td class="table-text  px-3 flnamae"> <span> @item2.Filename </span></td>
-                                    <td class="table-text  px-3">@item2.Status</td>
+                                    <td class="table-text  px-3">@item2.Status </td>
                                     <td class="table-text  px-3">@item2.Createddate</td>
 
                                     <td class="table-text text-center ">
@@ -257,7 +257,9 @@
                 });
             });
 
-
+            $("form").on("change", ".file-upload-field", function () {
+                $(this).parent(".file-upload-wrapper1").attr("data-text", $(this).val().replace(/.*(\/|\\)/, ''));
+            });
 
             $('#topflexCheckDefault').change(function () {
                 $('.table tbody input[type="checkbox"]').prop('checked', $(this).is(':checked'));

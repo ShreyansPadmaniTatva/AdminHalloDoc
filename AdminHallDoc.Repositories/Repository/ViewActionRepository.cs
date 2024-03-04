@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Org.BouncyCastle.Utilities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -56,10 +57,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                        }).FirstAsync();
 
             List<Documents> doclist = _context.Requestwisefiles
-                        .Where(r => r.Requestid == id)
+                        .Where(r => r.Requestid == id )
+                        .ToList()
+                        .Where(r => r.Isdeleted.Get(0) == false)
                         .OrderByDescending(x => x.Createddate)
                         .Select(r => new Documents
                         {
+                            isDeleted = r.Isdeleted.ToString(),
                             RequestwisefilesId = r.Requestwisefileid,
                             Status = r.Doctype,
                             Createddate = r.Createddate,
@@ -89,7 +93,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 }
             }
 
-           if( _emailConfig.SendMail(v.Email, "All Document Of Your Request "+v.PatientName,"Heeyy " + v.PatientName+" Kindly Check your Attachments", files))
+           if(await _emailConfig.SendMailAsync(v.Email, "All Document Of Your Request "+v.PatientName,"Heeyy " + v.PatientName+" Kindly Check your Attachments", files))
             {
                 return true;
             }
@@ -111,24 +115,25 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     var data = await _context.Requestwisefiles.Where(e => e.Requestwisefileid == price).FirstOrDefaultAsync();
                     if (data != null)
                     {
-                        try
-                        {
-                            var v = Directory.GetCurrentDirectory() + "\\wwwroot\\Upload" + data.Filename.Replace("Upload/", "").Replace("/", "\\");
-                            // Check if file exists with its full path
-                            if (File.Exists(v))
-                            {
-                                // If file found, delete it
-                                File.Delete(v);
-                                Console.WriteLine("File deleted.");
-                            }
-                            else Console.WriteLine("File not found");
-                        }
-                        catch (IOException ioExp)
-                        {
-                            Console.WriteLine(ioExp.Message);
-                        }
+                        //try
+                        //{
+                        //    var v = Directory.GetCurrentDirectory() + "\\wwwroot\\Upload" + data.Filename.Replace("Upload/", "").Replace("/", "\\");
+                        //    // Check if file exists with its full path
+                        //    if (File.Exists(v))
+                        //    {
+                        //        // If file found, delete it
+                        //        File.Delete(v);
+                        //        Console.WriteLine("File deleted.");
+                        //    }
+                        //    else Console.WriteLine("File not found");
+                        //}
+                        //catch (IOException ioExp)
+                        //{
+                        //    Console.WriteLine(ioExp.Message);
+                        //}
+                        data.Isdeleted[0] = true;
 
-                        _context.Requestwisefiles.Remove(data);
+                        _context.Requestwisefiles.Update(data);
                         _context.SaveChanges();
                         
                     }
@@ -443,6 +448,39 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     {
                         Requestid = RequestID,
                         Status = 10,
+                        Createddate = DateTime.Now
+                    };
+                    _context.Requeststatuslogs.Add(rsl);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else { return false; }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+        #endregion
+
+        #region CloseCase
+        public async Task<bool> CloseCase(int RequestID)
+        {
+            try
+            {
+                var requestData = await _context.Requests.Where(e => e.Requestid == RequestID).FirstOrDefaultAsync();
+                if (requestData != null)
+                {
+
+                    requestData.Status = 9;
+                    _context.Requests.Update(requestData);
+                    await _context.SaveChangesAsync();
+
+                    Requeststatuslog rsl = new Requeststatuslog
+                    {
+                        Requestid = RequestID,
+                        Status = 9,
                         Createddate = DateTime.Now
                     };
                     _context.Requeststatuslogs.Add(rsl);

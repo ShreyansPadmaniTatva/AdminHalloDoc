@@ -40,7 +40,7 @@ function savealt(title) {
         position: "top-end",
         showConfirmButton: false,
         timer: 3000,
-        iconColor: 'white',
+        iconColor: 'black',
         customClass: {
             popup: 'colored-toast',
         },

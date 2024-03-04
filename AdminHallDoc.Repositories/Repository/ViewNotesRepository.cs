@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -244,6 +245,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 _context.Orderdetails.Add(Orderdetail);
                 await _context.SaveChangesAsync();
 
+                var req = await _context.Requests.Where(e => e.Requestid == viewOrder.RequestId).FirstOrDefaultAsync();
+                _emailConfig.SendMail(viewOrder.Email, "New Order arrived", viewOrder.Prescription + "Request name" + req.Firstname);
                 return true;
             }
             catch (Exception e)
