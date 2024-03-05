@@ -1,5 +1,13 @@
-﻿
+﻿@using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewAdminProfile
+@{
+    var enumData = from AdminStatus e in Enum.GetValues(typeof(AdminStatus))
+                   select new
+                   {
+                       ID = (int)e,
+                       Name = e.ToString()
+                   };
+}
 <div class="container">
     <div class="justify-content-between d-flex container-fluid mb-5 position-relative ">
         <div class="">
@@ -23,10 +31,10 @@
                 <input asp-for="Password" class="form-control rounded" name="Password" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Password </label>
             </div>
+           
             <div class="col-md-6 form-floating">
-                <input asp-for="Status" class="form-control rounded" name="Status" type="text" placeholder=Suchtext autocomplete=off>
-
-                <label for="floatingInput">Status </label>
+                <select class="form-select form-select-md p-2" required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
+            </select>
             </div>
             <div class="col-md-6 form-floating">
                 <input asp-for="Roles" class="form-control rounded" name="Roles" type="text" placeholder=Suchtext autocomplete=off>
@@ -42,7 +50,7 @@
                 <input asp-for="Lastname" class="form-control rounded" name="Lastname" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Last name </label>
             </div>
-            <div class="col-md-6 form-floating  my-1">
+            <div class="col-md-6 form-floating  ">
                 <input asp-for="Email" class="form-control  rounded " id="email" name="Email" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Email </label>
             </div>

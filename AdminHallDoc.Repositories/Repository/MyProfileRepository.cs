@@ -6,6 +6,7 @@ using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Ocsp;
+using Org.BouncyCastle.Crypto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,7 +100,39 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 await _context.SaveChangesAsync();
             }
 
-            
+            List<int>  regions = await _context.Adminregions
+               .Where(r => r.Adminid == v.AdminId)
+               .Select(req => req.Regionid)
+               .ToListAsync();
+
+            List<int> priceList = v.Regionsid.Split(',').Select(int.Parse).ToList();
+            foreach (var item in priceList)
+            {
+                if (regions.Contains(item))
+                {
+                    regions.Remove(item);
+                }
+                else
+                {
+                    Adminregion ar = new Adminregion();
+                    ar.Regionid = item;
+                    ar.Adminid = (int)v.AdminId;
+                    _context.Adminregions.Update(ar);
+                    await _context.SaveChangesAsync();
+                    regions.Remove(item);
+
+                }
+            }
+            if (regions.Count > 0)
+            {
+                foreach (var item in regions)
+                {
+                   Adminregion ar =  await _context.Adminregions.Where(r => r.Adminid == v.AdminId && r.Regionid == item).FirstAsync();
+                    _context.Adminregions.Remove(ar);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
             return true;
 
         }

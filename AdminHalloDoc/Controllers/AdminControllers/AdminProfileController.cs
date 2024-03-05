@@ -35,9 +35,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             {
                 await _myProfileRepository.PutProfileDetails(v);
             }
-             
-            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-            return View("../AdminViews/Profile/Index");
+            
+            return RedirectToAction("Index");
         }
         #endregion
     }

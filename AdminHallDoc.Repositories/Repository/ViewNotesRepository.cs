@@ -28,7 +28,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
-       
         #region GetDocumentByRequest
         public async Task<ViewNotesModel> GetNotesByRequest(int id)
         {

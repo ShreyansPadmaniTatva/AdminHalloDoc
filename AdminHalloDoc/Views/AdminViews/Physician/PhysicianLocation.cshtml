@@ -1,0 +1,64 @@
+﻿
+<link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps.css'>
+    <style>
+    #mapArea {
+        height: 70vh;
+        width: 50vw;
+        margin: 4rem auto;
+    }
+    </style>
+
+<div id="mapArea"></div>
+<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps-web.min.js"></script>
+<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/services/services-web.min.js"></script>
+    <script>
+    const APIKey = "Ka5JcBchkVsJSr3gxVgHPC1NcvPO90lG";
+    var Lagos = { lat: 6.5244, lng: 3.3792 };
+
+    var map = tt.map({
+        key: APIKey,
+        container: "mapArea",
+        center: Lagos,
+        zoom: 15
+    });
+
+
+    var bus_stop = { lat: 6.4734, lng: 3.3653 }
+    var marker = new tt.Marker().setLngLat(bus_stop).addTo(map);
+    var popup = new tt.Popup({ anchor: 'top' }).setText('Bus Stop')
+    marker.setPopup(popup).togglePopup()
+
+    var sites = [
+        { lat: 23.0225, lng: 72.5714 },
+        { lat: 6.4442, lng: 3.3561 },
+        { lat: 6.4451, lng: 3.3573 },
+        { lat: 6.4459, lng: 3.3520 }
+    ];
+
+    sites.forEach(function (site) {
+        var marker = new tt.Marker().setLngLat(site).addTo(map);
+        var popup = new tt.Popup({ anchor: 'top' }).setText('Site')
+        marker.setPopup(popup).togglePopup()
+    });
+
+
+
+    function moveMapTo(newLoc) {
+        map.flyTo({
+            center: newLoc,
+            zoom: 15
+        });
+    }
+
+    async function fetchLoc() {
+        const response = await tt.services.fuzzySearch({
+            key: APIKey,
+            query: document.querySelector("#query").value
+        });
+
+        if (response.results) {
+            moveMapTo(response.results[0].position);
+        }
+    }
+
+    </script>

@@ -31,6 +31,13 @@ namespace AdminHalloDoc.Entities.ViewModel
             Block
 
         }
+        public enum AdminStatus
+        {
+            Active,
+            DisActive,
+            Off
+
+        }
         public static int FindStatus(int status)
         {
             if (status == 1)

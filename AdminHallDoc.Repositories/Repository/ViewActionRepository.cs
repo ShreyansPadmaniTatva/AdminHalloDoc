@@ -193,6 +193,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             {
                 Requestid = Requestid,
                 Filename = UploadDoc,
+                Isdeleted = new BitArray(1),
                 Createddate = DateTime.Now,
             };
             _context.Requestwisefiles.Add(requestwisefile);
