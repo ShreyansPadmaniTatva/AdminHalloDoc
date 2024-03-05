@@ -1,23 +1,26 @@
 ﻿
 <link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps.css'>
-    <style>
-    #mapArea {
+   
+<style>
+    #mapAreash {
         height: 70vh;
         width: 50vw;
         margin: 4rem auto;
     }
     </style>
 
-<div id="mapArea"></div>
+<div id="mapAreash"></div>
+
 <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps-web.min.js"></script>
 <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/services/services-web.min.js"></script>
     <script>
     const APIKey = "bmULYKyU2sYwUF1NFjiJ6Fdc3OrqHyWo";
+
     var Lagos = { lat: 20.5937, lng: 78.9629 };
 
     var map = tt.map({
         key: APIKey,
-        container: "mapArea",
+        container: "mapAreash",
         center: Lagos,
         zoom: 5
     });
@@ -54,7 +57,7 @@
 
 
 
-    // not usefull
+    // not usefull for temp value
     function moveMapTo(newLoc) {
         map.flyTo({
             center: newLoc,
@@ -62,7 +65,7 @@
         });
     }
 
-    async function fetchLoc() {
+    async function fetchshreyansLoc() {
         const response = await tt.services.fuzzySearch({
             key: APIKey,
             query: document.querySelector("#query").value

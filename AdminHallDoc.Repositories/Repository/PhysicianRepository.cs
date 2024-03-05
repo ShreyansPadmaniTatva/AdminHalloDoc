@@ -25,12 +25,31 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Find_Location_Physician
-
         public async Task<List<PhysicianLocation>> FindPhysicianLocation()
         {
             
 
             List<PhysicianLocation> pl =await _context.Physicianlocations
+                                    .OrderByDescending(x => x.Physicianname)
+                        .Select(r => new PhysicianLocation
+                        {
+                            locationid = r.Locationid,
+                            longitude = r.Longitude,
+                            latitude = r.Latitude,
+                            physicianname = r.Physicianname
+
+                        }).ToListAsync();
+            return pl;
+
+        }
+        #endregion
+
+        #region Find_Location_Physician
+        public async Task<List<PhysicianLocation>> PhysicianLocation()
+        {
+
+
+            List<PhysicianLocation> pl = await _context.Physicianlocations
                                     .OrderByDescending(x => x.Physicianname)
                         .Select(r => new PhysicianLocation
                         {

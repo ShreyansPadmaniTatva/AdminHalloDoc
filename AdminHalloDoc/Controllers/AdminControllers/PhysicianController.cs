@@ -21,10 +21,22 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             _physicianRepository = physicianRepository;
         }
         #endregion
+
+        #region Physician_Location
         public async Task<IActionResult> PhysicianLocation()
         {
            ViewBag.Log = await _physicianRepository.FindPhysicianLocation();
             return View("../AdminViews/Physician/PhysicianLocation");
         }
+        #endregion
+
+        #region PhysicianAll
+        public async Task<IActionResult> PhysicianAll()
+        {
+            ViewBag.Log = await _physicianRepository.FindPhysicianLocation();
+            return View("../AdminViews/Physician/PhysicianLocation");
+        }
+        #endregion
+
     }
 }
