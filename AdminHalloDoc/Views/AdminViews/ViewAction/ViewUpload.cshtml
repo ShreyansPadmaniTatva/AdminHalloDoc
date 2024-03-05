@@ -49,7 +49,7 @@
                             <input name="file" type="file" class="file-upload-field" id="file" value="">
 
                         </div>
-                        <input type="submit" class="btn text-light btn-info rounded-right " id="fileupload" value="upload" />
+                        <div class="btn text-light btn-info rounded-right " id="fileupload" >upload</div>
                         <!-- <input class="form-control rounded" name="suche" type="file" placeholder=Suchtext autocomplete=off> -->
                     </div>
                 </form>
@@ -272,7 +272,7 @@
                 }
             });
 
-            $("#fileupload").submit(function (e) {
+            $("#fileupload").click(function (e) {
                 e.preventDefault();
                 if ($('#file')[0].files[0] == undefined) {
                     swal.fire({
@@ -285,6 +285,8 @@
                         cancelButtonColor: "#01BBE7",
                     })
                     return;
+                }else{
+                    $('#myForm').submit();
                 }
             })
         });
