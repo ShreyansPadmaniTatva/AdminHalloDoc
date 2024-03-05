@@ -8,6 +8,8 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
     public class Encounter
     {
+        public int? Requesid { get; set; }
+        public int? RequesClientid { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Location { get; set; }

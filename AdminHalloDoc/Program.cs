@@ -20,6 +20,7 @@ builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IViewActionRepository, ViewActionRepository>();
 builder.Services.AddScoped<IViewNotesRepository, ViewNotesRepository>();
 builder.Services.AddScoped<IMyProfileRepository, MyProfileRepository>();
+builder.Services.AddScoped<IPhysicianRepository, PhysicianRepository>();
 
 var app = builder.Build();
 

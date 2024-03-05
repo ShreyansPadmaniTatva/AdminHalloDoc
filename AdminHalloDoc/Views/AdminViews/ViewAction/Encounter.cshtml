@@ -1,13 +1,13 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Viewcase;
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Encounter;
 @{
 }
 <div class="container" >
-    <div class="justify-content-between d-flex container-fluid my-5 position-relative ">
+    <div class="justify-content-between d-flex container-fluid mb-2 position-relative ">
         <div class="">
-            <h1>  View Patient request <span class="badge badge-success p-2">Success</span> </h1>
+            <h3> Encounter Form <span class="badge badge-success p-2">Success</span> </h3>
         </div>
         <div>
             <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-outline-info"> ❮  Back </a>
@@ -15,17 +15,13 @@
     </div>
     <div class="card border-0 shadow p-4 mb-5  rounded">
         <form asp-action="SaveViewcase" asp-controller="ViewAction" class="row g-3 " enctype="multipart/form-data">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <h4 class=" my-4">Patient Information</h4>
+           <div class="text-center text-info " >
+                <h1 class="fw-bold my-2">Medical Report - Confidential</h1>
+           </div>
             <input asp-for="RequesClientid" name="RequesClientid" type="hidden">
 
-            <div class="col-md-12 form-floating  my-1">
-                <textarea asp-for="Notes" disabled class="form-control rounded" name="Symptoms" type="text" rows="4" cols="50" placeholder=Suchtext autocomplete=off></textarea>
-                <label asp-for="Notes" for="Symptoms"> Patient Notes </label>
-                <span asp-validation-for="Notes" class="text-danger"></span>
-            </div>
+           
 
-            <hr/>
             <div class="col-md-6 form-floating  ">
                 <input asp-for="FirstName" class="form-control rounded" name="FirstName" type="text" placeholder="First Name" autocomplete=off>
                 <label class="" for="floatingInput">First Name </label>
@@ -36,50 +32,166 @@
                 <label for="floatingInput">Last Name </label>
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="col-md-6 form-floating">
-                <input asp-for="BirthDate" class="form-control rounded" name="BirthDate" type="date" placeholder=Suchtext autocomplete=off>
-                <label for="floatingInput">Birth Date </label>
-                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            <div class="col-md-12 form-floating  ">
+                <textarea asp-for="Location" class="form-control rounded" name="Location" type="text" rows="4" cols="50" placeholder=Suchtext autocomplete=off></textarea>
+                <label asp-for="Location" for="Symptoms"> Patient Notes </label>
+                <span asp-validation-for="Location" class="text-danger"></span>
             </div>
-            <div class="col-md-5 form-floating ">
+            <div class="col-md-6 form-floating">
+                <input asp-for="DOB" class="form-control rounded" name="BirthDate" type="date" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Birth Date </label>
+                <span asp-validation-for="DOB" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="Date" class="form-control rounded" name="Date" type="date" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Birth Date </label>
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating ">
                 <input asp-for="PhoneNumber" id="phone" type="tel" name="PhoneNumber" class="form-control rounded" autocomplete=off>
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="col-md-1">
-                <div class=" border border-1 border-info text-info text-center rounded-3 ">
-                    <a class="text-info" href="tel:"><i class="bi bi-telephone fs-2 "></i></a>
-                </div>
             </div>
             <div class="col-md-6 form-floating ">
                 <input id="email" asp-for="Email" class="form-control rounded" name="Email" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Email </label>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class=" col-md-6  my-4">
-                <div id="editprofile" onclick="toggleFormElements('false')" class="btn btn-outline-info  p-3"> Edit </div>
-                <input id="submit" type="submit" class="btn btn-info text-white p-2" value="save">
-            </div>
 
-            <h4 class=" my-4">Patient Contact Information</h4>
-            <div class="col-md-6 form-floating ">
-                <input asp-for="Address" class="form-control rounded" name="Street" type="text" placeholder=Suchtext autocomplete=off>
-                <label for="floatingInput">Street </label>
-                <span asp-validation-for="Address" class="text-danger"></span>
+            <div class="col-md-6 form-floating  ">
+                <input asp-for="HistoryOfP" class="form-control rounded" name="HistoryOfP" type="text" placeholder=Suchtext autocomplete=off>
+                <label asp-for="HistoryOfP" for="Symptoms"> Patient Notes </label>
+                <span asp-validation-for="HistoryOfP" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating  ">
-                <input asp-for="RoomSite" class="form-control rounded" name="RoomSite" type="text"  placeholder=Suchtext autocomplete=off>
-                <label for="floatingInput">Room / site ( Optional )</label>
-                <span asp-validation-for="RoomSite" class="text-danger"></span>
+                <input asp-for="HistoryOfMedical" class="form-control rounded" name="HistoryOfMedical" type="text" placeholder=Suchtext autocomplete=off>
+                <label asp-for="HistoryOfMedical" for="Symptoms"> History Of Medical </label>
+                <span asp-validation-for="HistoryOfMedical" class="text-danger"></span>
             </div>
 
+            <div class="col-md-6 form-floating  ">
+                <input asp-for="Medications" class="form-control rounded" name="Medications" type="text" placeholder=Suchtext autocomplete=off>
+                <label asp-for="Medications" for="Symptoms"> Patient Notes </label>
+                <span asp-validation-for="Medications" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating  ">
+                <input asp-for="Allergies" class="form-control rounded" name="Allergies" type="text" placeholder=Suchtext autocomplete=off>
+                <label asp-for="Allergies" for="Symptoms"> Patient Notes </label>
+                <span asp-validation-for="Allergies" class="text-danger"></span>
+            </div>
+
+            
+
+            <div class="col-md-4 form-floating ">
+                <input asp-for="Temp" class="form-control rounded" name="Temp" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Street </label>
+                <span asp-validation-for="Temp" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-floating ">
+                <input asp-for="Hr" class="form-control rounded" name="Hr" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Street </label>
+                <span asp-validation-for="Hr" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-floating ">
+                <input asp-for="Rr" class="form-control rounded" name="Rr" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Street </label>
+                <span asp-validation-for="Rr" class="text-danger"></span>
+            </div>
+            <div class="col-md-2 form-floating ">
+                <input asp-for="BloodPressureS" class="form-control rounded" name="BloodPressureS" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Blood Pressure S </label>
+                <span asp-validation-for="BloodPressureS" class="text-danger"></span>
+            </div>
+            <div class="col-md-2 form-floating ">
+                <input asp-for="BloodPressureD" class="form-control rounded" name="BloodPressureD" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Blood Pressure D </label>
+                <span asp-validation-for="BloodPressureD" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-floating ">
+                <input asp-for="O2" class="form-control rounded" name="O2" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">O2 </label>
+                <span asp-validation-for="O2" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-floating ">
+                <input asp-for="Pain" class="form-control rounded" name="Pain" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Pain </label>
+                <span asp-validation-for="Pain" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="col-md-6 form-floating  ">
+                <input asp-for="Heent" class="form-control rounded" name="Heent" type="text" placeholder="First Name" autocomplete=off>
+                <label class="" for="floatingInput">Heent </label>
+                <span asp-validation-for="Heent" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="CV" class="form-control rounded" name="CV" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput"> CV </label>
+                <span asp-validation-for="CV" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating  ">
+                <input asp-for="Chest" class="form-control rounded" name="Chest" type="text" placeholder="First Name" autocomplete=off>
+                <label class="" for="floatingInput">Chest </label>
+                <span asp-validation-for="Chest" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="ABD" class="form-control rounded" name="ABD" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">ABD </label>
+                <span asp-validation-for="ABD" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating  ">
+                <input asp-for="Extr" class="form-control rounded" name="Extr" type="text" placeholder="First Name" autocomplete=off>
+                <label class="" for="floatingInput">Extr </label>
+                <span asp-validation-for="Extr" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="Skin" class="form-control rounded" name="Skin" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Skin </label>
+                <span asp-validation-for="Skin" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating  ">
+                <input asp-for="Neuro" class="form-control rounded" name="Neuro" type="text" placeholder="First Name" autocomplete=off>
+                <label class="" for="floatingInput">Neuro </label>
+                <span asp-validation-for="Neuro" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="Other" class="form-control rounded" name="Other" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Other </label>
+                <span asp-validation-for="Other" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating  ">
+                <input asp-for="Diagnosis" class="form-control rounded" name="Diagnosis" type="text" placeholder="First Name" autocomplete=off>
+                <label class="" for="floatingInput">Diagnosis </label>
+                <span asp-validation-for="Diagnosis" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="Treatment" class="form-control rounded" name="Treatment" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Treatment </label>
+                <span asp-validation-for="Treatment" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="MedicationsDispensed" class="form-control rounded" name="MedicationsDispensed" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Medications Dispensed </label>
+                <span asp-validation-for="MedicationsDispensed" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="Procedures" class="form-control rounded" name="Procedures" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Procedures </label>
+                <span asp-validation-for="Procedures" class="text-danger"></span>
+            </div>
+            <div class="col-md-12 form-floating">
+                <input asp-for="Followup" class="form-control rounded" name="Followup" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Followup </label>
+                <span asp-validation-for="Followup" class="text-danger"></span>
+            </div>
            
 
         </form>
         <div class="text-end my-4">
            
-            <a data-bs-toggle="modal" data-bs-target="#Assigncase" data-bs-requestid="@Model.Requestid" data-bs-patientname="@Model.FirstName" class="btn btn-outline-info"> Assign </a>
-            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-outline-info"> View Notes </a>
-            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-dager"> Cancel </a>
+            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-info text-white"> Save Chnages </a>
+            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-primary"> Finalize </a>
+            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-outline-info"> Cancel </a>
         </div>
     </div>
 </div>

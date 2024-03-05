@@ -567,3 +567,8 @@ th:nth-child(6) {
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+
+.nn li a:hover {
+    color: var(--primary-color) !important;
+    background-color: var(--bs-info-bg-subtle) !important;
+}
