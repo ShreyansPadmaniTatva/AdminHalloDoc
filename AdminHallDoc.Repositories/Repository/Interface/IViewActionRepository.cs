@@ -24,7 +24,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<bool> BlockCase(ViewActions v);
         Task<bool> AssignPhysician(ViewActions v);
         Task<bool> DeleteDocumentByRequest(string ids);
-        Task<bool> SendFilEmail(string ids,int Requestid);
+        Task<bool> SendFilEmail(string ids,int Requestid, string SendFilEmail);
         Boolean SendAgreement(ViewActions v);
         Boolean SendAgreement_accept(int RequestID);
         Boolean SendAgreement_Reject(int RequestID, string Notes);

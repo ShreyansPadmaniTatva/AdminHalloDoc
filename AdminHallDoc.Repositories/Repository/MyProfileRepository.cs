@@ -3,7 +3,9 @@ using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Org.BouncyCastle.Crypto;
@@ -43,7 +45,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                         {
                                             AdminId = r.Adminid,
                                             UserName = asp.Username,
-                                            Password = asp.Passwordhash,
                                             Address1 = r.Address1,
                                             Address2 = r.Address2,
                                             AltMobile = r.Altphone,
@@ -84,6 +85,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             var req = await _context.Admins
                 .Where(W => W.Adminid == v.AdminId)
                     .FirstOrDefaultAsync();
+            Aspnetuser U = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Id == req.Aspnetuserid);
+            var hasher = new PasswordHasher<string>();
+            U.Passwordhash = hasher.HashPassword(null, v.Password); ;
+            _context.Update(U);
+            await _context.SaveChangesAsync();
             if (req != null)
             {
                 req.Firstname = v.Firstname;

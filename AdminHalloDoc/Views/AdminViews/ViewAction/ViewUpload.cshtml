@@ -71,16 +71,14 @@
                                     <i class="fa fa-trash" aria-hidden="true"></i>  Delete
                                 </a>
                         </form>
-                        <form method="post" id="sendmails" asp-action="SendFilEmail" asp-controller="ViewAction">
-                            <input type="hidden" value="@Model.RequestID" name="Requestid" />
-                            <input type="hidden" id="mailids" name="mailids" />
-
-                            <div id="sendmail"  class="btn btn-outline-info btn-back text-end mx-1">
-                            <i class="fa-solid fa-mail"></i>  Send Mail
-                        </div>
-                        </form>
+                     
+                        <button id="sendmailmodel" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-outline-info btn-back text-end mx-1">
+                                <i class="fa-solid fa-mail"></i>  Send Mail
+                            </button>
+                           
                     </div>
                 </div>
+              
                 <div class="table-responsive mt-3 ">
                     <table class="table">
                         <thead class="border-0">
@@ -133,6 +131,33 @@
             </div>
         </div>
 
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Email Files</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="sendmails" asp-action="SendFilEmail" asp-controller="ViewAction">
+                <div class="modal-body">
+                    <input type="hidden" value="@Model.RequestID" name="Requestid" />
+                    <input type="hidden" id="mailids" name="mailids" />
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Email:</label>
+                        <input type="text" class="form-control" name="email">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <div id="sendmail" class="btn btn-outline-info btn-back text-end mx-1">
+                        <i class="fa-solid fa-mail"></i>  Send Mail
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @section Scripts
@@ -197,7 +222,18 @@
 
                     }
                 });
-
+                if ($('#mailids').val() == '') {
+                        swal.fire({
+                            title: "Oops..",
+                            text: "Oops!☹️ Please Select One File ",
+                            icon: "error",
+                            showCancelButton: true,
+                            showConfirmButton: false,
+                            cancelButtonText: "Okay",
+                            cancelButtonColor: "#01BBE7",
+                        })
+                        return;
+                    }
                 Swal.fire({
                     title: "Do you want to Send Mail That file ?",
                     showDenyButton: false,

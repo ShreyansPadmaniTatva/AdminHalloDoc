@@ -41,7 +41,7 @@
 
     <div class="row align-items-center  justify-content-around my-3 " >
        @if (Model.transfernotes.Count > 0)
-                        {
+       {
                 <div class="col-md-6" style="min-height:100px">
                     <div class="card border-0 shadow" style="cursor:pointer">
                         <div class="card-body">
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                 </div>
-        }
+       }
         @if (Model.cancelnotes != null)
         {
             @foreach (var item in Model.cancelnotes)
@@ -91,7 +91,6 @@
                 </div>
            }
         }
-            
         </div>
         <div class="row align-items-center  justify-content-around  ">
         <div class="col-md-6">
@@ -136,7 +135,6 @@
 
                                 <label class="inputs-lable inputs-lable-textarea fs-6 badge text-bg-primary" id="notedata">Notes</label>
                             </div>
-                            
                             <div class="text-end m-3">
                                 <input type="submit" class="btn btn-info text-white mt-2" value="Save Changes" >
                             </div>
@@ -150,11 +148,6 @@
 
         </div>
         
-      
-
-
-    
-
 </div>
 
 <script>

@@ -77,7 +77,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region SendFilEmail
-        public async Task<bool> SendFilEmail(string ids,int Requestid)
+        public async Task<bool> SendFilEmail(string ids,int Requestid, string email)
         {
 
             var v = await GetRequestDetails(Requestid);
@@ -93,7 +93,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 }
             }
 
-           if(await _emailConfig.SendMailAsync(v.Email, "All Document Of Your Request "+v.PatientName,"Heeyy " + v.PatientName+" Kindly Check your Attachments", files))
+           if(await _emailConfig.SendMailAsync(email, "All Document Of Your Request "+v.PatientName,"Heeyy " + v.PatientName+" Kindly Check your Attachments", files))
             {
                 return true;
             }

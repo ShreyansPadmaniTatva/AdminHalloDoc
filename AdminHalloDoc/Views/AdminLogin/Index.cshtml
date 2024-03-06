@@ -1,0 +1,66 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "AdminPanel/_Login_Layout";
+}
+@model AdminHalloDoc.Entities.Models.Aspnetuser
+<div class="text-center container-fluid my-3 position-relative ">
+    <div class=" top-0 end-0 mt-3 mx-5 position-absolute border border-1 text-info border-info rounded-3">
+        <button class="btn btn-outline-info" onclick="mode()">
+            <i class="bi bi-moon"></i>
+        </button>
+    </div>
+    <div class="row">
+        <div class="col-md-6 al-side ">
+            <img src="images/11116016_415.jpg" class="img-fluid img-login" />
+        </div>
+        <div class="col-md-6 al-background">
+            <div class="logo ">
+                <img src="images/Fig56. Patient site 1.png" class="img-fluid my-5 bg-white " />
+            </div>
+            <div class="content m-5 ">
+                
+                <form asp-action="CheckAccessLogin" asp-controller="AdminLogin" method="post">
+                    <h1 class="login fs-1 fw-bolder">Login To Your Account</h1>
+
+                    @TempData["error"]
+
+                    <div class="form-floating input-group with-icon mb-3    ">
+                        <input asp-for="Username" class="form-control rounded" name="Username" type="text" placeholder=Suchtext autocomplete=off>
+                        <i class="bi bi-person"></i>
+                        <label for="floatingInput">User Name </label>
+                    </div>
+                    <div class="form-floating input-group with-icon mb-3    ">
+                        <input asp-for="Passwordhash" class="form-control rounded" name="Passwordhash" type="text" placeholder=Suchtext autocomplete=off>
+                        <i class="bi bi-person"></i>
+                        <label for="floatingInput">PassWord </label>
+                    </div>
+
+
+                    <div class="form-floating my-3">
+                        <input type="submit" value="Submit" class="btn btn-info fs-4 text-white w-100"/>
+                            
+                    </div>
+                </form>
+                <a href="" class="text-center  text-decoration-none text-primary">
+                    ❮ &nbsp; Back To Login
+                </a>
+            </div>
+            <div class=" justify-content-center align-self-end d-flex align-items-end  bottom-0 py-5 align-text-bottom align-items-end">
+                <div class="text-center">
+
+                    <span class="text-center mx-2">
+                        Term Of Condition
+                    </span>
+                    <span>
+                        I
+                    </span>
+                    <span class="mx-2">
+                        Privacy Policy
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

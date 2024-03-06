@@ -20,6 +20,16 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 		{
 			_context = context;
 		}
+
+        public async Task<List<UserRoleCombobox>> UserRoleComboBox()
+        {
+            return await _context.Aspnetroles.Select(req => new UserRoleCombobox()
+            {
+                RoleId = req.Id,
+                RoleName = req.Name
+            })
+                .ToListAsync();
+        }
         public async Task<List<VenderTypeComboBox>> VenderTypeComboBox()
         {
             return await _context.Healthprofessionaltypes.Select(req => new VenderTypeComboBox()

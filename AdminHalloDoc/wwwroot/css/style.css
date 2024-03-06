@@ -572,3 +572,33 @@ th:nth-child(6) {
     color: var(--primary-color) !important;
     background-color: var(--bs-info-bg-subtle) !important;
 }
+
+@media only screen and (max-width: 768px) {
+    .al-background {
+        position: absolute;
+        /* width: 100%; */
+        min-height: 100%;
+        top: 0;
+        left: 0;
+        background-size: cover;
+        background-position: center;
+        overflow: hidden;
+        /* z-index: 0; */
+    }
+
+        .al-background::before {
+            content: "";
+            background-image: url('../images/11116016_415.jpg');
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.25;
+        }
+    .al-side{
+        display:none;
+    }
+}

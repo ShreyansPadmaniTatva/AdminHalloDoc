@@ -213,9 +213,9 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region SendFilEmail
-        public async Task<IActionResult> SendFilEmail(string mailids, int Requestid)
+        public async Task<IActionResult> SendFilEmail(string mailids, int Requestid, string email)
         {
-            if(await _viewActionRepository.SendFilEmail(mailids, Requestid))
+            if(await _viewActionRepository.SendFilEmail(mailids, Requestid , email))
             {
 
                 TempData["Status"] = "Send File in Mail Successfully..!";

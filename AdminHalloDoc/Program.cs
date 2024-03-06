@@ -10,7 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSession();
+
+builder.Services.AddSession(
+options =>
+{
+    options.IOTimeout = TimeSpan.FromSeconds(60);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+
+});
+
 var emailConfig = builder.Configuration
         .GetSection("EmailConfiguration")
         .Get<EmailConfiguration>();
@@ -21,6 +30,7 @@ builder.Services.AddScoped<IViewActionRepository, ViewActionRepository>();
 builder.Services.AddScoped<IViewNotesRepository, ViewNotesRepository>();
 builder.Services.AddScoped<IMyProfileRepository, MyProfileRepository>();
 builder.Services.AddScoped<IPhysicianRepository, PhysicianRepository>();
+builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 
 var app = builder.Build();
 
