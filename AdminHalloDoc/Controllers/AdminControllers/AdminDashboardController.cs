@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
-    [AdminAuth("Admin")]
+    [AdminAuth("Adminsde")]
     public class AdminDashboardController : Controller
     {
         #region Constructor

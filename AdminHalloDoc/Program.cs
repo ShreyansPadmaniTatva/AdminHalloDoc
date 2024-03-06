@@ -31,6 +31,7 @@ builder.Services.AddScoped<IViewNotesRepository, ViewNotesRepository>();
 builder.Services.AddScoped<IMyProfileRepository, MyProfileRepository>();
 builder.Services.AddScoped<IPhysicianRepository, PhysicianRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 var app = builder.Build();
 

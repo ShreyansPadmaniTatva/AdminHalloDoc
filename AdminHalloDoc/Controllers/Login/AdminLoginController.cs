@@ -15,11 +15,13 @@ namespace AdminHalloDoc.Controllers.Login
         private readonly EmailConfiguration _emailConfig;
         private readonly ApplicationDbContext _context;
         private readonly ILoginRepository _loginRepository;
-        public AdminLoginController(ApplicationDbContext context, EmailConfiguration emailConfig, ILoginRepository loginRepository)
+        private readonly IJwtService _jwtService;
+        public AdminLoginController(ApplicationDbContext context, EmailConfiguration emailConfig, ILoginRepository loginRepository, IJwtService jwtService)
         {
             _context = context;
             _emailConfig = emailConfig;
             _loginRepository = loginRepository;
+            _jwtService = jwtService;
         }
         #endregion
         public IActionResult Index()
@@ -40,7 +42,10 @@ namespace AdminHalloDoc.Controllers.Login
             if (admin != null)
             {
                 TempData["error"] = "Correct";
-                SessionUtils.setLogginUser(HttpContext.Session, admin);
+                // SessionUtils.setLogginUser(HttpContext.Session, admin);
+
+                var jwttoken = _jwtService.GenerateJWTAuthetication(admin);
+                Response.Cookies.Append("jwt",jwttoken);
 
                 return RedirectToAction("Index", "AdminDashboard");
             }
