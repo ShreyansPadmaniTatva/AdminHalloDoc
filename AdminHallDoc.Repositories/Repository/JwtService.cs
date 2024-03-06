@@ -34,11 +34,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 new Claim(ClaimTypes.Email, userinfo.Username),
                 new Claim(ClaimTypes.Role, userinfo.Role),
                 new Claim("FirstName", userinfo.FirstName),
-                new Claim("UserId", userinfo.UserId.ToString()),
-                new Claim(ClaimTypes.Email, userinfo.Username),
-                new Claim(JwtHeaderParameterNames.Jku, userinfo.FirstName),
-                new Claim(JwtHeaderParameterNames.Kid, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, userinfo.Username)
+                new Claim("UserId", userinfo.UserId.ToString())
             };
 
 
@@ -50,7 +46,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var expires =
-                DateTime.UtcNow.AddSeconds(30);
+                DateTime.UtcNow.AddMinutes(20);
 
             var token = new JwtSecurityToken(
                 Configuration["Jwt:Issuer"],

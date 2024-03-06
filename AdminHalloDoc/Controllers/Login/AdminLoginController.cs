@@ -48,6 +48,10 @@ namespace AdminHalloDoc.Controllers.Login
                 var jwttoken = _jwtService.GenerateJWTAuthetication(admin);
                 Response.Cookies.Append("jwt",jwttoken);
 
+                if (admin.Role == "Patient")
+                {
+                    return RedirectToAction("Index", "Dashboard");
+                }
                 return RedirectToAction("Index", "AdminDashboard");
             }
             else

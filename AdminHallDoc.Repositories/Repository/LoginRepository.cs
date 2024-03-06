@@ -33,32 +33,45 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
             var user = await _context.Aspnetusers.FirstOrDefaultAsync(u => u.Username == aspNetUser.Username);
 
+            
 
-            UserInfo admin = null;
+            UserInfo admin = new UserInfo();
             if (user != null)
             {
                 var hasher = new PasswordHasher<string>();
                 PasswordVerificationResult result = hasher.VerifyHashedPassword(null, user.Passwordhash, aspNetUser.Passwordhash);
                 if (result != PasswordVerificationResult.Success)
                 {
-                   
+
                     return admin;
                 }
                 else
                 {
-                     admin = await (from ad in _context.Admins
-                                    join r in _context.Roles
-                                    on ad.Roleid equals r.Roleid into adminGroup
-                                    from role in adminGroup.DefaultIfEmpty()
-                                    where ad.Aspnetuserid == user.Id 
-                                    select new UserInfo
-                                    {
-                                        Username = ad.Firstname,
-                                        FirstName = ad.Firstname ?? string.Empty,
-                                        LastName = ad.Lastname ?? string.Empty,
-                                        Role = role.Name,
-                                        UserId = ad.Adminid
-                                    }).FirstOrDefaultAsync();
+                    var data = _context.Aspnetuserroles.FirstOrDefault(E => E.Userid == user.Id);
+                    var datarole = _context.Aspnetroles.FirstOrDefault(e => e.Id == data.Roleid);
+
+
+                    admin.Username = user.Username;
+                    admin.FirstName = admin.FirstName ?? string.Empty;
+                    admin.LastName = admin.LastName ?? string.Empty;
+                    admin.Role = datarole.Name;
+                    if (admin.Role == "Admin")
+                    {
+                        var admindata = _context.Admins.FirstOrDefault(u => u.Aspnetuserid == user.Id);
+                        admin.UserId = admindata.Adminid;
+                    }
+                    else if (admin.Role == "Patient")
+                    {
+                        var admindata = _context.Users.FirstOrDefault(u => u.Aspnetuserid == user.Id);
+                        admin.UserId = admindata.Userid;
+                       
+                    }
+                    else
+                    {
+                        var admindata = _context.Physicians.FirstOrDefault(u => u.Aspnetuserid == user.Id);
+                        admin.UserId = admindata.Physicianid;
+                    }
+
                     return admin;
                 }
             }
@@ -67,6 +80,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 return admin;
             }
         }
+    
         #endregion
 
     }

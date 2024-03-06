@@ -1,4 +1,5 @@
-﻿using AdminHalloDoc.Entities.Data;
+﻿using AdminHalloDoc.Controllers.Login;
+using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Models;
@@ -12,7 +13,7 @@ using System.Data;
 
 namespace AdminHalloDoc.Controllers.PatientControllers
 {
-    [CheckAccess]
+    [AdminAuth("Patient")]
     public class DashboardController : Controller
     {
         #region Configuration
