@@ -1,0 +1,98 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model AdminHalloDoc.Entities.ViewModel.PatientViewModel.ViewPatientCreateRequest
+<div class="justify-content-between d-flex container-fluid my-5 position-relative ">
+    <div class="">
+        <h1> Submit For Me </h1>
+    </div>
+    <div>
+        <a asp-action="Index" asp-controller="Dashboard" class="btn btn-outline-info"> ❮  Back </a>
+    </div>
+</div>
+<div class="card border-0 shadow p-4 mb-5  rounded">
+    <form asp-action="PostMe" asp-controller="RequestByPatient" class="row g-3 " enctype="multipart/form-data">
+
+        <h4 class=" my-4">Patient Information</h4>
+        <div class="col-md-12 form-floating  my-1">
+            <textarea asp-for="Symptoms" class="form-control rounded" name="Symptoms" type="text" rows="5" placeholder=Suchtext autocomplete=off></textarea>
+            <label for="floatingInput">Symptoms </label>
+            <span asp-validation-for="Symptoms" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-floating  ">
+            <input asp-for="FirstName" class="form-control rounded" name="FirstName" type="text" placeholder="First Name" autocomplete=off>
+            <label class="" for="floatingInput">First Name </label>
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-floating">
+            <input asp-for="LastName" class="form-control rounded" name="LastName" type="text" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">Last Name </label>
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-floating">
+            <input asp-for="BirthDate" class="form-control rounded" name="BirthDate" type="date" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">Birth Date </label>
+            <span asp-validation-for="BirthDate" class="text-danger"></span>
+        </div>
+
+        <h4 class=" my-4">Patient Contact Information</h4>
+        <div class="col-md-6 form-floating  my-1">
+            <input asp-for="Email" disabled class="form-control rounded" name="Email" type="email" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">Email </label>
+        </div>
+        <div class="col-md-6 form-floating  my-1">
+            <input asp-for="PhoneNumber" id="phone" type="tel" name="PhoneNumber" class="form-control rounded" placeholder="+91 9537290202" autocomplete=off>
+        </div>
+
+        <h4 class=" my-4">Patient Contact Information</h4>
+        <div class="col-md-6 form-floating ">
+            <input asp-for="Street" class="form-control rounded" name="Street" type="text" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">Street </label>
+            <span asp-validation-for="Street" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-floating ">
+            <input asp-for="City" class="form-control rounded" name="City" type="text" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">City</label>
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-floating ">
+            <input asp-for="State" class="form-control rounded" name="State" type="text" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">State</label>
+            <span asp-validation-for="State" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-floating  ">
+            <input asp-for="ZipCode" class="form-control rounded" name="ZipCode" type="text" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">Zip Code</label>
+            <span asp-validation-for="ZipCode" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-floating  ">
+            <input asp-for="RoomSite" class="form-control rounded" name="RoomSite" type="text" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">Room / site ( Optional )</label>
+            <span asp-validation-for="RoomSite" class="text-danger"></span>
+        </div>
+        <div class="col-md-2 form-floating  ">
+            <button type="button" class="btn btn-outline-info" onclick="getLocation()">
+                <i class="bi bi-geo-alt"></i> Map
+            </button>
+            <p id="map"></p>
+            <input asp-for="latitude" id="latitude" type="hidden" />
+            <input asp-for="longitude" id="longitude" type="hidden" />
+        </div>
+        <h4 class=" my-4">Upload Photo or Document ( Optional )</h4>
+        <div class="col-md-12 form-floating  ">
+            <div class="file-upload-wrapper border border-1" data-text="Select your file!">
+                <input asp-for="UploadFile" name="UploadFile" type="file" class="file-upload-field" value="">
+            </div>
+            <span asp-validation-for="UploadFile" class="text-danger"></span>
+            <!-- <input class="form-control rounded" name="suche" type="file" placeholder=Suchtext autocomplete=off> -->
+        </div>
+
+        <div class="text-end my-4">
+            <input type="submit" value="Submit" class="btn btn-info text-white"> 
+            <button class="btn btn-outline-info"> cancel </button>
+        </div>
+
+    </form>
+</div>

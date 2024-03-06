@@ -1,0 +1,40 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Submit Request Page";
+}
+<div class="row min-vh-100">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div class="text-end mt-4">
+            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-info"> ❮  Back </a>
+        </div>
+        <div class="text-start  fw-semibol my-5  ">
+            <h1 class="text-center fw-bolder "> I am a... </h1>
+            <div class="d-inline text-uppercase">
+                <a asp-action="Index" asp-controller="PatientCreateRequest" class="text-decoration-none">
+                    <div class="alert alert-primary" role="alert">
+                        Patient
+                    </div>
+                </a>
+                <a asp-action="Index" asp-controller="PatientFamilyFriend" class="text-decoration-none">
+                    <div class="alert alert-secondary" role="alert">
+                        Family/Friend
+                    </div>
+                </a>
+                <a asp-action="Index" asp-controller="PatientConcierge" class="text-decoration-none">
+                    <div class="alert alert-success" role="alert">
+                        Concierge
+                    </div>
+                </a>
+                <a asp-action="Index" asp-controller="PatientBusiness" class="text-decoration-none">
+                    <div class="alert alert-danger" role="alert">
+                        Business Partner
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>

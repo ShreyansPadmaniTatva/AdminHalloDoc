@@ -32,6 +32,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         public async Task<UserInfo> CheckAccessLogin(Aspnetuser aspNetUser)
         {
             var user = await _context.Aspnetusers.FirstOrDefaultAsync(u => u.Username == aspNetUser.Username);
+
+
             UserInfo admin = null;
             if (user != null)
             {

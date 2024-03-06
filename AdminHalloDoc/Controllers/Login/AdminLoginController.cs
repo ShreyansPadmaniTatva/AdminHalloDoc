@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AdminHalloDoc.Controllers.Login
 {
+
     public class AdminLoginController : Controller
     {
         #region Configuration
@@ -58,5 +59,16 @@ namespace AdminHalloDoc.Controllers.Login
             return RedirectToAction("Index");
         }
         #endregion
+
+        #region Start_session
+        public async Task<IActionResult> Logout()
+        {
+            Response.Cookies.Delete("jwt");
+
+            return RedirectToAction("Index");
+        }
+        #endregion
+
+
     }
 }
