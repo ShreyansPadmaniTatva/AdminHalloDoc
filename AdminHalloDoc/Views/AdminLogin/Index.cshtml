@@ -3,6 +3,16 @@
 *@
 @{
     Layout = "AdminPanel/_Login_Layout";
+    var status = "null";
+    if (TempData["Status"] == null)
+    {
+        status = "null";
+    }
+    else
+    {
+        status = TempData["Status"].ToString();
+
+    }
 }
 @model AdminHalloDoc.Entities.Models.Aspnetuser
 <div class="text-center container-fluid my-3 position-relative ">
@@ -27,12 +37,12 @@
                     @TempData["error"]
 
                     <div class="form-floating input-group with-icon mb-3    ">
-                        <input asp-for="Username" class="form-control rounded" name="Username" type="text" placeholder=Suchtext autocomplete=off>
+                        <input asp-for="Username" required class="form-control rounded" name="Username" type="text" placeholder=Suchtext autocomplete=off>
                         <i class="bi bi-person"></i>
                         <label for="floatingInput">User Name </label>
                     </div>
                     <div class="form-floating input-group with-icon mb-3    ">
-                        <input asp-for="Passwordhash" class="form-control rounded" name="Passwordhash" type="text" placeholder=Suchtext autocomplete=off>
+                        <input asp-for="Passwordhash" required class="form-control rounded" name="Passwordhash" type="text" placeholder=Suchtext autocomplete=off>
                         <i class="bi bi-person"></i>
                         <label for="floatingInput">PassWord </label>
                     </div>
@@ -40,7 +50,7 @@
 
                     <div class="form-floating my-3">
                         <input type="submit" value="Submit" class="btn btn-info fs-4 text-white w-100"/>
-                            
+                        <button onclick="reloadSiteOnce()">Reload Site</button>
                     </div>
                 </form>
                 <a href="" class="text-center  text-decoration-none text-primary">
@@ -64,3 +74,15 @@
         </div>
     </div>
 </div>
+<script>
+    window.onload = function () {
+        console.log("@status  d");
+        if ("@status" != "null") {
+            cancelalt("@status");
+        }
+
+    };
+</script>
+<script>
+
+</script>

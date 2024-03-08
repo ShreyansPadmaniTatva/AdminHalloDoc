@@ -57,6 +57,7 @@ namespace AdminHalloDoc.Controllers.Login
             else
             {
                 TempData["error"] = "InCorrect Id Or Pass";
+                TempData["Status"] = "InCorrect Id Or Pass";
             }
 
 

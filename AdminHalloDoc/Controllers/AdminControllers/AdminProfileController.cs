@@ -1,9 +1,11 @@
-﻿using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+﻿using AdminHalloDoc.Controllers.Login;
+using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
+    [AdminAuth("Admin")]
     public class AdminProfileController : Controller
     {
         #region Constoter

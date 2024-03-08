@@ -77,7 +77,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             }
             else
             {
-                return admin;
+                return null;
             }
         }
     

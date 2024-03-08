@@ -19,7 +19,7 @@ namespace AdminHalloDoc.Entities.ViewModel
         public string Password { get; set; }
 
         #region SendMail
-        public async void SendMail(String To, String Subject, String Body)
+        public async Task<bool> SendMail(String To, String Subject, String Body)
         {
             try
             {
@@ -38,11 +38,13 @@ namespace AdminHalloDoc.Entities.ViewModel
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
                 }
+                return true;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            return false;
         }
         #endregion
 
