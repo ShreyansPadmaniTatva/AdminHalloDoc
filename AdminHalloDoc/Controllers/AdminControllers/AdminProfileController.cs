@@ -1,5 +1,6 @@
 ﻿using AdminHalloDoc.Controllers.Login;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,17 +28,62 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         {
             ViewAdminProfile p = await _myProfileRepository.GetProfileDetails(6);
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
             return  View("../AdminViews/Profile/Index",p);
         }
 
         #region Update_Profile
-        public async Task<IActionResult> UpdateProfile(ViewAdminProfile v)
+      
+        
+        public async Task<IActionResult> SaveAdministrationinfo(ViewAdminProfile vm)
         {
-            if(ModelState.IsValid)
+
+
+            bool data =await _myProfileRepository.EditAdminProfileAsync(vm);
+            if (data)
             {
-                await _myProfileRepository.PutProfileDetails(v);
+                TempData["Status"] = "Administration Information Changed...";
             }
-            
+            else
+            {
+                TempData["Status"] = "Imformation not Changed properly...";
+            }
+
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> EditBillingInfo(ViewAdminProfile vm)
+        {
+
+
+
+            bool data = await _myProfileRepository.EditBillingInfoAsync(vm);
+            if (data)
+            {
+                TempData["Status"] = "Billing Information Changed...";
+            }
+            else
+            {
+                TempData["Status"] = "Billing not Changed properly...";
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> ResetPassAdmin(string password)
+        {
+
+
+
+            bool data = await _myProfileRepository.ChangePasswordAsync(password, Convert.ToInt32(CV.UserID()));
+            if (data)
+            {
+                TempData["Status"] = "Password changed Successfully...";
+            }
+            else
+            {
+                TempData["Status"] = "Password not Changed...";
+            }
+
             return RedirectToAction("Index");
         }
         #endregion

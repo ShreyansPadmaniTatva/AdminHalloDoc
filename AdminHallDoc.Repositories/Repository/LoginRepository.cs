@@ -28,7 +28,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
-        #region Constructor
+        #region CheckAccessLogin
         public async Task<UserInfo> CheckAccessLogin(Aspnetuser aspNetUser)
         {
             var user = await _context.Aspnetusers.FirstOrDefaultAsync(u => u.Username == aspNetUser.Username);
@@ -43,7 +43,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 if (result != PasswordVerificationResult.Success)
                 {
 
-                    return admin;
+                    return null;
                 }
                 else
                 {

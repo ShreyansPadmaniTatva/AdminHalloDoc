@@ -36,7 +36,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             try
             {
 
-                var data = await _requestRepository.GetContactAsync(status);
+                var data = await _requestRepository.GetContactAsync("2");
                 var workbook = new XLWorkbook();
                 var worksheet = workbook.Worksheets.Add("Data");
 

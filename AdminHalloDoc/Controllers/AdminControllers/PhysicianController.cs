@@ -2,6 +2,7 @@
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -55,6 +56,70 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
+        #region ChangeNotificationPhysician
+        public async Task<IActionResult> ChangeNotificationPhysician(string changedValues)
+        {
+            Dictionary<int, bool> changedValuesDict = JsonConvert.DeserializeObject<Dictionary<int, bool>>(changedValues);
+
+            _physicianRepository.ChangeNotificationPhysician(changedValuesDict);
+
+            return RedirectToAction("PhysicianAll");
+        }
+        #endregion
+
+        #region PhysicianProfile
+        public async Task<IActionResult> PhysicianProfile(int? id)
+        {
+            //TempData["Status"] = TempData["Status"];
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
+            if (id == null)
+            {
+                ViewData["PhysicianAccount"] = "Add";
+            }
+            else
+            {
+                ViewData["PhysicianAccount"] = "Edit";
+
+            }
+            //var v = await _physicianRepository.PhysicianAll();
+            //if (region == null)
+            //{
+            //    v = await _physicianRepository.PhysicianAll();
+
+            //}
+            //else
+            //{
+            //    v = await _physicianRepository.PhysicianByRegion(region);
+            //    return Json(v);
+
+            //}
+            return View("../AdminViews/Physician/PhysicianAddEdit");
+        }
+        #endregion
+
+        [HttpPost]
+        #region PhysicianAddEdit
+        public async Task<IActionResult> PhysicianAddEdit(int? id)
+        {
+            //TempData["Status"] = TempData["Status"];
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
+            if (id == null)
+            {
+                ViewData["PhysicianAccount"] = "Add";
+            }
+            else
+            {
+                ViewData["PhysicianAccount"] = "Edit";
+
+            }
+           
+            return View("../AdminViews/Physician/PhysicianAddEdit");
+        }
+        #endregion
+
+        #region SendMessage
         public async Task<IActionResult> SendMessage(string? id, string? email, int? way, string? msg)
         {
             bool s;
@@ -80,6 +145,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
             return RedirectToAction("PhysicianAll");
         }
+        #endregion
 
     }
 }

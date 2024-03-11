@@ -30,16 +30,21 @@
         <div class="text-end mx-2 px-3 d-flex justify-content-between">
                     <div class="dropdown ">
 
-                        <select class="form-select form-select-sm " data-allow-clear="true" tabindex="-1" id="Region" onchange="myFunction()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                        <select class="form-select form-select-md " data-allow-clear="true" tabindex="-1" id="Region" onchange="myFunction()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                             <option value="-1" >All Region</option>
                         </select>
                     </div>
-               
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-outline-info">
-                Create Provider Account
-
-            </button>
+               <div class="d-flex" >
+                <form asp-action="ChangeNotificationPhysician" class="mx-2" id="saveChangesForm" asp-controller="Physician">
+                    <input type="hidden" id="changedValuesInput" name="changedValues">
+                    <button class="btn btn-outline-info " style="display:none;" type="submit" id="saveChangesButton" > Save Changes </button>
+                   </form>
+                <!-- Button trigger modal -->
+                <a asp-action="PhysicianProfile" asp-controller="Physician" class="btn btn-info text-white">
+                    Create Provider Account
+                </a>
+               </div>
+          
         </div>
         <div class="table-responsive">
             <table class="table table-responsive mt-3 p-3">
@@ -59,17 +64,12 @@
                         <tr>
                             <td class="table-text px-3 text-center justify-content-center" align="center"  scope="row" data-label="Created Date">
 
-                                    @if (item.notification[0])
-                                    {
+                                @{
+                                        var check = item.notification[0];
+                                    <input class="form-check-input form-check-inputs" id="@item.notificationid" type="checkbox" value="" @(check ? "checked" : "")>
+                                }
 
-                                    <input class="form-check-input" type="checkbox" value="" checked id="flexCheckDefault">
-                                    }
-                                    else
-                                    {
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-
-                                    }
-                                    <input class="form-check-input RequestwisefilesId" type="hidden" value="@item.Physicianid">
+                                    <input class="RequestwisefilesId" type="hidden" value="@item.Physicianid">
                             </td>
                             <td scope="row" data-label="Created Date">@item.Firstname  @item.Lastname</td>
                             <td scope="row" data-label="Created Date">@item.role</td>
@@ -81,14 +81,13 @@
                                     Contact
                                  
                                 </button>
-                                <a asp-action="Index" asp-controller="Documentsinfo" asp-route-id="@item.Physicianid" class="btn btn-outline-info btn-sm document-button mx-1">
+                                <a asp-action="PhysicianProfile" asp-controller="Physician" asp-route-id="@item.Physicianid" class="btn btn-outline-info btn-sm document-button mx-1">
                                     Edit
                                    
                                 </a>
                             </td>
                         </tr>
                     }
-
                 </tbody>
             </table>
         </div>
@@ -107,20 +106,20 @@
                     <h5 class="modal-title fs-5" id="exampleModalLabel"> Select communicatio Way  <span class="text-info" id="patientname"> </span></h5>
                     <input type="hidden" name="email" id="email" />
                     <input type="hidden" name="id" id="id" />
-                    <div class="mb-4">
-                        <div class="form-check">
+                    <div class="mb-4 mx-3">
+                        <div class="form-check p-2 fs-5">
                             <input class="form-check-input" value="1" type="radio" name="way" id="flexRadioDefault1">
                             <label class="form-check-label" for="flexRadioDefault1">
                               Sms
                             </label>
                         </div>
-                        <div class="form-check">
+                        <div class="form-check p-2 fs-5">
                             <input class="form-check-input" value="2" type="radio" name="way" id="flexRadioDefault2" checked>
                             <label class="form-check-label" for="flexRadioDefault2">
                                 Email
                             </label>
                         </div>
-                        <div class="form-check">
+                        <div class="form-check p-2 fs-5">
                             <input class="form-check-input" value="3" type="radio" name="way" id="flexRadioDefault3" >
                             <label class="form-check-label" for="flexRadioDefault2">
                                 Both
@@ -128,7 +127,7 @@
                         </div>
                     </div>
                     <div class="mb-4 form-floating ">
-                        <textarea class="form-control rounded" name="msg" required cols="50" type="text" rows="8" placeholder=Suchtext autocomplete=off></textarea>
+                        <textarea class="form-control rounded" name="msg" required cols="500" type="text" rows="80" placeholder=Suchtext autocomplete=off></textarea>
                         <label for="floatingInput">Message </label>
                     </div>
 
@@ -141,7 +140,48 @@
         </div>
     </div>
 </div>
+@section Scripts
+    {
 <script>
+
+    $(document).ready(function () {
+
+           $('#saveChangesButton').click(function() {
+            $('#saveChangesForm').submit();
+        });
+
+            // Initialize an object to track the initial state of each checkbox
+            var initialState = {};
+
+            // Store the initial state of each checkbox when the page loads
+            $('.form-check-inputs').each(function () {
+                initialState[this.id] = this.checked;
+            });
+
+            $('.form-check-inputs').change(function () {
+                var changedValues = {};
+
+                // Check each checkbox for changes
+                $('.form-check-inputs').each(function () {
+                    if (this.checked !== initialState[this.id]) {
+                        changedValues[this.id] = this.checked;
+                    }
+                });
+
+                // Update the hidden input with the changed values
+                $('#changedValuesInput').val(JSON.stringify(changedValues));
+                console.log(changedValues);
+                // Show or hide the "Save Changes" button based on whether there are any changes
+                if (Object.keys(changedValues).length > 0) {
+                    $('#saveChangesButton').show();
+                } else {
+                    $('#saveChangesButton').hide();
+                }
+            });
+
+
+    });
+
     window.onload = function () {
         console.log("@status  d");
         if ("@status" != "null") {
@@ -191,12 +231,12 @@
 
                     // Add the checkbox cell
                     var checkboxCell = $('<td class="table-text px-3  justify-content-center" scope="row"  align="center" data-label="Created Date">');
-                    var checkboxInput = $('<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">');
+                    var checkboxInput = $('<input class="form-check-input form-check-inputs" type="checkbox" value="" id="flexCheckDefault">');
                     if (item.notification[0]) {
                         checkboxInput.prop('checked', true);
                     }
                     checkboxCell.append(checkboxInput);
-                    checkboxCell.append('<input class="form-check-input RequestwisefilesId" type="hidden" value="' + item.physicianid + '">');
+                    checkboxCell.append('<input class="RequestwisefilesId" type="hidden" value="' + item.physicianid + '">');
                     newRow.append(checkboxCell);
 
                     // Add other cells
@@ -222,4 +262,4 @@
         });
     }
 </script>
-
+}

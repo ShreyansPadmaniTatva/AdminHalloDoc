@@ -9,11 +9,14 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
     public class Physicians
     {
+        public int? notificationid { get; set; }
         public BitArray? notification { get; set; }
         public string? role { get; set; }
         public int Physicianid { get; set; }
 
         public string? Aspnetuserid { get; set; }
+        public string? UserName { get; set; }
+        public string? Regionsid { get; set; }
 
         public string Firstname { get; set; } = null!;
 
@@ -22,6 +25,9 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string Email { get; set; } = null!;
 
         public string? Mobile { get; set; }
+        public string? State { get; set; }
+        public string? Zipcode { get; set; }
+        public string? AltMobile { get; set; }
 
         public string? Medicallicense { get; set; }
 
@@ -78,5 +84,12 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public BitArray? Istokengenerate { get; set; }
 
         public string? Syncemailaddress { get; set; }
+        public List<Regions>? Regionids { get; set; }
+        public class Regions
+        {
+            public int? regionid { get; set; }
+            public string? regionname { get; set; }
+
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<List<VenderTypeComboBox>> VenderTypeComboBox();
         Task<List<RegionComboBox>> RegionComboBox();
         Task<List<CaseReasonComboBox>> CaseReasonComboBox();
+        Task<List<UserRoleCombobox>> UserRoleComboBox();
         Task<int> CountNewRequest();
         Task<int> CountPandingRequest();
         Task<int> CountActiveRequest();

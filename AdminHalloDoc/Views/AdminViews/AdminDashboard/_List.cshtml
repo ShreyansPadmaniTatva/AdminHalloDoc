@@ -9,40 +9,39 @@
     List<string> tdHtmlValues = statusTdHtmlMap.ContainsKey(Status) ? statusTdHtmlMap[Status] : new List<string>();
 }   
 
-<div class="justify-content-between d-flex my-3">
-    <div class="heading ">
-        <h3 class="mb-0 pb-0 top-heading">Patient</h3>  <span class="align-bottom  top-side-heading d-flex flex-column justify-content-end pb-1 px-2 text-primary-emphasis fw-bolder"> (Close)</span>
+<div class="justify-content-between d-flex my-4">
+    <div class="heading d-flex">
+        <h3 class="mb-0 pb-0 top-heading">Patient</h3>  <span class="align-bottom  top-side-heading d-flex flex-column justify-content-end pb-1 px-2 text-primary-emphasis fw-bolder"> (@Enum.GetName(typeof(AdminDashStatus), Status))</span>
     </div>
-    <din>
+    <din class="d-flex">
         <span data-bs-toggle="tooltip" data-bs-placement="left" title="Edit">
             
         </span>
 
-        <div class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#sendlink">
+        <div class="btn btn-info text-white mx-1" data-bs-toggle="modal" data-bs-target="#sendlink">
             <i class="bi bi-send"></i>
             <span class="top-btn">
                 send link
             </span>
         </div>
-        <div class="btn btn-info text-white">
+        <div class="btn btn-info text-white mx-1">
             <i class="bi bi-file-earmark-break"></i>
             <span class="top-btn">
                 Create Request
             </span>
 
         </div>
-        <div class="btn btn-info text-white">
+        <div class="btn btn-info text-white mx-1">
             <i class="bi bi-forward"></i>
             <span class="top-btn">
                 export
             </span>
 
         </div>
-        <div class="btn btn-info text-white">
-            <form id="filterForm"
+        <form id="filterForm" class="mx-1"
                   asp-action="ExporttoExcel" asp-controller="Report" novalidate="novalidate">
-                <input type="hidden" name="HtmlTable"/>
-                <button type="submit" value="1" id="btnsubmit" name="status" class="btn btn-transpernt text-white">
+                <input type="hidden" name="HtmlTable" />
+                <button type="submit" value="1" id="btnsubmit" name="status" class="btn btn-info text-white">
                     <i class="bi bi-forward-fill"></i>
                     <span class="top-btn">
                         export all
@@ -50,7 +49,8 @@
 
                 </button>
             </form>
-        </div>
+            
+        
     </din>
 </div>
 <script>

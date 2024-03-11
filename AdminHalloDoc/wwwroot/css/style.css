@@ -173,42 +173,44 @@ padding-left: 1.7rem;
   width: 100%;
   height: 50px;
 }
-.file-upload-wrapper:after {
-  content: attr(data-text);
-  font-size: 18px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: var(--bs-body-bg);
-  padding: 5px 15px;
-  display: block;
-  width: calc(100% - 40px);
-  pointer-events: none;
-  z-index: 20;
-  height: 40px;
-  line-height: 40px;
-  color: var(--bs-body-color);
-  border-radius: 5px 10px 10px 5px;
-  font-weight: 300;
-}
-.file-upload-wrapper:before {
-  content: 'Upload';
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: inline-block;
-  height: 50px;
-  background: var(--primary-color);
-  color: #fff;
-  font-weight: 700;
-  z-index: 25;
-  font-size: 16px;
-  line-height: 60px;
-  padding: 0 15px;
-  text-transform: uppercase;
-  pointer-events: none;
-  border-radius: 0 5px 5px 0;
-}
+
+    .file-upload-wrapper:after {
+        content: attr(data-text);
+        font-size: 18px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: #ffffff;
+        padding: 5px 15px;
+        display: block;
+        width: calc(100% - 40px);
+        pointer-events: none;
+        z-index: 20;
+        height: 50px;
+        line-height: 40px;
+        color: var(--bs-body-color);
+        border-radius: 5px 10px 10px 5px;
+        font-weight: 300;
+    }
+
+    .file-upload-wrapper:before {
+        content: 'Upload';
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: inline-block;
+        height: 55px;
+        background: var(--primary-color);
+        color: #fff;
+        font-weight: 700;
+        z-index: 25;
+        font-size: 16px;
+        line-height: 55px;
+        padding: 0 15px;
+        text-transform: uppercase;
+        pointer-events: none;
+        border-radius: 0 5px 5px 0;
+    }
 
 .file-upload-wrapper input {
   opacity: 0;
@@ -225,6 +227,62 @@ padding-left: 1.7rem;
   cursor: pointer;
   width: 100%;
 }
+.file-upload {
+    position: relative;
+    width: 100%;
+    height: 50px;
+}
+.file-upload input {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+    height: 40px;
+    margin: 0;
+    padding: 0;
+    display: block;
+    cursor: pointer;
+    width: 100%;
+}
+.file-upload:after {
+    content: attr(data-text);
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #ffffff;
+    padding: 5px 15px;
+    display: block;
+    width: calc(100% - 60%);
+    pointer-events: none;
+    z-index: 20;
+    height: 50px;
+    line-height: 40px;
+    color: var(--bs-body-color);
+    border-radius: 5px 10px 10px 5px;
+    font-weight: 300;
+}
+    .file-upload:before {
+        content: 'Upload';
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: inline-block;
+        height: 55px;
+        background: var(--primary-color);
+        color: #fff;
+        font-weight: 700;
+        z-index: 25;
+        font-size: 16px;
+        line-height: 55px;
+        padding: 0 15px;
+        text-transform: uppercase;
+        pointer-events: none;
+        border-radius: 0 5px 5px 0;
+    }
 .iti--allow-dropdown{
   width: 100%;
   height: calc(3.5rem + calc(var(--bs-border-width) * 2));
@@ -606,4 +664,71 @@ th:nth-child(6) {
     .al-side{
         display:none;
     }
+}
+
+.form-check-input[type=radio] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    /* Remove most all native input styles */
+    appearance: none;
+    /* For iOS < 15 */
+    background-color: white;
+    /* Not removed via appearance */
+    margin: 0;
+    font: inherit;
+    color: green;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid var(--nav-active);
+    border-radius: 50%;
+    transform: translateY(-0.075em);
+    display: grid;
+    place-content: center;
+    margin-right: 15px;
+    margin-top: 5px;
+}
+
+    .form-check-input[type=radio]::before {
+        content: "";
+        width: 0.65em;
+        height: 0.65em;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+        box-shadow: inset 1em 1em var(--form-control-color);
+        /* Windows High Contrast Mode */
+        background-color: var(--nav-active);
+    }
+
+    .form-check-input[type=radio]:checked::before {
+        transform: scale(1);
+    }
+
+    .form-check-input[type=radio]:focus {
+        outline: max(2px, 0.15em) solid var(--nav-active);
+        outline-offset: max(2px, 0.15em);
+    }
+.inputWrapper {
+    height: 35px;
+    width: 6%;
+    overflow: hidden;
+    position: relative;
+    border-radius: 7%;
+    cursor: pointer;
+    background-color: #DDF;
+}
+
+.fileInput {
+    cursor: pointer;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 99;
+    /*This makes the button huge. If you want a bigger button, increase the font size*/
+    font-size: 50px;
+    /*Opacity settings for all browsers*/
+    opacity: 0;
+    -moz-opacity: 0;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0)
 }

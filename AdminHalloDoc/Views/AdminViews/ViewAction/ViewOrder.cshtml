@@ -81,7 +81,7 @@
             success: function (response) {
 
                 console.log(response);
-                var s = '<option value="-1">Please Select</option>';
+                var s = '';
                 for (var i = 0; i < response.length; i++) {
                     s += '<option class="p-2" value="' + response[i].venderId + '">' + response[i].venderName + '</option>';
                 }

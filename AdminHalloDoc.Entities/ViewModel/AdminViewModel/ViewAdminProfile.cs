@@ -18,7 +18,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? UserName { get; set; }
         public string? Password { get; set; }
         public short? Status { get; set; }
-        public string? Roles { get; set; }
+        public int? Roleid { get; set; }
         public string? Firstname { get; set; } = null!;
 
         public string? Lastname { get; set; }

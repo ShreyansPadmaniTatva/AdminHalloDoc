@@ -43,6 +43,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                         where r.Adminid == UserId
                                         select new ViewAdminProfile
                                         {
+                                            Roleid = r.Roleid,
                                             AdminId = r.Adminid,
                                             UserName = asp.Username,
                                             Address1 = r.Address1,
@@ -80,68 +81,156 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Put_Profile
-        public async Task<bool> PutProfileDetails(ViewAdminProfile v)
+
+        #region Edit_Admin_ProfileAsync
+
+        public async Task<bool> EditAdminProfileAsync(ViewAdminProfile vm)
         {
-            var req = await _context.Admins
-                .Where(W => W.Adminid == v.AdminId)
-                    .FirstOrDefaultAsync();
-            Aspnetuser U = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Id == req.Aspnetuserid);
-            var hasher = new PasswordHasher<string>();
-            U.Passwordhash = hasher.HashPassword(null, v.Password); ;
-            _context.Update(U);
-            await _context.SaveChangesAsync();
-            if (req != null)
+            try
             {
-                req.Firstname = v.Firstname;
-                req.Lastname = v.Lastname;
-                req.Email = v.Email;
-                req.Status = v.Status;
-                req.Mobile = v.Mobile;
-                req.Address1 = v.Address1;
-                req.Address2 = v.Address2;
-                req.City = v.City;
-                req.Zip = v.Zipcode;
-                req.Altphone = v.AltMobile;
-                _context.Admins.Update(req);
-                await _context.SaveChangesAsync();
-            }
-
-            List<int>  regions = await _context.Adminregions
-               .Where(r => r.Adminid == v.AdminId)
-               .Select(req => req.Regionid)
-               .ToListAsync();
-
-            List<int> priceList = v.Regionsid.Split(',').Select(int.Parse).ToList();
-            foreach (var item in priceList)
-            {
-                if (regions.Contains(item))
+                if (vm == null)
                 {
-                    regions.Remove(item);
+                    return false;
                 }
                 else
                 {
-                    Adminregion ar = new Adminregion();
-                    ar.Regionid = item;
-                    ar.Adminid = (int)v.AdminId;
-                    _context.Adminregions.Update(ar);
-                    await _context.SaveChangesAsync();
-                    regions.Remove(item);
+
+                    var DataForChange = await _context.Admins
+                             .Where(W => W.Adminid == vm.AdminId)
+                             .FirstOrDefaultAsync();
+
+                    if (DataForChange != null)
+                    {
+
+                        DataForChange.Email = vm.Email;
+                        DataForChange.Firstname = vm.Firstname;
+                        DataForChange.Lastname = vm.Lastname;
+                        DataForChange.Mobile = vm.Mobile;
+
+
+                        _context.Admins.Update(DataForChange);
+                        _context.SaveChanges();
+
+
+                        List<int> regions = await _context.Adminregions
+                           .Where(r => r.Adminid == vm.AdminId)
+                           .Select(req => req.Regionid)
+                           .ToListAsync();
+
+                        List<int> priceList = vm.Regionsid.Split(',').Select(int.Parse).ToList();
+                        foreach (var item in priceList)
+                        {
+                            if (regions.Contains(item))
+                            {
+                                regions.Remove(item);
+                            }
+                            else
+                            {
+                                Adminregion ar = new Adminregion();
+                                ar.Regionid = item;
+                                ar.Adminid = (int)vm.AdminId;
+                                _context.Adminregions.Update(ar);
+                                await _context.SaveChangesAsync();
+                                regions.Remove(item);
+
+                            }
+                        }
+                        if (regions.Count > 0)
+                        {
+                            foreach (var item in regions)
+                            {
+                                Adminregion ar = await _context.Adminregions.Where(r => r.Adminid == vm.AdminId && r.Regionid == item).FirstAsync();
+                                _context.Adminregions.Remove(ar);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
 
                 }
             }
-            if (regions.Count > 0)
+            catch (Exception ex)
             {
-                foreach (var item in regions)
-                {
-                   Adminregion ar =  await _context.Adminregions.Where(r => r.Adminid == v.AdminId && r.Regionid == item).FirstAsync();
-                    _context.Adminregions.Remove(ar);
-                    await _context.SaveChangesAsync();
-                }
+                return false;
             }
 
-            return true;
+        }
+
+        #endregion
+
+        #region Edit_Billing_InfoAsync
+        public async Task<bool> EditBillingInfoAsync(ViewAdminProfile vm)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Admins
+                        .Where(W => W.Adminid == vm.AdminId)
+                        .FirstOrDefaultAsync();
+                    
+                    if (DataForChange != null)
+                    {
+
+                        DataForChange.Address1 = vm.Address1;
+                        DataForChange.Address2 = vm.Address2;
+                        DataForChange.City = vm.City;
+                        DataForChange.Mobile = vm.Mobile;
+
+
+                        _context.Admins.Update(DataForChange);
+                        _context.SaveChanges();
+
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region Change_Password
+        public async Task<bool> ChangePasswordAsync(string password, int AdminId)
+        {
+            var hasher = new PasswordHasher<string>();
+
+
+            var req = await _context.Admins
+                .Where(W => W.Adminid == AdminId)
+                    .FirstOrDefaultAsync();
+            Aspnetuser U = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Id == req.Aspnetuserid);
+
+            if (U != null)
+            {
+                 U.Passwordhash = hasher.HashPassword(null, password); 
+                _context.Aspnetusers.Update(U);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
 
         }
         #endregion
+
+        #endregion
+
     }
 }

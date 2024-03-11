@@ -10,6 +10,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
     public interface IMyProfileRepository
     {
         Task<ViewAdminProfile> GetProfileDetails(int UserId);
-        Task<bool> PutProfileDetails(ViewAdminProfile v);
+        Task<bool> ChangePasswordAsync(string password, int AdminId);
+        Task<bool> EditAdminProfileAsync(ViewAdminProfile vm);
+        Task<bool> EditBillingInfoAsync(ViewAdminProfile vm);
     }
 }

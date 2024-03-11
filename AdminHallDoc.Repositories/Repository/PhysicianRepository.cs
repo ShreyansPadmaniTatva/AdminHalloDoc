@@ -46,19 +46,20 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
-        #region Find_Location_Physician
+        #region PhysicianAll
         public async Task<List<Physicians>> PhysicianAll()
         {
 
 
             List<Physicians> pl = await (from r in _context.Physicians
-                                         join Aspnetuser in _context.Physiciannotifications
-                                         on r.Physicianid equals Aspnetuser.Physicianid into aspGroup
-                                         from asp in aspGroup.DefaultIfEmpty()
+                                         join Notifications in _context.Physiciannotifications
+                                         on r.Physicianid equals Notifications.Physicianid into aspGroup
+                                         from nof in aspGroup.DefaultIfEmpty()
                                          join role in _context.Roles
                                          on r.Roleid equals role.Roleid into roleGroup
                                          from roles in roleGroup.DefaultIfEmpty()
                                          select  new Physicians{
+                                             notificationid = nof.Id,
                                             Createddate = r.Createddate,
                                             Physicianid = r.Physicianid,
                                             Address1 = r.Address1,
@@ -69,7 +70,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                             Businesswebsite = r.Businesswebsite,
                                             City = r.City,
                                             Firstname = r.Firstname, Lastname = r.Lastname,
-                                            notification = asp.Isnotificationstopped,
+                                            notification = nof.Isnotificationstopped,
                                             role = roles.Name,
                                             Status = r.Status,
                                             Email = r.Email
@@ -82,7 +83,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
-        #region Find_Location_Physician
+        #region PhysicianByRegion
         public async Task<List<Physicians>> PhysicianByRegion(int? region)
         {
 
@@ -94,9 +95,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                          on pr.Physicianid equals ph.Physicianid into rGroup
                                         from r in rGroup.DefaultIfEmpty()
 
-                                        join Aspnetuser in _context.Physiciannotifications
-                                         on r.Physicianid equals Aspnetuser.Physicianid into aspGroup
-                                         from asp in aspGroup.DefaultIfEmpty()
+                                        join Notifications in _context.Physiciannotifications
+                                         on r.Physicianid equals Notifications.Physicianid into aspGroup
+                                         from nof in aspGroup.DefaultIfEmpty()
 
                                          join role in _context.Roles
                                          on r.Roleid equals role.Roleid into roleGroup
@@ -116,7 +117,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                              City = r.City,
                                              Firstname = r.Firstname,
                                              Lastname = r.Lastname,
-                                             notification = asp.Isnotificationstopped,
+                                             notification = nof.Isnotificationstopped,
                                              role = roles.Name,
                                              Status = r.Status
 
@@ -127,6 +128,43 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             return pl;
 
         }
+        #endregion
+
+        #region Change_Notification_Physician
+
+        public async Task<bool> ChangeNotificationPhysician(Dictionary<int, bool> changedValuesDict)
+        {
+            try
+            {
+                if (changedValuesDict == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    
+
+                    foreach (var item in changedValuesDict)
+                    {
+                        var ar =  _context.Physiciannotifications.Find(item.Key);
+                        if (ar != null)
+                        {
+                            ar.Isnotificationstopped[0] = item.Value ;
+                            _context.Physiciannotifications.Update(ar);
+                             _context.SaveChanges();
+                        }
+                    }
+
+                        return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
         #endregion
     }
 }
