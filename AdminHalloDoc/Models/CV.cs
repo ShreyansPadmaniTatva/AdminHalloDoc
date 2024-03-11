@@ -63,5 +63,20 @@ namespace AdminHalloDoc.Models.CV
             return UserID;
         }
 
+        public static string? ID()
+        {
+            string cookieValue;
+            string UserID = null;
+
+            if (_httpContextAccessor.HttpContext.Request.Cookies["jwt"] != null)
+            {
+                cookieValue = _httpContextAccessor.HttpContext.Request.Cookies["jwt"].ToString();
+
+                UserID = DecodedToken.DecodeJwt(DecodedToken.ConvertJwtStringToJwtSecurityToken(cookieValue)).claims.FirstOrDefault(t => t.Key == "UserID").Value;
+            }
+
+            return UserID;
+        }
+
     }
 }

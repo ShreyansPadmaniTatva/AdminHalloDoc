@@ -14,5 +14,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<List<Physicians>> PhysicianAll();
         Task<List<Physicians>> PhysicianByRegion(int? region);
         Task<bool> ChangeNotificationPhysician(Dictionary<int, bool> changedValuesDict);
+        Task<bool> PhysicianAddEdit(Physicians physiciandata, string AdminId);
     }
 }

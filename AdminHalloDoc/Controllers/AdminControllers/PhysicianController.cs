@@ -1,5 +1,6 @@
 ﻿using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -82,36 +83,20 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 ViewData["PhysicianAccount"] = "Edit";
 
             }
-            //var v = await _physicianRepository.PhysicianAll();
-            //if (region == null)
-            //{
-            //    v = await _physicianRepository.PhysicianAll();
-
-            //}
-            //else
-            //{
-            //    v = await _physicianRepository.PhysicianByRegion(region);
-            //    return Json(v);
-
-            //}
             return View("../AdminViews/Physician/PhysicianAddEdit");
         }
         #endregion
 
         [HttpPost]
         #region PhysicianAddEdit
-        public async Task<IActionResult> PhysicianAddEdit(int? id)
+        public async Task<IActionResult> PhysicianAddEdit(Physicians physicians)
         {
             //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
-            if (id == null)
+          if(ModelState.IsValid)
             {
-                ViewData["PhysicianAccount"] = "Add";
-            }
-            else
-            {
-                ViewData["PhysicianAccount"] = "Edit";
+                _physicianRepository.PhysicianAddEdit(physicians, CV.ID());
 
             }
            

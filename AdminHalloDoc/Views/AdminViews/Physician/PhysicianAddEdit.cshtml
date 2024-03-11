@@ -31,8 +31,8 @@
         </div>
     </div>
     <div class="card border-0 shadow p-4 mb-5  rounded">
+        <form id="addedit" class="row g-3" asp-action="PhysicianAddEdit" asp-controller="Physician" enctype="multipart/form-data" >
 
-        <form asp-action="ResetPassAdmin" asp-controller="AdminProfile" id="resetpass" class="row g-3 ">
             <input type="hidden" asp-for="Physicianid" />
             <h4 class=" my-4">Account Information</h4>
             <div class="col-md-6 form-floating  ">
@@ -49,17 +49,16 @@
                 </select>
             </div>
             <div class="col-md-6 form-floating">
-                <select class="form-select form-select-md p-2" required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
+                <select class="form-select form-select-md p-2" required name="Roleid" asp-for="Roleid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
                 </select>
             </div>
             <div class="text-end">
                 <button class="text-end btn btn-outline-info " id="submitresetpass">Reset Password</button>
             </div>
-        </form>
+        
 
         <h4 class=" my-4"> Physician Information</h4>
 
-        <form asp-action="SaveAdministrationinfo" asp-controller="AdminProfile" id="profile" class="row g-3 ">
             <input type="hidden" asp-for="Physicianid" />
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Firstname" class="form-control rounded admin-input" name="Firstname" type="text" placeholder="First Name" autocomplete=off>
@@ -95,12 +94,29 @@
 
                 @foreach (var cb in ViewBag.RegionComboBox)
                 {
-                    
 
+                    @if (Model != null && Model.Regionids.Count > 0)
+                    {
+                        <div class="form-check mx-2">
+                            <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region" id="flexCheckDefault" checked>
+                            <label class="form-check-label" for="flexCheckDefault">
+                                @cb.RegionName
+                            </label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-check mx-2">
+                            <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                @cb.RegionName
+                            </label>
+                        </div>
+                    }
 
                 }
             </div>
-            <div class="text-end">
+          @*  <div class="text-end">
                 <a onclick="enable_disable_administration()" id="edit" class="btn  btn-info btn-submit ">
                     Edit
                 </a>
@@ -110,12 +126,11 @@
                 <div id="cancel" class="btn  btn-outline-danger ">
                     cancel
                 </div>
-            </div>
-        </form>
-
+            </div>*@
+            
         <h4 class=" my-4">Mailing & Billing  Information</h4>
 
-        <form asp-action="EditBillingInfo" asp-controller="AdminProfile" id="billing" method="post" class="row g-3 ">
+       
             <input type="hidden" asp-for="Physicianid" />
             <div class="col-md-6 form-floating ">
                 <input asp-for="Address1" class="form-control rounded mail-billing-imp" name="Address1" type="text" placeholder=Suchtext autocomplete=off>
@@ -138,28 +153,27 @@
                 <label for="floatingInput">Zip Code</label>
             </div>
             <div class="col-md-6 form-floating  my-1">
-                <input asp-for="AltMobile" id="phone1" type="tel" name="AltMobile" class="form-control rounded mail-billing-imp" autocomplete=off>
+                <input asp-for="Altphone" id="phone1" type="tel" name="Altphone" class="form-control rounded mail-billing-imp" autocomplete=off>
                 <!-- <label for="floatingInput">Phone Number </label> -->
             </div>
 
-            <div class="text-end my-4">
+@*            <div class="text-end my-4">
                 <a onclick="enable_disable_mailBilling()" id="edit1" class="btn btn-info text-white p-2">
                     Edit
                 </a>
                 <div id="submitbilling" class="btn btn-info text-white p-2">
                     save
                 </div>
-                <div id="cancel1" @*asp-action="Index" asp-controller="MyProfile"*@ class="btn  btn-outline-danger ">
+                <div id="cancel1" class="btn  btn-outline-danger ">
                     cancel
                 </div>
 
             </div>
-
-        </form>
+*@
+       
 
         <h4 class=" my-4">Provider Profile</h4>
 
-        <form asp-action="EditBillingInfo" asp-controller="AdminProfile" id="billing" method="post" class="row g-3 ">
             <input type="hidden" asp-for="Physicianid" />
             <div class="col-md-6 form-floating ">
                 <input asp-for="Businessname" class="form-control rounded mail-billing-imp" name="Businessname" type="text" placeholder=Suchtext autocomplete=off>
@@ -170,18 +184,35 @@
                 <label for="floatingInput">Business Website </label>
             </div>
             <div class="col-md-6 form-floating ">
-                <input asp-for="Photo" class="form-control rounded mail-billing-imp file-upload-wrapper" name="Photo" type="file" placeholder=Suchtext autocomplete=off>
+                <input asp-for="PhotoFile" id="abcvb" class="form-control rounded mail-billing-imp file-upload-wrapper-1" name="PhotoFile" type="file" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Photo</label>
             </div>
-            <div class="col-md-6 form-floating ">
-                <input asp-for="Signature" class="form-control rounded mail-billing-imp file-upload-wrapper" name="Signature" type="file" placeholder=Suchtext autocomplete=off>
+            <div class="col-md-6 form-floating d-flex">
+                <input asp-for="SignatureFile" id="abc"  class="form-control rounded mail-billing-imp file-upload-wrapper-1" name="SignatureFile" type="file" placeholder=Suchtext autocomplete=off>
+                <button class="btn btn-info mx-1 text-white" type="button" id="create-signature-button">Create</button>
                 <label for="floatingInput">Signature</label>
+              
+            </div>
+            <div class="col-md-6" >
+
+            </div>
+            <div class="col-md-6">
+                <div>
+                    <div id="clear-button" style="display:none;">Clear</div>
+                    <div id="save-button" style="display:none;" disabled>Save</div>
+                        <input type="hidden" id="signature-data" name="signatureData">
+                </div>
+                <div class=" d-flex">
+                    <img id="saved" alt="Signature" />
+                    <canvas id="signature-pad" width="300" height="200" style="display:none;"></canvas>
+                    
+                </div>
             </div>
             <div class="col-md-12 form-floating ">
                 <textarea asp-for="Adminnotes" name="Adminnotes" class="form-control" rows="10" cols="100"></textarea>
                 <label for="floatingInput">Adminnotes</label>
             </div>
-
+@*
             <div class="text-end my-4">
                 <a onclick="enable_disable_mailBilling()" id="edit1" class="btn btn-info text-white p-2">
                     Edit
@@ -189,27 +220,27 @@
                 <div id="submitbilling" class="btn btn-info text-white p-2">
                     save
                 </div>
-                <div id="cancel1" @*asp-action="Index" asp-controller="MyProfile"*@ class="btn  btn-outline-danger ">
+                <div id="cancel1"  class="btn  btn-outline-danger ">
                     cancel
                 </div>
 
-            </div>
+            </div>*@
 
-        </form>
+        
         <hr />
         <h4 class=" my-2">Onbording</h4>
 
-        <form asp-action="EditBillingInfo" asp-controller="AdminProfile" id="billing" method="post" class="row g-3 ">
+        
             <input type="hidden" asp-for="Physicianid" />
             <div class="col-md-12 d-flex ">
                 <div class="form-check mx-2">
-                    <input class="form-check-input" asp-for="Adminnotes" type="checkbox" name="Isagreementdoc" id="flexCheckDefault">
+                    <input class="form-check-input" asp-for="Isagreementdoc[0]" type="checkbox" name="Isagreementdoc" id="flexCheckDefault">
                     <label class="form-check-label" for="flexCheckDefault">
                         Independent Contractor Agreement
                     </label>
                 </div>
                 <div class="inputWrapper">
-                    <input class="fileInput btn btn-info" type="file" name="file1" />
+                    <input class="fileInput btn btn-info" type="file" asp-for="Agreementdoc" name="file1" />
                     <span class="btn btn-info text-white">Upload</span>
                 </div>
                 <button class="btn btn-info mx-1 text-white" asp-for="Adminnotes" type="button" name="licensedoc" id="flexCheckDefault">View</button>
@@ -218,13 +249,13 @@
 
             <div class="col-md-12 d-flex">
                 <div class="form-check mx-2">
-                    <input class="form-check-input" asp-for="Adminnotes" type="checkbox" name="Isnondisclosuredoc" id="flexCheckDefault">
+                    <input class="form-check-input" asp-for="Isnondisclosuredoc[0]" type="checkbox" name="Isnondisclosuredoc" id="flexCheckDefault">
                     <label class="form-check-label" for="flexCheckDefault">
                         Background Check
                     </label>
                 </div>
                 <div class="inputWrapper">
-                    <input class="fileInput btn btn-info" type="file" name="file1" />
+                    <input class="fileInput btn btn-info" asp-for="BackGrounddoc" type="file" name="file1" />
                     <span class="btn btn-info text-white">Upload</span>
                 </div>
                 <button class="btn btn-info mx-1 text-white" asp-for="Adminnotes" type="button" name="licensedoc" id="flexCheckDefault">View</button>
@@ -238,7 +269,7 @@
                     </label>
                 </div>
                 <div class="inputWrapper">
-                    <input class="fileInput btn btn-info" type="file" name="file1" />
+                    <input class="fileInput btn btn-info" asp-for="Strainingdoc" type="file" name="file1" />
                     <span class="btn btn-info text-white">Upload</span>
                 </div>
                 <button class="btn btn-info mx-1 text-white" asp-for="Adminnotes" type="button" name="licensedoc" id="flexCheckDefault">View</button>
@@ -252,7 +283,7 @@
                     </label>
                 </div>
                 <div class="inputWrapper">
-                    <input class="fileInput btn btn-info" type="file" name="file1" />
+                    <input class="fileInput btn btn-info" asp-for="NonDisclosuredoc" type="file" name="file1" />
                     <span class="btn btn-info text-white">Upload</span>
                 </div>
                 <button class="btn btn-info mx-1 text-white" asp-for="Adminnotes" type="button" name="licensedoc" id="flexCheckDefault">View</button>
@@ -266,35 +297,146 @@
                     </label>
                 </div>
                 <div class="inputWrapper">
-                    <input class="fileInput btn btn-info" type="file" name="file1" />
+                    <input class="fileInput btn btn-info" asp-for="Licensedoc" type="file" name="file1" />
                     <span class="btn btn-info text-white">Upload</span>
                 </div>
                 <button class="btn btn-info mx-1 text-white" asp-for="Adminnotes" type="button" name="licensedoc" id="flexCheckDefault">View</button>
 
             </div>
             
-            <div class="text-end my-4">
+@*            <div class="text-end my-4">
                 <a onclick="enable_disable_mailBilling()" id="edit1" class="btn btn-info text-white p-2">
                     Edit
                 </a>
                 <div id="submitbilling" class="btn btn-info text-white p-2">
                     save
                 </div>
-                <div id="cancel1" @*asp-action="Index" asp-controller="MyProfile"*@ class="btn  btn-outline-danger ">
+                <div id="cancel1"  class="btn  btn-outline-danger ">
                     cancel
                 </div>
 
-            </div>
+            </div>*@
 
+       
+
+        <input type="submit" class="btn btn-info" value="Add" />
         </form>
-
     </div>
-</div>po
+</div>
 @section Scripts
     {
 
     <script type="text/javascript">
 
+
+        $(function () {
+            var canvas = $('#signature-pad')[0];
+            var ctx = canvas.getContext('2d');
+            var drawing = false;
+            var strokes = [];
+            var saveButton = $('#save-button');
+            var signatureFileInput = $('#abc');
+
+            function scaleUp(c, scale) {
+
+                var newCanvas = $("<canvas>")
+                    .attr("width", c.width * scale)
+                    .attr("height", c.height * scale)[0];
+
+                var ctx2 = newCanvas.getContext("2d");
+                ctx2.imageSmoothingEnabled = false;
+                ctx2.drawImage(c, 0, 0, newCanvas.width, newCanvas.height);
+
+                var dataURL = newCanvas.toDataURL("image/png");
+                document.getElementById("saved").src = dataURL;
+
+            }
+
+            $('#create-signature-button').on('click', function () {
+                $('#create-signature-button').hide();
+                $('#clear-button').show();
+                $('#undo-button').show();
+                $('#save-button').show();
+                canvas.style.display = 'block';
+            });
+
+            $('#signature-pad').on('mousedown', function (e) {
+                drawing = true;
+                ctx.beginPath();
+                ctx.moveTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+            });
+
+            $('#signature-pad').on('mousemove', function (e) {
+                if (drawing) {
+                    ctx.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+                    ctx.stroke();
+                }
+            });
+
+            $('#signature-pad').on('mouseup', function () {
+                if (drawing) {
+                    drawing = false;
+                    strokes.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+                    updateSaveButtonState();
+                }
+            });
+
+            $('#clear-button').on('click', function () {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                strokes = [];
+                updateSaveButtonState();
+            });
+
+            $('#undo-button').on('click', function () {
+                if (strokes.length > 0) {
+                    ctx.putImageData(strokes.pop(), 0, 0);
+                    updateSaveButtonState();
+                }
+            });
+
+            $('#save-button').on('click', function () {
+                scaleUp(canvas, 1);
+                var dataURL = canvas.toDataURL("image/png");
+                $('#signature-data').val(dataURL); // Set the value of the hidden input field
+               // $('#save-form').submit(); // Submit the form
+            });
+
+            function updateSignatureFileInput() {
+                if (strokes.length > 0) {
+                    var dataURL = canvas.toDataURL("image/png");
+                    var blob = dataURLToBlob(dataURL);
+                    var file = new File([blob], "signature.png", { type: "image/png" });
+                    signatureFileInput.prop('files', [file]);
+                    saveButton.prop('disabled', false);
+                } else {
+                    saveButton.prop('disabled', true);
+                }
+            }
+
+            function dataURLToBlob(dataURL) {
+                var byteString = atob(dataURL.split(',')[1]);
+                var ab = new ArrayBuffer(byteString.length);
+                var ia = new Uint8Array(ab);
+                for (var i = 0; i < byteString.length; i++) {
+                    ia[i] = byteString.charCodeAt(i);
+                }
+                return new Blob([ab], { type: 'image/png' });
+            }
+
+            function updateSaveButtonState() {
+                if (strokes.length > 0) {
+                    var dataURL = canvas.toDataURL("image/png");
+                    var blob = dataURLToBlob(dataURL);
+                    var file = new File([blob], "signature.png", { type: "image/png" });
+                    var dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    signatureFileInput.prop('files', dataTransfer.files);
+                    saveButton.prop('disabled', false);
+                } else {
+                    saveButton.prop('disabled', true);
+                }
+            }
+        });
 
         window.onload = function () {
             console.log("@status  d");

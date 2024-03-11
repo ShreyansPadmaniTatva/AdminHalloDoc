@@ -50,7 +50,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     var data = _context.Aspnetuserroles.FirstOrDefault(E => E.Userid == user.Id);
                     var datarole = _context.Aspnetroles.FirstOrDefault(e => e.Id == data.Roleid);
 
-
+                    admin.ID = user.Id;
                     admin.Username = user.Username;
                     admin.FirstName = admin.FirstName ?? string.Empty;
                     admin.LastName = admin.LastName ?? string.Empty;

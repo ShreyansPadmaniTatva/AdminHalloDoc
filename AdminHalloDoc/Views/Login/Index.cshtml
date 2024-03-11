@@ -31,7 +31,7 @@
                     <form asp-action="CheckAccessLogin" asp-controller="Login">
                         <h1 class="login fs-1 fw-bolder">Login To Your Account</h1>
                         <div class="form-floating input-group with-icon mb-3">
-                            <input class="form-control rounded" asp-for="Username" type="text" placeholder=Suchtext
+                            <input class="form-control rounded" value="shreyans.s@gmail.com" asp-for="Username" type="text" placeholder=Suchtext
                                    autocomplete=off required>
                             <i class="bi bi-person"></i>
                             <label for="floatingInput">Email </label>
@@ -39,7 +39,7 @@
                             <span asp-validation-for="Username" class="text-danger" ></span>
                                    
                         <div class="form-floating input-group with-icon mb-3">
-                            <input class="form-control rounded" asp-for="Passwordhash" type="password" placeholder=Suchtext
+                            <input class="form-control rounded" value="123" asp-for="Passwordhash" type="password" placeholder=Suchtext
                                    autocomplete=off required>
                             <i class="bi bi-eye"></i>
                             <label for="floatingInput" class="bg-transparent">Password</label>

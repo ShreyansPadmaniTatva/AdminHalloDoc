@@ -36,7 +36,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 new Claim("FirstName", userinfo.FirstName),
                 new Claim("UserID", userinfo.UserId.ToString()),
                 new Claim("Role", userinfo.Role),
-                new Claim("UserName", userinfo.Username)
+                new Claim("UserName", userinfo.Username),
+                new Claim("ID", userinfo.ID),
+
             };
 
 

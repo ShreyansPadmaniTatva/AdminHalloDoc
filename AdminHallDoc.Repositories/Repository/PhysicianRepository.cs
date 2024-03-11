@@ -2,8 +2,10 @@
 using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -166,5 +168,69 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
 
         #endregion
+
+        #region PhysicianAddEdit
+        public async Task<bool> PhysicianAddEdit(Physicians physiciandata,string AdminId)
+        {
+            try
+            {
+                if (physiciandata.UserName!=null && physiciandata.PassWord != null)
+                {
+                    var Aspnetuser = new Aspnetuser();
+                    var hasher = new PasswordHasher<string>();
+                    Aspnetuser.Id = Guid.NewGuid().ToString();
+                    Aspnetuser.Username = physiciandata.UserName;
+                    Aspnetuser.Passwordhash = hasher.HashPassword(null, physiciandata.PassWord);
+                    Aspnetuser.Email = physiciandata.Email;
+                    Aspnetuser.CreatedDate = DateTime.Now;
+                    _context.Aspnetusers.Add(Aspnetuser);
+                    await _context.SaveChangesAsync();
+
+                    var Physician = new Physician();
+                    // Aspnetuser
+                    Physician.Aspnetuserid = Aspnetuser.Id;
+                    Physician.Firstname = physiciandata.Firstname;
+                    Physician.Lastname = physiciandata.Lastname;
+                    Physician.Status = physiciandata.Status;
+                    Physician.Roleid = physiciandata.Roleid;
+                    Physician.Email = physiciandata.Address1;
+                    Physician.Mobile = physiciandata.Address1;
+                    Physician.Medicallicense = physiciandata.Address1;
+                    Physician.Npinumber = physiciandata.Address1;
+                    Physician.Syncemailaddress = physiciandata.Address1;
+                    Physician.Address1 = physiciandata.Address1;
+                    Physician.Address2 = physiciandata.Address1;
+                    Physician.City = physiciandata.Address1;
+                    Physician.Zip = physiciandata.Zipcode;
+                    Physician.Altphone = physiciandata.Altphone;
+                    Physician.Businessname = physiciandata.Businessname;
+                    Physician.Businesswebsite = physiciandata.Businesswebsite;
+                    Physician.Createddate = DateTime.Now;
+                    Physician.Createdby = AdminId;
+
+                    _context.Physicians.Add(Physician);
+                    await _context.SaveChangesAsync();
+
+                    
+                    CM.UploadProviderDoc(physiciandata.PhotoFile, Physician.Physicianid);
+                    CM.UploadProviderDoc(physiciandata.SignatureFile, Physician.Physicianid);
+                }
+
+                else
+                {
+
+                }
+              
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+        #endregion
+
     }
 }
