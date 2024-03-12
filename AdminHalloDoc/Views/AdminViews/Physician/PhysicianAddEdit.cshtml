@@ -38,10 +38,13 @@
             <div class="col-md-6 form-floating  ">
                 <input asp-for="UserName" class="form-control rounded" name="UserName" type="text" placeholder="First Name" autocomplete=off>
                 <label class="" for="floatingInput">User Name </label>
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
-                <input class="form-control rounded" name="Password" type="text" placeholder=Suchtext autocomplete=off>
+                <input class="form-control rounded" asp-for="PassWord" name="Password" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Password </label>
+                <span asp-validation-for="PassWord" class="text-danger"></span>
+
             </div>
 
             <div class="col-md-6 form-floating">
@@ -63,14 +66,17 @@
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Firstname" class="form-control rounded admin-input" name="Firstname" type="text" placeholder="First Name" autocomplete=off>
                 <label class="" for="floatingInput">First Name </label>
+                <span asp-validation-for="Firstname" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
                 <input asp-for="Lastname" class="form-control rounded admin-input" name="Lastname" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Last name </label>
+                <span asp-validation-for="Lastname" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Email" class="form-control  rounded admin-input" id="email" name="Email" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Email </label>
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Mobile" id="phone" type="tel" name="Mobile" class="form-control rounded admin-input" autocomplete=off>
@@ -98,7 +104,7 @@
                     @if (Model != null && Model.Regionids.Count > 0)
                     {
                         <div class="form-check mx-2">
-                            <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region" id="flexCheckDefault" checked>
+                            <input class="form-check-input regionbox" value="@cb.RegionId" type="checkbox" name="Region" id="flexCheckDefault" checked>
                             <label class="form-check-label" for="flexCheckDefault">
                                 @cb.RegionName
                             </label>
@@ -107,7 +113,7 @@
                     else
                     {
                         <div class="form-check mx-2">
-                            <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region" id="flexCheckDefault">
+                            <input class="form-check-input regionbox" value="@cb.RegionId" type="checkbox" name="Region" id="flexCheckDefault">
                             <label class="form-check-label" for="flexCheckDefault">
                                 @cb.RegionName
                             </label>
@@ -145,7 +151,8 @@
                 <label for="floatingInput">City</label>
             </div>
             <div class="col-md-6 form-floating ">
-                <input asp-for="State" class="form-control rounded mail-billing-imp" name="State" type="text" placeholder=Suchtext autocomplete=off>
+                <select class="form-select form-select-md mt-3 p-2" asp-for="Regionid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                </select>
                 <label for="floatingInput">State</label>
             </div>
             <div class="col-md-6 form-floating  ">
@@ -178,10 +185,14 @@
             <div class="col-md-6 form-floating ">
                 <input asp-for="Businessname" class="form-control rounded mail-billing-imp" name="Businessname" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Business Name </label>
+                <span asp-validation-for="Businessname" class="text-danger"></span>
+
             </div>
             <div class="col-md-6 form-floating ">
                 <input asp-for="Businesswebsite" class="form-control rounded mail-billing-imp" name="Businesswebsite" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Business Website </label>
+                <span asp-validation-for="Businesswebsite" class="text-danger"></span>
+
             </div>
             <div class="col-md-6 form-floating ">
                 <input asp-for="PhotoFile" id="abcvb" class="form-control rounded mail-billing-imp file-upload-wrapper-1" name="PhotoFile" type="file" placeholder=Suchtext autocomplete=off>
@@ -198,15 +209,19 @@
             </div>
             <div class="col-md-6">
                 <div>
-                    <div id="clear-button" style="display:none;">Clear</div>
-                    <div id="save-button" style="display:none;" disabled>Save</div>
+                    
                         <input type="hidden" id="signature-data" name="signatureData">
                 </div>
                 <div class=" d-flex">
-                    <img id="saved" alt="Signature" />
+                    <img id="saved" alt="Signature" class="border border-1 border-success-subtle mx-3" style="display:none;" />
                     <canvas id="signature-pad" width="300" height="200" style="display:none;"></canvas>
                     
                 </div>
+                <div class="text-end mt-2" >
+                    <div id="clear-button" class="btn btn-danger mt-0" style="display:none;">Clear</div>
+                    <div id="save-button" class="btn btn-success" style="display:none;" disabled>Save</div>
+                </div>
+                
             </div>
             <div class="col-md-12 form-floating ">
                 <textarea asp-for="Adminnotes" name="Adminnotes" class="form-control" rows="10" cols="100"></textarea>
@@ -230,79 +245,133 @@
         <hr />
         <h4 class=" my-2">Onbording</h4>
 
-        
-            <input type="hidden" asp-for="Physicianid" />
-            <div class="col-md-12 d-flex ">
-                <div class="form-check mx-2">
-                    <input class="form-check-input" asp-for="Isagreementdoc[0]" type="checkbox" name="Isagreementdoc" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Independent Contractor Agreement
-                    </label>
-                </div>
-                <div class="inputWrapper">
-                    <input class="fileInput btn btn-info" type="file" asp-for="Agreementdoc" name="file1" />
-                    <span class="btn btn-info text-white">Upload</span>
-                </div>
-                <button class="btn btn-info mx-1 text-white" asp-for="Adminnotes" type="button" name="licensedoc" id="flexCheckDefault">View</button>
 
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-check mx-2">
+                            <input class="form-check-input agreement-checkbox" asp-for="Isagreementdoc" name="Isagreementdoc" type="checkbox" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Independent Contractor Agreement
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex">
+                        <div class="inputWrapper" >
+                            <input disabled class="fileInput btn btn-info" id="abc" asp-for="Agreementdoc" type="file" name="Agreementdoc" />
+                            <span class="btn btn-info text-white upload-button">Upload</span>
+                        </div>
+                        <a class="btn btn-info mx-2 text-white view-button" style="display:none;">View</a>
+
+                        <!-- Display uploaded file details -->
+                        <div class="file-details" style="display:none;">
+                            <p><span class="file-name"></span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-md-12 d-flex">
-                <div class="form-check mx-2">
-                    <input class="form-check-input" asp-for="Isnondisclosuredoc[0]" type="checkbox" name="Isnondisclosuredoc" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Background Check
-                    </label>
-                </div>
-                <div class="inputWrapper">
-                    <input class="fileInput btn btn-info" asp-for="BackGrounddoc" type="file" name="file1" />
-                    <span class="btn btn-info text-white">Upload</span>
-                </div>
-                <button class="btn btn-info mx-1 text-white" asp-for="Adminnotes" type="button" name="licensedoc" id="flexCheckDefault">View</button>
 
-            </div>
-            <div class="col-md-12 d-flex">
-                <div class="form-check mx-2">
-                    <input class="form-check-input" asp-for="Adminnotes" type="checkbox" name="Isnondisclosuredoc" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                       HIPAA Compliance
-                    </label>
-                </div>
-                <div class="inputWrapper">
-                    <input class="fileInput btn btn-info" asp-for="Strainingdoc" type="file" name="file1" />
-                    <span class="btn btn-info text-white">Upload</span>
-                </div>
-                <button class="btn btn-info mx-1 text-white" asp-for="Adminnotes" type="button" name="licensedoc" id="flexCheckDefault">View</button>
+            <div class="col-md-12 ">
+                <div class="row" > 
+                    <div class="col-md-3">
+                        <div class="form-check mx-2">
+                            <input class="form-check-input agreement-checkbox" asp-for="Isbackgrounddoc" type="checkbox" id="Isbackgrounddoc">
+                            <label class="form-check-label" for="Isbackgrounddoc">
+                                Background Check
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex">
+                        <div class="inputWrapper">
+                            <input disabled class="fileInput btn btn-info" asp-for="BackGrounddoc" type="file" name="BackGrounddoc" />
+                            <span class="btn btn-info text-white upload-button">Upload</span>
+                        </div>
+                        <a class="btn btn-info mx-2 text-white view-button" style="display:none;">View</a>
 
+                        <!-- Display uploaded file details -->
+                        <div class="file-details" style="display:none;">
+                            <p><span class="file-name"></span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-12 d-flex">
-                <div class="form-check mx-2">
-                    <input class="form-check-input" asp-for="Adminnotes" type="checkbox" name="Isnondisclosuredoc" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Non-disclosure Agreement
-                    </label>
-                </div>
-                <div class="inputWrapper">
-                    <input class="fileInput btn btn-info" asp-for="NonDisclosuredoc" type="file" name="file1" />
-                    <span class="btn btn-info text-white">Upload</span>
-                </div>
-                <button class="btn btn-info mx-1 text-white" asp-for="Adminnotes" type="button" name="licensedoc" id="flexCheckDefault">View</button>
 
-            </div>
-            <div class="col-md-12 d-flex">
-                <div class="form-check mx-2">
-                    <input class="form-check-input" asp-for="Adminnotes" type="checkbox" name="licensedoc" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        License Document
-                    </label>
-                </div>
-                <div class="inputWrapper">
-                    <input class="fileInput btn btn-info" asp-for="Licensedoc" type="file" name="file1" />
-                    <span class="btn btn-info text-white">Upload</span>
-                </div>
-                <button class="btn btn-info mx-1 text-white" asp-for="Adminnotes" type="button" name="licensedoc" id="flexCheckDefault">View</button>
+            <div class="col-md-12 ">
+                <div class="row" > 
+                    <div class="col-md-3">
+                        <div class="form-check mx-2">
+                            <input class="form-check-input agreement-checkbox" asp-for="Istrainingdoc" type="checkbox"  id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                HIPAA Compliance
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex">
+                        <div class="inputWrapper">
+                            <input disabled class="fileInput btn btn-info" asp-for="Trainingdoc" type="file" name="Trainingdoc" />
+                            <span class="btn btn-info text-white upload-button">Upload</span>
+                        </div>
+                        <a class="btn btn-info mx-2 text-white view-button" style="display:none;">View</a>
 
+                        <!-- Display uploaded file details -->
+                        <div class="file-details" style="display:none;">
+                            <p><span class="file-name"></span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <div class="col-md-12 ">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-check mx-2">
+                            <input  class="form-check-input agreement-checkbox" asp-for="Isnondisclosuredoc" type="checkbox" id="Isnondisclosuredoc">
+                            <label class="form-check-label" for="Isnondisclosuredoc">
+                                Non-disclosure Agreement
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex">
+                        <div class="inputWrapper">
+                            <input disabled class="fileInput btn btn-info" asp-for="NonDisclosuredoc" type="file" name="NonDisclosuredoc" />
+                            <span class="btn btn-info text-white upload-button">Upload</span>
+                        </div>
+                        <a class="btn btn-info mx-2 text-white view-button" style="display:none;">View</a>
+
+                        <!-- Display uploaded file details -->
+                        <div class="file-details" style="display:none;">
+                            <p><span class="file-name"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 ">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-check mx-2">
+                            <input class="form-check-input agreement-checkbox" asp-for="Islicensedoc" type="checkbox" id="Islicensedoc">
+                            <label class="form-check-label" for="Islicensedoc">
+                                License Document
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex">
+                        <div class="inputWrapper">
+                            <input disabled class="fileInput btn btn-info" asp-for="Licensedoc" type="file" name="Licensedoc" />
+                            <span class="btn btn-info text-white upload-button">Upload</span>
+                        </div>
+                        <a class="btn btn-info mx-2 text-white view-button" style="display:none;">View</a>
+
+                        <!-- Display uploaded file details -->
+                        <div class="file-details" style="display:none;">
+                            <p><span class="file-name"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             
 @*            <div class="text-end my-4">
                 <a onclick="enable_disable_mailBilling()" id="edit1" class="btn btn-info text-white p-2">
@@ -330,6 +399,64 @@
 
 
         $(function () {
+
+            $('.regionbox').on('change', function () {
+                event.preventDefault();
+                let checkboxes = document.querySelectorAll('.regionbox:checked');
+                let regionIds = [];
+                checkboxes.forEach((checkbox) => {
+                    regionIds.push(checkbox.value);
+                });
+                document.querySelector('#regionids').value = regionIds.join(',');
+                console.log(document.querySelector('#regionids').value);
+            });
+
+            $('.agreement-checkbox').on('change', function () {
+                var isChecked = $(this).prop('checked');
+                var $fileInput = $(this).closest('.row').find('.fileInput');
+
+                console.log($fileInput);
+
+                $fileInput.prop('disabled', !isChecked);
+            });
+
+
+            $('.fileInput').on('change', function () {
+                var file = $(this)[0].files[0];
+                var $fileDetails = $(this).closest('.inputWrapper').siblings('.file-details');
+                var $viewButton = $(this).closest('.inputWrapper').siblings('.view-button');
+                console.log($viewButton);
+
+                if (file) {
+                    $viewButton.show();
+                    $fileDetails.show();
+                    $fileDetails.find('.file-name').text(file.name);
+                }
+            });
+
+            $('.view-button').on('click', function () {
+                var $fileInput = $(this).siblings('.inputWrapper').find('.fileInput')[0];
+                var file = $fileInput.files[0];
+                if (file) {
+                    var fileType = file.type;
+                    if (fileType === 'application/pdf') {
+                        // Handle PDF file view
+                        var link = document.createElement('a');
+                        link.href = e.target.result;
+                        link.download = file.name;
+                        document.body.appendChild(link)
+                            ;
+                        link.click();
+                        document.body.removeChild(link)
+                    } else {
+                        // Handle other file types (e.g., prompt download)
+                        alert('Download file: ' + file.name);
+                    }
+                }
+            });
+
+
+
             var canvas = $('#signature-pad')[0];
             var ctx = canvas.getContext('2d');
             var drawing = false;
@@ -357,6 +484,7 @@
                 $('#clear-button').show();
                 $('#undo-button').show();
                 $('#save-button').show();
+                
                 canvas.style.display = 'block';
             });
 
@@ -387,14 +515,8 @@
                 updateSaveButtonState();
             });
 
-            $('#undo-button').on('click', function () {
-                if (strokes.length > 0) {
-                    ctx.putImageData(strokes.pop(), 0, 0);
-                    updateSaveButtonState();
-                }
-            });
-
             $('#save-button').on('click', function () {
+                $('#saved').show();
                 scaleUp(canvas, 1);
                 var dataURL = canvas.toDataURL("image/png");
                 $('#signature-data').val(dataURL); // Set the value of the hidden input field

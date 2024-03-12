@@ -87,17 +87,23 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        [HttpPost]
         #region PhysicianAddEdit
+        [HttpPost]
         public async Task<IActionResult> PhysicianAddEdit(Physicians physicians)
         {
             //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
+           // bool b = physicians.Isagreementdoc[0];
+
           if(ModelState.IsValid)
             {
-                _physicianRepository.PhysicianAddEdit(physicians, CV.ID());
+              await  _physicianRepository.PhysicianAddEdit(physicians, CV.ID());
 
+            }
+            else
+            {
+                return View("../AdminViews/Physician/PhysicianAddEdit",physicians);
             }
            
             return View("../AdminViews/Physician/PhysicianAddEdit");

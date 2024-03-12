@@ -10,7 +10,7 @@ namespace AdminHalloDoc.Entities.ViewModel
     public class CM
     {
         #region UploadFile
-        public static string UploadProviderDoc(IFormFile UploadFile, int Physicianid)
+        public static string UploadProviderDoc(IFormFile UploadFile, int Physicianid, string FileName)
         {
             string upload_path = null;
             if (UploadFile != null)
@@ -21,7 +21,7 @@ namespace AdminHalloDoc.Entities.ViewModel
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
-                string newfilename = $"{Path.GetFileNameWithoutExtension(UploadFile.FileName)}.{Path.GetExtension(UploadFile.FileName).Trim('.')}";
+                string newfilename = FileName;
 
                 string fileNameWithPath = Path.Combine(path, newfilename);
                 upload_path = FilePath.Replace("wwwroot\\Upload\\Physician\\", "/Upload/Physician/") + "/" + newfilename;

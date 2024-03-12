@@ -33,7 +33,7 @@ namespace AdminHalloDoc.Entities.ViewModel
         }
         public enum AdminStatus
         {
-            Pending,            Active ,            NotActive
+            Pending = 1,            Active ,            NotActive
 
         }
         public static int FindStatus(int status)

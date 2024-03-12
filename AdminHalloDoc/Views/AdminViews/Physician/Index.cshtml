@@ -1,9 +1,4 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians>;
 @{
     var status = "null";
@@ -65,8 +60,12 @@
                             <td class="table-text px-3 text-center justify-content-center" align="center"  scope="row" data-label="Created Date">
 
                                 @{
-                                        var check = item.notification[0];
-                                    <input class="form-check-input form-check-inputs" id="@item.notificationid" type="checkbox" value="" @(check ? "checked" : "")>
+                                    var check = false;
+                                    if (item.notification != null)
+                                    {
+                                         check = item.notification[0];
+                                    }
+                                    <input class="form-check-input form-check-inputs" id="@item.Physicianid" type="checkbox" value="" @(check ? "checked" : "")>
                                 }
 
                                     <input class="RequestwisefilesId" type="hidden" value="@item.Physicianid">
@@ -74,7 +73,7 @@
                             <td scope="row" data-label="Created Date">@item.Firstname  @item.Lastname</td>
                             <td scope="row" data-label="Created Date">@item.role</td>
                             <td scope="row" data-label="Created Date">@item.Isnondisclosuredoc</td>
-                            <td scope="row" data-label="Created Date">@item.Status</td>
+                            <td scope="row" data-label="Created Date"> @Enum.GetName(typeof(AdminStatus), item.Status)</td>
                             <td class=" d-flex" data-label="Document">
 
                                 <button data-bs-toggle="modal" data-bs-id="@item.Physicianid" data-bs-email="@item.Email" data-bs-target="#myModal" class="btn btn-outline-info btn-sm document-button mx-1">

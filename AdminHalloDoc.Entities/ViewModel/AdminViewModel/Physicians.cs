@@ -37,13 +37,17 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 
         public string? Adminnotes { get; set; }
 
-        public BitArray? Isagreementdoc { get; set; }
 
-        public BitArray? Isbackgrounddoc { get; set; }
 
-        public BitArray? Istrainingdoc { get; set; }
+        public bool Isagreementdoc { get; set; } 
 
-        public BitArray? Isnondisclosuredoc { get; set; }
+        public bool Isbackgrounddoc { get; set; }
+
+        public bool Istrainingdoc { get; set; }
+
+        public bool Isnondisclosuredoc { get; set; }
+        public bool Islicensedoc { get; set; }
+
 
         public string? Address1 { get; set; }
 
@@ -76,7 +80,6 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 
         public string? Npinumber { get; set; }
 
-        public BitArray? Islicensedoc { get; set; }
 
         public string? Signature { get; set; }
         public IFormFile? SignatureFile { get; set; }
@@ -88,7 +91,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? Syncemailaddress { get; set; }
         public IFormFile? Agreementdoc { get; set; }
         public IFormFile? NonDisclosuredoc { get; set; }
-        public IFormFile? Strainingdoc { get; set; }
+        public IFormFile? Trainingdoc { get; set; }
         public IFormFile? BackGrounddoc { get; set; }
         public IFormFile? Licensedoc { get; set; }
         public List<Regions>? Regionids { get; set; }
