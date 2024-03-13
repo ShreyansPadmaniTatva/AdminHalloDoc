@@ -43,6 +43,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                         where r.Adminid == UserId
                                         select new ViewAdminProfile
                                         {
+                                            
                                             Roleid = r.Roleid,
                                             AdminId = r.Adminid,
                                             UserName = asp.Username,

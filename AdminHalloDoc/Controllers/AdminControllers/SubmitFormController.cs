@@ -1,4 +1,5 @@
 ﻿using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
@@ -88,13 +89,67 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region Encounter
-        public async Task<IActionResult> Encounter()
+
+        #region Encounter_View
+        public async Task<IActionResult> Encounter(int id)
         {
 
-            //ViewDocuments v = await _viewActionRepository.GetDocumentByRequest(id);
-            return View("../AdminViews/ViewAction/Encounter");
+            ViewEncounter v =  _viewActionRepository.GetEncounterDetailsByRequestID(id);
+            return View("../AdminViews/ViewAction/Encounter",v);
         }
         #endregion
+
+
+        public IActionResult EncounterEdit(ViewEncounter model)
+        {
+
+            
+
+            bool data = _viewActionRepository.EditEncounterDetails(model, CV.ID());
+            if (data)
+            {
+
+
+                TempData["Status"] = "Encounter Changes Saved..";
+            }
+            else
+            {
+                TempData["Status"] =  "Encounter Changes Not Saved";
+            }
+
+            return RedirectToAction("Encounter", new { id = model.Requesid });
+
+        }
+
+        #region ACTION-FINALIZE
+        public IActionResult Finalize(ViewEncounter model)
+        {
+            bool data = _viewActionRepository.EditEncounterDetails(model, CV.ID());
+            if (data)
+            {
+                bool final = _viewActionRepository.CaseFinalized(model, CV.ID());
+                if (final)
+                {
+                    TempData["Status"] = "Case Is Finalized";
+                    return RedirectToAction("Index", "AdminDashboard");
+                }
+                else
+                {
+                    TempData["Status"] = "Case Is not Finalized";
+                    return View("../AdminSite/Action/Encounter", model);
+                }
+
+            }
+            else
+            {
+                TempData["Status"] = "Case Is not Finalized";
+                return View("../AdminSite/Action/Encounter", model);
+            }
+
+        }
+        #endregion
+
+#endregion
 
     }
 }

@@ -7,6 +7,7 @@ using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Ocsp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewAdminProfile;
+using static AdminHalloDoc.Entities.ViewModel.Constant;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -279,6 +281,269 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             return false;
         }
         #endregion
+
+        #region GetPhysicianById
+        public async Task<Physicians> GetPhysicianById(int id)
+        {
+
+
+                 Physicians pl = await (from r in _context.Physicians
+                                        join Aspnetuser in _context.Aspnetusers
+                                        on r.Aspnetuserid equals Aspnetuser.Id into aspGroup
+                                        from asp in aspGroup.DefaultIfEmpty()
+                                        join Notifications in _context.Physiciannotifications
+                                         on r.Physicianid equals Notifications.Physicianid into PhyNGroup
+                                         from nof in PhyNGroup.DefaultIfEmpty()
+                                         join role in _context.Roles
+                                         on r.Roleid equals role.Roleid into roleGroup
+                                         from roles in roleGroup.DefaultIfEmpty()
+                                         where r.Physicianid == id
+                                         select new Physicians
+                                         {
+                                             UserName = asp.Username,
+                                             Roleid = r.Roleid,
+                                             Status = r.Status,
+                                             notificationid = nof.Id,
+                                             Createddate = r.Createddate,
+                                             Physicianid = r.Physicianid,
+                                             Address1 = r.Address1,
+                                             Address2 = r.Address2,
+                                             Adminnotes = r.Adminnotes,
+                                             Altphone = r.Altphone,
+                                             Businessname = r.Businessname,
+                                             Businesswebsite = r.Businesswebsite,
+                                             City = r.City,
+                                             Firstname = r.Firstname,
+                                             Lastname = r.Lastname,
+                                             notification = nof.Isnotificationstopped,
+                                             role = roles.Name,
+                                             Email = r.Email,
+                                             Photo = r.Photo,
+                                             Signature = r.Signature,
+                                             Isagreementdoc = r.Isagreementdoc[0],
+                                             Isnondisclosuredoc = r.Isnondisclosuredoc[0],
+                                             Isbackgrounddoc = r.Isbackgrounddoc[0],
+                                             Islicensedoc = r.Islicensedoc[0],
+                                             Istrainingdoc = r.Istrainingdoc[0]
+
+                                         })
+                                        .FirstOrDefaultAsync();
+
+            List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians.Regions> regions = new List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians.Regions>();
+
+            regions =  _context.Physicianregions
+                  .Where(r => r.Physicianid == pl.Physicianid)
+                  .Select(req => new AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians.Regions()
+                  {
+                      regionid = req.Regionid
+                  })
+                  .ToList();
+
+            pl.Regionids = regions;
+
+            return pl;
+
+        }
+        #endregion
+
+        #region Put_Profile
+
+        #region SavePhysicianInfo
+        public async Task<bool> SavePhysicianInfo(Physicians vm)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Physicians
+                        .Where(W => W.Physicianid == vm.Physicianid)
+                        .FirstOrDefaultAsync();
+                    Aspnetuser U = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Id == DataForChange.Aspnetuserid);
+
+                    if (DataForChange != null)
+                    {
+
+                        U.Username = vm.UserName;
+                        DataForChange.Status = vm.Status;
+                        DataForChange.Roleid = vm.Roleid;
+
+
+                        _context.Physicians.Update(DataForChange);
+                        _context.Aspnetusers.Update(U);
+                        _context.SaveChanges();
+
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        //#region Edit_Admin_ProfileAsync
+
+        //public async Task<bool> EditAdminProfileAsync(ViewAdminProfile vm)
+        //{
+        //    try
+        //    {
+        //        if (vm == null)
+        //        {
+        //            return false;
+        //        }
+        //        else
+        //        {
+
+        //            var DataForChange = await _context.Admins
+        //                     .Where(W => W.Adminid == vm.AdminId)
+        //                     .FirstOrDefaultAsync();
+
+        //            if (DataForChange != null)
+        //            {
+
+        //                DataForChange.Email = vm.Email;
+        //                DataForChange.Firstname = vm.Firstname;
+        //                DataForChange.Lastname = vm.Lastname;
+        //                DataForChange.Mobile = vm.Mobile;
+
+
+        //                _context.Admins.Update(DataForChange);
+        //                _context.SaveChanges();
+
+
+        //                List<int> regions = await _context.Adminregions
+        //                   .Where(r => r.Adminid == vm.AdminId)
+        //                   .Select(req => req.Regionid)
+        //                   .ToListAsync();
+
+        //                List<int> priceList = vm.Regionsid.Split(',').Select(int.Parse).ToList();
+        //                foreach (var item in priceList)
+        //                {
+        //                    if (regions.Contains(item))
+        //                    {
+        //                        regions.Remove(item);
+        //                    }
+        //                    else
+        //                    {
+        //                        Adminregion ar = new Adminregion();
+        //                        ar.Regionid = item;
+        //                        ar.Adminid = (int)vm.AdminId;
+        //                        _context.Adminregions.Update(ar);
+        //                        await _context.SaveChangesAsync();
+        //                        regions.Remove(item);
+
+        //                    }
+        //                }
+        //                if (regions.Count > 0)
+        //                {
+        //                    foreach (var item in regions)
+        //                    {
+        //                        Adminregion ar = await _context.Adminregions.Where(r => r.Adminid == vm.AdminId && r.Regionid == item).FirstAsync();
+        //                        _context.Adminregions.Remove(ar);
+        //                        await _context.SaveChangesAsync();
+        //                    }
+        //                }
+
+        //                return true;
+        //            }
+        //            else
+        //            {
+        //                return false;
+        //            }
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //    }
+
+        //}
+
+        //#endregion
+
+        //#region Edit_Billing_InfoAsync
+        //public async Task<bool> EditBillingInfoAsync(ViewAdminProfile vm)
+        //{
+        //    try
+        //    {
+        //        if (vm == null)
+        //        {
+        //            return false;
+        //        }
+        //        else
+        //        {
+        //            var DataForChange = await _context.Admins
+        //                .Where(W => W.Adminid == vm.AdminId)
+        //                .FirstOrDefaultAsync();
+
+        //            if (DataForChange != null)
+        //            {
+
+        //                DataForChange.Address1 = vm.Address1;
+        //                DataForChange.Address2 = vm.Address2;
+        //                DataForChange.City = vm.City;
+        //                DataForChange.Mobile = vm.Mobile;
+
+
+        //                _context.Admins.Update(DataForChange);
+        //                _context.SaveChanges();
+
+
+        //                return true;
+        //            }
+        //            else
+        //            {
+        //                return false;
+        //            }
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //    }
+        //}
+        //#endregion
+
+        #region Change_Password
+        public async Task<bool> ChangePasswordAsync(string password, int Physicianid)
+        {
+            var hasher = new PasswordHasher<string>();
+
+
+            var req = await _context.Physicians
+                .Where(W => W.Physicianid == Physicianid)
+                    .FirstOrDefaultAsync();
+
+
+            if (req != null)
+            {
+            var U = await _context.Aspnetusers.Where(m => m.Id == req.Aspnetuserid).FirstOrDefaultAsync();
+                U.Passwordhash = hasher.HashPassword(null, password);
+                _context.Aspnetusers.Update(U);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+
+        }
+        #endregion
+
+        #endregion
+
 
     }
 }

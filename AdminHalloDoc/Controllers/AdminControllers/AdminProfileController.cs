@@ -26,7 +26,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         public async Task<IActionResult> Index()
         {
-            ViewAdminProfile p = await _myProfileRepository.GetProfileDetails(6);
+            ViewAdminProfile p = await _myProfileRepository.GetProfileDetails( Convert.ToInt32( CV.UserID()));
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
             return  View("../AdminViews/Profile/Index",p);

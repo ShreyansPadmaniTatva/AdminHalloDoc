@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
-    public class Encounter
+    public class ViewEncounter
     {
+        public bool? Isfinalize { get; set; }
+        public int EncounterID { get; set; } 
         public int? Requesid { get; set; }
         public int? RequesClientid { get; set; }
         public string? FirstName { get; set; }

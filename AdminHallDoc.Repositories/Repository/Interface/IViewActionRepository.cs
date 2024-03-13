@@ -30,5 +30,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Boolean SendAgreement_Reject(int RequestID, string Notes);
         Task<bool> ClearCase(int RequestID);
         Task<bool> CloseCase(int RequestID);
+        ViewEncounter GetEncounterDetailsByRequestID(int RequestID);
+        bool EditEncounterDetails(ViewEncounter Data, string id);
+        bool CaseFinalized(ViewEncounter model, string id);
     }
 }

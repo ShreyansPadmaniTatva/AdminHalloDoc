@@ -1,7 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Encounter;
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewEncounter;
 @{
 }
 <div class="container" >
@@ -14,12 +14,13 @@
         </div>
     </div>
     <div class="card border-0 shadow p-4 mb-5  rounded">
-        <form asp-action="SaveViewcase" asp-controller="ViewAction" class="row g-3 " enctype="multipart/form-data">
+        <form asp-action="EncounterEdit" asp-controller="SubmitForm" class="row g-3 " enctype="multipart/form-data">
            <div class="text-center text-info " >
                 <h1 class="fw-bold my-2">Medical Report - Confidential</h1>
            </div>
             <input asp-for="RequesClientid" name="RequesClientid" type="hidden">
-
+            <input type="hidden" asp-for="Requesid" />
+            <input type="hidden" asp-for="EncounterID" />
            
 
             <div class="col-md-6 form-floating  ">
@@ -184,14 +185,21 @@
                 <label for="floatingInput">Followup </label>
                 <span asp-validation-for="Followup" class="text-danger"></span>
             </div>
-           
 
+            <div class="card-footer border-0 bg-transparent text-end">
+                <button type="submit" class="btn btn-info text-white">Save Changes</button>
+                @{
+                    if (Model.Isfinalize == false)
+                    {
+                        <button type="submit" value="Finalize" asp-action="Finalize" asp-controller="SubmitForm" class="btn btn-danger btn-cancel ">Finalize</button>
+                    }
+
+                }
+
+                <a class="btn btn-outline-danger btn-cancel " asp-action="Index" asp-controller="AdminDashboard">
+                    cancel
+                </a>
+            </div>
         </form>
-        <div class="text-end my-4">
-           
-            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-info text-white"> Save Chnages </a>
-            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-primary"> Finalize </a>
-            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-outline-info"> Cancel </a>
-        </div>
     </div>
 </div>

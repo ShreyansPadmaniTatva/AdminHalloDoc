@@ -1,4 +1,5 @@
-﻿using AdminHalloDoc.Entities.ViewModel;
+﻿using AdminHalloDoc.Entities.Models;
+using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
@@ -80,7 +81,10 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
             else
             {
+
                 ViewData["PhysicianAccount"] = "Edit";
+                Physicians v = await _physicianRepository.GetPhysicianById((int)id);
+                return View("../AdminViews/Physician/PhysicianAddEdit",v);
 
             }
             return View("../AdminViews/Physician/PhysicianAddEdit");
@@ -135,6 +139,62 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
 
             return RedirectToAction("PhysicianAll");
+        }
+        #endregion
+
+        #region Update_Physician_Profile
+
+
+        public async Task<IActionResult> SavePhysicianInfo(Physicians physicians)
+        {
+
+
+            bool data = await _physicianRepository.SavePhysicianInfo(physicians);
+            if (data)
+            {
+                TempData["Status"] = "Administration Information Changed...";
+            }
+            else
+            {
+                TempData["Status"] = "Imformation not Changed properly...";
+            }
+
+            return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+        }
+        public async Task<IActionResult> EditBillingInfo(ViewAdminProfile vm)
+        {
+
+
+
+            bool data = await _myProfileRepository.EditBillingInfoAsync(vm);
+            if (data)
+            {
+                TempData["Status"] = "Billing Information Changed...";
+            }
+            else
+            {
+                TempData["Status"] = "Billing not Changed properly...";
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> ResetPassAdmin(string password, int Physicianid)
+        {
+
+
+
+            bool data = await _physicianRepository.ChangePasswordAsync(password, Physicianid);
+            if (data)
+            {
+                TempData["Status"] = "Password changed Successfully...";
+            }
+            else
+            {
+                TempData["Status"] = "Password not Changed...";
+            }
+
+            return RedirectToAction("PhysicianProfile", new { id = Physicianid });
         }
         #endregion
 
