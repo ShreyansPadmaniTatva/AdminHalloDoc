@@ -1,0 +1,129 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var enumData = from AccountType e in Enum.GetValues(typeof(AccountType))
+                   select new
+                   {
+                       ID = (int)e,
+                       Name = e.ToString()
+                   };
+    var status = "null";
+    if (TempData["Status"] == null)
+    {
+        status = "null";
+    }
+    else
+    {
+        status = TempData["Status"].ToString();
+
+    }
+
+}
+@using static AdminHalloDoc.Entities.ViewModel.Constant;
+@model List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewUserAcces>;
+<div class="container">
+    <div class="justify-content-between d-flex container-fluid position-relative ">
+        <div class="">
+            <h3 class="fw-bolder">
+                User Access
+            </h3>
+        </div>
+    </div>
+    <div class="card border-0 shadow py-4 mb-5 mx-3 mt-3 rounded">
+        <div class="d-flex justify-content-between" >
+            <div class="text-start mx-2 px-3">
+                <div class="dropdown ">
+                    <select class="form-select form-select-md " data-allow-clear="true" tabindex="-1" id="accounttype"  asp-items="@(new SelectList(enumData,"ID","Name"))" data-control="select2" data-placeholder="Select Level">
+                    </select>
+                </div>
+            </div>
+            <div class="text-end mx-2 px-3">
+                <!-- Button trigger modal -->
+                <a asp-action="CreateRoleAccess" asp-controller="RoleAccess" type="button" id="adminAccount" class="btn btn-outline-info" style="display:none">
+                    Create Admin Account
+                </a>
+                <a asp-action="CreateRoleAccess" asp-controller="RoleAccess" type="button" id="providerAccount" class="btn btn-outline-info" style="display:none">
+                    Create Provider Account
+                </a>
+            </div>
+        </div>
+       
+        <div class="table-responsive">
+            <table class="table table-responsive mt-3 p-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Account Type</th>
+                        <th scope="col">Account POC</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Open Request</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider mx-5">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="@Enum.GetName(typeof(AccountType), item.accounttype)">
+                            <td class="mobile-hide" data-label="Current Status"> @Enum.GetName(typeof(AccountType), item.accounttype)</td>
+                            <td scope="row" data-label="Created Date"> @item.FirstName</td>
+                            <td scope="row" data-label="Created Date"> @item.Mobile</td>
+                            <td scope="row" data-label="Created Date">  @Enum.GetName(typeof(AdminStatus), item.status)</td>
+                            <td scope="row" data-label="Created Date"> @item.status)</td>
+                            <td class="mobile-hide" data-label="Document">
+                                @if(item.isAdmin){
+                                    <a asp-action="Index" asp-controller="AdminProfile" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">
+                                        Edit a
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="PhysicianProfile" asp-controller="Physician" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">
+                                        Edit p
+                                    </a>
+                                }
+                                
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts
+    {
+
+    <script type="text/javascript">
+
+
+        $('#accounttype').on('change', function () {
+            console.log(56);
+            var Accounttype = $("#accounttype").val();
+            if (Accounttype == 2) {
+                $('#adminAccount').show();
+                $('#providerAccount').hide();
+            } else if (Accounttype == 3) {
+                $('#adminAccount').hide();
+                $('#providerAccount').show();
+            } else {
+                $('#adminAccount').hide();
+                $('#providerAccount').hide();
+            }
+        });
+
+        window.onload = function () {
+            chnageaccount();
+
+            console.log("@status  d");
+            if ("@status" != "null") {
+                savealt("@status")
+            }
+
+        };
+    </script>
+}

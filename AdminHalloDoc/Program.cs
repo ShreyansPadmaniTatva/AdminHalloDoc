@@ -24,7 +24,12 @@ var emailConfig = builder.Configuration
         .GetSection("EmailConfiguration")
         .Get<EmailConfiguration>();
 
+var smsConfig = builder.Configuration
+        .GetSection("SmsConfiguration")
+        .Get<SmsConfiguration>();
+
 builder.Services.AddSingleton(emailConfig);
+builder.Services.AddSingleton(smsConfig);
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IViewActionRepository, ViewActionRepository>();
 builder.Services.AddScoped<IViewNotesRepository, ViewNotesRepository>();
@@ -32,6 +37,7 @@ builder.Services.AddScoped<IMyProfileRepository, MyProfileRepository>();
 builder.Services.AddScoped<IPhysicianRepository, PhysicianRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IRoleAccessRepository, RoleAccessRepository>();
 
 var app = builder.Build();
 

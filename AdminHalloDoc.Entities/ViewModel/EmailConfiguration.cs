@@ -143,6 +143,7 @@ namespace AdminHalloDoc.Entities.ViewModel
         }
 
         #endregion
+
         //public async Task<bool> SendMailAsync(String To, String Subject, String Body, List<string> Attachments)
         //{
         //    MimeMessage message = new MimeMessage();
@@ -183,6 +184,7 @@ namespace AdminHalloDoc.Entities.ViewModel
 
         //    return true;
         //}
+
         #region Encode_Decode
         public string Encode(string encodeMe)
         {

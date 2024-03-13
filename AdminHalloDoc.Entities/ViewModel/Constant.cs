@@ -36,6 +36,13 @@ namespace AdminHalloDoc.Entities.ViewModel
             Pending = 1,            Active ,            NotActive
 
         }
+
+        public enum AccountType
+        {
+            All = 1,            Admin,            Physician,
+            Patient
+        }
+
         public static int FindStatus(int status)
         {
             if (status == 1)

@@ -161,6 +161,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
             return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
         }
+
         public async Task<IActionResult> EditBillingInfo(ViewAdminProfile vm)
         {
 

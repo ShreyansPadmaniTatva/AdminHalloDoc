@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.2" />
     <PackageReference Include="System.Security.Permissions" Version="8.0.0" />
+    <PackageReference Include="Twilio" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
