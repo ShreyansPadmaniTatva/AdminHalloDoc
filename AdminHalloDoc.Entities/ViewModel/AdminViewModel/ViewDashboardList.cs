@@ -33,4 +33,25 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? Physician { get; set;}
 
     }
+    public class PaginatedViewModel
+    {
+        public List<ViewDashboardList>? DashboardList { get; set; }
+        public int CurrentPage { get; set; } = 1;
+        public int TotalPages { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+
+        //Extra Inputs
+        public string? SearchInput { get; set; }
+        public int? RegionId { get; set; }
+        public int? RequestType { get; set; }
+
+        //Count
+        public int NewRequest { get; set; }
+        public int PendingRequest { get; set; }
+        public int ActiveRequest { get; set; }
+        public int ConcludeRequest { get; set; }
+        public int ToCloseRequest { get; set; }
+        public int UnpaidRequest { get; set; }
+
+    }
 }

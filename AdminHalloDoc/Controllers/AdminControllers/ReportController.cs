@@ -1,4 +1,5 @@
 ﻿using AdminHalloDoc.Entities.Data;
+using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
@@ -31,12 +32,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             var v = Encoding.ASCII.GetBytes(HtmlTable);
             return File(Encoding.ASCII.GetBytes(HtmlTable), "application/vnd.ms-excel", "htmltable.xls");
         }
-        public async Task<IActionResult> DownloadExcel(string status)
+        public async Task<IActionResult> DownloadExcel(PaginatedViewModel details, string status)
         {
             try
             {
 
-                var data = await _requestRepository.GetContactAsync("2");
+                var data = await _requestRepository.GetContactAsync("2",details);
                 var workbook = new XLWorkbook();
                 var worksheet = workbook.Worksheets.Add("Data");
 
@@ -51,7 +52,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 worksheet.Cell(1, 9).Value = "Notes";
 
                 int row = 2;
-                foreach (var item in data)
+                foreach (var item in data.DashboardList)
                 {
 
                     worksheet.Cell(row, 1).Value = item.PatientName;

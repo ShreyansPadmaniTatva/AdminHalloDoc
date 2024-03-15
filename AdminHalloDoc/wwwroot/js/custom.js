@@ -24,8 +24,18 @@ $(function () {
         $(this).parent(".file-upload-wrapper").attr("data-text", $(this).val().replace(/.*(\/|\\)/, ''));
     });
  
+    $(".toggle--open").on("click", function () {
+        $("#navlist").attr("data-hidden", "false");
+        $(this).attr("aria-expanded", "true");
+    });
+
+    $(".toggle--close").on("click", function () {
+        $("#navlist").attr("data-hidden", "true");
+        $(".toggle--open").attr("aria-expanded", "false");
+    });
 
 });
+
 
 function oops(title) {
     Swal.fire({

@@ -16,7 +16,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<int> CountConcludeRequest();
         Task<int> CountToCloseRequest();
         Task<int> CountUnPaidRequest();
-        Task<List<ViewDashboardList>> GetContactAsync(string status);
+        Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data);
         Task<Viewcase> GetRequestDetails(int? Requestid);
         Task<Boolean> PutViewcase(Viewcase viewcase);
     }

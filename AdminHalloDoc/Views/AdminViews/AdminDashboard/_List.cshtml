@@ -1,142 +1,19 @@
-﻿@model List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDashboardList>
+﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.PaginatedViewModel;
 @using static AdminHalloDoc.Entities.ViewModel.Constant
 @{
     var Status = -1;
-    if (Model.Count > 0)
+    if (Model.DashboardList.Count > 0)
     {
-        Status = FindStatus(Model[0].Status);
+        Status = FindStatus(Model.DashboardList[0].Status);
     }
     List<string> tdHtmlValues = statusTdHtmlMap.ContainsKey(Status) ? statusTdHtmlMap[Status] : new List<string>();
 }   
 
-<div class="justify-content-between d-flex my-4">
-    <div class="heading d-flex">
-        <h3 class="mb-0 pb-0 top-heading">Patient</h3>  <span class="align-bottom  top-side-heading d-flex flex-column justify-content-end pb-1 px-2 text-primary-emphasis fw-bolder"> (@Enum.GetName(typeof(AdminDashStatus), Status))</span>
-    </div>
-    <din class="d-flex">
-        <span data-bs-toggle="tooltip" data-bs-placement="left" title="Edit">
-            
-        </span>
 
-        <div class="btn btn-info text-white mx-1" data-bs-toggle="modal" data-bs-target="#sendlink">
-            <i class="bi bi-send"></i>
-            <span class="top-btn">
-                send link
-            </span>
-        </div>
-        <div class="btn btn-info text-white mx-1">
-            <i class="bi bi-file-earmark-break"></i>
-            <span class="top-btn">
-                Create Request
-            </span>
-
-        </div>
-        <div class="btn btn-info text-white mx-1">
-            <i class="bi bi-forward"></i>
-            <span class="top-btn">
-                export
-            </span>
-
-        </div>
-        <form id="filterForm" class="mx-1"
-                  asp-action="ExporttoExcel" asp-controller="Report" novalidate="novalidate">
-                <input type="hidden" name="HtmlTable" />
-                <button type="submit" value="1" id="btnsubmit" name="status" class="btn btn-info text-white">
-                    <i class="bi bi-forward-fill"></i>
-                    <span class="top-btn">
-                        export all
-                    </span>
-
-                </button>
-            </form>
-            
-        
-    </din>
-</div>
-<script>
-
-    $(function () {
-
-        $("#btnsubmit").click(function () {
-            document.querySelectorAll('.action').forEach(function (el) {
-                el.style.display = 'none';
-            });
-
-            // Using callback function
-            $("input[name='HtmlTable']").val($("#a1a").html(function () {
-                document.querySelectorAll('.action').forEach(function (el) {
-                    el.style.display = 'none';
-                });
-                // Second line of code runs after the first one is completed
-                // Place the code here that you want to execute after the first line completes
-            }));
-
-            // Using promise
-            $("input[name='HtmlTable']").val($("#a1a").html()).promise().done(function () {
-                document.querySelectorAll('.action').forEach(function (el) {
-                    el.style.display = 'none';
-                });
-                // Second line of code runs after the first one is completed
-                // Place the code here that you want to execute after the first line completes
-            });
-            $(".action").show();
-
-        });
-
-    });
-</script>
-<div class="card border-0 shadow py-2 my-3">
-    <div class="d-flex justify-content-between m-2 table-menu">
-        <div class="starting-bar d-flex">
-            <div class="row">
-                <div class="col-md-6">
-                    <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2 w-100" id="myInput" onkeyup="myFunctiona()" type="text" placeholder="Search" aria-label="Search">
-                    </form>
-                </div>
-                <div class="col-md-6 ">
-                    <div class="dropdown ">
-                      
-                        <select class="form-select form-select-sm " data-allow-clear="true" tabindex="-1" id="Region" onchange="myFunction()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
-                            <option>All Region</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
-        <div class="ending-bar d-flex text-center">
-            <div class="top-tollbar">
-                <button type="button" class="btn btn-light mx-1 border border-1 text-light-emphasis mx-3 f-tollbar all" onclick="filterSelection('all')">All</button>
-            </div>
-
-            <div class="top-tollbar">
-                <div class="p-success">
-                </div>
-                <div type="button" class="btn btn- f-tollbar p-0" onclick="filterSelection('bg-2')">Patient</div>
-            </div>
-            <div class="top-tollbar">
-                <div class=" p-warning ">
-                </div>
-                <button type="button" class="btn btn- f-tollbar p-0" onclick="filterSelection('bg-3')">Family/Friend</button>
-            </div>
-            <div class="top-tollbar">
-                <div class=" p-primary">
-                </div>
-                <button type="button" class="btn btn- f-tollbar" onclick="filterSelection('bg-1')">Business</button>
-            </div>
-            <div class="top-tollbar">
-                <div class=" p-info">
-                </div>
-                <button type="button" class="btn btn- f-tollbar" onclick="filterSelection('bg-4')">Concierge</button>
-            </div>
-
-        </div>
-    </div>
+<div class="card border-0 shadow pb-2 mb-3">
     <div class="table-responsive">
         <div class="accordion accordion-flush" id="accordionFlushExample">
-            @foreach (var item in Model)
+            @foreach (var item in Model.DashboardList)
             {
                     <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-heading-@item.Requestid">
@@ -236,7 +113,7 @@
             }
         </div>
         <div id="a1a" >
-            <table class="table table-responsive" id="table" border="2">
+            <table class="table table-responsive" id="table" >
                 <thead class="fw-lighter">
                     <tr>
                         <th class="d-none"> No. </th>
@@ -251,7 +128,7 @@
                     @{
                         int i = 1;
                     }
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.DashboardList)
                     {
                         <tr class="bg-@item.RequestTypeID  filterDiv @item.RegionID">
                             <td class="d-none"> @i @{
@@ -379,11 +256,29 @@
                 </tbody>
             </table>
         </div>
-      
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-container d-flex justify-content-center">
+                @{
+                    int start;
+                    //<li class="page-item"><a class="page-link">&lt;</a></li>
+                    @for (start = 1; start <= @Model.TotalPages; start++)
+                    {
+                        <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                              asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
+                            <input type="hidden" asp-for="RegionId" />
+                            <input type="hidden" asp-for="RequestType" />
+                            <input type="hidden" asp-for="SearchInput" />
+                            <input type="hidden" asp-for="CurrentPage" value="@start" />
+                        <li class="page-item"><button type="submit" class="@(start == @Model.CurrentPage ? "active" : "") page-link" onclick="pagination(@start)">@start</button></li>
+                        </form>
+
+                    }
+                    //<li class="page-item"><a class="page-link">&gt;</a></li>
+                }
+            </ul>
+        </nav>
     </div>
 </div>
-<div  >
-
 </div>
 <partial name="../ViewAction/_models/_sendlink.cshtml" />
 <script>
@@ -522,13 +417,13 @@
                 // Set focus back to dropdown toggle
                 dropdown.find('.dropdown-toggle').focus();
             });
-            $('#table')
-                .DataTable(
-                    { 
-                        searching: false
-                        , info: false
-                    }
-                );
+            //$('#table')
+            //    .DataTable(
+            //        { 
+            //            searching: false
+            //            , info: false
+            //        }
+            //    );
             $("#table_length").hide();
         });
 </script>

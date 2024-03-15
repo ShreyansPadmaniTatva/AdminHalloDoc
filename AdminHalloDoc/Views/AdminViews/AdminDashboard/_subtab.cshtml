@@ -1,4 +1,5 @@
-﻿
+﻿@using static AdminHalloDoc.Entities.ViewModel.Constant;
+
 <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
              
       asp-action="_SearchResult" asp-controller="AdminDashboard" novalidate="novalidate">
@@ -6,7 +7,7 @@
             <div class="tab ">
     <div class="row mb-3">
         <div class="col-md-2 col-sm-4 col-4 ">
-                <button type="submit" id="new" value="1" name="status" class="local btn alert alert-primary  btn-outline-primary w-100 text-start text-uppercase  a-primary t-tab">
+                <button type="submit" id="new" value="1" name="status" class="local btn alert py-3 fw-bolder alert-new btn-outline-new  w-100 text-start text-uppercase a-danger t-tab">
                 <span class="mx-2 top-icon">
                     <i class="bi bi-plus-circle"></i>
                 </span> New
@@ -16,7 +17,7 @@
             </button>
         </div>
         <div class="col-md-2 col-sm-4 col-4 position-relative">
-                <button type="submit" id="panding" value="2" name="status" class="local btn alert alert-info btn-outline-info w-100 text-start text-uppercase   a-info t-tab">
+                <button type="submit" id="panding" value="2" name="status" class="local btn alert py-3 fw-bolder alert-info btn-outline-info w-100 text-start text-uppercase   a-info t-tab">
                 <span class="mx-2 top-icon">
                     <i class="bi bi-person-workspace"></i>
                 </span> Panding
@@ -26,7 +27,7 @@
             </button>
         </div>
         <div class="col-md-2 col-sm-4 col-4 position-relative">
-                <button type="submit" id="active" value="5,4" name="status" class="local btn alert alert-success btn-outline-success w-100 text-start text-uppercase  a-success t-tab">
+                <button type="submit" id="active" value="5,4" name="status" class="local btn alert py-3 fw-bolder alert-success btn-outline-success w-100 text-start text-uppercase  a-success t-tab">
                 <span class="mx-2 top-icon">
                     <i class="bi bi-arrow-up-right-circle"></i>
                 </span> Active
@@ -36,7 +37,7 @@
             </button>
         </div>
         <div class="col-md-2 col-sm-4 col-4 position-relative">
-                <button type="submit" id="conclude" value="6" name="status" class="local btn alert alert-warning  btn-outline-warning w-100 text-start text-uppercase  a-warning t-tab">
+                <button type="submit" id="conclude" value="6" name="status" class="local btn alert py-3 fw-bolder alert-conclude  btn-outline-conclude w-100 text-start text-uppercase  a-warning t-tab">
                 <span class="mx-2 top-icon">
                     <i class="bi bi-clock-history"></i>
                 </span> Conclude
@@ -46,7 +47,7 @@
             </button>
         </div>
         <div class="col-md-2 col-sm-4 col-4 position-relative">
-                <button type="submit" id="toclose" value="3,7,8" name="status" class="local btn alert alert-danger btn-outline-danger w-100 text-start text-uppercase  a-danger t-tab">
+                <button type="submit" id="toclose" value="3,7,8" name="status" class="local btn alert py-3 fw-bolder alert-primary  btn-outline-primary w-100 text-start text-uppercase  a-primary  t-tab">
                 <span class="mx-2 top-icon">
                     <i class="bi bi-envelope-paper"></i>
                 </span> To Close
@@ -56,7 +57,7 @@
             </button>
         </div>
         <div class="col-md-2 col-sm-4 col-4  position-relative">
-                <button type="submit" id="unpaid" value="9" name="status" class="local btn alert alert-success btn-outline-success w-100 text-start text-uppercase  a-success t-tab">
+                <button type="submit" id="unpaid" value="9" name="status" class="local btn alert py-3 fw-bolder alert-unpaid btn-outline-unpaid w-100 text-start text-uppercase  a-unpaid t-tab">
 
                 <span class="mx-2 top-icon">
                     <i class="bi bi-currency-dollar"></i>
@@ -68,4 +69,50 @@
         </div>
     </div>
 </div>
+
 </form>
+<div class="justify-content-between d-flex my-4">
+    <div class="heading d-flex">
+        <h3 class="mb-0 pb-0 top-heading">Patient</h3>  <span class="align-bottom  top-side-heading d-flex flex-column justify-content-end pb-1 px-2 text-primary-emphasis fw-bolder"> (@Enum.GetName(typeof(AdminDashStatus), 2))</span>
+    </div>
+    <din class="d-flex">
+        <span data-bs-toggle="tooltip" data-bs-placement="left" title="Edit">
+
+        </span>
+
+        <div class="btn btn-info text-white mx-1" data-bs-toggle="modal" data-bs-target="#sendlink">
+            <i class="bi bi-send"></i>
+            <span class="top-btn">
+                send link
+            </span>
+        </div>
+        <div class="btn btn-info text-white mx-1">
+            <i class="bi bi-file-earmark-break"></i>
+            <span class="top-btn">
+                Create Request
+            </span>
+
+        </div>
+        <div class="btn btn-info text-white mx-1">
+            <i class="bi bi-forward"></i>
+            <span class="top-btn">
+                export
+            </span>
+
+        </div>
+        <form id="filterFormabc" class="mx-1"
+              asp-action="ExporttoExcel" asp-controller="Report" novalidate="novalidate">
+            <input type="hidden" name="HtmlTable" />
+            <button type="submit" value="1" id="btnsubmit" name="status" class="btn btn-info text-white">
+                <i class="bi bi-forward-fill"></i>
+                <span class="top-btn">
+                    export all
+                </span>
+
+            </button>
+        </form>
+
+
+    </din>
+</div>
+

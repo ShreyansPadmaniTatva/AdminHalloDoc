@@ -288,7 +288,19 @@
             </tbody>
         </table>
     </div>
-    <div id="daycontainer"></div>
+    <div id="daycontainer" style="display:none;">
+        <div class="schedule">
+            <table class="employee-schedules">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
     </div>
 @section Scripts
     {
@@ -296,7 +308,9 @@
     <script type="text/javascript">
 
         $(function () {
-            
+            const timeSlotsContainer = $('.employee-schedules thead tr');
+            const employeeSchedulesContainer = $('.employee-schedules tbody');
+
             let date = new Date();
             let year = date.getFullYear();
             let month = date.getMonth();
@@ -395,16 +409,39 @@
 
             // Event listener for the "Day" button
             document.getElementById("day").addEventListener("click", () => {
+                $('#monthcontainer').hide();
+                $('#weekviewcontainer').hide();
+                $('#daycontainer').show();
                 // Show day view
                 // You can implement the day view logic here
-                console.log("Day view clicked");
-                manipulate();
+                // Generate time slots
+                for (let i = 0; i < 24; i++) {
+                    const hour = i < 12 ? i === 0 ? 12 : i : i === 12 ? 12 : i - 12;
+                    const amPm = i < 12 ? 'A' : 'P';
+                    
+                    const timeSlot = $('<th>').text(`${hour} ${amPm}`);
+                    timeSlotsContainer.append(timeSlot);
+                }
+
+                // Generate employee schedules
+                const employees = ['Employee 1', 'Employee 2', 'Employee 3', 'Employee 4', 'Employee 5'];
+                employees.forEach(employee => {
+                    const employeeRow = $('<tr>');
+                    employeeRow.append($('<td>').text(employee));
+                    for (let i = 0; i < 24; i++) {
+                        const timeSlot = $('<td>');
+                        employeeRow.append(timeSlot);
+                    }
+                    employeeSchedulesContainer.append(employeeRow);
+                });
             });
 
             // Event listener for the "Week" button
             document.getElementById("week").addEventListener("click", () => {
                 $('#monthcontainer').hide();
                 $('#weekviewcontainer').show();
+                $('#daycontainer').hide();
+
                 // Show week view
                 // You can implement the week view logic here
                 console.log("Week view clicked");
@@ -564,6 +601,8 @@
             document.getElementById("month").addEventListener("click", () => {
                 $('#monthcontainer').show();
                 $('#weekviewcontainer').hide();
+                $('#daycontainer').hide();
+
                 // Show month view
                 // You can implement the month view logic here
                 console.log("Month view clicked");

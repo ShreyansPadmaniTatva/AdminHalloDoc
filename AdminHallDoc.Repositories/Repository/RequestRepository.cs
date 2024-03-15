@@ -96,19 +96,28 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             return count;
         }
 
-        public async Task<List<ViewDashboardList>> GetContactAsync(string status)
+        public async Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data)
         {
-            List<int> priceList = status.Split(',').Select(int.Parse).ToList();
+            List<int> statusdata = status.Split(',').Select(int.Parse).ToList();
 
 
-            return await (from req in _context.Requests
+           List<ViewDashboardList> allData = await (from req in _context.Requests
                     join reqClient in _context.Requestclients
                     on req.Requestid equals reqClient.Requestid into reqClientGroup
                     from rc in reqClientGroup.DefaultIfEmpty()
                     join phys in _context.Physicians
                     on req.Physicianid equals phys.Physicianid into physGroup
                     from p in physGroup.DefaultIfEmpty()
-                    where priceList.Contains(req.Status)
+                    join reg in _context.Regions
+                    on rc.Regionid equals reg.Regionid into RegGroup
+                    from rg in RegGroup.DefaultIfEmpty()
+                    where statusdata.Contains(req.Status) && (data.SearchInput == null ||
+                    rc.Firstname.Contains(data.SearchInput) || rc.Lastname.Contains(data.SearchInput) ||
+                    req.Firstname.Contains(data.SearchInput) || req.Lastname.Contains(data.SearchInput) ||
+                    rc.Email.Contains(data.SearchInput) || rc.Phonenumber.Contains(data.SearchInput) ||
+                    rc.Address.Contains(data.SearchInput) || rc.Notes.Contains(data.SearchInput) ||
+                    p.Firstname.Contains(data.SearchInput) || p.Lastname.Contains(data.SearchInput) ||
+                    rg.Name.Contains(data.SearchInput)) && (data.RegionId == null || rc.Regionid == data.RegionId)
                     select new ViewDashboardList
                     {
                         Physician = p.Firstname + " " + p.Lastname,
@@ -128,7 +137,21 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         RequestorPhoneNumber = req.Phonenumber
                     }).ToListAsync();
 
-           
+            int totalItemCount = allData.Count();
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
+
+            List<ViewDashboardList> list1 = allData.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();
+
+
+            PaginatedViewModel paginatedViewModel = new PaginatedViewModel
+            {
+                DashboardList = list1,
+                CurrentPage = data.CurrentPage,
+                TotalPages = totalPages,
+                PageSize = 10,
+                SearchInput = data.SearchInput
+            };
+            return paginatedViewModel;
         }
       
         public async Task<Viewcase> GetRequestDetails(int? RequestClientid)

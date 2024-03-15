@@ -2,13 +2,14 @@
     string path = Context.Request.Path;
 }
 <nav class="navbar p-0 pt-2 px-5 navbar-expand-lg bg-body shadow mb-5  rounded">
-    <div class="container-fluid justify-content-end">
+    <div class="container-fluid justify-content-">
         <!-- <a class="navbar-brand" href="#">Patient_</a> -->
-        <button class="navbar-toggler text-end my-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-bold">
+        
+        <div class="" id="navbarSupportedContent">
+            <ul id="navlist" data-hidden="true" class="navlist navbar-nav me-auto mb-2 mb-lg-0 fw-bold">
+                <button class="nav-toggle toggle--close" aria-label="close menu">
+                    &#x2573;
+                </button>
                 <li class="nav-item">
                     <a class="nav-link @(path.StartsWith("/AdminDashboard") || path.StartsWith("/ViewAction") || path.StartsWith("/SubmitForm")  ? "active" : "") px-3" aria-current="page" asp-controller="AdminDashboard" asp-action="Index">Dashboard</a>
                 </li>

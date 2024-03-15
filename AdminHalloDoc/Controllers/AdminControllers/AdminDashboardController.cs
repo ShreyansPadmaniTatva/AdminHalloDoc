@@ -34,7 +34,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             ViewBag.CountConcludeRequest = await _requestRepository.CountConcludeRequest();
             ViewBag.CountToCloseRequest = await _requestRepository.CountToCloseRequest();
             ViewBag.CountUnPaidRequest = await _requestRepository.CountUnPaidRequest();
-
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            ViewBag.CaseReasonComboBox = await _requestRepository.CaseReasonComboBox();
             return View("../AdminViews/AdminDashboard/Index");
         }
         #endregion
@@ -42,15 +43,16 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region _SearchResult
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> _SearchResultAsync(string status)
+        public async Task<IActionResult> _SearchResultAsync(PaginatedViewModel data, string status)
         {
+
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.CaseReasonComboBox = await _requestRepository.CaseReasonComboBox();
             if (status == null)
             {
                 status = "1";
             }
-            var r = await _requestRepository.GetContactAsync(status);
+            var r = await _requestRepository.GetContactAsync(status,data);
             return PartialView("../AdminViews/AdminDashboard/_List", r);
         }
         #endregion
