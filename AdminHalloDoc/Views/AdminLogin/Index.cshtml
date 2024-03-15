@@ -41,8 +41,11 @@
                         <label for="floatingInput">User Name </label>
                     </div>
                     <div class="form-floating input-group with-icon mb-3    ">
-                        <input asp-for="Passwordhash" value="123" required class="form-control rounded" name="Passwordhash" type="text" placeholder=Suchtext autocomplete=off>
-                        <i class="bi bi-person"></i>
+                        <input asp-for="Passwordhash" value="123" id="password" required class="form-control rounded" name="Passwordhash" type="password" placeholder=Suchtext autocomplete=off>
+                        <button type="button" class="btn btn-light" onclick="passtoggle()" style="position:absolute;right:0;top:20%;">
+                            <i class="showImg bi bi-person"></i>
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
                         <label for="floatingInput">PassWord </label>
                     </div>
                     <div class="form-floating my-3">
@@ -72,6 +75,21 @@
     </div>
 </div>
 <script>
+
+    function passtoggle() {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+            x.type = "text";
+            document.querySelectorAll(".fa-eye").forEach(i => i.style.display = "none");
+            document.querySelectorAll(".fa-eye-slash").forEach(i => i.style.display = "block");
+        }
+        else {
+            x.type = "password";
+            document.querySelectorAll(".fa-eye-slash").forEach(i => i.style.display = "none");
+            document.querySelectorAll(".fa-eye").forEach(i => i.style.display = "block");
+        }
+    }
+
     window.onload = function () {
         console.log("@status  d");
         if ("@status" != "null") {

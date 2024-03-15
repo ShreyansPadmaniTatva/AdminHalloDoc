@@ -14,7 +14,7 @@ namespace AdminHalloDoc.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            return View();  
         }
         public IActionResult SendSMS()
         {
@@ -24,9 +24,9 @@ namespace AdminHalloDoc.Controllers
 
             TwilioClient.Init(_smsConfiguration.AccountSid, _smsConfiguration.AuthToken);
             var message = MessageResource.Create(
-                body: "Hi, there shreyans!!",
+                body: "Hi, there i am shreyans!!",
                 from: new Twilio.Types.PhoneNumber(_smsConfiguration.Phonenumber),
-                to: new Twilio.Types.PhoneNumber("+918849999677") //add receiver's phone number
+                to: new Twilio.Types.PhoneNumber("+919537290206") //add receiver's phone number
             );
             Console.WriteLine(message.ErrorCode);
             return View(message);

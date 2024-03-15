@@ -1,0 +1,583 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+   
+    var status = "null";
+    if (TempData["Status"] == null)
+    {
+        status = "null";
+    }
+    else
+    {
+        status = TempData["Status"].ToString();
+
+    }
+
+
+}
+<style>
+    .calendar-container {
+        background: #fff;
+        width: 450px;
+        border-radius: 10px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+        .calendar-container header {
+            display: flex;
+            align-items: center;
+            padding: 25px 30px 10px;
+            justify-content: space-between;
+        }
+
+    header .calendar-navigation {
+        display: flex;
+    }
+
+        header .calendar-navigation span {
+            height: 38px;
+            width: 38px;
+            margin: 0 1px;
+            cursor: pointer;
+            text-align: center;
+            line-height: 38px;
+            border-radius: 50%;
+            user-select: none;
+            color: #aeabab;
+            font-size: 1.9rem;
+        }
+
+    .calendar-navigation span:last-child {
+        margin-right: -10px;
+    }
+
+    header .calendar-navigation span:hover {
+        background: #f2f2f2;
+    }
+
+    header .calendar-current-date {
+        font-weight: 500;
+        font-size: 1.45rem;
+    }
+
+    .calendar-body {
+        padding: 20px;
+    }
+
+        .calendar-body ul {
+            list-style: none;
+            flex-wrap: wrap;
+            display: flex;
+            text-align: center;
+        }
+
+        .calendar-body .calendar-dates {
+            margin-bottom: 20px;
+        }
+
+        .calendar-body li {
+            width: calc(100% / 7);
+            font-size: 1.07rem;
+            color: #414141;
+        }
+
+        .calendar-body .calendar-weekdays li {
+            cursor: default;
+            font-weight: 500;
+        }
+
+        .calendar-body .calendar-dates li {
+            margin-top: 30px;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+    .calendar-dates li.inactive {
+        color: #aaa;
+    }
+
+    .calendar-dates li.active {
+        color: #fff;
+    }
+
+    .calendar-dates li::before {
+        position: absolute;
+        content: "";
+        z-index: -1;
+        top: 50%;
+        left: 50%;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .calendar-dates li.active::before {
+        background: #6332c5;
+    }
+
+    .calendar-dates li:not(.active):hover::before {
+        background: #e4e1e1;
+    }
+</style>
+<div class="container">
+    <div class="justify-content-between d-flex container-fluid  position-relative ">
+        <div class="">
+            <h3 class="fw-bolder">
+               Scheduling
+            </h3>
+        </div>
+        <div class="">
+            <a href="history.back()" class="btn btn-outline-info"> ❮  Back </a>
+        </div>
+    </div>
+    <div class=" border-0  py-1 mx-3 mt-3 rounded">
+        <div class="row" >
+            <div class="col-md-7 mt-2">
+                <div class="dropdown bg-white">
+
+                    <select class="form-select form-control form-select-md p-2" data-allow-clear="true" tabindex="-1" id="Region" onchange="myFunction()" data-control="select2" data-placeholder="Select Level">
+                        <option value="-1">All Region</option>
+                        <option value="1">All Region All Region</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-5 mt-2"> 
+                <div class="d-flex justify-content-end">
+                    <a asp-action="PhysicianProfile" asp-controller="Physician" class="btn btn-info text-white mx-2">
+                        Provider On Call
+                    </a>
+                    <!-- Button trigger modal -->
+                    <a asp-action="PhysicianProfile" asp-controller="Physician" class="btn btn-info text-white  mx-2">
+                        Shift Review
+                    </a>
+                    <a asp-action="PhysicianProfile" asp-controller="Physician" class="btn btn-info text-white  mx-2">
+                        Add New Shift
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row my-4" >
+            <div class="col-md-7 mt-2">
+                <div class="calendar-current-date fs-4 fw-bolder">Dec 2023</div>
+                <div class="text-start my-3 calendar-navigation">
+                    <span id="calendar-prev" class="btn btn-info text-white rounded-circle">❮</span>
+                    <span class="mx-3" ><i class="fa-regular fa-calendar-days"></i></span>
+                    <span id="calendar-next" class="btn btn-info text-white rounded-circle">❯</span>
+                </div>
+            </div>
+            <div class="col-md-5 mt-3">
+                <div class="d-flex justify-content-end">
+                    <div class="alert alert-panding mx-1 px-4" role="alert">
+                    </div>
+                    <span class="mx-1">Panding Shifts</span>
+                    <!-- Button trigger modal -->
+                    <div class="alert alert-success mx-1 px-4" role="alert">
+                    </div>
+                    <span class="mx-1">Appoved Shifts</span>
+
+                </div>
+                <div class="d-flex justify-content-end">
+                    <div id="day" class="btn btn-outline-info  mx-2">
+                       Day
+                    </div>
+                    <!-- Button trigger modal -->
+                    <div id="week" class="btn btn-outline-info   mx-2">
+                       Week 
+                    </div>
+                    <div id="month" class="btn btn-outline-info   mx-2">
+                        Month
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="monthcontainer" class="calendar-body">
+        <ul class="calendar-weekdays"></ul>
+        <ul class="calendar-dates"></ul>
+    </div>
+
+    <div style="display:none" id="weekviewcontainer" class="active">
+       
+        <table>
+            <thead>
+                <tr class="weekhead">
+                    <th></th>
+                    
+                        <td class="title" data-name="Sun">Sun</td>
+                       
+                    <td class="title" data-name="Mon">Mon</td>
+                   
+                
+                    <td class="title" data-name="Tue">Tue</td>
+                    
+                
+                    <td class="title" data-name="Wed">Wed</td>
+                  
+            
+                    <td class="title" data-name="Thu">Thu</td>
+                 
+                    <td class="title" data-name="Fri">Fri</td>
+                
+                    <td class="title" data-name="Sat">Sat</td>
+                   
+                    
+                </tr>
+            </thead>
+            <tbody class="main">
+                <tr>
+                    <td class="title" data-name="Sun">Sun</td>
+                    <td class="one" data-week='0' data-name="Sun"></td>
+                    <td class="two" data-week='1' data-name="Sun"></td>
+                    <td class="three" data-week='2' data-name="Sun"></td>
+                    <td class="four" data-week='3' data-name="Sun"></td>
+                    <td class="five" data-week='4' data-name="Sun"></td>
+                </tr>
+                <tr>
+                    <td class="title" data-name="Mon">Mon</td>
+                    <td class="one" data-week='0' data-name="Mon"></td>
+                    <td class="two" data-week='1' data-name="Mon"></td>
+                    <td class="three" data-week='2' data-name="Mon"></td>
+                    <td class="four" data-week='3' data-name="Mon"></td>
+                    <td class="five" data-week='4' data-name="Mon"></td>
+                </tr>
+                <tr>
+                    <td class="title" data-name="Tue">Tue</td>
+                    <td class="one" data-week='0' data-name="Tue"></td>
+                    <td class="two" data-week='1' data-name="Tue"></td>
+                    <td class="three" data-week='2' data-name="Tue"></td>
+                    <td class="four" data-week='3' data-name="Tue"></td>
+                    <td class="five" data-week='4' data-name="Tue"></td>
+                </tr>
+                <tr>
+                    <td class="title" data-name="Wed">Wed</td>
+                    <td class="one" data-week='0' data-name="Wed"></td>
+                    <td class="two" data-week='1' data-name="Wed"></td>
+                    <td class="three" data-week='2' data-name="Wed"></td>
+                    <td class="four" data-week='3' data-name="Wed"></td>
+                    <td class="five" data-week='4' data-name="Wed"></td>
+                </tr>
+                <tr>
+                    <td class="title" data-name="Thu">Thu</td>
+                    <td class="one" data-week='0' data-name="Thu"></td>
+                    <td class="two" data-week='1' data-name="Thu"></td>
+                    <td class="three" data-week='2' data-name="Thu"></td>
+                    <td class="four" data-week='3' data-name="Thu"></td>
+                    <td class="five" data-week='4' data-name="Thu"></td>
+                </tr>
+                <tr>
+                    <td class="title" data-name="Fri">Fri</td>
+                    <td class="one" data-week='0' data-name="Fri"></td>
+                    <td class="two" data-week='1' data-name="Fri"></td>
+                    <td class="three" data-week='2' data-name="Fri"></td>
+                    <td class="four" data-week='3' data-name="Fri"></td>
+                    <td class="five" data-week='4' data-name="Fri"></td>
+                </tr>
+                <tr>
+                    <td class="title" data-name="Sat">Sat</td>
+                    <td class="one" data-week='0' data-name="Sat"></td>
+                    <td class="two" data-week='1' data-name="Sat"></td>
+                    <td class="three" data-week='2' data-name="Sat"></td>
+                    <td class="four" data-week='3' data-name="Sat"></td>
+                    <td class="five" data-week='4' data-name="Sat"></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div id="daycontainer"></div>
+    </div>
+@section Scripts
+    {
+
+    <script type="text/javascript">
+
+        $(function () {
+            
+            let date = new Date();
+            let year = date.getFullYear();
+            let month = date.getMonth();
+
+            const day = document.querySelector(".calendar-dates");
+            const weekdays = document.querySelector(".calendar-weekdays");
+            const currdate = document.querySelector(".calendar-current-date");
+            const prenexIcons = document.querySelectorAll(".calendar-navigation span");
+
+            // Array of month names
+            const months = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            // Array of weekdays
+            const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+            // Function to generate the calendar
+            const manipulate = () => {
+                // Clear existing weekdays
+                weekdays.innerHTML = "";
+
+                // Populate weekdays
+                daysOfWeek.forEach(day => {
+                    weekdays.innerHTML += `<li>${day}</li>`;
+                });
+
+                // Get the first day of the month
+                let dayone = new Date(year, month, 1).getDay();
+
+                // Get the last date of the month
+                let lastdate = new Date(year, month + 1, 0).getDate();
+
+                // Get the day of the last date of the month
+                let dayend = new Date(year, month, lastdate).getDay();
+
+                // Get the last date of the previous month
+                let monthlastdate = new Date(year, month, 0).getDate();
+
+                // Variable to store the generated calendar HTML
+                let lit = "";
+
+                // Loop to add the last dates of the previous month
+                for (let i = dayone; i > 0; i--) {
+                    lit += `<li class="inactive">${monthlastdate - i + 1}</li>`;
+                }
+
+                // Loop to add the dates of the current month
+                for (let i = 1; i <= lastdate; i++) {
+                    // Check if the current date is today
+                    let isToday = i === date.getDate() && month === new Date().getMonth() && year === new Date().getFullYear() ? "active" : "";
+                    lit += `<li class="${isToday}">${i}</li>`;
+                }
+
+                // Loop to add the first dates of the next month
+                for (let i = dayend; i < 6; i++) {
+                    lit += `<li class="inactive">${i - dayend + 1}</li>`;
+                }
+
+                // Update the text of the current date element with the formatted current month and year
+                currdate.innerText = `${months[month]} ${year}`;
+
+                // Update the HTML of the dates element with the generated calendar
+                day.innerHTML = lit;
+            };
+
+            manipulate();
+
+            // Attach a click event listener to each icon
+            prenexIcons.forEach(icon => {
+                // When an icon is clicked
+                icon.addEventListener("click", () => {
+                    // Check if the icon is "calendar-prev" or "calendar-next"
+                    month = icon.id === "calendar-prev" ? month - 1 : month + 1;
+
+                    // Check if the month is out of range
+                    if (month < 0 || month > 11) {
+                        // Set the date to the first day of the month with the new year
+                        date = new Date(year, month, new Date().getDate());
+
+                        // Set the year to the new year
+                        year = date.getFullYear();
+
+                        // Set the month to the new month
+                        month = date.getMonth();
+                    } else {
+                        // Set the date to the current date
+                        date = new Date();
+                    }
+
+                    // Call the manipulate function to update the calendar display
+                    manipulate();
+                });
+            });
+
+            // Event listener for the "Day" button
+            document.getElementById("day").addEventListener("click", () => {
+                // Show day view
+                // You can implement the day view logic here
+                console.log("Day view clicked");
+                manipulate();
+            });
+
+            // Event listener for the "Week" button
+            document.getElementById("week").addEventListener("click", () => {
+                $('#monthcontainer').hide();
+                $('#weekviewcontainer').show();
+                // Show week view
+                // You can implement the week view logic here
+                console.log("Week view clicked");
+
+                // Check if the week view container already exists
+                if ($('#weekviewcontainer').length > 0) {
+                    // Define prototype methods to calculate the first day of the week and get the week number
+                    Date.prototype.GetFirstDayOfWeek = function () {
+                        return new Date(this.setDate(this.getDate() - this.getDay() + (this.getDay() == 0 ? -6 : 1)));
+                    };
+                    Date.prototype.getWeek = function () {
+                        var onejan = new Date(this.getFullYear(), 0, 1);
+                        return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+                    };
+
+                    // Initialize variables and retrieve current date information
+                    var nav = 0;
+                    var cnav = 0;
+                    var inc = 1;
+                    var dec = 1;
+                    var wnav = 0;
+                    var wlnav = 0;
+                    var nd = new Date();
+                    var ndate = nd.getDate();
+                    var nday = nd.getDay();
+                    var weekOfMonth = Math.ceil((ndate - 1 - nday) / 7);
+                    nav = weekOfMonth;
+                    var fdweek = nd.GetFirstDayOfWeek();
+                    var getweekdt = nd.GetFirstDayOfWeek();
+
+                    // Define click event handler for the previous button
+                    $('#calendar-prev').click(function () {
+                        // Decrement week index
+                        if (nav == 5) {
+                            wnav = 5;
+                        }
+                        nav--;
+                        if (nav == -1) {
+                            nav = 4;
+                            fdweek.setDate(fdweek.getDate() - 5);
+                            getweekdt.setDate(getweekdt.getDate() - 5);
+                            inc = 0;
+                            dec = 1;
+                            cnav--;
+                        } else {
+                            fdweek.setDate(fdweek.getDate() - 12);
+                            getweekdt.setDate(getweekdt.getDate() - 12);
+                        }
+                        loadWeekCalendar();
+                    });
+
+                    // Define click event handler for the next button
+                    $('#calendar-next').click(function () {
+                        nav++;
+                        wlnav = 5;
+                        if ($('thead th[data-week="5"]').length > 0) {
+                            wlnav = 6;
+                        }
+                        if (nav == wlnav) {
+                            nav = 0;
+                            fdweek.setDate(fdweek.getDate() - 5);
+                            getweekdt.setDate(getweekdt.getDate() - 5);
+                            dec = 0;
+                            inc = 1;
+                            cnav++;
+                        } else {
+                            fdweek.setDate(fdweek.getDate() + 2);
+                            getweekdt.setDate(getweekdt.getDate() + 2);
+                            wnav = 5;
+                        }
+                        loadWeekCalendar();
+                        wnav = 0;
+                    });
+
+                    // Define function to load the week calendar
+                    function loadWeekCalendar() {
+                        const formatDate = new Intl.DateTimeFormat("en", { day: "2-digit" });
+                        const headwdate = new Intl.DateTimeFormat("en", { year: 'numeric', month: 'short', day: 'numeric' });
+                        var options = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
+                        const dt = new Date();
+                        if (cnav !== 0) { dt.setMonth(new Date().getMonth() + cnav); }
+                        const year = dt.getFullYear();
+                        const month = dt.getMonth();
+                        const day = dt.getDate();
+                        const week = dt.getWeek();
+                        const firstDayOfMonth = new Date(year, month, 1).toLocaleDateString('en-US', options);
+                        const lastDayOfMonth = new Date(year, month + 1, 0).toLocaleDateString('en-US', options);
+                        var firstday = firstDayOfMonth.split(',')[0];
+                        var lastday = lastDayOfMonth.split(',')[0];
+                        var daytype = new Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
+                        var i = daytype.indexOf(firstday);
+                        var j = daytype.indexOf(lastday) + 1;
+                        var removefirst = daytype.slice(0, i);
+                        var removelast = daytype.slice(j, daytype.length);
+                        $('td,th').css("background-color", "");
+                        const firstweek = new Date(year, month, 1).getWeek();
+                        const lastweek = new Date(year, month + 1, 0).getWeek();
+                       
+                        var used = new Date(year, month, 1).getDay() + new Date(year, month + 1, 0).getDate();
+                        var numofweeks = Math.ceil(used / 7);
+                       
+                        removefirst.forEach(removefirstcol);
+                        removelast.forEach(removelastcol);
+                        function removefirstcol(item, index) { $('td[data-week="0"][data-name="' + item + '"').css({ "background-image": "none", "background-color": "#c9c9c9", "cursor": "not-allowed" }); }
+                        function removelastcol(item, index) {
+                            if ($('thead th[data-week="5"]').length > 0) {
+                                $('td[data-week="5"][data-name="' + item + '"').css({ "background-image": "none", "background-color": "#c9c9c9", "cursor": "not-allowed" });
+                            } else {
+                                $('td[data-week="4"][data-name="' + item + '"').css({ "background-image": "none", "background-color": "#c9c9c9", "cursor": "not-allowed" });
+                            }
+                        }
+                        if (nav === 4 && $('thead th[data-week="5"]').length > 0 && wnav != 5) { nav = 5; }
+                        $('th[data-week="' + nav + '"').css({ "background-image": "none", "background-color": "#fff" });
+                        $('td[data-week="' + nav + '"').css({ "background-image": "none", "background-color": "#fff" });
+                        if (removelast.length === 0) {
+                            if (inc === 0) {
+                                fdweek.setDate(fdweek.getDate() - 7);
+                                getweekdt.setDate(getweekdt.getDate() - 7);
+                                inc++;
+                            }
+                        }
+                        if (removefirst.length === 0) {
+                            if (dec === 0) {
+                                fdweek.setDate(fdweek.getDate() + 7);
+                                getweekdt.setDate(getweekdt.getDate() + 7);
+                                dec++;
+                            }
+                        }
+                        const fweekdt = headwdate.format(getweekdt.setDate(getweekdt.getDate() - 1));
+                        console.log(fweekdt);
+                        const lweekdt = headwdate.format(getweekdt.setDate(getweekdt.getDate() + 6));
+                        var fmondt = fweekdt.split(' ')[0];
+                        var lmondt = lweekdt.split(' ')[0];
+                        var fdaydt = fweekdt.split(' ')[1];
+                        fdaydt = fdaydt.split(',')[0];
+                        var ldaydt = lweekdt.split(' ')[1];
+                        var fyeardt = fweekdt.split(',')[1];
+                        var lyeardt = lweekdt.split(',')[1];
+                        if (fyeardt == lyeardt && fmondt == lmondt) { $('.calendar-current-date').html(fmondt + " " + fdaydt + " - " + ldaydt + fyeardt); }
+                        if (fyeardt == lyeardt && fmondt != lmondt) { $('.calendar-current-date').html(fmondt + " " + fdaydt + " - " + lmondt + " " + ldaydt + fyeardt); }
+                        if (fyeardt != lyeardt && fmondt != lmondt) { $('.calendar-current-date').html(fweekdt + " - " + lweekdt); }
+                        $('.title[data-name="Sun"').html("Sunday - " + formatDate.format(fdweek.setDate(fdweek.getDate() - 1)));
+                        $('.title[data-name="Mon"').html("Monday " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
+                        $('.title[data-name="Tue"').html("Tuesday " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
+                        $('.title[data-name="Wed"').html("Wednesday " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
+                        $('.title[data-name="Thu"').html("Thursday " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
+                        $('.title[data-name="Fri"').html("Friday " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
+                        $('.title[data-name="Sat"').html("Saturday " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
+                    }
+
+                    // Initial load of the week calendar
+                    loadWeekCalendar();
+                }
+            });
+
+            // Event listener for the "Month" button
+            document.getElementById("month").addEventListener("click", () => {
+                $('#monthcontainer').show();
+                $('#weekviewcontainer').hide();
+                // Show month view
+                // You can implement the month view logic here
+                console.log("Month view clicked");
+                manipulate();
+            });
+        });
+       
+        window.onload = function () {
+            console.log("@status  d");
+            if ("@status" != "null") {
+                savealt("@status")
+            }
+
+        };
+
+    </script>
+}

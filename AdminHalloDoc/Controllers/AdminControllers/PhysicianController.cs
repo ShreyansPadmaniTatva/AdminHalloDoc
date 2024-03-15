@@ -114,6 +114,13 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
+        #region Physician_MY_Schedule
+        public async Task<IActionResult> MySchedule()
+        {
+            return View("../AdminViews/Physician/MySchedule");
+        }
+        #endregion
+
         #region SendMessage
         public async Task<IActionResult> SendMessage(string? id, string? email, int? way, string? msg)
         {

@@ -824,3 +824,9 @@ th:nth-child(6) {
     background-color: rgb(0, 181, 25);
     color: rgb(255, 255, 255);
 }
+.alert-panding {
+    --bs-alert-color: #EBC844;
+    --bs-alert-bg: #fba5e7;
+    --bs-alert-border-color: #eb70e1;
+    --bs-alert-link-color: #EBC844;
+}
