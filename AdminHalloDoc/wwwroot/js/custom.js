@@ -16,7 +16,22 @@ $(document).ready(function () {
     });
 });
 $(function () {
+    $(".t-tab").click(function () {
+        $('#requeststatus').val(this.value);
+        $('#submit').click();
 
+    });
+    $(".request-type-btn").click(function () {
+        $('#requesttypebtn').val(this.value);
+        $('.t-tab.active').click();
+
+    });
+    $(".regionDashboard").change(function () {
+        $('#requestRegionId').val(this.value);
+       
+        $('.t-tab.active').click();
+
+    });
     $("form").on("change", ".file-upload-field", function () {
         $(this).parent(".file-upload-wrapper").attr("data-text", $(this).val().replace(/.*(\/|\\)/, ''));
     });

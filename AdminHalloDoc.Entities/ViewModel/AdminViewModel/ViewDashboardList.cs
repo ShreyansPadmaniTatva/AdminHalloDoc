@@ -44,6 +44,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? SearchInput { get; set; }
         public int? RegionId { get; set; }
         public int? RequestType { get; set; }
+        public string? status { get; set; }
 
         //Count
         public int NewRequest { get; set; }

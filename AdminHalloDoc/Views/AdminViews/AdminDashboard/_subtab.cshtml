@@ -1,118 +1,203 @@
 ﻿@using static AdminHalloDoc.Entities.ViewModel.Constant;
-
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.PaginatedViewModel;
 <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
-             
       asp-action="_SearchResult" asp-controller="AdminDashboard" novalidate="novalidate">
-            @Html.AntiForgeryToken()
-            <div class="tab ">
-    <div class="row mb-3">
-        <div class="col-md-2 col-sm-4 col-4 ">
-                <button type="submit" id="new" value="1" name="status" class="local btn alert py-3 fw-bolder alert-new btn-outline-new  w-100 text-start text-uppercase a-danger t-tab">
-                <span class="mx-2 top-icon">
-                    <i class="bi bi-plus-circle"></i>
-                </span> New
-                <div>
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="status" name="status" id="requeststatus" class="form-control">
+    <input type="hidden" asp-for="RegionId" name="RegionId" id="requestRegionId" class="form-control">
+    <input type="hidden" asp-for="RequestType" name="RequestType" id="requesttypebtn" class="form-control">
+    <div class="tab ">
+        <div class="row mb-3">
+            <div class="col-md-2 col-sm-4 col-4 ">
+                <button id="new" value="1"  class="local btn alert py-3 fw-bolder alert-new btn-outline-new  w-100 text-start text-uppercase a-danger t-tab">
+                    <span class="mx-2 top-icon">
+                        <i class="bi bi-plus-circle"></i>
+                    </span> New
+                    <div>
                         <b class="fw-bold fs-3">@ViewBag.CountNewRequest</b>
-                </div>
-            </button>
-        </div>
-        <div class="col-md-2 col-sm-4 col-4 position-relative">
-                <button type="submit" id="panding" value="2" name="status" class="local btn alert py-3 fw-bolder alert-info btn-outline-info w-100 text-start text-uppercase   a-info t-tab">
-                <span class="mx-2 top-icon">
-                    <i class="bi bi-person-workspace"></i>
-                </span> Panding
-                <div>
+                    </div>
+                </button>
+            </div>
+            <div class="col-md-2 col-sm-4 col-4 position-relative">
+                <button id="panding" value="2"  class="local btn alert py-3 fw-bolder alert-info btn-outline-info w-100 text-start text-uppercase   a-info t-tab">
+                    <span class="mx-2 top-icon">
+                        <i class="bi bi-person-workspace"></i>
+                    </span> Panding
+                    <div>
                         <b class="fw-bold fs-3">@ViewBag.CountPandingRequest</b>
-                </div>
-            </button>
-        </div>
-        <div class="col-md-2 col-sm-4 col-4 position-relative">
-                <button type="submit" id="active" value="5,4" name="status" class="local btn alert py-3 fw-bolder alert-success btn-outline-success w-100 text-start text-uppercase  a-success t-tab">
-                <span class="mx-2 top-icon">
-                    <i class="bi bi-arrow-up-right-circle"></i>
-                </span> Active
-                <div>
+                    </div>
+                </button>
+            </div>
+            <div class="col-md-2 col-sm-4 col-4 position-relative">
+                <button  id="active" value="5,4" class="local btn alert py-3 fw-bolder alert-success btn-outline-success w-100 text-start text-uppercase  a-success t-tab">
+                    <span class="mx-2 top-icon">
+                        <i class="bi bi-arrow-up-right-circle"></i>
+                    </span> Active
+                    <div>
                         <b class="fw-bold fs-3">@ViewBag.CountActiveRequest</b>
-                </div>
-            </button>
-        </div>
-        <div class="col-md-2 col-sm-4 col-4 position-relative">
-                <button type="submit" id="conclude" value="6" name="status" class="local btn alert py-3 fw-bolder alert-conclude  btn-outline-conclude w-100 text-start text-uppercase  a-warning t-tab">
-                <span class="mx-2 top-icon">
-                    <i class="bi bi-clock-history"></i>
-                </span> Conclude
-                <div>
+                    </div>
+                </button>
+            </div>
+            <div class="col-md-2 col-sm-4 col-4 position-relative">
+                <button id="conclude" value="6" class="local btn alert py-3 fw-bolder alert-conclude  btn-outline-conclude w-100 text-start text-uppercase  a-warning t-tab">
+                    <span class="mx-2 top-icon">
+                        <i class="bi bi-clock-history"></i>
+                    </span> Conclude
+                    <div>
                         <b class="fw-bold fs-3">@ViewBag.CountConcludeRequest</b>
-                </div>
-            </button>
-        </div>
-        <div class="col-md-2 col-sm-4 col-4 position-relative">
-                <button type="submit" id="toclose" value="3,7,8" name="status" class="local btn alert py-3 fw-bolder alert-primary  btn-outline-primary w-100 text-start text-uppercase  a-primary  t-tab">
-                <span class="mx-2 top-icon">
-                    <i class="bi bi-envelope-paper"></i>
-                </span> To Close
-                <div>
+                    </div>
+                </button>
+            </div>
+            <div class="col-md-2 col-sm-4 col-4 position-relative">
+                <button  id="toclose" value="3,7,8" class="local btn alert py-3 fw-bolder alert-primary  btn-outline-primary w-100 text-start text-uppercase  a-primary  t-tab">
+                    <span class="mx-2 top-icon">
+                        <i class="bi bi-envelope-paper"></i>
+                    </span> To Close
+                    <div>
                         <b class="fw-bold fs-3">@ViewBag.CountToCloseRequest</b>
-                </div>
-            </button>
-        </div>
-        <div class="col-md-2 col-sm-4 col-4  position-relative">
-                <button type="submit" id="unpaid" value="9" name="status" class="local btn alert py-3 fw-bolder alert-unpaid btn-outline-unpaid w-100 text-start text-uppercase  a-unpaid t-tab">
+                    </div>
+                </button>
+            </div>
+            <div class="col-md-2 col-sm-4 col-4  position-relative">
+                <button id="unpaid" value="9" class="local btn alert py-3 fw-bolder alert-unpaid btn-outline-unpaid w-100 text-start text-uppercase  a-unpaid t-tab">
 
-                <span class="mx-2 top-icon">
-                    <i class="bi bi-currency-dollar"></i>
-                </span> Unpaid
-                <div>
+                    <span class="mx-2 top-icon">
+                        <i class="bi bi-currency-dollar"></i>
+                    </span> Unpaid
+                    <div>
                         <b class="fw-bold fs-3">@ViewBag.CountUnPaidRequest</b>
-                </div>
-            </button>
+                    </div>
+                </button>
+            </div>
         </div>
     </div>
-</div>
-
-</form>
-<div class="justify-content-between d-flex my-4">
-    <div class="heading d-flex">
-        <h3 class="mb-0 pb-0 top-heading">Patient</h3>  <span class="align-bottom  top-side-heading d-flex flex-column justify-content-end pb-1 px-2 text-primary-emphasis fw-bolder"> (@Enum.GetName(typeof(AdminDashStatus), 2))</span>
-    </div>
-    <din class="d-flex">
-        <span data-bs-toggle="tooltip" data-bs-placement="left" title="Edit">
-
-        </span>
-
-        <div class="btn btn-info text-white mx-1" data-bs-toggle="modal" data-bs-target="#sendlink">
-            <i class="bi bi-send"></i>
-            <span class="top-btn">
-                send link
-            </span>
+    <div class="justify-content-between d-flex my-4">
+        <div class="heading d-flex">
+            <h3 class="mb-0 pb-0 top-heading">Patient</h3>  <span class="align-bottom  top-side-heading d-flex flex-column justify-content-end pb-1 px-2 text-primary-emphasis fw-bolder"> (@Enum.GetName(typeof(AdminDashStatus), 2))</span>
         </div>
-        <div class="btn btn-info text-white mx-1">
-            <i class="bi bi-file-earmark-break"></i>
-            <span class="top-btn">
-                Create Request
+        <din class="d-flex">
+            <span data-bs-toggle="tooltip" data-bs-placement="left" title="Edit">
+
             </span>
 
-        </div>
-        <div class="btn btn-info text-white mx-1">
-            <i class="bi bi-forward"></i>
-            <span class="top-btn">
-                export
-            </span>
-
-        </div>
-        <form id="filterFormabc" class="mx-1"
-              asp-action="ExporttoExcel" asp-controller="Report" novalidate="novalidate">
-            <input type="hidden" name="HtmlTable" />
-            <button type="submit" value="1" id="btnsubmit" name="status" class="btn btn-info text-white">
-                <i class="bi bi-forward-fill"></i>
+            <div class="btn btn-info text-white mx-1" data-bs-toggle="modal" data-bs-target="#sendlink">
+                <i class="bi bi-send"></i>
                 <span class="top-btn">
-                    export all
+                    send link
+                </span>
+            </div>
+            <div class="btn btn-info text-white mx-1">
+                <i class="bi bi-file-earmark-break"></i>
+                <span class="top-btn">
+                    Create Request
                 </span>
 
-            </button>
-        </form>
+            </div>
+            <div class="btn btn-info text-white mx-1">
+                <i class="bi bi-forward"></i>
+                <span class="top-btn">
+                    export
+                </span>
+
+            </div>
+            <form id="filterFormabc" class="mx-1"
+                  asp-action="ExporttoExcel" asp-controller="Report" novalidate="novalidate">
+                <input type="hidden" name="HtmlTable" />
+                <button type="submit" value="1" id="btnsubmit" name="status" class="btn btn-info text-white">
+                    <i class="bi bi-forward-fill"></i>
+                    <span class="top-btn">
+                        export all
+                    </span>
+
+                </button>
+            </form>
 
 
-    </din>
-</div>
+        </din>
+    </div>
+    <div class="card border-0 rounded shadow">
+        <div class="row ps-2 mb-lg-0 ">
+            <div class="row col-xl-6">
+                <div class="col-sm-4">
+                    <input id="search-input" class="form-control p-2 mt-3 px-4 mb-3 w-100" type="text"
+                           placeholder='Search Patients'>
+                </div>
+                <div class="col-sm-4">
+                    <div class="">
 
+                        <select class="form-select form-select-sm p-2 mt-3 mb-3 w-100 regionDashboard"  data-allow-clear="true" tabindex="-1" id="regionDashboard" asp-items="@(new SelectList(ViewBag.RegionComboBox, "RegionId", "RegionName"))" data-control="select" data-placeholder="Region">
+                            <option id="defaultregion" value="">Regions</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xl-6 d-flex justify-content-xl-end justify-content-center gap-2 gap-sm-3 gap-xl-4 p-0">
+                <button value="" class="btn btn-transparent d-flex align-items-center justify-content-center flex-column flex-lg-row request-type-btn" data-requesttype="0">
+                    <span> All </span>
+                </button>
+                <button value="2" class="btn btn-transparent d-flex align-items-center justify-content-center flex-column flex-lg-row request-type-btn" data-requesttype="1">
+                    <div class="border border-1 rounded-circle m-1"
+                         style="width: 15px; height:15px; background-color: #60bc60;"></div><span>Patient</span>
+                </button>
+                <button value="3" class="btn btn-transparent d-flex align-items-center justify-content-center flex-column flex-lg-row request-type-btn" data-requesttype="2">
+                    <div class="border border-1 rounded-circle m-1"
+                         style="width: 15px; height:15px; background-color: #ee9125;"></div>
+                    <span>Family/Friend</span>
+                </button>
+                <button value="1" class="btn btn-transparent d-flex align-items-center justify-content-center flex-column flex-lg-row request-type-btn" data-requesttype="4">
+                    <div class="border border-1 rounded-circle m-1"
+                         style="width: 15px; height:15px; background-color: #e36478;"></div><span>Business</span>
+                </button>
+                <button value="4" class="btn btn-transparent d-flex align-items-center justify-content-center flex-column flex-lg-row request-type-btn" data-requesttype="3">
+                    <div class="border border-1 rounded-circle m-1"
+                         style="width: 15px; height:15px; background-color: #007fc7;"></div><span>Concierge</span>
+                </button>
+            </div>
+        </div>
+        <button type="submit" id="submin" class="d-none"></button>
+    </div>
+    <input type="submit" id="submit" class="d-none" />
+</form>
+@section Scripts{
+    <script>
+        function changeStatus(e) {
+            //  $('#requeststatus').val(e);
+            $('#filterForm').submit();
+        }
+        function subsubmit() {
+            console.log(54);
+            $('#subsubmitfom').submit();
+        }
+                    //$(function () {
+
+                    //    $("#btnsubmit").click(function () {
+                    //        document.querySelectorAll('.action').forEach(function (el) {
+                    //            el.style.display = 'none';
+                    //        });
+
+                    //        // Using callback function
+                    //        $("input[name='HtmlTable']").val($("#a1a").html(function () {
+                    //            document.querySelectorAll('.action').forEach(function (el) {
+                    //                el.style.display = 'none';
+                    //            });
+                    //            // Second line of code runs after the first one is completed
+                    //            // Place the code here that you want to execute after the first line completes
+                    //        }));
+
+                    //        // Using promise
+                    //        $("input[name='HtmlTable']").val($("#a1a").html()).promise().done(function () {
+                    //            document.querySelectorAll('.action').forEach(function (el) {
+                    //                el.style.display = 'none';
+                    //            });
+                    //            // Second line of code runs after the first one is completed
+                    //            // Place the code here that you want to execute after the first line completes
+                    //        });
+                    //        $(".action").show();
+
+                    //    });
+
+                    //});
+    </script>
+}

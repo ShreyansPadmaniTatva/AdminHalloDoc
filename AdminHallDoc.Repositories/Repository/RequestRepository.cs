@@ -118,7 +118,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     rc.Address.Contains(data.SearchInput) || rc.Notes.Contains(data.SearchInput) ||
                     p.Firstname.Contains(data.SearchInput) || p.Lastname.Contains(data.SearchInput) ||
                     rg.Name.Contains(data.SearchInput)) && (data.RegionId == null || rc.Regionid == data.RegionId)
-                    select new ViewDashboardList
+                     && (data.RequestType == null || req.Requesttypeid == data.RequestType)
+                     select new ViewDashboardList
                     {
                         Physician = p.Firstname + " " + p.Lastname,
                         RequestClientid = rc.Requestclientid,

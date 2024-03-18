@@ -17,12 +17,12 @@
 <div class="container-fluid ">
     @*<a asp-action="SendSMS" class="btn btn-danger" asp-controller="SendSms">send sms</a>*@
     <partial name="_subtab.cshtml" />
-    <partial name="_subform.cshtml" />
     <div id="SearchResult">
 
     </div>
 </div>
 <script type="text/javascript">
+    
     window.onload = function () {
         console.log("@status  d");
         if ("@status" != "null") {
@@ -53,6 +53,7 @@
     }
 </script>
     <script>
+
     function initDataTable(tableSelector) {
         $(tableSelector).DataTable({
             "scrollY": "300px",

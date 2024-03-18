@@ -48,6 +48,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.CaseReasonComboBox = await _requestRepository.CaseReasonComboBox();
+            data.status = status;
             if (status == null)
             {
                 status = "1";

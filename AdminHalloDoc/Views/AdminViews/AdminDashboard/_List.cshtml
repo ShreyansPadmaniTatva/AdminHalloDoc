@@ -263,7 +263,7 @@
                     //<li class="page-item"><a class="page-link">&lt;</a></li>
                     @for (start = 1; start <= @Model.TotalPages; start++)
                     {
-                        <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                        <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
                               asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
                             <input type="hidden" asp-for="RegionId" />
                             <input type="hidden" asp-for="RequestType" />
