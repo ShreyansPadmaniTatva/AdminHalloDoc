@@ -63,6 +63,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                          join role in _context.Roles
                                          on r.Roleid equals role.Roleid into roleGroup
                                          from roles in roleGroup.DefaultIfEmpty()
+                                         where r.Isdeleted == new BitArray(1)
                                          select  new Physicians{
                                              notificationid = nof.Id,
                                             Createddate = r.Createddate,
@@ -181,7 +182,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         #endregion
 
-        #region PhysicianAddEdit
+        #region Physician_Add
         public async Task<bool> PhysicianAddEdit(Physicians physiciandata,string AdminId)
         {
             try
@@ -226,17 +227,19 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Physician.Isnondisclosuredoc = new BitArray(1);
                     Physician.Islicensedoc = new BitArray(1);
                     Physician.Istrainingdoc = new BitArray(1);
+                    Physician.Isdeleted = new BitArray(1);
 
                     Physician.Isagreementdoc[0] = physiciandata.Isagreementdoc;
                     Physician.Isbackgrounddoc[0] = physiciandata.Isbackgrounddoc;
                     Physician.Isnondisclosuredoc[0] = physiciandata.Isnondisclosuredoc;
                     Physician.Islicensedoc[0] = physiciandata.Islicensedoc;
                     Physician.Istrainingdoc[0] = physiciandata.Istrainingdoc;
+                    Physician.Isdeleted[0] = false;
                     Physician.Adminnotes = physiciandata.Adminnotes;
 
 
-                    Physician.Photo = physiciandata.PhotoFile != null ? Physician.Firstname + " - " + DateTime.Now.ToString("yyyyMMddhhmmss") + " - Photo."+ Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.') : null; 
-                    Physician.Signature = physiciandata.SignatureFile != null ? Physician.Firstname + " - " + DateTime.Now.ToString("yyyyMMddhhmmss") + " - Signature.png" : null;
+                    Physician.Photo = physiciandata.PhotoFile != null ? Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Photo."+ Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.') : null; 
+                    Physician.Signature = physiciandata.SignatureFile != null ? Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Signature.png" : null;
 
                    
 
@@ -249,8 +252,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     CM.UploadProviderDoc(physiciandata.Licensedoc, Physician.Physicianid, "Agreementdoc.pdf");
                     CM.UploadProviderDoc(physiciandata.Trainingdoc, Physician.Physicianid, "Trainingdoc.pdf");
 
-                    CM.UploadProviderDoc(physiciandata.SignatureFile, Physician.Physicianid, Physician.Firstname + " - " + DateTime.Now.ToString("yyyyMMddhhmmss") + " - Signature.png");
-                    CM.UploadProviderDoc(physiciandata.PhotoFile, Physician.Physicianid, Physician.Firstname + " - " + DateTime.Now.ToString("yyyyMMddhhmmss") + " - Photo."+ Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.'));
+                    CM.UploadProviderDoc(physiciandata.SignatureFile, Physician.Physicianid, Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Signature.png");
+                    CM.UploadProviderDoc(physiciandata.PhotoFile, Physician.Physicianid, Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Photo."+ Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.'));
 
                     List<int> priceList = physiciandata.Regionsid.Split(',').Select(int.Parse).ToList();
                     foreach (var item in priceList)
@@ -279,7 +282,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                
             }
             return false;
-        }
+         }
         #endregion
 
         #region GetPhysicianById
@@ -324,9 +327,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                              Isnondisclosuredoc = r.Isnondisclosuredoc[0],
                                              Isbackgrounddoc = r.Isbackgrounddoc[0],
                                              Islicensedoc = r.Islicensedoc[0],
-                                             Istrainingdoc = r.Istrainingdoc[0]
+                                             Istrainingdoc = r.Istrainingdoc[0],
+                                             Medicallicense = r.Medicallicense,
+                                            Npinumber = r.Npinumber,
+                                            Syncemailaddress = r.Syncemailaddress,
+                                            Zipcode = r.Zip
 
-                                         })
+                                        })
                                         .FirstOrDefaultAsync();
 
             List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians.Regions> regions = new List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians.Regions>();
@@ -448,6 +455,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
 
                         _context.Physicians.Update(DataForChange);
+                        _context.SaveChanges();
+
                         List<int> priceList = vm.Regionsid.Split(',').Select(int.Parse).ToList();
 
 
@@ -478,7 +487,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
 
 
-                        _context.SaveChanges();
 
 
                         return true;
@@ -520,6 +528,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
 
                         DataForChange.Isdeleted = bt;
+                        DataForChange.Isdeleted[0] = true;
                         DataForChange.Modifieddate = DateTime.Now;
                         DataForChange.Modifiedby = AdminID;
                         _context.Physicians.Update(DataForChange);
@@ -546,7 +555,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region EditMailBilling
-        public async Task<bool> EditMailBilling(Physicians vm)
+        public async Task<bool> EditMailBilling(Physicians vm, string AdminId)
         {
             try
             {
@@ -570,6 +579,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         DataForChange.Regionid = vm.Regionid;
                         DataForChange.Zip = vm.Zipcode;
                         DataForChange.Altphone = vm.Altphone;
+                        DataForChange.Modifiedby = AdminId;
+                        DataForChange.Modifieddate = DateTime.Now;
 
 
 
@@ -632,6 +643,67 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         DataForChange.Modifiedby = AdminId;
                         DataForChange.Adminnotes = vm.Adminnotes;
                         DataForChange.Modifieddate = DateTime.Now;
+                        _context.Physicians.Update(DataForChange);
+
+                        _context.SaveChanges();
+
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region EditProviderOnbording
+        public async Task<bool> EditProviderOnbording(Physicians vm, string AdminId)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Physicians
+                        .Where(W => W.Physicianid == vm.Physicianid)
+                        .FirstOrDefaultAsync();
+
+
+                    if (DataForChange != null)
+                    {
+
+
+                        CM.UploadProviderDoc(vm.Agreementdoc, (int)vm.Physicianid, "Agreementdoc.pdf");
+                        CM.UploadProviderDoc(vm.BackGrounddoc, (int)vm.Physicianid, "BackGrounddoc.pdf");
+                        CM.UploadProviderDoc(vm.NonDisclosuredoc, (int)vm.Physicianid, "NonDisclosuredoc.pdf");
+                        CM.UploadProviderDoc(vm.Licensedoc, (int)vm.Physicianid, "Agreementdoc.pdf");
+                        CM.UploadProviderDoc(vm.Trainingdoc, (int)vm.Physicianid, "Trainingdoc.pdf");
+
+                        DataForChange.Isagreementdoc = new BitArray(1);
+                        DataForChange.Isbackgrounddoc = new BitArray(1);
+                        DataForChange.Isnondisclosuredoc = new BitArray(1);
+                        DataForChange.Islicensedoc = new BitArray(1);
+                        DataForChange.Istrainingdoc = new BitArray(1);
+
+                        DataForChange.Isagreementdoc[0] = vm.Isagreementdoc;
+                        DataForChange.Isbackgrounddoc[0] = vm.Isbackgrounddoc;
+                        DataForChange.Isnondisclosuredoc[0] = vm.Isnondisclosuredoc;
+                        DataForChange.Islicensedoc[0] = vm.Islicensedoc;
+                        DataForChange.Istrainingdoc[0] = vm.Istrainingdoc;
+                        DataForChange.Modifiedby = AdminId;
+                        DataForChange.Modifieddate = DateTime.Now;
+
                         _context.Physicians.Update(DataForChange);
 
                         _context.SaveChanges();

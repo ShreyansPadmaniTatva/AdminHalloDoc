@@ -6,6 +6,7 @@ using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -196,7 +197,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                          from admin in adminGroup.DefaultIfEmpty()
                                          join physician in _context.Physicians on user.Id equals physician.Aspnetuserid into physicianGroup
                                          from physician in physicianGroup.DefaultIfEmpty()
-                                         where admin != null || physician != null
+                                         where (admin != null || physician != null) && (admin.Isdeleted==new BitArray(1) || physician.Isdeleted == new BitArray(1))
                                          select new ViewUserAcces
                                          {
                                              UserName = user.Username,

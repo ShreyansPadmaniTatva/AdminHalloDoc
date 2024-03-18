@@ -40,10 +40,10 @@
             </div>
             <div class="text-end mx-2 px-3">
                 <!-- Button trigger modal -->
-                <a asp-action="CreateRoleAccess" asp-controller="RoleAccess" type="button" id="adminAccount" class="btn btn-outline-info" style="display:none">
+                <a asp-action="AdminAddEdit" asp-controller="RoleAccess" type="button" id="adminAccount" class="btn btn-outline-info" style="display:none">
                     Create Admin Account
                 </a>
-                <a asp-action="CreateRoleAccess" asp-controller="RoleAccess" type="button" id="providerAccount" class="btn btn-outline-info" style="display:none">
+                <a asp-action="PhysicianAddEdit" asp-controller="RoleAccess" type="button" id="providerAccount" class="btn btn-outline-info" style="display:none">
                     Create Provider Account
                 </a>
             </div>
@@ -72,13 +72,13 @@
                             <td scope="row" data-label="Created Date"> @item.status)</td>
                             <td class="mobile-hide" data-label="Document">
                                 @if(item.isAdmin){
-                                    <a asp-action="Index" asp-controller="AdminProfile" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">
+                                    <a asp-action="AdminAddEdit" asp-controller="RoleAccess" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">
                                         Edit a
                                     </a>
                                 }
                                 else
                                 {
-                                    <a asp-action="PhysicianProfile" asp-controller="Physician" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">
+                                    <a asp-action="PhysicianAddEdit" asp-controller="RoleAccess" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">
                                         Edit p
                                     </a>
                                 }

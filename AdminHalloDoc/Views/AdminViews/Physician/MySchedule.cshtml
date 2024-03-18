@@ -122,6 +122,8 @@
         background: #e4e1e1;
     }
 </style>
+
+
 <div class="container">
     <div class="justify-content-between d-flex container-fluid  position-relative ">
         <div class="">
@@ -363,7 +365,7 @@
                 for (let i = 1; i <= lastdate; i++) {
                     // Check if the current date is today
                     let isToday = i === date.getDate() && month === new Date().getMonth() && year === new Date().getFullYear() ? "active" : "";
-                    lit += `<li class="${isToday}">${i}</li>`;
+                    lit += `<li class="${isToday}">${i}<div>dede</div> <div>dede</div> <div>dede</div> <div>dede</div> </li>`;
                 }
 
                 // Loop to add the first dates of the next month

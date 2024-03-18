@@ -4,6 +4,7 @@ using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -12,19 +13,22 @@ namespace AdminHalloDoc.Controllers.AdminControllers
     public class RoleAccessController : Controller
     {
         #region Constoter
+        private readonly IRequestRepository _requestRepository;
         private readonly IViewActionRepository _viewActionRepository;
         private readonly IViewNotesRepository _viewNotesRepository;
         private readonly IMyProfileRepository _myProfileRepository;
         private readonly IPhysicianRepository _physicianRepository;
         private readonly EmailConfiguration _emailconfig;
         private readonly IRoleAccessRepository _roleAccessRepository;
-        public RoleAccessController(IPhysicianRepository physicianRepository, IViewActionRepository viewActionRepository,EmailConfiguration emailConfiguration,IRoleAccessRepository roleAccessRepository)
+        public RoleAccessController(IMyProfileRepository myProfileRepository, IPhysicianRepository physicianRepository, IViewActionRepository viewActionRepository,EmailConfiguration emailConfiguration,IRoleAccessRepository roleAccessRepository, IRequestRepository requestRepository)
         {
 
             _viewActionRepository = viewActionRepository;
             _physicianRepository = physicianRepository;
             _emailconfig = emailConfiguration;
             _roleAccessRepository = roleAccessRepository;
+            _requestRepository = requestRepository;
+            _myProfileRepository = myProfileRepository;
         }
         #endregion
 
@@ -122,5 +126,56 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             return View("../AdminViews/RoleAccess/UserAccess", v);
         }
         #endregion
+
+        #region PhysicianAddEdit-ADDEdit
+
+        public async Task<IActionResult> PhysicianAddEdit(int? id)
+        {
+
+            //TempData["Status"] = TempData["Status"];
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
+            if (id == null)
+            {
+                ViewData["PhysicianAccount"] = "Add";
+            }
+            else
+            {
+
+                ViewData["PhysicianAccount"] = "Edit";
+                Physicians v = await _physicianRepository.GetPhysicianById((int)id);
+                return View("../AdminViews/Physician/PhysicianAddEdit", v);
+
+            }
+            return View("../AdminViews/Physician/PhysicianAddEdit");
+        }
+        #endregion
+
+        #region AdminAddEdit-ADDEdit
+
+        public async Task<IActionResult> AdminAddEdit(int? id)
+        {
+            
+
+            //TempData["Status"] = TempData["Status"];
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
+            if (id == null)
+            {
+                ViewData["PhysicianAccount"] = "Add";
+            }
+            else
+            {
+
+                ViewAdminProfile p = await _myProfileRepository.GetProfileDetails((int)id);
+                ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+                ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
+                return View("../AdminViews/Profile/Index", p);
+
+            }
+            return View("../AdminViews/Profile/Index");
+        }
+        #endregion
+
     }
 }

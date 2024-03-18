@@ -69,9 +69,10 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        #region PhysicianProfile
+        #region Add_Profile
         public async Task<IActionResult> PhysicianProfile(int? id)
         {
+            
             //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
@@ -110,7 +111,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 return View("../AdminViews/Physician/PhysicianAddEdit",physicians);
             }
            
-            return View("../AdminViews/Physician/PhysicianAddEdit");
+            return RedirectToAction("PhysicianAll");
         }
         #endregion
 
@@ -154,7 +155,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         public async Task<IActionResult> SavePhysicianInfo(Physicians physicians)
         {
-
+            string actionName = RouteData.Values["action"].ToString();
+            string actionNameaq = ControllerContext.ActionDescriptor.ActionName; // Get the current action name
 
             bool data = await _physicianRepository.SavePhysicianInfo(physicians);
             if (data)
@@ -187,11 +189,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             return RedirectToAction("PhysicianProfile", new { id = Physicianid });
         }
 
-
-
         public async Task<IActionResult> EditAdminInfo(Physicians physicians)
         {
-
             bool data = await _physicianRepository.EditAdminInfo(physicians);
             if (data)
             {
@@ -207,7 +206,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         public async Task<IActionResult> EditMailBilling(Physicians physicians)
         {
-            bool data = await _physicianRepository.EditMailBilling(physicians);
+            bool data = await _physicianRepository.EditMailBilling(physicians, CV.ID());
             if (data)
             {
                 TempData["Status"] = "mail and billing Info Updated Successfully...";
@@ -222,9 +221,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         public async Task<IActionResult> EditProviderProfile(Physicians physicians)
         {
-            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
-
             bool data = await _physicianRepository.EditProviderProfile(physicians, CV.ID());
             if (data)
             {
@@ -238,11 +234,23 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
         }
 
+        public async Task<IActionResult> EditProviderOnbording(Physicians physicians)
+        {
+            bool data = await _physicianRepository.EditProviderOnbording(physicians, CV.ID());
+            if (data)
+            {
+                TempData["Status"] = "Files Updated Successfully...";
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+            }
+            else
+            {
+                TempData["Status"] = "some problem";
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+            }
+        }
+
         public async Task<IActionResult> DeletePhysician(int PhysicianID)
         {
-            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
-
             bool data = await _physicianRepository.DeletePhysician(PhysicianID, CV.ID());
             if (data)
             {
@@ -252,7 +260,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             else
             {
                 TempData["Status"] = "not Deleted problem";
-                return RedirectToAction("PhysicianProfile", new { id = PhysicianID });
+                return RedirectToAction("PhysicianAll");
             }
         }
 
