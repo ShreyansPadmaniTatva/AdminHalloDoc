@@ -18,5 +18,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<Physicians> GetPhysicianById(int id);
         Task<bool> SavePhysicianInfo(Physicians vm);
         Task<bool> ChangePasswordAsync(string password, int Physicianid);
+        Task<bool> EditAdminInfo(Physicians vm);
+        Task<bool> DeletePhysician(int PhysicianID, string AdminID);
+        Task<bool> EditMailBilling(Physicians vm);
+        Task<bool> EditProviderProfile(Physicians vm, string AdminId);
     }
 }

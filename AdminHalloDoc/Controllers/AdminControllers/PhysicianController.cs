@@ -169,24 +169,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
         }
 
-        public async Task<IActionResult> EditBillingInfo(ViewAdminProfile vm)
-        {
-
-
-
-            bool data = await _myProfileRepository.EditBillingInfoAsync(vm);
-            if (data)
-            {
-                TempData["Status"] = "Billing Information Changed...";
-            }
-            else
-            {
-                TempData["Status"] = "Billing not Changed properly...";
-            }
-
-            return RedirectToAction("Index");
-        }
-
         public async Task<IActionResult> ResetPassAdmin(string password, int Physicianid)
         {
 
@@ -204,6 +186,76 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
             return RedirectToAction("PhysicianProfile", new { id = Physicianid });
         }
+
+
+
+        public async Task<IActionResult> EditAdminInfo(Physicians physicians)
+        {
+
+            bool data = await _physicianRepository.EditAdminInfo(physicians);
+            if (data)
+            {
+                TempData["Status"] = "admin Info Updated Successfully...";
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+            }
+            else
+            {
+                TempData["Status"] =  "some problem";
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+            }
+        }
+
+        public async Task<IActionResult> EditMailBilling(Physicians physicians)
+        {
+            bool data = await _physicianRepository.EditMailBilling(physicians);
+            if (data)
+            {
+                TempData["Status"] = "mail and billing Info Updated Successfully...";
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+            }
+            else
+            {
+                TempData["Status"] = "some problem";
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+            }
+        }
+
+        public async Task<IActionResult> EditProviderProfile(Physicians physicians)
+        {
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
+
+            bool data = await _physicianRepository.EditProviderProfile(physicians, CV.ID());
+            if (data)
+            {
+                TempData["Status"] = "mail and billing Info Updated Successfully...";
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+            }
+            else
+            {
+                TempData["Status"] = "some problem";
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+            }
+        }
+
+        public async Task<IActionResult> DeletePhysician(int PhysicianID)
+        {
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
+
+            bool data = await _physicianRepository.DeletePhysician(PhysicianID, CV.ID());
+            if (data)
+            {
+                TempData["Status"] =  "Deleted Successfully...";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["Status"] = "not Deleted problem";
+                return RedirectToAction("PhysicianProfile", new { id = PhysicianID });
+            }
+        }
+
         #endregion
 
     }

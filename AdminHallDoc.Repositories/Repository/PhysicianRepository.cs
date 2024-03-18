@@ -346,7 +346,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
-        #region Put_Profile
+        #region Put_Profile_Physician
 
         #region SavePhysicianInfo
         public async Task<bool> SavePhysicianInfo(Physicians vm)
@@ -393,131 +393,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
-        //#region Edit_Admin_ProfileAsync
-
-        //public async Task<bool> EditAdminProfileAsync(ViewAdminProfile vm)
-        //{
-        //    try
-        //    {
-        //        if (vm == null)
-        //        {
-        //            return false;
-        //        }
-        //        else
-        //        {
-
-        //            var DataForChange = await _context.Admins
-        //                     .Where(W => W.Adminid == vm.AdminId)
-        //                     .FirstOrDefaultAsync();
-
-        //            if (DataForChange != null)
-        //            {
-
-        //                DataForChange.Email = vm.Email;
-        //                DataForChange.Firstname = vm.Firstname;
-        //                DataForChange.Lastname = vm.Lastname;
-        //                DataForChange.Mobile = vm.Mobile;
-
-
-        //                _context.Admins.Update(DataForChange);
-        //                _context.SaveChanges();
-
-
-        //                List<int> regions = await _context.Adminregions
-        //                   .Where(r => r.Adminid == vm.AdminId)
-        //                   .Select(req => req.Regionid)
-        //                   .ToListAsync();
-
-        //                List<int> priceList = vm.Regionsid.Split(',').Select(int.Parse).ToList();
-        //                foreach (var item in priceList)
-        //                {
-        //                    if (regions.Contains(item))
-        //                    {
-        //                        regions.Remove(item);
-        //                    }
-        //                    else
-        //                    {
-        //                        Adminregion ar = new Adminregion();
-        //                        ar.Regionid = item;
-        //                        ar.Adminid = (int)vm.AdminId;
-        //                        _context.Adminregions.Update(ar);
-        //                        await _context.SaveChangesAsync();
-        //                        regions.Remove(item);
-
-        //                    }
-        //                }
-        //                if (regions.Count > 0)
-        //                {
-        //                    foreach (var item in regions)
-        //                    {
-        //                        Adminregion ar = await _context.Adminregions.Where(r => r.Adminid == vm.AdminId && r.Regionid == item).FirstAsync();
-        //                        _context.Adminregions.Remove(ar);
-        //                        await _context.SaveChangesAsync();
-        //                    }
-        //                }
-
-        //                return true;
-        //            }
-        //            else
-        //            {
-        //                return false;
-        //            }
-
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return false;
-        //    }
-
-        //}
-
-        //#endregion
-
-        //#region Edit_Billing_InfoAsync
-        //public async Task<bool> EditBillingInfoAsync(ViewAdminProfile vm)
-        //{
-        //    try
-        //    {
-        //        if (vm == null)
-        //        {
-        //            return false;
-        //        }
-        //        else
-        //        {
-        //            var DataForChange = await _context.Admins
-        //                .Where(W => W.Adminid == vm.AdminId)
-        //                .FirstOrDefaultAsync();
-
-        //            if (DataForChange != null)
-        //            {
-
-        //                DataForChange.Address1 = vm.Address1;
-        //                DataForChange.Address2 = vm.Address2;
-        //                DataForChange.City = vm.City;
-        //                DataForChange.Mobile = vm.Mobile;
-
-
-        //                _context.Admins.Update(DataForChange);
-        //                _context.SaveChanges();
-
-
-        //                return true;
-        //            }
-        //            else
-        //            {
-        //                return false;
-        //            }
-
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return false;
-        //    }
-        //}
-        //#endregion
-
         #region Change_Password
         public async Task<bool> ChangePasswordAsync(string password, int Physicianid)
         {
@@ -542,8 +417,243 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
+        #region EditAdminInfo
+        public async Task<bool> EditAdminInfo(Physicians vm)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Physicians
+                        .Where(W => W.Physicianid == vm.Physicianid)
+                        .FirstOrDefaultAsync();
+
+
+                    if (DataForChange != null)
+                    {
+
+
+                        DataForChange.Firstname = vm.Firstname;
+                        DataForChange.Lastname = vm.Lastname;
+                        DataForChange.Email = vm.Email;
+                        DataForChange.Mobile = vm.Mobile;
+                        DataForChange.Medicallicense = vm.Medicallicense;
+                        DataForChange.Npinumber = vm.Npinumber;
+                        DataForChange.Syncemailaddress = vm.Syncemailaddress;
+
+
+
+                        _context.Physicians.Update(DataForChange);
+                        List<int> priceList = vm.Regionsid.Split(',').Select(int.Parse).ToList();
+
+
+
+
+                        foreach (var dataitem2 in priceList)
+                        {
+                            var data = _context.Physicianregions.FirstOrDefault(e => e.Physicianid == vm.Physicianid && e.Regionid == dataitem2);
+                            if (data != null)
+                            {
+
+                            }
+                            else
+                            {
+                                Physicianregion adr = new Physicianregion
+                                {
+                                    Physicianid = DataForChange.Physicianid,
+                                    Regionid = dataitem2
+                                };
+
+                                _context.Physicianregions.Add(adr);
+                                _context.SaveChanges();
+                            }
+
+
+
+                        }
+
+
+
+                        _context.SaveChanges();
+
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         #endregion
 
+        #region DeletePhysician
+        public async Task<bool> DeletePhysician(int PhysicianID, string AdminID)
+        {
+            try
+            {
+                BitArray bt = new BitArray(1);
+                bt.Set(0, true);
+                if (PhysicianID == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Physicians
+                        .Where(W => W.Physicianid == PhysicianID)
+                        .FirstOrDefaultAsync();
+
+
+                    if (DataForChange != null)
+                    {
+
+
+                        DataForChange.Isdeleted = bt;
+                        DataForChange.Modifieddate = DateTime.Now;
+                        DataForChange.Modifiedby = AdminID;
+                        _context.Physicians.Update(DataForChange);
+
+
+
+                        _context.SaveChanges();
+
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region EditMailBilling
+        public async Task<bool> EditMailBilling(Physicians vm)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Physicians
+                        .Where(W => W.Physicianid == vm.Physicianid)
+                        .FirstOrDefaultAsync();
+
+
+                    if (DataForChange != null)
+                    {
+
+
+                        DataForChange.Address1 = vm.Address1;
+                        DataForChange.City = vm.City;
+                        DataForChange.Regionid = vm.Regionid;
+                        DataForChange.Zip = vm.Zipcode;
+                        DataForChange.Altphone = vm.Altphone;
+
+
+
+
+                        _context.Physicians.Update(DataForChange);
+
+                        _context.SaveChanges();
+
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region EditProviderProfile
+        public async Task<bool> EditProviderProfile(Physicians vm, string AdminId)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Physicians
+                        .Where(W => W.Physicianid == vm.Physicianid)
+                        .FirstOrDefaultAsync();
+
+
+                    if (DataForChange != null)
+                    {
+                        if (vm.PhotoFile != null)
+                        {
+                            DataForChange.Photo = vm.PhotoFile != null ? vm.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmm") + "-Photo." + Path.GetExtension(vm.PhotoFile.FileName).Trim('.') : null;
+                            CM.UploadProviderDoc(vm.PhotoFile, (int)vm.Physicianid, vm.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmm") + "-Photo." + Path.GetExtension(vm.PhotoFile.FileName).Trim('.'));
+
+                        }
+                        if (vm.SignatureFile != null)
+                        {
+                            DataForChange.Signature = vm.SignatureFile != null ? vm.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmm") + "-Signature.png" : null;
+                            CM.UploadProviderDoc(vm.SignatureFile, (int)vm.Physicianid, vm.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmm") + "-Signature.png");
+                        }
+
+
+
+                        DataForChange.Businessname = vm.Businessname;
+                        DataForChange.Businesswebsite = vm.Businesswebsite;
+                        DataForChange.Modifiedby = AdminId;
+                        DataForChange.Adminnotes = vm.Adminnotes;
+                        DataForChange.Modifieddate = DateTime.Now;
+                        _context.Physicians.Update(DataForChange);
+
+                        _context.SaveChanges();
+
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #endregion
 
     }
 }
