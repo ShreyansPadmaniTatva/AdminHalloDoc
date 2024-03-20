@@ -23,9 +23,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         public async Task<List<UserRoleCombobox>> UserRoleComboBox()
         {
-            return await _context.Aspnetroles.Select(req => new UserRoleCombobox()
+            return await _context.Roles.Select(req => new UserRoleCombobox()
             {
-                RoleId = req.Id,
+                RoleId = req.Roleid,
                 RoleName = req.Name
             })
                 .ToListAsync();

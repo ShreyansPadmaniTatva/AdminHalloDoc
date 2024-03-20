@@ -38,6 +38,7 @@ builder.Services.AddScoped<IPhysicianRepository, PhysicianRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IRoleAccessRepository, RoleAccessRepository>();
+builder.Services.AddScoped<ISchedulingRepository, SchedulingRepository>();
 
 var app = builder.Build();
 

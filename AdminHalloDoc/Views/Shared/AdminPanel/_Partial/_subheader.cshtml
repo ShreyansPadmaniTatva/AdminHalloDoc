@@ -1,16 +1,57 @@
-﻿@{
+﻿@using AdminHalloDoc.Entities.Models;
+@using AdminHalloDoc.Models.CV;
+@using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+@using System.Text;
+@using static AdminHalloDoc.Entities.ViewModel.Constant;
+@inject ILoginRepository loginRepository
+@{
     string path = Context.Request.Path;
+    List<Menu> MenuItems = await loginRepository.ListMenuByRole(CV.RoleId());
+    List<MenuItem> Staticmenu = new List<MenuItem>();
+    foreach (Menu menu in MenuItems)
+    {
+        MenuItem m = new MenuItem();
+        m = staticmenu.Items.Where(item => item.DbName == menu.Name).FirstOrDefault();
+
+        if (m != null)
+        {
+            Staticmenu.Add(m);
+        }
+        
+    }
+
 }
 <nav class="navbar p-0 pt-2 px-5 navbar-expand-lg bg-body shadow mb-5  rounded">
     <div class="container-fluid justify-content-">
         <!-- <a class="navbar-brand" href="#">Patient_</a> -->
-        
+
         <div class="" id="navbarSupportedContent">
             <ul id="navlist" data-hidden="true" class="navlist navbar-nav me-auto mb-2 mb-lg-0 fw-bold">
                 <button class="nav-toggle toggle--close" aria-label="close menu">
                     &#x2573;
                 </button>
-                <li class="nav-item">
+                @foreach (var menuItem in Staticmenu)
+                {
+                    if (menuItem.Submenu is null)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link px-4 @(path.StartsWith(menuItem.Url.ToString()) ? "active" : "")" href="@menuItem.Url">@menuItem.Label</a>
+                        </li>
+                    }
+                    else if (menuItem.Submenu is List<MenuItem> dropdownMenu)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link px-4 dropdown-toggle @(dropdownMenu.Any(item => path.StartsWith(item.Url)) ? "active" : "")" data-bs-toggle="dropdown" aria-expanded="false">@menuItem.Label</a>
+                            <ul class="dropdown-menu border-0 nn">
+                                @foreach (var subMenuItem in dropdownMenu)
+                                {
+                                    <li><a class="dropdown-item n @(path.StartsWith(subMenuItem.Url) ? "active" : "")" href="@subMenuItem.Url">@subMenuItem.Label</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                }
+               @* <li class="nav-item">
                     <a class="nav-link @(path.StartsWith("/AdminDashboard") || path.StartsWith("/ViewAction") || path.StartsWith("/SubmitForm")  ? "active" : "") px-3" aria-current="page" asp-controller="AdminDashboard" asp-action="Index">Dashboard</a>
                 </li>
                 <li class="nav-item">
@@ -22,8 +63,8 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link px-4 dropdown-toggle @(path.StartsWith("/Physician") ? "active" : "")" data-bs-toggle="dropdown" aria-expanded="false">Provider</a>
                     <ul class="dropdown-menu border-0 nn">
-                        <li><a class="dropdown-item n"  asp-action="PhysicianAll" asp-controller="Physician"> Provider </a></li>
-                        <li><a class="dropdown-item n" asp-action="MySchedule" asp-controller="Physician">Scheduling</a></li>
+                        <li><a class="dropdown-item n" asp-action="PhysicianAll" asp-controller="Physician"> Provider </a></li>
+                        <li><a class="dropdown-item n" asp-action="Index" asp-controller="Scheduling">Scheduling</a></li>
                         <li><a class="dropdown-item n" href="#">Invoicing</a></li>
                     </ul>
                 </li>
@@ -39,8 +80,81 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link px-3" href="Patient_Profile.html">Records</a>
-                </li>
+                </li>*@
             </ul>
         </div>
     </div>
 </nav>
+
+@{
+
+
+    //    StringBuilder menuHtml = new StringBuilder();
+
+    //foreach(var menuItem in menu.Items)
+    //{
+    //    menuHtml.Append("<li class=\"nav-item");
+    //    if (menuItem.IsActive) {
+    //        menuHtml.Append(" active");
+    //    }
+    //    menuHtml.Append("\">");
+
+    //    if (menuItem.Submenu != null && menuItem.Submenu.Count > 0) {
+    //        menuHtml.Append("<a class=\"nav-link dropdown-toggle\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">");
+    //        menuHtml.Append(menuItem.Label);
+    //        menuHtml.Append("</a>");
+    //        menuHtml.Append("<ul class=\"dropdown-menu border-0 nn\">");
+    //        foreach(var subMenuItem in menuItem.Submenu)
+    //        {
+    //            menuHtml.Append("<li><a class=\"dropdown-item n\" href=\"" + subMenuItem.Url + "\">" + subMenuItem.Label + "</a></li>");
+    //        }
+    //        menuHtml.Append("</ul>");
+    //    }
+    //    else {
+    //        menuHtml.Append("<a class=\"nav-link\" href=\"" + menuItem.Url + "\">");
+    //        menuHtml.Append(menuItem.Label);
+    //        menuHtml.Append("</a>");
+    //    }
+
+    //    menuHtml.Append("</li>");
+    //}
+
+    //string finalMenuHtml = menuHtml.ToString();
+}
+@*@{
+    // Define the menu items in a dictionary
+
+
+    // Helper function to check if a path starts with a given URL
+    Func<string, bool> pathStartsWith = (url) => Request.Path.StartsWithSegments(url);
+}
+
+<div class="" id="navbarSupportedContent">
+    <ul id="navlist" data-hidden="true" class="navlist navbar-nav me-auto mb-2 mb-lg-0 fw-bold">
+        <button class="nav-toggle toggle--close" aria-label="close menu">
+            &#x2573;
+        </button>
+
+        @foreach (var menuItem in menuItems)
+        {
+            if (menuItem.Value is string)
+            {
+                <li class="nav-item">
+                    <a class="nav-link px-4 @(pathStartsWith(menuItem.Value.ToString()) ? "active" : "")" href="@menuItem.Value">@menuItem.Key</a>
+                </li>
+            }
+            else if (menuItem.Value is Dictionary<string, string> dropdownMenu)
+            {
+                <li class="nav-item dropdown">
+                    <a class="nav-link px-4 dropdown-toggle @(dropdownMenu.Any(item => pathStartsWith(item.Value)) ? "active" : "")" data-bs-toggle="dropdown" aria-expanded="false">@menuItem.Key</a>
+                    <ul class="dropdown-menu border-0 nn">
+                        @foreach (var subMenuItem in dropdownMenu)
+                        {
+                            <li><a class="dropdown-item n @(pathStartsWith(subMenuItem.Value) ? "active" : "")" href="@subMenuItem.Value">@subMenuItem.Key</a></li>
+                        }
+                    </ul>
+                </li>
+            }
+        }
+    </ul>
+</div>*@

@@ -88,7 +88,7 @@
         }
 
         .calendar-body .calendar-dates li {
-            margin-top: 30px;
+            border: 0px solid #414141;
             position: relative;
             z-index: 1;
             cursor: pointer;
@@ -122,7 +122,50 @@
         background: #e4e1e1;
     }
 </style>
+<style>
+    .first {
+        background-color: #ffabd5;
+    }
+    li div{
+        border: 0.5px solid #c9c9c9;
+        padding:1px;
+    }
+    li div {
+        height: 25px; /* Set the desired fixed height */
+        overflow: hidden; /* Hide overflow text */
+    }
 
+    .heading{
+        background-color: #565656;
+        color:white !important;
+        border: 1px solid #f3f3f3;
+    }
+
+    .weekhead{
+        background-color: #565656;
+        color: white !important;
+        border: 1px solid #f3f3f3;
+    }
+
+    .Converage {
+        background-color: #ffabd5;
+        color: black !important;
+        
+    }
+
+        .Converage td {
+        border: 1px solid #f3f3f3;
+    }
+    .weekhead td{
+        color: white !important;
+        padding: 0.4rem;
+        border: 1px solid #f3f3f3;
+    }
+    .main tr > td{
+        border: 1px solid #c9c9c9;
+        padding: 0.3rem;
+    }
+</style>
 
 <div class="container">
     <div class="justify-content-between d-flex container-fluid  position-relative ">
@@ -198,16 +241,16 @@
     </div>
 
     <div id="monthcontainer" class="calendar-body">
-        <ul class="calendar-weekdays"></ul>
+        <ul class="calendar-weekdays mb-0"></ul>
         <ul class="calendar-dates"></ul>
     </div>
 
     <div style="display:none" id="weekviewcontainer" class="active">
        
-        <table>
+        <table style="width:100%;" >
             <thead>
                 <tr class="weekhead">
-                    <th></th>
+                    <td>Staf</td>
                     
                         <td class="title" data-name="Sun">Sun</td>
                        
@@ -227,69 +270,37 @@
                     <td class="title" data-name="Sat">Sat</td>
                    
                     
+
+                </tr>
+                <tr class="Converage">
+                    <th>Converage</th>
+
+                    <td class="" data-name="Sun">0/24</td>
+
+                    <td class="" data-name="Mon">0/24</td>
+
+
+                    <td class="" data-name="Tue">0/24</td>
+
+
+                    <td class="" data-name="Wed">0/24</td>
+
+
+                    <td class="" data-name="Thu">0/24</td>
+
+                    <td class="" data-name="Fri">0/24</td>
+
+                    <td class="" data-name="Sat">0/24</td>
+
+
                 </tr>
             </thead>
             <tbody class="main">
-                <tr>
-                    <td class="title" data-name="Sun">Sun</td>
-                    <td class="one" data-week='0' data-name="Sun"></td>
-                    <td class="two" data-week='1' data-name="Sun"></td>
-                    <td class="three" data-week='2' data-name="Sun"></td>
-                    <td class="four" data-week='3' data-name="Sun"></td>
-                    <td class="five" data-week='4' data-name="Sun"></td>
-                </tr>
-                <tr>
-                    <td class="title" data-name="Mon">Mon</td>
-                    <td class="one" data-week='0' data-name="Mon"></td>
-                    <td class="two" data-week='1' data-name="Mon"></td>
-                    <td class="three" data-week='2' data-name="Mon"></td>
-                    <td class="four" data-week='3' data-name="Mon"></td>
-                    <td class="five" data-week='4' data-name="Mon"></td>
-                </tr>
-                <tr>
-                    <td class="title" data-name="Tue">Tue</td>
-                    <td class="one" data-week='0' data-name="Tue"></td>
-                    <td class="two" data-week='1' data-name="Tue"></td>
-                    <td class="three" data-week='2' data-name="Tue"></td>
-                    <td class="four" data-week='3' data-name="Tue"></td>
-                    <td class="five" data-week='4' data-name="Tue"></td>
-                </tr>
-                <tr>
-                    <td class="title" data-name="Wed">Wed</td>
-                    <td class="one" data-week='0' data-name="Wed"></td>
-                    <td class="two" data-week='1' data-name="Wed"></td>
-                    <td class="three" data-week='2' data-name="Wed"></td>
-                    <td class="four" data-week='3' data-name="Wed"></td>
-                    <td class="five" data-week='4' data-name="Wed"></td>
-                </tr>
-                <tr>
-                    <td class="title" data-name="Thu">Thu</td>
-                    <td class="one" data-week='0' data-name="Thu"></td>
-                    <td class="two" data-week='1' data-name="Thu"></td>
-                    <td class="three" data-week='2' data-name="Thu"></td>
-                    <td class="four" data-week='3' data-name="Thu"></td>
-                    <td class="five" data-week='4' data-name="Thu"></td>
-                </tr>
-                <tr>
-                    <td class="title" data-name="Fri">Fri</td>
-                    <td class="one" data-week='0' data-name="Fri"></td>
-                    <td class="two" data-week='1' data-name="Fri"></td>
-                    <td class="three" data-week='2' data-name="Fri"></td>
-                    <td class="four" data-week='3' data-name="Fri"></td>
-                    <td class="five" data-week='4' data-name="Fri"></td>
-                </tr>
-                <tr>
-                    <td class="title" data-name="Sat">Sat</td>
-                    <td class="one" data-week='0' data-name="Sat"></td>
-                    <td class="two" data-week='1' data-name="Sat"></td>
-                    <td class="three" data-week='2' data-name="Sat"></td>
-                    <td class="four" data-week='3' data-name="Sat"></td>
-                    <td class="five" data-week='4' data-name="Sat"></td>
-                </tr>
-
+               
             </tbody>
         </table>
     </div>
+
     <div id="daycontainer" style="display:none;">
         <div class="schedule">
             <table class="employee-schedules">
@@ -310,6 +321,51 @@
     <script type="text/javascript">
 
         $(function () {
+            var ProviderData = [];
+            //Get Provider List in array
+            function getProviderList(region) {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("PhysicianAll", "Scheduling")',
+                    data: { region: region },
+                    dataType: "json",
+                    success: function (response) {
+                        // Initialize an array to store the JSON data
+                       
+
+                        // Process the response data
+                        response.forEach(function (item) {
+                            // Create an object with desired properties
+                            var jsonObject = {
+                                id: item.physicianid,
+                                address: item.Address1 + ', ' + item.Address2,
+                                name: item.firstname + ' ' + item.lastname,
+                                status: item.Status,
+                                photo: item.photo
+                                // Add more properties as needed
+                            };
+
+                            // Push the object to the JSON data array
+                            ProviderData.push(jsonObject);
+                        });
+
+                        // Convert the JSON data array to JSON format
+                        var jsonData = JSON.stringify(ProviderData);
+
+                        // Output the JSON data to the console
+                        console.log(jsonData);
+                    },
+                    error: function () {
+                        // Handle error
+                        console.error("Error fetching provider list");
+                    }
+                });
+            }
+
+            // Call the function to get provider list initially
+            getProviderList();
+
+
             const timeSlotsContainer = $('.employee-schedules thead tr');
             const employeeSchedulesContainer = $('.employee-schedules tbody');
 
@@ -338,7 +394,7 @@
 
                 // Populate weekdays
                 daysOfWeek.forEach(day => {
-                    weekdays.innerHTML += `<li>${day}</li>`;
+                    weekdays.innerHTML += `<li class="heading" >${day}</li>`;
                 });
 
                 // Get the first day of the month
@@ -358,19 +414,19 @@
 
                 // Loop to add the last dates of the previous month
                 for (let i = dayone; i > 0; i--) {
-                    lit += `<li class="inactive">${monthlastdate - i + 1}</li>`;
+                    lit += `<li class="inactive"><div class="" ></div><div></div> <div></div> <div></div> <div></div></li>`;
                 }
 
                 // Loop to add the dates of the current month
                 for (let i = 1; i <= lastdate; i++) {
                     // Check if the current date is today
                     let isToday = i === date.getDate() && month === new Date().getMonth() && year === new Date().getFullYear() ? "active" : "";
-                    lit += `<li class="${isToday}">${i}<div>dede</div> <div>dede</div> <div>dede</div> <div>dede</div> </li>`;
+                    lit += `<li class="${isToday}"><div class="first" >${i}</div><div></div> <div></div> <div></div> <div></div> </li>`;
                 }
 
                 // Loop to add the first dates of the next month
                 for (let i = dayend; i < 6; i++) {
-                    lit += `<li class="inactive">${i - dayend + 1}</li>`;
+                    lit += `<li class="inactive"><div class="" ></div><div></div> <div></div> <div></div> <div></div></li>`;
                 }
 
                 // Update the text of the current date element with the formatted current month and year
@@ -518,8 +574,40 @@
                         wnav = 0;
                     });
 
-                    // Define function to load the week calendar
+                    // Define function to load the week calendar--------------------------WEEk-------------------------TABLE-----------------------------------------------
                     function loadWeekCalendar() {
+                        var tbody = document.querySelector('.main');
+                        tbody.innerHTML = "";
+                        // Check if tbody exists
+                        if (tbody) {
+                            // Add rows dynamically
+                            for (var i = 0; i < ProviderData.length ;i++) {
+                                var row = document.createElement('tr');
+                                for (var j = 0; j < 8; j++) {
+                                    var cell = document.createElement('td');
+                                    if (j === 0) {
+                                        var image = document.createElement('img');
+                                        image.classList.add("img-fluid");
+                                        image.classList.add("mx-2");
+                                        image.style.height = "50px";
+                                        image.src = '/Upload/Physician/' + ProviderData[i].id + '/' + ProviderData[i].photo; // Set the image URL from ProviderData
+                                        image.alt = ProviderData[i].name; // Set the alt text for accessibility
+                                        cell.appendChild(image);
+                                        cell.appendChild(document.createTextNode(ProviderData[i].name)); // Add text content after the image
+
+                                        // First cell, add some content or leave it empty
+                                       // cell.textContent = ProviderData[i].name; + (i + 1);
+                                    } else {
+                                        // Other cells, you can add your content or leave them empty
+                                        cell.textContent = '';
+                                    }
+                                    row.appendChild(cell);
+                                }
+                                tbody.appendChild(row);
+                            }
+                        }
+                        // Above function to load the week calendar--------------------------WEEk-------------------------TABLE-----------------------------------------------
+
                         const formatDate = new Intl.DateTimeFormat("en", { day: "2-digit" });
                         const headwdate = new Intl.DateTimeFormat("en", { year: 'numeric', month: 'short', day: 'numeric' });
                         var options = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
@@ -572,6 +660,7 @@
                                 dec++;
                             }
                         }
+
                         const fweekdt = headwdate.format(getweekdt.setDate(getweekdt.getDate() - 1));
                         console.log(fweekdt);
                         const lweekdt = headwdate.format(getweekdt.setDate(getweekdt.getDate() + 6));
@@ -585,13 +674,13 @@
                         if (fyeardt == lyeardt && fmondt == lmondt) { $('.calendar-current-date').html(fmondt + " " + fdaydt + " - " + ldaydt + fyeardt); }
                         if (fyeardt == lyeardt && fmondt != lmondt) { $('.calendar-current-date').html(fmondt + " " + fdaydt + " - " + lmondt + " " + ldaydt + fyeardt); }
                         if (fyeardt != lyeardt && fmondt != lmondt) { $('.calendar-current-date').html(fweekdt + " - " + lweekdt); }
-                        $('.title[data-name="Sun"').html("Sunday - " + formatDate.format(fdweek.setDate(fdweek.getDate() - 1)));
-                        $('.title[data-name="Mon"').html("Monday " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
-                        $('.title[data-name="Tue"').html("Tuesday " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
-                        $('.title[data-name="Wed"').html("Wednesday " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
-                        $('.title[data-name="Thu"').html("Thursday " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
-                        $('.title[data-name="Fri"').html("Friday " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
-                        $('.title[data-name="Sat"').html("Saturday " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
+                        $('.title[data-name="Sun"').html("Sun - " + formatDate.format(fdweek.setDate(fdweek.getDate() - 1)));
+                        $('.title[data-name="Mon"').html("Mon " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
+                        $('.title[data-name="Tue"').html("Tue " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
+                        $('.title[data-name="Wed"').html("Wed " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
+                        $('.title[data-name="Thu"').html("Thu " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
+                        $('.title[data-name="Fri"').html("Fri " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
+                        $('.title[data-name="Sat"').html("Sat " + formatDate.format(fdweek.setDate(fdweek.getDate() + 1)));
                     }
 
                     // Initial load of the week calendar

@@ -36,7 +36,7 @@
             <input type="hidden" asp-for="AdminId" />
             <h4 class=" my-4">Account Information</h4>
             <div class="col-md-6 form-floating  ">
-                <input  asp-for="UserName" class="form-control rounded" name="UserName" type="text" placeholder="First Name" autocomplete=off>
+                <input asp-for="UserName" disabled class="form-control rounded" name="UserName" type="text" placeholder="First Name" autocomplete=off>
                 <label class="" for="floatingInput">User Name </label>
             </div>
             <div class="col-md-6 form-floating">
@@ -45,11 +45,11 @@
             </div>
 
             <div class="col-md-6 form-floating">
-                <select  class="form-select form-select-md p-2" required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
+                <select  class="form-select form-select-md p-2" disabled required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
                 </select>
             </div>
             <div class="col-md-6 form-floating">
-                <select  class="form-select form-select-md p-2" required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
+                <select class="form-select form-select-md p-2" disabled required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
                 </select>
             </div>
             <div class="text-end edits">

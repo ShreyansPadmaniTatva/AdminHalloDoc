@@ -189,6 +189,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             {
                 if (physiciandata.UserName!=null && physiciandata.PassWord != null)
                 {
+                    // ASP_User
                     var Aspnetuser = new Aspnetuser();
                     var hasher = new PasswordHasher<string>();
                     Aspnetuser.Id = Guid.NewGuid().ToString();
@@ -198,6 +199,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Aspnetuser.CreatedDate = DateTime.Now;
                     _context.Aspnetusers.Add(Aspnetuser);
                      _context.SaveChanges();
+
+                    //aspnet_user_roles
+                    var aspnetuserroles = new Aspnetuserrole();
+                    aspnetuserroles.Userid = Aspnetuser.Id;
+                    aspnetuserroles.Roleid = "Provider";
+                    _context.Aspnetusers.Add(Aspnetuser);
+                    _context.SaveChanges();
 
                     // Physician
                     var Physician = new Physician();
@@ -255,6 +263,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     CM.UploadProviderDoc(physiciandata.SignatureFile, Physician.Physicianid, Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Signature.png");
                     CM.UploadProviderDoc(physiciandata.PhotoFile, Physician.Physicianid, Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Photo."+ Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.'));
 
+                    // Physician_region
                     List<int> priceList = physiciandata.Regionsid.Split(',').Select(int.Parse).ToList();
                     foreach (var item in priceList)
                     {
@@ -265,16 +274,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                              _context.SaveChanges();
                         
                     }
-
-
                 }
-
                 else
                 {
 
                 }
-              
-
                 return true;
             }
             catch (Exception e)

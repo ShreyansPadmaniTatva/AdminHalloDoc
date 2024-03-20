@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace AdminHalloDoc.Entities.ViewModel
 {
     public class CM
@@ -68,5 +67,7 @@ namespace AdminHalloDoc.Entities.ViewModel
             return upload_path;
         }
         #endregion
+
+
     }
 }

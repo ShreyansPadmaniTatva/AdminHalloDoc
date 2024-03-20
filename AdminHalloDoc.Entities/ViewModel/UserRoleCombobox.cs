@@ -8,7 +8,7 @@ namespace AdminHalloDoc.Entities.ViewModel
 {
     public class UserRoleCombobox
     {
-        public string RoleId { get; set; }
+        public int RoleId { get; set; }
         public string RoleName { get; set; }
     }
 }

@@ -38,6 +38,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 new Claim("Role", userinfo.Role),
                 new Claim("UserName", userinfo.Username),
                 new Claim("ID", userinfo.ID),
+                new Claim("RoleId", userinfo.RoleId.ToString()),
 
             };
 

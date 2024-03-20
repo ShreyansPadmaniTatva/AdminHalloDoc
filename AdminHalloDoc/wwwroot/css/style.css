@@ -1059,3 +1059,17 @@ nav {
     --bs-btn-disabled-border-color: #ffc107;
     --bs-gradient: none;
 }
+a{
+    text-decoration:none;
+}
+.request-type-btn.active {
+    border: 2px solid #a9a9a9;
+    color: black;
+}
+.request-type-btn {
+    height: 36px;
+}
+.dropdown-item.active, .dropdown-item:active {
+    color: var(--primary-color) !important;
+    background-color: var(--bs-info-bg-subtle) !important;
+}

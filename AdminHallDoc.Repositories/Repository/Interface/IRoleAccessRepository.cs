@@ -16,6 +16,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<ViewRoleByMenu> GetRoleByMenus(int roleid);
         Task<List<int>> CheckMenuByRole(int roleid);
         Task<bool> PutRoleMenu(ViewRoleByMenu role, string Menusid, string ID);
-        Task<List<ViewUserAcces>> GetAllUserDetails();
+        Task<List<ViewUserAcces>> GetAllUserDetails(int? User);
     }
 }

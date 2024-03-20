@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Org.BouncyCastle.Crypto;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -81,7 +82,132 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
+        #region Admin_Add
+        public async Task<bool> AdminPost(ViewAdminProfile admindata, string AdminId)
+        {
+            try
+            {
+                if (admindata.UserName != null && admindata.Password != null)
+                {
+                    //Aspnet_user
+                    var Aspnetuser = new Aspnetuser();
+                    var hasher = new PasswordHasher<string>();
+                    Aspnetuser.Id = Guid.NewGuid().ToString();
+                    Aspnetuser.Username = admindata.UserName;
+                    Aspnetuser.Passwordhash = hasher.HashPassword(null, admindata.Password);
+                    Aspnetuser.Email = admindata.Email;
+                    Aspnetuser.CreatedDate = DateTime.Now;
+                    _context.Aspnetusers.Add(Aspnetuser);
+                    _context.SaveChanges();
+
+                    //aspnet_user_roles
+                    var aspnetuserroles = new Aspnetuserrole();
+                    aspnetuserroles.Userid = Aspnetuser.Id;
+                    aspnetuserroles.Roleid = "Admin";
+                    _context.Aspnetuserroles.Add(aspnetuserroles);
+                    _context.SaveChanges();
+
+                    //Admin
+                    var Admin = new AdminHalloDoc.Entities.Models.Admin();
+                    Admin.Aspnetuserid = Aspnetuser.Id;
+                    Admin.Firstname = admindata.Firstname;
+                    Admin.Lastname = admindata.Lastname;
+                    Admin.Status = admindata.Status;
+                    Admin.Roleid = admindata.Roleid;
+                    Admin.Email = admindata.Email;
+                    Admin.Mobile = admindata.Mobile;
+                    Admin.Isdeleted = new BitArray(1);
+                    Admin.Isdeleted[0] = false;
+                    Admin.Address1 = admindata.Address1;
+                    Admin.Address2 = admindata.Address2;
+                    Admin.City = admindata.City;
+                    Admin.Zip = admindata.Zipcode;
+                    Admin.Altphone = admindata.AltMobile;
+                   
+                    Admin.Createddate = DateTime.Now;
+                    Admin.Createdby = AdminId;
+                     //Admin.Regionid = admindata.Regionid;
+
+                    _context.Admins.Add(Admin);
+                    _context.SaveChanges();
+
+                    //Admin_region
+                    List<int> priceList = admindata.Regionsid.Split(',').Select(int.Parse).ToList();
+                    foreach (var item in priceList)
+                    {
+                        Adminregion ar = new Adminregion();
+                        ar.Regionid = item;
+                        ar.Adminid = (int)Admin.Adminid;
+                        _context.Adminregions.Add(ar);
+                        _context.SaveChanges();
+
+                    }
+
+
+                }
+
+                else
+                {
+
+                }
+
+
+                return true;
+            }
+            catch (Exception e)
+            {
+
+            }
+            return false;
+        }
+        #endregion
+
         #region Put_Profile
+
+        #region SavePhysicianInfo
+        public async Task<bool> SaveAdminInfo(ViewAdminProfile  vm)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Admins
+                        .Where(W => W.Adminid == vm.AdminId)
+                        .FirstOrDefaultAsync();
+                    Aspnetuser U = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Id == DataForChange.Aspnetuserid);
+
+                    if (DataForChange != null)
+                    {
+
+                        U.Username = vm.UserName;
+                        DataForChange.Status = vm.Status;
+                        DataForChange.Roleid = vm.Roleid;
+
+
+                        _context.Admins.Update(DataForChange);
+                        _context.Aspnetusers.Update(U);
+                        _context.SaveChanges();
+
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
 
         #region Edit_Admin_ProfileAsync
 

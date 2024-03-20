@@ -1,4 +1,4 @@
-﻿@using static AdminHalloDoc.Entities.ViewModel.Constant;
+﻿    @using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.PaginatedViewModel;
 <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
       asp-action="_SearchResult" asp-controller="AdminDashboard" novalidate="novalidate">
@@ -6,6 +6,7 @@
     <input type="hidden" asp-for="status" name="status" id="requeststatus" class="form-control">
     <input type="hidden" asp-for="RegionId" name="RegionId" id="requestRegionId" class="form-control">
     <input type="hidden" asp-for="RequestType" name="RequestType" id="requesttypebtn" class="form-control">
+    <input type="hidden" asp-for="SearchInput" name="SearchInput" id="SearchInput" class="form-control">
     <div class="tab ">
         <div class="row mb-3">
             <div class="col-md-2 col-sm-4 col-4 ">
@@ -119,22 +120,22 @@
         <div class="row ps-2 mb-lg-0 ">
             <div class="row col-xl-6">
                 <div class="col-sm-4">
-                    <input id="search-input" class="form-control p-2 mt-3 px-4 mb-3 w-100" type="text"
+                    <input id="getSearchInput" class="form-control p-2 mt-3 px-4 mb-3 w-100" type="text"
                            placeholder='Search Patients'>
                 </div>
                 <div class="col-sm-4">
                     <div class="">
 
                         <select class="form-select form-select-sm p-2 mt-3 mb-3 w-100 regionDashboard"  data-allow-clear="true" tabindex="-1" id="regionDashboard" asp-items="@(new SelectList(ViewBag.RegionComboBox, "RegionId", "RegionName"))" data-control="select" data-placeholder="Region">
-                            <option id="defaultregion" value="">Regions</option>
+                            <option id="defaultregion" value="">All Regions</option>
                         </select>
                     </div>
                 </div>
             </div>
 
 
-            <div class="col-xl-6 d-flex justify-content-xl-end justify-content-center gap-2 gap-sm-3 gap-xl-4 p-0">
-                <button value="" class="btn btn-transparent d-flex align-items-center justify-content-center flex-column flex-lg-row request-type-btn" data-requesttype="0">
+            <div class="col-xl-6 d-flex justify-content-xl-end justify-content-center gap-2 gap-sm-3 gap-xl-4 p-0 align-items-center">
+                <button value="" class="btn btn-transparent d-flex align-items-center justify-content-center flex-column active flex-lg-row request-type-btn" data-requesttype="0">
                     <span> All </span>
                 </button>
                 <button value="2" class="btn btn-transparent d-flex align-items-center justify-content-center flex-column flex-lg-row request-type-btn" data-requesttype="1">
@@ -162,6 +163,8 @@
 </form>
 @section Scripts{
     <script>
+
+
         function changeStatus(e) {
             //  $('#requeststatus').val(e);
             $('#filterForm').submit();

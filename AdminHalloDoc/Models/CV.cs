@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AdminHalloDoc.Entities.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,6 +17,20 @@ namespace AdminHalloDoc.Models.CV
             _httpContextAccessor = new HttpContextAccessor();
         }
 
+        public static int? RoleId()
+        {
+            string cookieValue;
+            string RoleId = null;
+
+            if (_httpContextAccessor.HttpContext.Request.Cookies["jwt"] != null)
+            {
+                cookieValue = _httpContextAccessor.HttpContext.Request.Cookies["jwt"].ToString();
+
+                RoleId = DecodedToken.DecodeJwt(DecodedToken.ConvertJwtStringToJwtSecurityToken(cookieValue)).claims.FirstOrDefault(t => t.Key == "RoleId").Value;
+            }
+
+            return Convert.ToInt32(RoleId);
+        }
 
         public static string? role()
         {
@@ -77,6 +92,10 @@ namespace AdminHalloDoc.Models.CV
 
             return UserID;
         }
+
+        #region SetMenu 
+      
+        #endregion
 
     }
 }

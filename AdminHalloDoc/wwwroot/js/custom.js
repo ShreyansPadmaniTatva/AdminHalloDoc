@@ -28,7 +28,13 @@ $(function () {
     });
     $(".regionDashboard").change(function () {
         $('#requestRegionId').val(this.value);
-       
+
+        $('.t-tab.active').click();
+
+    });
+    $("#getSearchInput").keyup(function () {
+        $('#SearchInput').val(this.value.trim());
+        console.log($('#SearchInput').val());
         $('.t-tab.active').click();
 
     });
@@ -51,6 +57,22 @@ $(function () {
 
 });
 
+
+var buttons = document.querySelectorAll('.request-type-btn');
+
+console.log(buttons);
+// Add click event listeners to each button
+buttons.forEach(function (button) {
+    button.addEventListener('click', function () {
+        // Remove 'active' class from all buttons
+        buttons.forEach(function (btn) {
+            btn.classList.remove('active');
+        });
+
+        // Add 'active' class to the clicked button
+        button.classList.add('active');
+    });
+});
 
 function oops(title) {
     Swal.fire({

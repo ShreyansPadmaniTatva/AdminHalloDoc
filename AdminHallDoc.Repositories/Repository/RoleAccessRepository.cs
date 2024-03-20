@@ -50,7 +50,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region GetMenusByAccount
-        public async Task<List<Menu>> GetMenusByAccount(short Accounttype)
+        public async Task<List<AdminHalloDoc.Entities.Models.Menu>> GetMenusByAccount(short Accounttype)
         {
             return await _context.Menus.Where(r => r.Accounttype == Accounttype).ToListAsync();
         }
@@ -187,31 +187,71 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region GetProfileAll
-        public async Task<List<ViewUserAcces>> GetAllUserDetails()
+        public async Task<List<ViewUserAcces>> GetAllUserDetails(int? User)
         {
+            IQueryable<ViewUserAcces> query =
+                from user in _context.Aspnetusers
+                join admin in _context.Admins on user.Id equals admin.Aspnetuserid into adminGroup
+                from admin in adminGroup.DefaultIfEmpty()
+                join physician in _context.Physicians on user.Id equals physician.Aspnetuserid into physicianGroup
+                from physician in physicianGroup.DefaultIfEmpty()
+                where (admin != null || physician != null) &&
+                      (admin.Isdeleted == new BitArray(1) || physician.Isdeleted == new BitArray(1))
+                select new ViewUserAcces
+                {
+                    UserName = user.Username,
+                    FirstName = admin != null ? admin.Firstname : (physician != null ? physician.Firstname : null),
+                    isAdmin = admin != null,
+                    UserID = admin != null ? admin.Adminid : (physician != null ? physician.Physicianid : null),
+                    accounttype = admin != null ? 2 : (physician != null ? 3 : null),
+                    status = admin != null ? admin.Status : (physician != null ? physician.Status : null),
+                    Mobile = admin != null ? admin.Mobile : (physician != null ? physician.Mobile : null),
+                };
 
+            if (User.HasValue)
+            {
+                switch (User.Value)
+                {
+                    case 2: // Admin data
+                        query = query.Where(u => u.isAdmin);
+                        break;
+                    case 3: // Provider data
+                        query = query.Where(u => !u.isAdmin);
+                        break;
 
-            List<ViewUserAcces> v = await (
-                                         from user in _context.Aspnetusers
-                                         join admin in _context.Admins on user.Id equals admin.Aspnetuserid into adminGroup
-                                         from admin in adminGroup.DefaultIfEmpty()
-                                         join physician in _context.Physicians on user.Id equals physician.Aspnetuserid into physicianGroup
-                                         from physician in physicianGroup.DefaultIfEmpty()
-                                         where (admin != null || physician != null) && (admin.Isdeleted==new BitArray(1) || physician.Isdeleted == new BitArray(1))
-                                         select new ViewUserAcces
-                                         {
-                                             UserName = user.Username,
-                                             FirstName = admin != null ? admin.Firstname : (physician != null ? physician.Firstname : null),
-                                             isAdmin = admin != null ? true : false,
-                                             UserID = admin != null ? admin.Adminid : (physician != null ? physician.Physicianid : null),
-                                             accounttype = admin != null ? 2 : (physician != null ? 3 : null),
-                                             status = admin != null ? admin.Status : (physician != null ? physician.Status : null),
-                                             Mobile = admin != null ? admin.Mobile : (physician!=null ? physician.Mobile : null),
-                                         }
-                                     ).ToListAsync();
-            return v;
+                }
+            }
 
+            return await query.ToListAsync();
         }
+        //public async Task<List<ViewUserAcces>> GetAllUserDetails(int? User)
+        //{
+
+
+        //    List<ViewUserAcces> v = await (
+        //                                 from user in _context.Aspnetusers
+        //                                 join admin in _context.Admins on user.Id equals admin.Aspnetuserid into adminGroup
+        //                                 from admin in adminGroup.DefaultIfEmpty()
+        //                                 join physician in _context.Physicians on user.Id equals physician.Aspnetuserid into physicianGroup
+        //                                 from physician in physicianGroup.DefaultIfEmpty()
+        //                                 where (admin != null || physician != null) && (admin.Isdeleted==new BitArray(1) || physician.Isdeleted == new BitArray(1))
+
+        //                                 select new ViewUserAcces
+        //                                 {
+        //                                     UserName = user.Username,
+        //                                     FirstName = admin != null ? admin.Firstname : (physician != null ? physician.Firstname : null),
+        //                                     isAdmin = admin != null ? true : false,
+        //                                     UserID = admin != null ? admin.Adminid : (physician != null ? physician.Physicianid : null),
+        //                                     accounttype = admin != null ? 2 : (physician != null ? 3 : null),
+        //                                     status = admin != null ? admin.Status : (physician != null ? physician.Status : null),
+        //                                     Mobile = admin != null ? admin.Mobile : (physician!=null ? physician.Mobile : null),
+        //                                 }
+        //                             ).ToListAsync();
+        //    return v;
+
+        //}
+
+
         #endregion
 
     }

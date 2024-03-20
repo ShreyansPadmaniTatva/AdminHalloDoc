@@ -69,7 +69,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        #region Add_Profile
+        #region AddEdit_Profile
         public async Task<IActionResult> PhysicianProfile(int? id)
         {
             
@@ -92,7 +92,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        #region PhysicianAddEdit
+        #region Physician_Add
         [HttpPost]
         public async Task<IActionResult> PhysicianAddEdit(Physicians physicians)
         {
@@ -115,12 +115,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        #region Physician_MY_Schedule
-        public async Task<IActionResult> MySchedule()
-        {
-            return View("../AdminViews/Physician/MySchedule");
-        }
-        #endregion
 
         #region SendMessage
         public async Task<IActionResult> SendMessage(string? id, string? email, int? way, string? msg)

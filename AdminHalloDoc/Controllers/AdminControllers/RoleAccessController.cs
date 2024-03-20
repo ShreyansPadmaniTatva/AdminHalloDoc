@@ -118,11 +118,15 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region User_Access
-        public async Task<IActionResult> UserAccess()
+        public async Task<IActionResult> UserAccess(int? User)
         {
 
             TempData["Status"] = TempData["Status"];
-            List<ViewUserAcces> v = await _roleAccessRepository.GetAllUserDetails();
+            List<ViewUserAcces> v = await _roleAccessRepository.GetAllUserDetails(User);
+            if(User != null)
+            {
+                return Json(v);
+            }
             return View("../AdminViews/RoleAccess/UserAccess", v);
         }
         #endregion
@@ -162,19 +166,126 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
             if (id == null)
             {
-                ViewData["PhysicianAccount"] = "Add";
+                ViewData["AdminAccount"] = "Add Admin";
             }
             else
             {
+                ViewData["AdminAccount"] = "Edit Admin";
 
                 ViewAdminProfile p = await _myProfileRepository.GetProfileDetails((int)id);
                 ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
                 ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
-                return View("../AdminViews/Profile/Index", p);
+                return View("../AdminViews/RoleAccess/AdminAddEdit", p);
 
             }
-            return View("../AdminViews/Profile/Index");
+            return View("../AdminViews/RoleAccess/AdminAddEdit");
         }
+        #endregion
+
+        #region Creat_Admin
+        [HttpPost]
+        public async Task<IActionResult> AdminAdd(ViewAdminProfile vm)
+        {
+            //TempData["Status"] = TempData["Status"];
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
+            // bool b = physicians.Isagreementdoc[0];
+
+            if (ModelState.IsValid)
+            {
+                await _myProfileRepository.AdminPost(vm, CV.ID());
+
+            }
+            else
+            {
+                return View("../AdminViews/RoleAccess/AdminAddEdit", vm);
+            }
+
+            return RedirectToAction("UserAccess");
+        }
+        #endregion
+
+        #region Update_Profile_Admin
+
+        #region SaveAdminInfo
+        public async Task<IActionResult> SaveAdminInfo(ViewAdminProfile vm)
+        {
+            string actionName = RouteData.Values["action"].ToString();
+            string actionNameaq = ControllerContext.ActionDescriptor.ActionName; // Get the current action name
+
+            bool data = await _myProfileRepository.SaveAdminInfo(vm);
+            if (data)
+            {
+                TempData["Status"] = "Administration Information Changed...";
+            }
+            else
+            {
+                TempData["Status"] = "Imformation not Changed properly...";
+            }
+
+            return RedirectToAction("AdminAddEdit", new { id = vm.AdminId });
+        }
+        #endregion
+
+        #region SaveAdministrationinfo
+        public async Task<IActionResult> SaveAdministrationinfo(ViewAdminProfile vm)
+        {
+
+
+            bool data = await _myProfileRepository.EditAdminProfileAsync(vm);
+            if (data)
+            {
+                TempData["Status"] = "Administration Information Changed...";
+            }
+            else
+            {
+                TempData["Status"] = "Imformation not Changed properly...";
+            }
+
+            return RedirectToAction("AdminAddEdit", new { id = vm.AdminId });
+        }
+        #endregion
+
+        #region EditBillingInfo
+        public async Task<IActionResult> EditBillingInfo(ViewAdminProfile vm)
+        {
+
+
+
+            bool data = await _myProfileRepository.EditBillingInfoAsync(vm);
+            if (data)
+            {
+                TempData["Status"] = "Billing Information Changed...";
+            }
+            else
+            {
+                TempData["Status"] = "Billing not Changed properly...";
+            }
+
+            return RedirectToAction("AdminAddEdit", new { id = vm.AdminId });
+        }
+        #endregion
+
+        #region ResetPassAdmin
+        public async Task<IActionResult> ResetPassAdmin(string password,int AdminId)
+        {
+
+
+
+            bool data = await _myProfileRepository.ChangePasswordAsync(password, AdminId);
+            if (data)
+            {
+                TempData["Status"] = "Password changed Successfully...";
+            }
+            else
+            {
+                TempData["Status"] = "Password not Changed...";
+            }
+
+            return RedirectToAction("AdminAddEdit", new { id = AdminId });
+        }
+        #endregion
+
         #endregion
 
     }

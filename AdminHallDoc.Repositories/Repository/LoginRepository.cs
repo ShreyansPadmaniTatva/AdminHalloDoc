@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -59,17 +60,21 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     {
                         var admindata = _context.Admins.FirstOrDefault(u => u.Aspnetuserid == user.Id);
                         admin.UserId = admindata.Adminid;
+                    admin.RoleId = (int)admindata.Roleid;
                     }
                     else if (admin.Role == "Patient")
                     {
                         var admindata = _context.Users.FirstOrDefault(u => u.Aspnetuserid == user.Id);
                         admin.UserId = admindata.Userid;
-                       
+
+
                     }
                     else
                     {
                         var admindata = _context.Physicians.FirstOrDefault(u => u.Aspnetuserid == user.Id);
                         admin.UserId = admindata.Physicianid;
+                        admin.RoleId = (int)admindata.Roleid;
+
                     }
 
                     return admin;
@@ -80,7 +85,30 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 return null;
             }
         }
-    
+
+        #endregion
+
+        #region CheckAccessLogin
+        public async Task<List<Menu>> ListMenuByRole(int? roleid)
+        {
+            List<Menu> allData = null;
+            if (roleid != null)
+            {
+                 allData = await (from rm in _context.Rolemenus
+                                                         join Menus in _context.Menus
+                                                         on rm.Menuid equals Menus.Menuid into MenusGroup
+                                                         from m in MenusGroup.DefaultIfEmpty()
+                                                         where rm.Roleid == roleid
+                                                          orderby m.Sortorder 
+                                                          select  m  ).ToListAsync();
+            }
+            else
+            {
+                return allData;
+            }
+            return allData;
+        }
+
         #endregion
 
     }

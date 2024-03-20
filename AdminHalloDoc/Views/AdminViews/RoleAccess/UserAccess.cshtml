@@ -34,7 +34,7 @@
         <div class="d-flex justify-content-between" >
             <div class="text-start mx-2 px-3">
                 <div class="dropdown ">
-                    <select class="form-select form-select-md " data-allow-clear="true" tabindex="-1" id="accounttype"  asp-items="@(new SelectList(enumData,"ID","Name"))" data-control="select2" data-placeholder="Select Level">
+                    <select class="form-select form-select-md " data-allow-clear="true" tabindex="-1" id="accounttype" onchange="ChangeRole()" asp-items="@(new SelectList(enumData,"ID","Name"))" data-control="select2" data-placeholder="Select Level">
                     </select>
                 </div>
             </div>
@@ -99,7 +99,61 @@
     {
 
     <script type="text/javascript">
+        var AdminStatus = {
+        @foreach (int value in Enum.GetValues(typeof(AdminStatus)))
+        {
+            <text>'@value': '@Enum.GetName(typeof(AdminStatus), value)', </text>
+        }
+                    };
+        var accountTypeValues = {
+        @foreach (int value in Enum.GetValues(typeof(AccountType)))
+        {
+            <text>'@value': '@Enum.GetName(typeof(AccountType), value)', </text>
+        }
+            };
+        function ChangeRole() {
+            var email = $("#accounttype").val();
+            if (email == '-1') {
+                email = null;
+                location.reload();
+            }
+            console.log(email);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UserAccess","RoleAccess")?User=' + email,
+                cache: false,
+                success: function (response) {
 
+                    console.log(response);
+                    $('table tbody').empty();
+                    // Assuming response is an array of objects, iterate through each object
+                    response.forEach(function (item) {
+                       
+                        var newRow = $('<tr>');
+                        newRow.append('<td class="mobile-hide" data-label="Current Status">' + accountTypeValues[item.accounttype] + '</td>');
+                        
+                        newRow.append('<td scope="row" data-label="Created Date">' + item.firstName + '</td>');
+                        newRow.append('<td scope="row" data-label="Created Date">' + item.mobile + '</td>');
+                        newRow.append('<td scope="row" data-label="Created Date">' + AdminStatus[item.status] + '</td>');
+                        newRow.append('<td scope="row" data-label="Created Date">' + item.status + '</td>');
+
+                        var actionButtonsCell = $('<td class="d-flex" data-label="Document">');
+                        if (item.isAdmin) {
+                            actionButtonsCell.append('<a href="/RoleAccess/AdminAddEdit/' + item.userID + '" class="btn btn-outline-info btn-sm document-button mx-1">Edit a</a>');
+                        } else {
+                            actionButtonsCell.append('<a href="/RoleAccess/PhysicianAddEdit/' + item.userID + '" class="btn btn-outline-info btn-sm document-button mx-1">Edit p</a>');
+                        } newRow.append(actionButtonsCell);
+                        
+                        // Append the new row to the table
+                        $('table tbody').append(newRow);
+                    });
+
+                },
+                error: function () {
+                    alert("Error while checking email.");
+                }
+            });
+        }
 
         $('#accounttype').on('change', function () {
             console.log(56);
@@ -117,7 +171,6 @@
         });
 
         window.onload = function () {
-            chnageaccount();
 
             console.log("@status  d");
             if ("@status" != "null") {

@@ -13,5 +13,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<bool> ChangePasswordAsync(string password, int AdminId);
         Task<bool> EditAdminProfileAsync(ViewAdminProfile vm);
         Task<bool> EditBillingInfoAsync(ViewAdminProfile vm);
+        Task<bool> SaveAdminInfo(ViewAdminProfile vm);
+        Task<bool> AdminPost(ViewAdminProfile admindata, string AdminId);
     }
 }
