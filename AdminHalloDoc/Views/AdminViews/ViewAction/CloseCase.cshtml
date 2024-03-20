@@ -18,15 +18,11 @@
     <div class="card bg-transparent border-0 p-2" style="border-radius: 15px;">
         <div class="card-header d-flex justify-content-between  border-0  bg-transparent p-1  mt-3 mb-2">
             <div class="text-start">
-                <h5 class="mt-2"> Document</h5>
+                <h3 class="mt-2 fw-bolder"> Document</h3>
             </div>
             <div class="text-end">
-                <a asp-action="Index" asp-controller="Dashboard" class="btn btn-outline-info btn-back text-end">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                         class="bi bi-arrow-left-short" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                              d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
-                    </svg></i>Back
+                <a onclick="history.back()" class="btn btn-outline-info btn-back text-end">
+                    ❮ Back
                 </a>
             </div>
         </div>
@@ -96,15 +92,14 @@
                     <label for="floatingInput">Birth Date </label>
                     <span asp-validation-for="DOB" class="text-danger"></span>
                 </div>
-                <div class="col-md-5 form-floating ">
+                <div class="col-md-6 form-floating  d-flex align-items-center">
                     <input asp-for="PhoneNumber" id="phone" type="tel" name="PhoneNumber" class="form-control rounded" autocomplete=off>
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                </div>
-                <div class="col-md-1">
-                    <div class=" border border-1 border-info text-info text-center rounded-3 ">
-                        <a class="text-info" href="tel:@Model.PhoneNumber"><i class="bi bi-telephone fs-2 "></i></a>
+                    <div>
+                        <a class=" btn btn-outline-info text-center rounded fs-4 mx-2" href="tel:@Model.PhoneNumber"><i class="bi bi-telephone"></i></a>
                     </div>
                 </div>
+               
                 <div class="col-md-6 form-floating ">
                     <input id="email" asp-for="Email" id="email" class="form-control rounded" name="Email" type="text" placeholder=Suchtext autocomplete=off>
                     <label for="floatingInput">Email </label>
@@ -157,9 +152,12 @@
         console.log(5);
         toggleFormElements('true');
 
-        if ("@status" === "True") {
-            savealt("Record saved successfully..!")
-        }
+       
+
+            if ("@status" != "null") {
+                savealt("@status");
+            }
+       
     }
 
 </script>

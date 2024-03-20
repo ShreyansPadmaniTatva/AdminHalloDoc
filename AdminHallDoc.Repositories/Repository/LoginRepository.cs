@@ -88,7 +88,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         #endregion
 
-        #region CheckAccessLogin
+        #region ListMenuByRole
         public async Task<List<Menu>> ListMenuByRole(int? roleid)
         {
             List<Menu> allData = null;

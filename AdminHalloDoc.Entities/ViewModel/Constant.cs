@@ -106,7 +106,7 @@ namespace AdminHalloDoc.Entities.ViewModel
             public string DbName { get; set; }
             public string Label { get; set; }
             public string Url { get; set; }
-            public bool IsActive { get; set; }
+            public List<string> UrlList { get; set; }
             public List<MenuItem> Submenu { get; set; }
         }
 
@@ -129,6 +129,13 @@ namespace AdminHalloDoc.Entities.ViewModel
                   DbName ="AdminDashboard",
                 Label = "Dashboard",
                   Url = "/AdminDashboard/Index",
+                  UrlList = new List<string> { "/AdminDashboard", "/ViewAction", "/SubmitForm" }
+              },
+               new MenuItem
+              {
+                  DbName ="PhysicianDashbord",
+                Label = "Dashboard",
+                  Url = "/AdminDashboard/Index",
                   //IsActive = path.StartsWith("/AdminDashboard") || path.StartsWith("/ViewAction") || path.StartsWith("/SubmitForm")
               },
               new MenuItem {
@@ -138,9 +145,15 @@ namespace AdminHalloDoc.Entities.ViewModel
                   // IsActive = path.StartsWith("/Physician/PhysicianLocation")
               },
               new MenuItem {
-                  DbName ="AdminDashboard",
+                  DbName ="MyProfile",
                 Label = "My Profile",
                   Url = "/AdminProfile/Index",
+                  //  IsActive = path.StartsWith("/AdminProfile")
+              },
+              new MenuItem {
+                  DbName ="MyShedule",
+                Label = "My Schedule",
+                  Url = "/Scheduling/Index",
                   //  IsActive = path.StartsWith("/AdminProfile")
               },
               new MenuItem {
@@ -167,8 +180,8 @@ namespace AdminHalloDoc.Entities.ViewModel
               new MenuItem {
                   DbName ="Partner",
                 Label = "Partner",
-                  Url = "/Physician/PhysicianAll",
-                  IsActive = false
+                  Url = "/Partner/Index",
+                //  IsActive = false
               },
               new MenuItem {
                   DbName ="Access-Details",
@@ -191,7 +204,7 @@ namespace AdminHalloDoc.Entities.ViewModel
                   DbName ="Records",
                 Label = "Records",
                   Url = "/Patient_Profile.html",
-                  IsActive = false
+                  //IsActive = false
               }
             }
         };

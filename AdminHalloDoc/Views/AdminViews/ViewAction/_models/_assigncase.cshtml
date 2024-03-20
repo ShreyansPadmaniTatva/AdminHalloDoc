@@ -3,13 +3,15 @@
         <div class="modal-content">
             <div class="modal-header  bg-info text-white">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Assign Physician </h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-circle"></i>
+                </button>
             </div>
             <form asp-action="AssignProvider" asp-controller="ViewAction">
             <div class="modal-body">
                 <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> </span></h3>
                
-                    <input type="hidden" disabled="false" name="requestid" id="requestid" />
+                    <input type="hidden" name="requestid" id="requestid" />
                     <div class="mb-4">
                         <select class="form-select form-select-sm mt-3 p-2" required name="region" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                             <option>All Region</option>
@@ -27,7 +29,7 @@
                 
             </div>
             <div class="modal-footer">
-                <input type="submit" class=" btn btn-info text-white" value="Assign" style="display:block !important" disabled="false" >
+                <input type="submit" class=" btn btn-info text-white" value="Assign" style="display:block !important" >
                 <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Close</button>
             </div>
             </form>

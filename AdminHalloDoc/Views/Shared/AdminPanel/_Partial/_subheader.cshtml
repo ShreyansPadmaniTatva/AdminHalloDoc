@@ -35,7 +35,16 @@
                     if (menuItem.Submenu is null)
                     {
                         <li class="nav-item">
-                            <a class="nav-link px-4 @(path.StartsWith(menuItem.Url.ToString()) ? "active" : "")" href="@menuItem.Url">@menuItem.Label</a>
+                            @{
+                                // Determine if any URL prefix in UrlList matches the beginning of the current path
+                                bool isActive = false;
+                                if (menuItem.UrlList!= null && menuItem.UrlList.Count > 0)
+                                {
+                                    isActive = menuItem.UrlList.Any(prefix => path.StartsWith(prefix));
+                                    
+                                }
+                            }
+                            <a class="nav-link px-4 @(isActive ? "active" : "")" href="@menuItem.Url">@menuItem.Label</a>
                         </li>
                     }
                     else if (menuItem.Submenu is List<MenuItem> dropdownMenu)

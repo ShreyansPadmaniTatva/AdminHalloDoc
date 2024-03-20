@@ -1,13 +1,13 @@
 ﻿using AdminHalloDoc.Controllers.Login;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
+using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
-    [AdminAuth("Admin")]
     public class AdminDashboardController : Controller
     {
         #region Constructor
@@ -23,20 +23,22 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        // [Authorize(Roles = "Admin")]
+        [AdminAuth("Admin,Provider")]
         #region DashBoard_Index
         public async Task<IActionResult> Index()
         {
             TempData["Status"] = TempData["Status"];
-            ViewBag.CountNewRequest = await _requestRepository.CountNewRequest();
-            ViewBag.CountPandingRequest = await _requestRepository.CountPandingRequest();
-            ViewBag.CountActiveRequest = await _requestRepository.CountActiveRequest();
-            ViewBag.CountConcludeRequest = await _requestRepository.CountConcludeRequest();
-            ViewBag.CountToCloseRequest = await _requestRepository.CountToCloseRequest();
-            ViewBag.CountUnPaidRequest = await _requestRepository.CountUnPaidRequest();
+            PaginatedViewModel sm = _requestRepository.Indexdata(-1);
+
+            if (CV.role() == "Provider")
+            {
+                 sm = _requestRepository.Indexdata(Convert.ToInt32(CV.UserID()));
+
+            }
+           
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.CaseReasonComboBox = await _requestRepository.CaseReasonComboBox();
-            return View("../AdminViews/AdminDashboard/Index");
+            return View("../AdminViews/AdminDashboard/Index",sm);
         }
         #endregion
 
@@ -53,6 +55,11 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             {
                 status = "1";
             }
+            if(CV.role() == "Provider")
+            {
+                var pr = await _requestRepository.GetContactAsync(status, data,Convert.ToInt32(CV.UserID()));
+                return PartialView("../AdminViews/AdminDashboard/_List", pr);
+            }
             var r = await _requestRepository.GetContactAsync(status,data);
             return PartialView("../AdminViews/AdminDashboard/_List", r);
         }
@@ -61,6 +68,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region View_Case
         public async Task<IActionResult> Viewcase(int? id)
         {
+            TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             Viewcase v =  await _requestRepository.GetRequestDetails(id);
             return View("../AdminViews/ViewAction/Viewcase",v);

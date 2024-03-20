@@ -26,13 +26,9 @@
 
 
                 <div class="text-end">
-                    <a asp-controller="Dashboard" asp-action="Index"
+                <a onclick="history.back()"
                        class="btn btn-outline-info btn-back">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                             fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                  d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
-                        </svg></i>Back
+                    ❮ Back
                     </a>
                 </div>
             </div>
@@ -125,17 +121,17 @@
 
         <div class="col-md-12" >
             <form method="post" asp-action="ChangeNotes" asp-controller="AdminDashboard">
-                <div class="  align-items-center d-flex justify-content-around mb-2 mt-3 " style="cursor:pointer">
+                <div class="   align-items-center d-flex justify-content-around mb-2 mt-3 " style="cursor:pointer">
 
                     <div class="col-md-12 shadow rounded  ">
-                        <div class="card-body">
-                            <div class="inputs-control w-100 mt-2 p-2">
+                        <div class="card border-0">
+                            <div class=" form-floating  m-3">
                                 <input type="hidden" name="RequestID" value="@Model.Requestid" />
-                                <textarea id="changenote" placeholder=" " rows="5" name="" class="input-outline w-100 fs-6 " type="text"></textarea>
-
-                                <label class="inputs-lable inputs-lable-textarea fs-6 badge text-bg-primary" id="notedata">Notes</label>
+                                <textarea id="changenote"  class="form-control rounded " name="Symptoms" type="text" rows="4" cols="50" placeholder=Suchtext autocomplete=off></textarea>
+                                <label id="notedata" for="Symptoms">  Notes </label>
+                                <span  class="text-danger"></span>
                             </div>
-                            <div class="text-end m-3">
+                            <div class="text-end mx-3 mb-3 mt-2">
                                 <input type="submit" class="btn btn-info text-white mt-2" value="Save Changes" >
                             </div>
                         </div>

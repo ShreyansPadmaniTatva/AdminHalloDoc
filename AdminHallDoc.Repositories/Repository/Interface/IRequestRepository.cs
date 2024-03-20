@@ -10,13 +10,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<List<RegionComboBox>> RegionComboBox();
         Task<List<CaseReasonComboBox>> CaseReasonComboBox();
         Task<List<UserRoleCombobox>> UserRoleComboBox();
-        Task<int> CountNewRequest();
-        Task<int> CountPandingRequest();
-        Task<int> CountActiveRequest();
-        Task<int> CountConcludeRequest();
-        Task<int> CountToCloseRequest();
-        Task<int> CountUnPaidRequest();
+        PaginatedViewModel Indexdata(int ProviderId);
         Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data);
+        Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data, int ProviderId);
         Task<Viewcase> GetRequestDetails(int? Requestid);
         Task<Boolean> PutViewcase(Viewcase viewcase);
     }

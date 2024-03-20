@@ -1,4 +1,5 @@
-﻿using AdminHalloDoc.Entities.ViewModel;
+﻿using AdminHalloDoc.Entities.Models;
+using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using System;
@@ -15,6 +16,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         bool PutNotes(string? adminnotes, string? physiciannotes, int? RequestID);
         Task<List<VenderComboBox>> FindVenderByVenderType(int? id);
         Task<ViewOrder> FindVenderByVenderID(int? id);
+        Task<List<Healthprofessional>> GetPartnersByProfession(int? profession);
         Task<bool> SaveViewOrder(ViewOrder viewOrder);
+        Task<bool> SavePartner(Healthprofessional SavePartner);
     }
 }

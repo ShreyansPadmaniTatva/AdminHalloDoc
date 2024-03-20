@@ -59,41 +59,29 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 .ToListAsync();
         }
 
-        public async Task<int> CountNewRequest()
+        public PaginatedViewModel Indexdata(int ProviderId)
         {
-			int count = 0;
-			count = _context.Requests.Count(e => e.Status == 1); 
-			return count;
-        }
-        public async Task<int> CountPandingRequest()
-        {
-            int count = 0;
-            count = _context.Requests.Count(e => e.Status == 2); 
-            return count;
-        }
-        public async Task<int> CountActiveRequest()
-        {
-            int count = 0;
-            count = _context.Requests.Where(n => ( n.Status == 4 || n.Status == 5)).Count();
-            return count;
-        }
-        public async Task<int> CountConcludeRequest()
-        {
-            int count = 0;
-            count = _context.Requests.Count(e => e.Status == 6); 
-            return count;
-        }
-        public async Task<int> CountToCloseRequest()
-        {
-            int count = 0;
-            count = _context.Requests.Count(e =>( e.Status == 3 || e.Status == 7 || e.Status == 8)); 
-            return count;
-        }
-        public async Task<int> CountUnPaidRequest()
-        {
-            int count = 0;
-            count = _context.Requests.Count(e => e.Status == 9); 
-            return count;
+            if(ProviderId < 0)
+            {
+                return new PaginatedViewModel
+                {
+                    NewRequest = _context.Requests.Where(r => r.Status == 1).Count(),
+                    PendingRequest = _context.Requests.Where(r => r.Status == 2).Count(),
+                    ActiveRequest = _context.Requests.Where(r => (r.Status == 4 || r.Status == 5)).Count(),
+                    ConcludeRequest = _context.Requests.Where(r => r.Status == 6).Count(),
+                    ToCloseRequest = _context.Requests.Where(r => (r.Status == 3 || r.Status == 7 || r.Status == 8)).Count(),
+                    UnpaidRequest = _context.Requests.Where(r => r.Status == 9).Count()
+                };
+            }
+            return new PaginatedViewModel
+            {
+                NewRequest = _context.Requests.Where(r => r.Status == 1 && r.Physicianid == ProviderId).Count(),
+                PendingRequest = _context.Requests.Where(r => r.Status == 2 && r.Physicianid == ProviderId).Count(),
+                ActiveRequest = _context.Requests.Where(r => (r.Status == 4 || r.Status == 5) && r.Physicianid == ProviderId).Count(),
+                ConcludeRequest = _context.Requests.Where(r => r.Status == 6 && r.Physicianid == ProviderId).Count(),
+                ToCloseRequest = _context.Requests.Where(r => (r.Status == 3 || r.Status == 7 || r.Status == 8) && r.Physicianid == ProviderId).Count(),
+                UnpaidRequest = _context.Requests.Where(r => r.Status == 9 && r.Physicianid == ProviderId).Count()
+            };
         }
 
         public async Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data)
@@ -127,7 +115,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         Requestid = req.Requestid,
                         RequestTypeID = req.Requesttypeid,
                         Requestor = req.Firstname + " " + req.Lastname,
-                        PatientName = rc.Firstname + rc.Lastname,
+                        PatientName = rc.Firstname + " " + rc.Lastname,
                         RequestedDate = req.Createddate,
                         Dob = new DateTime((int)rc.Intyear,(int) Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
                         PhoneNumber = rc.Phonenumber,
@@ -154,7 +142,65 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             };
             return paginatedViewModel;
         }
-      
+
+        public async Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data, int ProviderId)
+        {
+            List<int> statusdata = status.Split(',').Select(int.Parse).ToList();
+
+
+            List<ViewDashboardList> allData = await (from req in _context.Requests
+                                                     join reqClient in _context.Requestclients
+                                                     on req.Requestid equals reqClient.Requestid into reqClientGroup
+                                                     from rc in reqClientGroup.DefaultIfEmpty()
+                                                     join phys in _context.Physicians
+                                                     on req.Physicianid equals phys.Physicianid into physGroup
+                                                     from p in physGroup.DefaultIfEmpty()
+                                                     join reg in _context.Regions
+                                                     on rc.Regionid equals reg.Regionid into RegGroup
+                                                     from rg in RegGroup.DefaultIfEmpty()
+                                                     where statusdata.Contains(req.Status) && (data.SearchInput == null ||
+                                                     rc.Firstname.Contains(data.SearchInput) || rc.Lastname.Contains(data.SearchInput) ||
+                                                     req.Firstname.Contains(data.SearchInput) || req.Lastname.Contains(data.SearchInput) ||
+                                                     rc.Email.Contains(data.SearchInput) || rc.Phonenumber.Contains(data.SearchInput) ||
+                                                     rc.Address.Contains(data.SearchInput) || rc.Notes.Contains(data.SearchInput) ||
+                                                     p.Firstname.Contains(data.SearchInput) || p.Lastname.Contains(data.SearchInput) ||
+                                                     rg.Name.Contains(data.SearchInput)) && (data.RegionId == null || rc.Regionid == data.RegionId)
+                                                      && (data.RequestType == null || req.Requesttypeid == data.RequestType) && req.Physicianid == ProviderId
+                                                     select new ViewDashboardList
+                                                     {
+                                                         Physician = p.Firstname + " " + p.Lastname,
+                                                         RequestClientid = rc.Requestclientid,
+                                                         Status = req.Status,
+                                                         Requestid = req.Requestid,
+                                                         RequestTypeID = req.Requesttypeid,
+                                                         Requestor = req.Firstname + " " + req.Lastname,
+                                                         PatientName = rc.Firstname + " " + rc.Lastname,
+                                                         RequestedDate = req.Createddate,
+                                                         Dob = new DateTime((int)rc.Intyear, (int)Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
+                                                         PhoneNumber = rc.Phonenumber,
+                                                         Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.Zipcode,
+                                                         Notes = rc.Notes,
+                                                         ProviderID = req.Physicianid,
+                                                         RegionID = rc.Regionid,
+                                                         RequestorPhoneNumber = req.Phonenumber
+                                                     }).ToListAsync();
+
+            int totalItemCount = allData.Count();
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
+
+            List<ViewDashboardList> list1 = allData.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();
+
+
+            PaginatedViewModel paginatedViewModel = new PaginatedViewModel
+            {
+                DashboardList = list1,
+                CurrentPage = data.CurrentPage,
+                TotalPages = totalPages,
+                PageSize = 10,
+                SearchInput = data.SearchInput
+            };
+            return paginatedViewModel;
+        }
         public async Task<Viewcase> GetRequestDetails(int? RequestClientid)
         {
 
@@ -173,7 +219,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     LastName = requestclients.Lastname,
                     Email = requestclients.Email,
                     Notes = requestclients.Notes,
-                     //BirthDate = new DateTime((int)requestclients.Intyear, Convert.ToInt32(requestclients.Strmonth), (int)requestclients.Intdate),
+                    BirthDate = new DateTime(requestclients.Intyear != null ? (int)requestclients.Intyear : 0001, Convert.ToInt32(requestclients.Strmonth != null ? requestclients.Strmonth : 1), requestclients.Intdate != null ? (int)requestclients.Intdate : 01) != new DateTime(0001, 01, 01) ? new DateTime((int)requestclients.Intyear != 0 ? (int)requestclients.Intyear : 1, Convert.ToInt32(requestclients.Strmonth != null ? requestclients.Strmonth : 1), (int)requestclients.Intdate != 0 ? (int)requestclients.Intdate : 1) : null,
+                   // BirthDate = new DateTime((int)requestclients.Intyear, Convert.ToInt32(requestclients.Strmonth), (int)requestclients.Intdate),
                     PhoneNumber = requestclients.Phonenumber,
                     Address = requestclients.Address + "," + requestclients.Street + "," + requestclients.City + "," + requestclients.State + "," + requestclients.Zipcode,
                    

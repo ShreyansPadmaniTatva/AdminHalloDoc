@@ -1,0 +1,41 @@
+﻿@model List<AdminHalloDoc.Entities.Models.Healthprofessional>;
+<div class="table-responsive">
+    <table class="table table-responsive mt-3 p-3">
+        <thead>
+            <tr>
+                <th></th>
+                <th scope="col">Stoop Notification </th>
+                <th scope="col">Provider Name</th>
+                <th scope="col">Role</th>
+                <th scope="col">On Call Status </th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider mx-5">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="table-text px-3 text-center justify-content-center" align="center" scope="row" data-label="Created Date">
+                    </td>
+                    <td scope="row" data-label="Created Date">@item.Vendorname  </td>
+                    <td scope="row" data-label="Created Date">@item.Email</td>
+                    <td scope="row" data-label="Created Date">@item.Faxnumber</td>
+                    <td scope="row" data-label="Created Date">@item.Phonenumber</td>
+                    <td scope="row" data-label="Created Date">@item.Businesscontact</td>
+                    <td class=" d-flex" data-label="Document">
+
+                        <button data-bs-toggle="modal" data-bs-id="@item.Vendorid" data-bs-email="@item.Email" data-bs-target="#myModal" class="btn btn-outline-info btn-sm document-button mx-1">
+                            Contact
+
+                        </button>
+                        <a asp-action="PhysicianProfile" asp-controller="Physician" asp-route-id="@item.Vendorid" class="btn btn-outline-info btn-sm document-button mx-1">
+                            Edit
+
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

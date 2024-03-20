@@ -4,17 +4,18 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.JsonWebTokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using static AdminHalloDoc.Entities.ViewModel.Constant;
 
 namespace AdminHalloDoc.Controllers.Login
 {
     [AttributeUsage(AttributeTargets.All)]
     public class AdminAuth : Attribute, IAuthorizationFilter
     {
-        private readonly string _role;
+        private readonly List<string> _role;
        
 
-        public AdminAuth(string role) { 
-            _role = role;
+        public AdminAuth(string role = "") {
+            _role = role.Split(',').ToList();
            
         }
 
@@ -45,13 +46,26 @@ namespace AdminHalloDoc.Controllers.Login
                 filterContext.Result = new RedirectResult("~/AdminLogin");
                 return;
             }
-
-            if (string.IsNullOrWhiteSpace(_role) || roles.Value != _role)
+            bool flage = false;
+            foreach (var role in _role)
             {
-                    filterContext.Result = new RedirectResult("~/AdminLogin/AccessDenied");
-              
+
+                if (string.IsNullOrWhiteSpace(role) || roles.Value != role)
+                {
+
+                    flage = false;
+                }
+                else
+                {
+                    flage = true;
+                    break;
+                }
             }
 
+            if (!flage)
+            {
+                filterContext.Result = new RedirectResult("~/AdminLogin/AccessDenied");
+            }
 
             //var admin = SessionUtils.GetLogginUser(filterContext.HttpContext.Session);
 

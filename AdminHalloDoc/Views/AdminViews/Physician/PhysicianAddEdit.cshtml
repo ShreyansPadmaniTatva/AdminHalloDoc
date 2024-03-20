@@ -54,11 +54,11 @@
             </div>
 
             <div class="col-md-6 form-floating">
-                <select class="form-select form-select-md p-2 asp" required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
+                <select class="form-select form-select-md form-control-disable p-2 asp" required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
                 </select>
             </div>
             <div class="col-md-6 form-floating">
-                <select class="form-select form-select-md p-2 asp" required name="Roleid" asp-for="Roleid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
+                <select class="form-select form-select-md  form-control-disable p-2 asp" required name="Roleid" asp-for="Roleid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
                 </select>
             </div>
 
@@ -166,7 +166,7 @@
                 <label for="floatingInput">City</label>
             </div>
             <div class="col-md-6 form-floating ">
-                <select class="form-select form-select-md mt-3 p-2" asp-for="Regionid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                <select class="form-select form-select-md mt-3 p-2 mail-billing-imp" asp-for="Regionid" name="Regionid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                 </select>
                 <label for="floatingInput">State</label>
             </div>
@@ -223,7 +223,7 @@
             <div class="col-md-6" >
                 @if(Model != null && Model.Photo != null){
                     <span> Photo  </span>
-                    <img class="img-fluid border border-1" src="~/Upload/Physician/@Model.Physicianid/@Model.Photo" alt="Photo" />
+                        <img class="img-fluid border border-1  h-25 mx-2" src="~/Upload/Physician/@Model.Physicianid/@Model.Photo" alt="Photo" />
                 }
             </div>
             <div class="col-md-6">
@@ -231,7 +231,7 @@
                     @if (Model != null && Model.Signature != null)
                     {
                         <span> Signature  </span>
-                        <img class="img-fluid border border-1" src="~/Upload/Physician/@Model.Physicianid/@Model.Signature" alt="Signature" />
+                        <img class="img-fluid border border-1 mx-2" src="~/Upload/Physician/@Model.Physicianid/@Model.Signature" alt="Signature" />
                     }
                         <input type="hidden" id="signature-data" name="signatureData">
                 </div>
@@ -514,7 +514,7 @@
                 $('#save-admindata').hide();
                 $('#cancel-admindata').hide();
                 $('.inp-dis').prop('disabled', true);
-                $('select').prop('disabled', true);
+
                 $('#saveasp').hide();
                 $('#cancelasp').hide();
                 $('#add').hide();

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -256,5 +257,55 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
+        #region GetPartnersByProfession
+        public async Task<List<Healthprofessional>> GetPartnersByProfession(int? profession)
+        {
+
+
+            List<Healthprofessional> pl = await (from r in _context.Healthprofessionals
+                                               
+                                         where r.Isdeleted == new BitArray(1) 
+                                                 select r )
+                                        .ToListAsync();
+
+            return pl;
+
+        }
+        #endregion
+
+        #region SavePartner
+        public async Task<bool> SavePartner(Healthprofessional SavePartner)
+        {
+            try
+            {
+                var Healthprofessional = new Healthprofessional();
+                // Aspnetuser
+                Healthprofessional.Vendorname = SavePartner.Vendorname;
+                Healthprofessional.Faxnumber = SavePartner.Faxnumber;
+                Healthprofessional.Email = SavePartner.Email;
+                Healthprofessional.Createddate = DateTime.Now;
+                Healthprofessional.Profession = SavePartner.Profession;
+                Healthprofessional.State = SavePartner.State;
+                Healthprofessional.City = SavePartner.City;
+                Healthprofessional.Regionid = SavePartner.Regionid;
+                Healthprofessional.Zip = SavePartner.Zip;
+                Healthprofessional.Businesscontact = SavePartner.Businesscontact;
+                Healthprofessional.Isdeleted = new BitArray(1);
+                Healthprofessional.Isdeleted[0] = false;
+
+                _context.Healthprofessionals.Add(Healthprofessional);
+                await _context.SaveChangesAsync();
+
+                //var req = await _context.Requests.Where(e => e.Requestid == viewOrder.RequestId).FirstOrDefaultAsync();
+                //_emailConfig.SendMail(viewOrder.Email, "New Order arrived", viewOrder.Prescription + "Request name" + req.Firstname);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+        #endregion
     }
 }

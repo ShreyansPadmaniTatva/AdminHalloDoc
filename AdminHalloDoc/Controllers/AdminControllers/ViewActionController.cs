@@ -2,9 +2,11 @@
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Ocsp;
+using Twilio.Types;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -24,9 +26,14 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region Save_Viewcase
         public async Task<IActionResult> SaveViewcase(Viewcase viewcase)
         {
-            ViewData["Status"]  = await _requestRepository.PutViewcase(viewcase);
+           
+            if (await _requestRepository.PutViewcase(viewcase))
+            {
+
+                TempData["Status"] = "Update Data Successfully..!";
+            }
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-            return View("../AdminViews/ViewAction/Viewcase", viewcase);
+            return RedirectToAction("Viewcase", "AdminDashboard", new { id = viewcase.RequesClientid});
         }
         #endregion
 
@@ -125,7 +132,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             {
                 TempData["Status"] = "Clear Request Successfully..!";
             }
-            ViewBag.CountToCloseRequest = await _requestRepository.CountToCloseRequest();
             return Json(true);
         }
         #endregion

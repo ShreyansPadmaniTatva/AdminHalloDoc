@@ -335,7 +335,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                              Medicallicense = r.Medicallicense,
                                             Npinumber = r.Npinumber,
                                             Syncemailaddress = r.Syncemailaddress,
-                                            Zipcode = r.Zip
+                                            Zipcode = r.Zip,
+                                            Regionid = r.Regionid
 
                                         })
                                         .FirstOrDefaultAsync();

@@ -1,0 +1,69 @@
+﻿@using AdminHalloDoc.Models.CV;
+    @using static AdminHalloDoc.Entities.ViewModel.Constant;
+<form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+      asp-action="_SearchResult" asp-controller="Partner"  novalidate="novalidate">
+    @Html.AntiForgeryToken()
+
+    <div class="text-end mx-2 px-3 d-flex justify-content-between">
+        <div class="dropdown ">
+
+            <select class="form-select form-select-md " data-allow-clear="true" tabindex="-1" id="Region" onchange="myFunction()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                <option value="-1">All Region</option>
+            </select>
+        </div>
+        <div class="d-flex">
+
+            <!-- Button trigger modal -->
+            <a asp-action="PartnerAddEdit" asp-controller="Partner" class="btn btn-info text-white">
+                Create Partner Account
+            </a>
+        </div>
+
+    </div>
+
+
+    <input type="submit" id="submit" class="d-none" />
+</form>
+@section Scripts{
+    <script>
+
+
+        function changeStatus(e) {
+            //  $('#requeststatus').val(e);
+            $('#filterForm').submit();
+        }
+        function subsubmit() {
+            console.log(54);
+            $('#subsubmitfom').submit();
+        }
+                    //$(function () {
+
+                    //    $("#btnsubmit").click(function () {
+                    //        document.querySelectorAll('.action').forEach(function (el) {
+                    //            el.style.display = 'none';
+                    //        });
+
+                    //        // Using callback function
+                    //        $("input[name='HtmlTable']").val($("#a1a").html(function () {
+                    //            document.querySelectorAll('.action').forEach(function (el) {
+                    //                el.style.display = 'none';
+                    //            });
+                    //            // Second line of code runs after the first one is completed
+                    //            // Place the code here that you want to execute after the first line completes
+                    //        }));
+
+                    //        // Using promise
+                    //        $("input[name='HtmlTable']").val($("#a1a").html()).promise().done(function () {
+                    //            document.querySelectorAll('.action').forEach(function (el) {
+                    //                el.style.display = 'none';
+                    //            });
+                    //            // Second line of code runs after the first one is completed
+                    //            // Place the code here that you want to execute after the first line completes
+                    //        });
+                    //        $(".action").show();
+
+                    //    });
+
+                    //});
+    </script>
+}

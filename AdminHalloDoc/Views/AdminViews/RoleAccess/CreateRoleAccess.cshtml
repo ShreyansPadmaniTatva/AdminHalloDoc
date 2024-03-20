@@ -53,7 +53,7 @@
             <input asp-for="Roleid" type="hidden" id="roleid" />
             <div class="col-md-12" > 
               
-                <div id="menu" class="d-flex" >
+                <div id="menu" class="d-flex row" >
 
                 </div>
             </div>
@@ -86,7 +86,7 @@
                     $('#menu').empty();
                     // Append checkboxes to the menu div
                     response.forEach(function (menuItem) {
-                        $('#menu').append('<div class="form-check mx-2"><input ' + menuItem.checekd + ' id = "' + menuItem.menuid + '" onchange="menubox()" class="form-check-input menubox" type="checkbox" name="' + menuItem.name + '" value="' + menuItem.menuid + '">  <label class="form-check-label" for= "' + menuItem.menuid + '" >' + menuItem.name + '</label></div>');
+                        $('#menu').append('<div class="col-md-2 my-1" ><div class="form-check mx-2"><input ' + menuItem.checekd + ' id = "' + menuItem.menuid + '" onchange="menubox()" class="form-check-input menubox" type="checkbox" name="' + menuItem.name + '" value="' + menuItem.menuid + '">  <label class="form-check-label" for= "' + menuItem.menuid + '" >' + menuItem.name + '</label></div></div>');
                     });
                     menubox();
                 },

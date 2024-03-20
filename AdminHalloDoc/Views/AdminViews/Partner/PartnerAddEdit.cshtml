@@ -1,0 +1,123 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model AdminHalloDoc.Entities.Models.Healthprofessional;
+<div class="container">
+    <div class="justify-content-between d-flex container-fluid position-relative ">
+        <div class="">
+            <h1 class="fw-bolder" > Add Business </h1>
+        </div>
+        <div>
+            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-outline-info"> ❮  Back </a>
+        </div>
+    </div>
+    <div class="card border-0 shadow p-4 mb-5  rounded">
+        <form asp-action="SavePartner" asp-controller="Partner" class="row g-3 " enctype="multipart/form-data">
+            <h3 class="fw-bolder" >Submit Information</h3>
+            <input asp-for="Vendorid" type="hidden">
+
+            <div class="col-md-6 form-floating  ">
+                <input asp-for="Vendorname" class="form-control rounded" id="BusinessContact" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Business Name </label>
+                <span asp-validation-for="Vendorname" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 form-floating  ">
+                <select class="form-select form-select-md mt-3 p-2 " required asp-for="Profession" asp-items="@(new SelectList(ViewBag.VenderTypeComboBox,"VenderTypeId","Name"))" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="VenderType" data-control="select2" data-placeholder="Select Level">
+                </select>
+            </div>
+            <div class="col-md-6 form-floating ">
+                <input asp-for="Faxnumber" type="text" class="form-control rounded" id="FaxNumber" autocomplete=off>
+                <label for="floatingInput">Fax Number </label>
+
+                <span asp-validation-for="Faxnumber" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating d-flex align-items-center">
+                <input asp-for="Phonenumber" id="phone" type="tel" name="PhoneNumber" class="form-control rounded vcs" autocomplete=off>
+                <span asp-validation-for="Phonenumber" class="text-danger"></span>
+              
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="Email" class="form-control rounded" type="text" id="Email" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Email </label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="Businesscontact" class="form-control rounded" id="BusinessContact" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Business Contact </label>
+                <span asp-validation-for="Businesscontact" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="State" class="form-control rounded" id="BusinessContact" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">State </label>
+                <span asp-validation-for="State" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="City" class="form-control rounded" id="BusinessContact" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">City</label>
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input asp-for="State" class="form-control rounded" id="BusinessContact" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">State</label>
+                <span asp-validation-for="State" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 form-floating">
+                <input asp-for="Zip" class="form-control rounded" id="BusinessContact" type="text" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Zip</label>
+                <span asp-validation-for="Zip" class="text-danger"></span>
+            </div>
+           
+            <div class="text-end my-4">
+            <input type="submit" value="save" class="btn btn-info" />
+                <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-outline-info"> Cancel </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function myFunction() {
+        var email = $("#VenderType").val();
+        console.log(email);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("FindVender","SubmitForm")?VenderType=' + email,
+            cache: false,
+            success: function (response) {
+
+                console.log(response);
+                var s = '';
+                for (var i = 0; i < response.length; i++) {
+                    s += '<option class="p-2" value="' + response[i].venderId + '">' + response[i].venderName + '</option>';
+                }
+                $("#vender").html(s);
+            },
+            error: function () {
+                alert("Error while checking email.");
+            }
+        });
+    }
+
+    function mySecondFunction() {
+        var email = $("#vender").val();
+        console.log(email);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetOrder","SubmitForm")?Venderid=' + email,
+            cache: false,
+            success: function (response) {
+                $("#BusinessContact").val(response.businessContact);
+                $("#Email").val(response.email);
+                $("#FaxNumber").val(response.faxNumber);
+
+            },
+            error: function () {
+                alert("Error while checking email.");
+            }
+        });
+    }
+
+</script>

@@ -53,6 +53,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region Close_Case
         public async Task<IActionResult> CloseCase(int? id)
         {
+            TempData["Status"] = TempData["Status"];
             ViewDocuments v = await _viewActionRepository.GetDocumentByRequest(id);
             return View("../AdminViews/ViewAction/CloseCase", v);
         }

@@ -350,7 +350,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == v.RequestID);
             request.Physicianid = v.ProviderId;
-            request.Status = 2;
+           // request.Status = 2;
             _context.Requests.Update(request);
             _context.SaveChanges();
 
@@ -359,7 +359,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             rsl.Physicianid = v.ProviderId;
             rsl.Notes = v.Notes;
             rsl.Createddate = DateTime.Now;
-            rsl.Status = 2;
+            //rsl.Status = 2;
             _context.Requeststatuslogs.Update(rsl);
             _context.SaveChanges();
 
