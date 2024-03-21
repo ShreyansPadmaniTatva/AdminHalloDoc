@@ -1,4 +1,7 @@
-﻿using AdminHalloDoc.Entities.ViewModel;
+﻿using AdminHalloDoc.Entities.Models;
+using AdminHalloDoc.Entities.ViewModel;
+using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,13 +29,21 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             _schedulingRepository = schedulingRepository;
         }
         #endregion
+
         #region Physician_Schedule
         public async Task<IActionResult> Index()
         {
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+          
             return View("../AdminViews/Physician/MySchedule");
         }
         #endregion
+
+        public async Task<IActionResult> GetShiftForMonth(int? region)
+        {
+            var v = await _schedulingRepository.GetShift(3);
+            return Json(v);
+        }
 
 
         #region PhysicianAll
@@ -50,6 +61,30 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
              return Json(v);
         }
+        #endregion
+
+        #region _CreateShift
+        public async Task<IActionResult> _CreateShift()
+        {
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            return PartialView("../AdminViews/Physician/_CreateShift");
+        }
+
+
+        #region _CreateShiftPost
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _CreateShiftPost(Schedule v)
+        {
+            if (await _schedulingRepository.CreateShift(v,CV.ID()))
+            {
+                TempData["Status"] = "Create Shift Successfully..!";
+            }
+
+            return RedirectToAction("Index");
+        }
+        #endregion
+
         #endregion
     }
 }

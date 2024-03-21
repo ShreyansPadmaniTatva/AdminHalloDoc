@@ -37,29 +37,56 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region _SearchResult
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> _SearchResult(int? professionId)
+        public async Task<IActionResult> _SearchResult(int? regionId)
         {
-            List<Healthprofessional> r =await _viewNotesRepository.GetPartnersByProfession(professionId);
+            List<Healthprofessional> r =await _viewNotesRepository.GetPartnersByProfession(regionId);
             return PartialView("../AdminViews/Partner/_List", r);
         }
         #endregion
 
-        public async Task<IActionResult> PartnerAddEditAsync(int? venderId)
+        public async Task<IActionResult> PartnerAddEdit(int? id)
         {
             ViewBag.VenderTypeComboBox = await _requestRepository.VenderTypeComboBox();
-            if(venderId == null)
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            if (id == null)
             {
                 return View("../AdminViews/Partner/PartnerAddEdit");
 
             }
-
-            return View("../AdminViews/Partner/PartnerAddEdit");
+            var v = await _viewNotesRepository.GetPartnerById(id);
+            return View("../AdminViews/Partner/PartnerAddEdit",v);
         }
         public async Task<IActionResult> SavePartnerAsync(Healthprofessional v)
         {
-           
-            await _viewNotesRepository.SavePartner(v);
+            TempData["Status"] = "Data Is Not Save.....";
+            if (ModelState.IsValid && await _viewNotesRepository.SavePartner(v))
+            {
+                TempData["Status"] = "Data Is  Save.....!";
+            }
+            else
+            {
+                ViewBag.VenderTypeComboBox = await _requestRepository.VenderTypeComboBox();
+                ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+                return View("../AdminViews/Partner/PartnerAddEdit", v);
+            }
+
             return RedirectToAction("Index");
         }
+
+        #region DeletePartner
+        public async Task<IActionResult> DeletePartner(int? venderId)
+        {
+            if (await _viewNotesRepository.DeletePartnerById(venderId))
+            {
+                TempData["Status"] = "Partner Is Deleted  .....!";
+            }
+            else
+            {
+                TempData["Status"] = "Partner Is Not Deleted  .....!";
+            }
+            return RedirectToAction("Index");
+        }
+        #endregion
+
     }
 }

@@ -160,16 +160,19 @@ namespace AdminHalloDoc.Entities.ViewModel
                   DbName = "Provider-Details",
                 Label = "Provider",
                   Url = "#",
-                  // IsActive = path.StartsWith("/Physician"),
+                   UrlList = new List<string> { "/Physician/PhysicianAll", "/Scheduling/Index", "/Partner" },
                   Submenu = new List < MenuItem > {
                     new MenuItem {
                         DbName = "Provider",
-                      Label = "Provider", Url = "/Physician/PhysicianAll"
+                      Label = "Provider", Url = "/Physician/PhysicianAll",
+                       UrlList = new List<string> { "/Physician/PhysicianAll" }
                     },
                     new MenuItem {
                         DbName = "Scheduling",
 
-                      Label = "Scheduling", Url = "/Scheduling/Index"
+                      Label = "Scheduling", Url = "/Scheduling/Index",
+                       UrlList = new List<string> { "/Scheduling/Index" }
+
                     },
                     new MenuItem {
                         DbName = "nothing",    
@@ -181,7 +184,7 @@ namespace AdminHalloDoc.Entities.ViewModel
                   DbName ="Partner",
                 Label = "Partner",
                   Url = "/Partner/Index",
-                //  IsActive = false
+                UrlList = new List<string> { "/Partner/Index", "/Partner/PartnerAddEdit", "/Partner" }
               },
               new MenuItem {
                   DbName ="Access-Details",

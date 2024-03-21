@@ -198,9 +198,10 @@
                     <a asp-action="PhysicianProfile" asp-controller="Physician" class="btn btn-info text-white  mx-2">
                         Shift Review
                     </a>
-                    <a asp-action="PhysicianProfile" asp-controller="Physician" class="btn btn-info text-white  mx-2">
-                        Add New Shift
-                    </a>
+                    <a class="btn btn-info text-white js-stkModal-btn mx-2"
+                       data-form-id="formEdit_UMS"
+                       data-url='@Url.Action("_CreateShift", "Scheduling")'
+                       data-modal-size="lg">Add New Shift  </a>
                 </div>
             </div>
         </div>
@@ -322,6 +323,7 @@
 
         $(function () {
             var ProviderData = [];
+            var extractedDataArray = [];
             //Get Provider List in array
             function getProviderList(region) {
                 $.ajax({
@@ -362,9 +364,66 @@
                 });
             }
 
+            function GetShiftForMonth(month) {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetShiftForMonth", "Scheduling")',
+                    data: { region: month },
+                    dataType: "json",
+                    success: function (response) {
+                        // Initialize an array to store extracted data
+                       
+
+                        // Iterate over the array
+                        response.forEach(function (shift) {
+                            // Extract and store data from each shift object
+                            var extractedData = {
+                                //  date: shift.shidtDate.match(/\d{4}-(\d{2})-\d{2}/)[1],
+                                date: shift.shidtDate.match(/\d{4}-\d{2}-(\d{2})/)[1],
+                                shiftId: shift.shiftid,
+                                physicianId: shift.physicianid,
+                                physicianName: shift.physicianName,
+                                shiftDate: shift.shidtDate, // Correct the typo to "shiftDate"
+                                startTime: shift.starttime,
+                                endTime: shift.endtime,
+                                isRepeat: shift.isrepeat
+                            };
+
+                            // Check if dayList exists and is an array
+                            if (Array.isArray(shift.dayList)) {
+                                // Create an array to store day data
+                                var dayDataArray = [];
+                                // Iterate over dayList and store data
+                                shift.dayList.forEach(function (day) {
+                                    var dayData = {
+                                        physicianName: day.physicianName,
+                                        startTime: day.starttime,
+                                        endTime: day.endtime
+                                    };
+                                    // Push day data into dayDataArray
+                                    dayDataArray.push(dayData);
+                                });
+                                // Add dayDataArray to extractedData object
+                                extractedData.dayDataArray = dayDataArray;
+                            }
+
+                            // Push extracted data into the array
+                            extractedDataArray.push(extractedData);
+                        });
+
+                        // Output the extracted data array to the console
+                        console.log(extractedDataArray);
+                    },
+                    error: function () {
+                        // Handle error
+                        console.error("Error fetching provider list");
+                    }
+                });
+            }
+
             // Call the function to get provider list initially
             getProviderList();
-
+            GetShiftForMonth();
 
             const timeSlotsContainer = $('.employee-schedules thead tr');
             const employeeSchedulesContainer = $('.employee-schedules tbody');
@@ -421,7 +480,9 @@
                 for (let i = 1; i <= lastdate; i++) {
                     // Check if the current date is today
                     let isToday = i === date.getDate() && month === new Date().getMonth() && year === new Date().getFullYear() ? "active" : "";
-                    lit += `<li class="${isToday}"><div class="first" >${i}</div><div></div> <div></div> <div></div> <div></div> </li>`;
+                    let isDayInArray = extractedDataArray.some(item => parseInt(item.date) === i) ? "matched" : "";
+
+                    lit += `<li class="${isToday}"><div class="first" >${isDayInArray}</div><div></div> <div></div> <div></div> <div></div> </li>`;
                 }
 
                 // Loop to add the first dates of the next month

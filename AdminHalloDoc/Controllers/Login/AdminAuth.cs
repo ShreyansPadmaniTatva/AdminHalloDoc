@@ -46,6 +46,8 @@ namespace AdminHalloDoc.Controllers.Login
                 filterContext.Result = new RedirectResult("~/AdminLogin");
                 return;
             }
+
+
             bool flage = false;
             foreach (var role in _role)
             {

@@ -7,8 +7,8 @@
     <div class="text-end mx-2 px-3 d-flex justify-content-between">
         <div class="dropdown ">
 
-            <select class="form-select form-select-md " data-allow-clear="true" tabindex="-1" id="Region" onchange="myFunction()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
-                <option value="-1">All Region</option>
+            <select class="form-select form-select-md " name="regionId" data-allow-clear="true" tabindex="-1" onchange="subsubmit()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                <option value="">All Region</option>
             </select>
         </div>
         <div class="d-flex">
@@ -24,46 +24,12 @@
 
     <input type="submit" id="submit" class="d-none" />
 </form>
-@section Scripts{
+
     <script>
 
-
-        function changeStatus(e) {
-            //  $('#requeststatus').val(e);
-            $('#filterForm').submit();
-        }
         function subsubmit() {
             console.log(54);
-            $('#subsubmitfom').submit();
+        $('#submit').click();
         }
-                    //$(function () {
-
-                    //    $("#btnsubmit").click(function () {
-                    //        document.querySelectorAll('.action').forEach(function (el) {
-                    //            el.style.display = 'none';
-                    //        });
-
-                    //        // Using callback function
-                    //        $("input[name='HtmlTable']").val($("#a1a").html(function () {
-                    //            document.querySelectorAll('.action').forEach(function (el) {
-                    //                el.style.display = 'none';
-                    //            });
-                    //            // Second line of code runs after the first one is completed
-                    //            // Place the code here that you want to execute after the first line completes
-                    //        }));
-
-                    //        // Using promise
-                    //        $("input[name='HtmlTable']").val($("#a1a").html()).promise().done(function () {
-                    //            document.querySelectorAll('.action').forEach(function (el) {
-                    //                el.style.display = 'none';
-                    //            });
-                    //            // Second line of code runs after the first one is completed
-                    //            // Place the code here that you want to execute after the first line completes
-                    //        });
-                    //        $(".action").show();
-
-                    //    });
-
-                    //});
     </script>
-}
+

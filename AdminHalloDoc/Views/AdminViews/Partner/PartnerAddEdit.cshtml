@@ -8,7 +8,7 @@
             <h1 class="fw-bolder" > Add Business </h1>
         </div>
         <div>
-            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-outline-info"> ❮  Back </a>
+            <a onclick="history.back()" class="btn btn-outline-info"> ❮  Back </a>
         </div>
     </div>
     <div class="card border-0 shadow p-4 mb-5  rounded">
@@ -23,7 +23,7 @@
             </div>
 
             <div class="col-md-6 form-floating  ">
-                <select class="form-select form-select-md mt-3 p-2 " required asp-for="Profession" asp-items="@(new SelectList(ViewBag.VenderTypeComboBox,"VenderTypeId","Name"))" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="VenderType" data-control="select2" data-placeholder="Select Level">
+                <select class="form-select form-select-md  p-2 " required asp-for="Profession" asp-items="@(new SelectList(ViewBag.VenderTypeComboBox,"VenderTypeId","Name"))" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="VenderType" data-control="select2" data-placeholder="Select Level">
                 </select>
             </div>
             <div class="col-md-6 form-floating ">
@@ -58,9 +58,9 @@
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
-                <input asp-for="State" class="form-control rounded" id="BusinessContact" type="text" placeholder=Suchtext autocomplete=off>
-                <label for="floatingInput">State</label>
-                <span asp-validation-for="State" class="text-danger"></span>
+                <select class="form-select form-control form-select-sm  p-2" required asp-for="Regionid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                </select>
+                <span asp-validation-for="Regionid" class="text-danger"></span>
             </div>
 
             <div class="col-md-6 form-floating">
@@ -70,7 +70,7 @@
             </div>
            
             <div class="text-end my-4">
-            <input type="submit" value="save" class="btn btn-info" />
+            <input type="submit" value="save" class="btn btn-info text-white" />
                 <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-outline-info"> Cancel </a>
             </div>
         </form>
