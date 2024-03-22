@@ -189,7 +189,7 @@
 
         $(function () {
             var x = 1;
-            var ProviderData = [];
+            var providerList = [];
             const extractedDataArray = [];
             //Get Provider List in array
             function getProviderList(region) {
@@ -199,30 +199,51 @@
                     data: { region: region },
                     dataType: "json",
                     success: function (response) {
-                        // Initialize an array to store the JSON data
-
-
-                        // Process the response data
+                         // Array to store converted objects
                         response.forEach(function (item) {
-                            // Create an object with desired properties
-                            var jsonObject = {
+                            var dayList = []; // Array to store converted dayList
+                            if (item.dayList) {
+                                item.dayList.forEach(function (dayItem) {
+                                    var dayItemObj = {
+                                        shiftid: dayItem.shiftid,
+                                        physicianid: dayItem.physicianid,
+                                        physicianName: dayItem.physicianName,
+                                        physicianPhoto: dayItem.physicianPhoto,
+                                        regionid: dayItem.regionid,
+                                        startdate: dayItem.startdate,
+                                        shiftdate: dayItem.shiftdate,
+                                        starttime: dayItem.starttime,
+                                        endtime: dayItem.endtime,
+                                        isrepeat: dayItem.isrepeat,
+                                        checkWeekday: dayItem.checkWeekday,
+                                        repeatupto: dayItem.repeatupto,
+                                        status: dayItem.status,
+                                        dayList: dayItem.dayList,
+                                        submit: dayItem.submit
+                                    };
+                                    dayList.push(dayItemObj);
+                                });
+                            }
+                            var providerObj = {
+                                shiftid: item.shiftid,
                                 id: item.physicianid,
-                                address: item.Address1 + ', ' + item.Address2,
-                                name: item.firstname + ' ' + item.lastname,
-                                status: item.Status,
-                                photo: item.photo
-                                // Add more properties as needed
+                                name: item.physicianName,
+                                photo: item.physicianPhoto,
+                                regionid: item.regionid,
+                                startdate: item.startdate,
+                                shiftdate: item.shiftdate,
+                                starttime: item.starttime,
+                                endtime: item.endtime,
+                                isrepeat: item.isrepeat,
+                                checkWeekday: item.checkWeekday,
+                                repeatupto: item.repeatupto,
+                                status: item.status,
+                                dayList: dayList,
+                                submit: item.submit
                             };
-
-                            // Push the object to the JSON data array
-                            ProviderData.push(jsonObject);
+                            providerList.push(providerObj);
                         });
-
-                        // Convert the JSON data array to JSON format
-                        var jsonData = JSON.stringify(ProviderData);
-
-                        // Output the JSON data to the console
-                        // console.log(jsonData);
+                        console.log(providerList);
                     },
                     error: function () {
                         // Handle error
@@ -230,6 +251,7 @@
                     }
                 });
             }
+
 
             function GetShiftForMonth(month) {
                 $.ajax({
@@ -246,7 +268,7 @@
                             // Extract and store data from each shift object
                             var extractedData = {
                                 //  date: shift.shidtDate.match(/\d{4}-(\d{2})-\d{2}/)[1],
-                                date: shift.shidtDate.match(/\d{4}-\d{2}-(\d{2})/)[1],
+                                date: shift.shiftdate.match(/\d{4}-\d{2}-(\d{2})/)[1],
                                 shiftId: shift.shiftid,
                                 physicianId: shift.physicianid,
                                 physicianName: shift.physicianName,
@@ -436,6 +458,7 @@
                 icon.addEventListener("click", () => {
                     // Check if the icon is "calendar-prev" or "calendar-next"
                     month = icon.id === "calendar-prev" ? month - 1 : month + 1;
+                    console.log(x);
                     if (x == 1) {
                         // Check if the month is out of range
                         if (month < 0 || month > 11) {
@@ -467,6 +490,7 @@
                 // Show day view
                 // You can implement the day view logic here
                 // Generate time slots
+                x = 3;
                 for (let i = 0; i < 24; i++) {
                     const hour = i < 12 ? i === 0 ? 12 : i : i === 12 ? 12 : i - 12;
                     const amPm = i < 12 ? 'A' : 'P';
@@ -490,6 +514,7 @@
 
             // Event listener for the "Week" button
             document.getElementById("week").addEventListener("click", () => {
+                x = 2;
                 $('#monthcontainer').hide();
                 $('#weekviewcontainer').show();
                 $('#daycontainer').hide();
@@ -526,46 +551,52 @@
 
                     // Define click event handler for the previous button
                     $('#calendar-prev').click(function () {
+                        if (x == 2) {
+                            if (nav == 5) {
+                                wnav = 5;
+                            }
+                            nav--;
+                            if (nav == -1) {
+                                nav = 4;
+                                fdweek.setDate(fdweek.getDate() - 5);
+                                getweekdt.setDate(getweekdt.getDate() - 5);
+                                inc = 0;
+                                dec = 1;
+                                cnav--;
+                            } else {
+                                fdweek.setDate(fdweek.getDate() - 12);
+                                getweekdt.setDate(getweekdt.getDate() - 12);
+                            }
+                            loadWeekCalendar();
+                        }
                         // Decrement week index
-                        if (nav == 5) {
-                            wnav = 5;
-                        }
-                        nav--;
-                        if (nav == -1) {
-                            nav = 4;
-                            fdweek.setDate(fdweek.getDate() - 5);
-                            getweekdt.setDate(getweekdt.getDate() - 5);
-                            inc = 0;
-                            dec = 1;
-                            cnav--;
-                        } else {
-                            fdweek.setDate(fdweek.getDate() - 12);
-                            getweekdt.setDate(getweekdt.getDate() - 12);
-                        }
-                        loadWeekCalendar();
+                       
                     });
 
                     // Define click event handler for the next button
                     $('#calendar-next').click(function () {
-                        nav++;
-                        wlnav = 5;
-                        if ($('thead th[data-week="5"]').length > 0) {
-                            wlnav = 6;
+                        if (x == 2) {
+                            nav++;
+                            wlnav = 5;
+                            if ($('thead th[data-week="5"]').length > 0) {
+                                wlnav = 6;
+                            }
+                            if (nav == wlnav) {
+                                nav = 0;
+                                fdweek.setDate(fdweek.getDate() - 5);
+                                getweekdt.setDate(getweekdt.getDate() - 5);
+                                dec = 0;
+                                inc = 1;
+                                cnav++;
+                            } else {
+                                fdweek.setDate(fdweek.getDate() + 2);
+                                getweekdt.setDate(getweekdt.getDate() + 2);
+                                wnav = 5;
+                            }
+                            loadWeekCalendar();
+                            wnav = 0;
                         }
-                        if (nav == wlnav) {
-                            nav = 0;
-                            fdweek.setDate(fdweek.getDate() - 5);
-                            getweekdt.setDate(getweekdt.getDate() - 5);
-                            dec = 0;
-                            inc = 1;
-                            cnav++;
-                        } else {
-                            fdweek.setDate(fdweek.getDate() + 2);
-                            getweekdt.setDate(getweekdt.getDate() + 2);
-                            wnav = 5;
-                        }
-                        loadWeekCalendar();
-                        wnav = 0;
+                      
                     });
 
                     // Define function to load the week calendar--------------------------WEEk-------------------------TABLE-----------------------------------------------
@@ -575,7 +606,7 @@
                         // Check if tbody exists
                         if (tbody) {
                             // Add rows dynamically
-                            for (var i = 0; i < ProviderData.length; i++) {
+                            for (var i = 0; i < providerList.length; i++) {
                                 var row = document.createElement('tr');
                                 for (var j = 0; j < 8; j++) {
                                     var cell = document.createElement('td');
@@ -584,16 +615,29 @@
                                         image.classList.add("img-fluid");
                                         image.classList.add("mx-2");
                                         image.style.height = "50px";
-                                        image.src = '/Upload/Physician/' + ProviderData[i].id + '/' + ProviderData[i].photo; // Set the image URL from ProviderData
-                                        image.alt = ProviderData[i].name; // Set the alt text for accessibility
+                                        image.src = '/Upload/Physician/' + providerList[i].id + '/' + providerList[i].photo; // Set the image URL from ProviderData
+                                        image.alt = providerList[i].name; // Set the alt text for accessibility
                                         cell.appendChild(image);
-                                        cell.appendChild(document.createTextNode(ProviderData[i].name)); // Add text content after the image
+                                        cell.appendChild(document.createTextNode(providerList[i].name)); // Add text content after the image
 
                                         // First cell, add some content or leave it empty
                                         // cell.textContent = ProviderData[i].name; + (i + 1);
                                     } else {
                                         // Other cells, you can add your content or leave them empty
-                                        cell.textContent = '';
+                                        const currentDate = new Date();
+                                        const cellDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + j - 1);
+
+                                        cell.textContent = fdweek.getDate()+j-2;
+                                        const matchingDates = providerList[i].dayList.filter(item => {
+                                            const startDate = new Date(item.startdate);
+                                            console.log(startDate);
+                                            return cellDate.getDate() === startDate.getDate() && cellDate.getMonth() === startDate.getMonth() && cellDate.getFullYear() === startDate.getFullYear();
+                                        });
+                                        // If matching dates are found, count them and print the count in the cell
+                                        if (matchingDates.length > 0) {
+                                            const count = matchingDates.length;
+                                            cell.textContent = count;
+                                        }
                                     }
                                     row.appendChild(cell);
                                 }
@@ -687,7 +731,7 @@
                 $('#monthcontainer').show();
                 $('#weekviewcontainer').hide();
                 $('#daycontainer').hide();
-
+                x = 1;
                 // Show month view
                 // You can implement the month view logic here
                 console.log("Month view clicked");

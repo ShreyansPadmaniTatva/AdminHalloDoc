@@ -27,9 +27,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region PhysicianAll
-        public async Task<List<Physicians>> PhysicianAll()
+        public async Task<List<Schedule>> PhysicianAll()
         {
 
+            List<Schedule> ScheduleDetails = new List<Schedule>();
 
             List<Physicians> pl = await (from r in _context.Physicians
                                          join Notifications in _context.Physiciannotifications
@@ -61,15 +62,43 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
                                          })
                                         .ToListAsync();
+            foreach (Physicians schedule in pl)
+            {
+                List<Schedule> ss = await (from s in _context.Shifts
+                                           join pd in _context.Physicians
+                                           on s.Physicianid equals pd.Physicianid
+                                           join sd in _context.Shiftdetails
+                                           on s.Shiftid equals sd.Shiftid into shiftGroup
+                                           from sd in shiftGroup.DefaultIfEmpty()
+                                           where s.Physicianid == schedule.Physicianid
+                                           select new Schedule
+                                           {
+                                               Shiftid = sd.Shiftdetailid,
+                                               Status = sd.Status,
+                                               Starttime = sd.Starttime,
+                                               Endtime = sd.Endtime,
+                                               PhysicianName = pd.Firstname + ' ' + pd.Lastname,
+                                           })
+                                              .ToListAsync();
 
-            return pl;
+                Schedule temp = new Schedule();
+                temp.PhysicianName = schedule.Firstname + ' ' + schedule.Lastname;
+                temp.PhysicianPhoto = schedule.Photo;
+                temp.Physicianid = (int)schedule.Physicianid;
+                temp.DayList = ss;
+                ScheduleDetails.Add(temp);
+            }
+
+            return ScheduleDetails;
+
 
         }
         #endregion
 
         #region PhysicianByRegion
-        public async Task<List<Physicians>> PhysicianByRegion(int? region)
+        public async Task<List<Schedule>> PhysicianByRegion(int? region)
         {
+            List<Schedule> ScheduleDetails = new List<Schedule>();
             List<Physicians> pl = await (
                                         from pr in _context.Physicianregions
 
@@ -107,7 +136,34 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                         .ToListAsync();
 
 
-            return pl;
+            foreach (Physicians schedule in pl)
+            {
+                List<Schedule> ss = await (from s in _context.Shifts
+                                           join pd in _context.Physicians
+                                           on s.Physicianid equals pd.Physicianid
+                                           join sd in _context.Shiftdetails
+                                           on s.Shiftid equals sd.Shiftid into shiftGroup
+                                           from sd in shiftGroup.DefaultIfEmpty()
+                                           where s.Physicianid == schedule.Physicianid
+                                           select new Schedule
+                                           {
+                                               Shiftid = sd.Shiftdetailid,
+                                               Status = sd.Status,
+                                               Starttime = sd.Starttime,
+                                               Endtime = sd.Endtime,
+                                               PhysicianName = pd.Firstname + ' ' + pd.Lastname,
+                                           })
+                                              .ToListAsync();
+
+                Schedule temp = new Schedule();
+                temp.PhysicianName = schedule.Firstname + ' ' + schedule.Lastname;
+                temp.PhysicianPhoto = schedule.Photo;
+                temp.Physicianid = (int)schedule.Physicianid;
+                temp.DayList = ss;
+                ScheduleDetails.Add(temp);
+            }
+
+            return ScheduleDetails;
 
         }
         #endregion
@@ -197,6 +253,74 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
+        #region UpdateStatusShift
+        public async Task<bool> UpdateStatusShift(string s, string AdminID)
+        {
+            List<int> shidtID = s.Split(',').Select(int.Parse).ToList();
+            try
+            {
+                foreach(int i in shidtID)
+                {
+                  Shiftdetail sd = _context.Shiftdetails.FirstOrDefault(sd => sd.Shiftdetailid == i);
+                    if (sd != null)
+                    {
+                        sd.Status = (short)(sd.Status == 1 ? 0 : 1);
+                        sd.Modifiedby = AdminID;
+                        sd.Modifieddate = DateTime.Now;
+                        _context.Shiftdetails.Update(sd);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+               
+               
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+        #endregion
+
+        #region EditShift
+        public async Task<bool> EditShift(Schedule s, string AdminID)
+        {
+            try
+            {
+                Shiftdetail sd =  _context.Shiftdetails.FirstOrDefault(sd => sd.Shiftdetailid == s.Shiftid);
+                if (sd != null)
+                {
+                    sd.Shiftdate = (DateTime)s.Shiftdate;
+                    sd.Starttime = s.Starttime;
+                    sd.Endtime = s.Endtime;
+                    sd.Modifiedby = AdminID;
+                    sd.Modifieddate = DateTime.Now;
+                    _context.Shiftdetails.Update(sd);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    return false;
+                }
+              
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+        #endregion
+
         #region GetShift
         public async Task<List<Schedule>> GetShift(int month)
         {
@@ -229,7 +353,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                              .ToListAsync();
 
                Schedule temp = new Schedule();
-                temp.ShidtDate = schedule;
+                temp.Shiftdate = schedule;
                 temp.DayList = ss;
                 ScheduleDetails.Add(temp);
             }
@@ -240,7 +364,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
-        #region GetShift
+        #region GetShiftByShiftdetailId
         public async Task<Schedule> GetShiftByShiftdetailId(int Shiftdetailid)
         {
             
@@ -262,6 +386,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                Endtime = sd.Endtime,
                                                Physicianid = s.Physicianid,
                                                PhysicianName = pd.Firstname + ' ' + pd.Lastname,
+                                               Shiftdate = sd.Shiftdate
                                            })
                                               .FirstOrDefault();
 

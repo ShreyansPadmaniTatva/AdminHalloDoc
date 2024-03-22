@@ -16,10 +16,11 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 
         public int Physicianid { get; set; }
         public string? PhysicianName { get; set; }
+        public string? PhysicianPhoto { get; set; }
         public int Regionid { get; set; }
 
         public DateOnly Startdate { get; set; }
-        public DateTime? ShidtDate { get; set; }
+        public DateTime? Shiftdate { get; set; }
         public TimeOnly Starttime { get; set; }
         public TimeOnly Endtime { get; set; }
 
@@ -30,6 +31,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public int? Repeatupto { get; set; }
         public short Status { get; set; }
         public List<Schedule> DayList { get; set; }
+        public string? submit { get;set; }
 
 
     }

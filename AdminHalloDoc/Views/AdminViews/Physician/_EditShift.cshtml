@@ -1,7 +1,7 @@
 ﻿@using AdminHalloDoc.Models.CV;
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Schedule;
 <div class="modal-header  bg-info text-white">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">Create Shift</h1>
+    <h1 class="modal-title fs-5" id="exampleModalLabel">View Shift</h1>
     <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
         <i class="bi bi-x-circle"></i>
     </button>
@@ -10,34 +10,33 @@
 <div class=" modal-body container-fluid">
     <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post" class="row"
           data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
-          asp-action="_CreateShiftPost" asp-controller="Scheduling">
+          asp-action="_EditShiftPost" asp-controller="Scheduling">
         @Html.AntiForgeryToken()
-        <input type="hidden" asp-for="Shiftid" />
+        <input type="hidden" id="shiftid" asp-for="Shiftid" />
 
         <div class="col-md-12 form-floating my-2">
-            <select class="form-select form-select-sm mt-3 p-2" required asp-for="Regionid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+            <select class="form-select form-select-md  p-2" disabled  asp-for="Regionid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
             </select>
         </div>
         <div class="col-md-12 form-floating my-2">
-            <select class="form-select form-select-sm p-2" required asp-for="Physicianid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.ProviderComboBox,"Physicianid","Firstname"))" data-control="select2" data-placeholder="Select Level">
+            <select class="form-select form-select-md p-2" disabled asp-for="Physicianid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.ProviderComboBox,"Physicianid","Firstname"))" data-control="select2" data-placeholder="Select Level">
             </select>
         </div>
         <div class="col-md-12 form-floating my-2">
-            <input id="StartDate" asp-for="Startdate" class="form-control rounded vcs" name="Startdate" type="date" placeholder=Suchtext autocomplete=off>
+            <input id="StartDate" asp-for="Shiftdate" disabled class="form-control rounded vcs" name="Shiftdate" type="date" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">Starting Date</label>
-            <span asp-validation-for="Startdate" class="text-danger"></span>
+            <span asp-validation-for="Shiftdate" class="text-danger"></span>
         </div>
-        <div class="col-md-6 form-floating">
-            <input id="StartTime" asp-for="Starttime" class="form-control rounded vcs" name="Starttime" type="time" placeholder=Suchtext autocomplete=off>
+        <div class="col-md-6 form-floating my-2">
+            <input id="StartTime" asp-for="Starttime" disabled class="form-control rounded vcs" name="Starttime" type="time" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">Start</label>
             <span asp-validation-for="Starttime" class="text-danger"></span>
         </div>
-        <div class="col-md-6 form-floating">
-            <input id="EndTime" asp-for="Endtime" class="form-control rounded vcs" name="Endtime" type="time" placeholder=Suchtext autocomplete=off>
+        <div class="col-md-6 form-floating my-2">
+            <input id="EndTime" asp-for="Endtime" disabled class="form-control rounded vcs" name="Endtime" type="time" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">End</label>
             <span asp-validation-for="Endtime" class="text-danger"></span>
         </div>
-        <hr class="form-button-divider" />
         @{
             short i = 0;
 
@@ -48,9 +47,14 @@
         }
         <input type="hidden" asp-for="Status" value="@i" id="checkWeekday" />
 
-        <div class="row">
-            <div class="offset-md-4 col-md-8">
-                <input type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" />
+        <div class="row my-3">
+            <div class="text-end col-md-12">
+               
+
+                <div class="btn btn-info text-white " onclick="myFunction()" id="retunrcall">Return</div>
+              
+                <input  id="save" style="display:none" type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" />
+                <div id="edit" onclick="toggleCheckboxes()" class="btn btn-info text-white">Edit</div>
                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -58,6 +62,25 @@
 </div>
 
 <script type="text/javascript">
+
+    function myFunction() {
+        var email = $("#shiftid").val();
+        console.log(email);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("_UpdateShiftPost","Scheduling")?id=' + email,
+            cache: false,
+            success: function (response) {
+
+                console.log(response);
+                location.reload();
+            },
+            error: function () {
+                alert("Error while checking email.");
+            }
+        });
+    }
+
     var today = new Date();
 
     // Get the date part of today's date in yyyy-mm-dd format
@@ -78,6 +101,28 @@
         }
     });
 
-   
+    function toggleCheckboxes() {
+        var StartDate = document.getElementById('StartDate');
+        var StartTime = document.getElementById('StartTime');
+        var EndTime = document.getElementById('EndTime');
+        var save = document.getElementById('save');
+        var edit = document.getElementById('edit');
+
+        if (StartDate.disabled) {
+            // Show the Save button and enable input fields
+            save.style.display = 'inline-block';
+            edit.style.display = 'none';
+            StartDate.disabled = false;
+            StartTime.disabled = false;
+            EndTime.disabled = false;
+        } else {
+            // Hide the Save button and disable input fields
+            edit.style.display = 'inline-block';
+            save.style.display = 'none';
+            StartDate.disabled = true;
+            StartTime.disabled = true;
+            EndTime.disabled = true;
+        }
+    }
 
 </script>

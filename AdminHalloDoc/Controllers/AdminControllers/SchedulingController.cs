@@ -93,24 +93,46 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
            Schedule v = await _schedulingRepository.GetShiftByShiftdetailId(id);
             ViewBag.ProviderComboBox = await _viewActionRepository.ProviderbyRegion(v.Regionid);
-            return PartialView("../AdminViews/Physician/_EditShift");
+            return PartialView("../AdminViews/Physician/_EditShift",v);
         }
 
 
-        #region _CreateShiftPost
+
+        #region _EditShiftPost
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> _EditShiftPost(Schedule v)
+        public async Task<IActionResult> _EditShiftPost(Schedule v, string submittt)
         {
-            if (await _schedulingRepository.CreateShift(v, CV.ID()))
+            if (submittt == "Return" && await _schedulingRepository.UpdateStatusShift("" + v.Shiftid, CV.ID()))
             {
-                TempData["Status"] = "Create Shift Successfully..!";
+                TempData["Status"] = "Update Shift Successfully..!";
+            }
+            else
+            {
+
+                if (await _schedulingRepository.EditShift(v, CV.ID()))
+                {
+                    TempData["Status"] = "Edit Shift Successfully..!";
+                }
             }
 
             return RedirectToAction("Index");
         }
         #endregion
 
+        #region _UpdateShiftPost
+
+        public async Task<IActionResult> _UpdateShiftPost(int id)
+        {
+            if (await _schedulingRepository.UpdateStatusShift("" + id, CV.ID()))
+            {
+                TempData["Status"] = "Update Shift Successfully..!";
+            }
+
+
+            return RedirectToAction("Index");
+        }
+        #endregion
         #endregion
     }
 }

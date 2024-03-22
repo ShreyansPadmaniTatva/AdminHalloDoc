@@ -10,10 +10,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
 {
     public interface ISchedulingRepository
     {
-        Task<List<Physicians>> PhysicianAll();
-        Task<List<Physicians>> PhysicianByRegion(int? region);
+        Task<List<Schedule>> PhysicianAll();
+        Task<List<Schedule>> PhysicianByRegion(int? region);
         Task<bool> CreateShift(Schedule s, string AdminID);
         Task<List<Schedule>> GetShift(int month);
         Task<Schedule> GetShiftByShiftdetailId(int Shiftdetailid);
+        Task<bool> EditShift(Schedule s, string AdminID);
+        Task<bool> UpdateStatusShift(string s, string AdminID);
     }
 }
