@@ -128,37 +128,57 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 _context.Shifts.Add(shift);
                 _context.SaveChanges();
 
+                Shiftdetail sd = new Shiftdetail();
+                sd.Shiftid = shift.Shiftid;
+                sd.Shiftdate = new DateTime(s.Startdate.Year,s.Startdate.Month,s.Startdate.Day);
+                sd.Starttime = s.Starttime;
+                sd.Endtime = s.Endtime;
+                sd.Regionid = s.Regionid;
+                sd.Status = s.Status;
+                sd.Isdeleted = new BitArray(1);
+                sd.Isdeleted[0] = false;
+                _context.Shiftdetails.Add(sd);
+                _context.SaveChanges();
+
+                Shiftdetailregion sr = new Shiftdetailregion();
+                sr.Shiftdetailid = sd.Shiftdetailid;
+                sr.Regionid = s.Regionid;
+                sr.Isdeleted = new BitArray(1);
+                sr.Isdeleted[0] = false;
+                _context.Shiftdetailregions.Add(sr);
+                _context.SaveChanges();
+
                 List<int> day = s.checkWeekday.Split(',').Select(int.Parse).ToList();
 
                 foreach (int d in day)
                 {
                     DayOfWeek desiredDayOfWeek = (DayOfWeek)d;
                     DateTime today = DateTime.Today;
-                    DateTime nextOccurrence = today;
+                    DateTime nextOccurrence = new DateTime(s.Startdate.Year, s.Startdate.Month, s.Startdate.Day);
                     int occurrencesFound = 0;
                     while (occurrencesFound < s.Repeatupto)
                     {
                         if (nextOccurrence.DayOfWeek == desiredDayOfWeek)
                         {
                           
-                            Shiftdetail sd = new Shiftdetail();
-                            sd.Shiftid = shift.Shiftid;
-                            sd.Shiftdate = nextOccurrence;
-                            sd.Starttime = s.Starttime;
-                            sd.Endtime = s.Endtime;
-                            sd.Regionid = s.Regionid;
-                            sd.Status = s.Status;
-                            sd.Isdeleted = new BitArray(1);
-                            sd.Isdeleted[0] = false;
-                            _context.Shiftdetails.Add(sd);
+                            Shiftdetail sdd = new Shiftdetail();
+                            sdd.Shiftid = shift.Shiftid;
+                            sdd.Shiftdate = nextOccurrence;
+                            sdd.Starttime = s.Starttime;
+                            sdd.Endtime = s.Endtime;
+                            sdd.Regionid = s.Regionid;
+                            sdd.Status = s.Status;
+                            sdd.Isdeleted = new BitArray(1);
+                            sdd.Isdeleted[0] = false;
+                            _context.Shiftdetails.Add(sdd);
                             _context.SaveChanges();
 
-                            Shiftdetailregion sr = new Shiftdetailregion();
-                            sr.Shiftdetailid = sd.Shiftdetailid;
-                            sr.Regionid = s.Regionid;
-                            sr.Isdeleted = new BitArray(1);
-                            sr.Isdeleted[0] = false;
-                            _context.Shiftdetailregions.Add(sr);
+                            Shiftdetailregion srr = new Shiftdetailregion();
+                            srr.Shiftdetailid = sdd.Shiftdetailid;
+                            srr.Regionid = s.Regionid;
+                            srr.Isdeleted = new BitArray(1);
+                            srr.Isdeleted[0] = false;
+                            _context.Shiftdetailregions.Add(srr);
                             _context.SaveChanges();
                             occurrencesFound++;
 
@@ -166,10 +186,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         nextOccurrence = nextOccurrence.AddDays(1);
                     }
                 }
-              
-
-                
-
                 return true;
                 
             }
@@ -204,8 +220,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                           where sd.Shiftdate == schedule
                                           select new Schedule
                                           {
+                                              Shiftid = sd.Shiftdetailid,
+                                              Status = sd.Status,
                                               Starttime = sd.Starttime,
-                                              Endtime = sd.Starttime,
+                                              Endtime = sd.Endtime,
                                               PhysicianName = pd.Firstname + ' '+pd.Lastname,
                                           })
                                              .ToListAsync();
@@ -218,6 +236,40 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
 
             return ScheduleDetails;
+
+        }
+        #endregion
+
+        #region GetShift
+        public async Task<Schedule> GetShiftByShiftdetailId(int Shiftdetailid)
+        {
+            
+                Schedule ss =  (from s in _context.Shifts
+                                           join pd in _context.Physicians
+                                           on s.Physicianid equals pd.Physicianid
+                                           join sd in _context.Shiftdetails
+                                           on s.Shiftid equals sd.Shiftid into shiftGroup
+                                           from sd in shiftGroup.DefaultIfEmpty()
+                                           join rg in _context.Regions
+                                           on sd.Regionid equals rg.Regionid
+                                           where sd.Shiftdetailid == Shiftdetailid
+                                           select new Schedule
+                                           {
+                                               Regionid = (int)sd.Regionid,
+                                               Shiftid = sd.Shiftdetailid,
+                                               Status = sd.Status,
+                                               Starttime = sd.Starttime,
+                                               Endtime = sd.Endtime,
+                                               Physicianid = s.Physicianid,
+                                               PhysicianName = pd.Firstname + ' ' + pd.Lastname,
+                                           })
+                                              .FirstOrDefault();
+
+               
+        
+
+
+            return ss;
 
         }
         #endregion

@@ -60,7 +60,6 @@ $(function () {
 
 var buttons = document.querySelectorAll('.request-type-btn');
 
-console.log(buttons);
 // Add click event listeners to each button
 buttons.forEach(function (button) {
     button.addEventListener('click', function () {

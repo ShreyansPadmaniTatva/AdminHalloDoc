@@ -14,5 +14,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<List<Physicians>> PhysicianByRegion(int? region);
         Task<bool> CreateShift(Schedule s, string AdminID);
         Task<List<Schedule>> GetShift(int month);
+        Task<Schedule> GetShiftByShiftdetailId(int Shiftdetailid);
     }
 }

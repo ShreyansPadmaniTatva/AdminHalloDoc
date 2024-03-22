@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-   
+
     var status = "null";
     if (TempData["Status"] == null)
     {
@@ -16,162 +16,12 @@
 
 
 }
-<style>
-    .calendar-container {
-        background: #fff;
-        width: 450px;
-        border-radius: 10px;
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-    }
-
-        .calendar-container header {
-            display: flex;
-            align-items: center;
-            padding: 25px 30px 10px;
-            justify-content: space-between;
-        }
-
-    header .calendar-navigation {
-        display: flex;
-    }
-
-        header .calendar-navigation span {
-            height: 38px;
-            width: 38px;
-            margin: 0 1px;
-            cursor: pointer;
-            text-align: center;
-            line-height: 38px;
-            border-radius: 50%;
-            user-select: none;
-            color: #aeabab;
-            font-size: 1.9rem;
-        }
-
-    .calendar-navigation span:last-child {
-        margin-right: -10px;
-    }
-
-    header .calendar-navigation span:hover {
-        background: #f2f2f2;
-    }
-
-    header .calendar-current-date {
-        font-weight: 500;
-        font-size: 1.45rem;
-    }
-
-    .calendar-body {
-        padding: 20px;
-    }
-
-        .calendar-body ul {
-            list-style: none;
-            flex-wrap: wrap;
-            display: flex;
-            text-align: center;
-        }
-
-        .calendar-body .calendar-dates {
-            margin-bottom: 20px;
-        }
-
-        .calendar-body li {
-            width: calc(100% / 7);
-            font-size: 1.07rem;
-            color: #414141;
-        }
-
-        .calendar-body .calendar-weekdays li {
-            cursor: default;
-            font-weight: 500;
-        }
-
-        .calendar-body .calendar-dates li {
-            border: 0px solid #414141;
-            position: relative;
-            z-index: 1;
-            cursor: pointer;
-        }
-
-    .calendar-dates li.inactive {
-        color: #aaa;
-    }
-
-    .calendar-dates li.active {
-        color: #fff;
-    }
-
-    .calendar-dates li::before {
-        position: absolute;
-        content: "";
-        z-index: -1;
-        top: 50%;
-        left: 50%;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    .calendar-dates li.active::before {
-        background: #6332c5;
-    }
-
-    .calendar-dates li:not(.active):hover::before {
-        background: #e4e1e1;
-    }
-</style>
-<style>
-    .first {
-        background-color: #ffabd5;
-    }
-    li div{
-        border: 0.5px solid #c9c9c9;
-        padding:1px;
-    }
-    li div {
-        height: 25px; /* Set the desired fixed height */
-        overflow: hidden; /* Hide overflow text */
-    }
-
-    .heading{
-        background-color: #565656;
-        color:white !important;
-        border: 1px solid #f3f3f3;
-    }
-
-    .weekhead{
-        background-color: #565656;
-        color: white !important;
-        border: 1px solid #f3f3f3;
-    }
-
-    .Converage {
-        background-color: #ffabd5;
-        color: black !important;
-        
-    }
-
-        .Converage td {
-        border: 1px solid #f3f3f3;
-    }
-    .weekhead td{
-        color: white !important;
-        padding: 0.4rem;
-        border: 1px solid #f3f3f3;
-    }
-    .main tr > td{
-        border: 1px solid #c9c9c9;
-        padding: 0.3rem;
-    }
-</style>
 
 <div class="container">
     <div class="justify-content-between d-flex container-fluid  position-relative ">
         <div class="">
             <h3 class="fw-bolder">
-               Scheduling
+                Scheduling
             </h3>
         </div>
         <div class="">
@@ -179,7 +29,7 @@
         </div>
     </div>
     <div class=" border-0  py-1 mx-3 mt-3 rounded">
-        <div class="row" >
+        <div class="row">
             <div class="col-md-7 mt-2">
                 <div class="dropdown bg-white">
 
@@ -189,7 +39,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-5 mt-2"> 
+            <div class="col-md-5 mt-2">
                 <div class="d-flex justify-content-end">
                     <a asp-action="PhysicianProfile" asp-controller="Physician" class="btn btn-info text-white mx-2">
                         Provider On Call
@@ -205,12 +55,12 @@
                 </div>
             </div>
         </div>
-        <div class="row my-4" >
+        <div class="row my-4">
             <div class="col-md-7 mt-2">
                 <div class="calendar-current-date fs-4 fw-bolder">Dec 2023</div>
                 <div class="text-start my-3 calendar-navigation">
                     <span id="calendar-prev" class="btn btn-info text-white rounded-circle">❮</span>
-                    <span class="mx-3" ><i class="fa-regular fa-calendar-days"></i></span>
+                    <span class="mx-3"><i class="fa-regular fa-calendar-days"></i></span>
                     <span id="calendar-next" class="btn btn-info text-white rounded-circle">❯</span>
                 </div>
             </div>
@@ -227,11 +77,11 @@
                 </div>
                 <div class="d-flex justify-content-end">
                     <div id="day" class="btn btn-outline-info  mx-2">
-                       Day
+                        Day
                     </div>
                     <!-- Button trigger modal -->
                     <div id="week" class="btn btn-outline-info   mx-2">
-                       Week 
+                        Week
                     </div>
                     <div id="month" class="btn btn-outline-info   mx-2">
                         Month
@@ -247,30 +97,30 @@
     </div>
 
     <div style="display:none" id="weekviewcontainer" class="active">
-       
-        <table style="width:100%;" >
+
+        <table style="width:100%;">
             <thead>
                 <tr class="weekhead">
                     <td>Staf</td>
-                    
-                        <td class="title" data-name="Sun">Sun</td>
-                       
+
+                    <td class="title" data-name="Sun">Sun</td>
+
                     <td class="title" data-name="Mon">Mon</td>
-                   
-                
+
+
                     <td class="title" data-name="Tue">Tue</td>
-                    
-                
+
+
                     <td class="title" data-name="Wed">Wed</td>
-                  
-            
+
+
                     <td class="title" data-name="Thu">Thu</td>
-                 
+
                     <td class="title" data-name="Fri">Fri</td>
-                
+
                     <td class="title" data-name="Sat">Sat</td>
-                   
-                    
+
+
 
                 </tr>
                 <tr class="Converage">
@@ -297,7 +147,6 @@
                 </tr>
             </thead>
             <tbody class="main">
-               
             </tbody>
         </table>
     </div>
@@ -315,15 +164,33 @@
             </table>
         </div>
     </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-center text-white">
+                <h1 class="modal-title fs-5"  id="model-head" ></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
+</div>
 @section Scripts
     {
 
     <script type="text/javascript">
 
         $(function () {
+            var x = 1;
             var ProviderData = [];
-            var extractedDataArray = [];
+            const extractedDataArray = [];
             //Get Provider List in array
             function getProviderList(region) {
                 $.ajax({
@@ -333,7 +200,7 @@
                     dataType: "json",
                     success: function (response) {
                         // Initialize an array to store the JSON data
-                       
+
 
                         // Process the response data
                         response.forEach(function (item) {
@@ -355,7 +222,7 @@
                         var jsonData = JSON.stringify(ProviderData);
 
                         // Output the JSON data to the console
-                        console.log(jsonData);
+                        // console.log(jsonData);
                     },
                     error: function () {
                         // Handle error
@@ -368,11 +235,11 @@
                 $.ajax({
                     type: "GET",
                     url: '@Url.Action("GetShiftForMonth", "Scheduling")',
-                    data: { region: month },
+                    data: { month: month },
                     dataType: "json",
                     success: function (response) {
                         // Initialize an array to store extracted data
-                       
+
 
                         // Iterate over the array
                         response.forEach(function (shift) {
@@ -396,9 +263,11 @@
                                 // Iterate over dayList and store data
                                 shift.dayList.forEach(function (day) {
                                     var dayData = {
+                                        shiftid: day.shiftid,
                                         physicianName: day.physicianName,
                                         startTime: day.starttime,
-                                        endTime: day.endtime
+                                        endTime: day.endtime,
+                                        status: day.status,
                                     };
                                     // Push day data into dayDataArray
                                     dayDataArray.push(dayData);
@@ -410,9 +279,10 @@
                             // Push extracted data into the array
                             extractedDataArray.push(extractedData);
                         });
-
+                        console.log(extractedDataArray)
+                        manipulate();
                         // Output the extracted data array to the console
-                        console.log(extractedDataArray);
+                        //console.log(extractedDataArray);
                     },
                     error: function () {
                         // Handle error
@@ -423,7 +293,7 @@
 
             // Call the function to get provider list initially
             getProviderList();
-            GetShiftForMonth();
+
 
             const timeSlotsContainer = $('.employee-schedules thead tr');
             const employeeSchedulesContainer = $('.employee-schedules tbody');
@@ -431,6 +301,8 @@
             let date = new Date();
             let year = date.getFullYear();
             let month = date.getMonth();
+            console.log(month);
+            GetShiftForMonth(month + 1);
 
             const day = document.querySelector(".calendar-dates");
             const weekdays = document.querySelector(".calendar-weekdays");
@@ -480,9 +352,41 @@
                 for (let i = 1; i <= lastdate; i++) {
                     // Check if the current date is today
                     let isToday = i === date.getDate() && month === new Date().getMonth() && year === new Date().getFullYear() ? "active" : "";
-                    let isDayInArray = extractedDataArray.some(item => parseInt(item.date) === i) ? "matched" : "";
+                    
+                    let foundItem = extractedDataArray.find(o => {
+                        return parseInt(o.date) === i;
+                    });
 
-                    lit += `<li class="${isToday}"><div class="first" >${isDayInArray}</div><div></div> <div></div> <div></div> <div></div> </li>`;
+                    let isDayInArray = foundItem ? "matched" : "";
+                    let dayDataArrayfinal = foundItem ? foundItem.dayDataArray : "";
+                    let ProviderNames = [];
+                    let Status = [];
+                    let buttonId = `viewAllButton_${i}`;
+
+                    // If dayDataArrayfinal is found, iterate over each item and push ProviderName to ProviderNames array
+                    if (dayDataArrayfinal) {
+                        dayDataArrayfinal.forEach(item => {
+                            let providerObj = {
+                                name: item.physicianName + ' <br/> ' + item.startTime + item.endTime,
+                                status: item.status,
+                                shiftid: item.shiftid
+                            };
+                            ProviderNames.push(providerObj);
+                            Status.push(item.status);
+                        });
+                    }
+
+
+                    lit += `<li class="${isToday}"><div class="first" >${i}</div>
+                                <a  data-form-id="formEdit_UMS"
+                                    data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 0 ? ProviderNames[0].shiftid : ''}'
+                                    class="js-stkModal-btn ${Status.length > 0 ? 'Status-' + Status[0] : ''} " >${ProviderNames.length > 0 ? ProviderNames[0].name : ''}</a>
+                               <a data-form-id="formEdit_UMS"
+                                    data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 1 ? ProviderNames[1].shiftid : ''}'
+                                    class="js-stkModal-btn ${Status.length > 1 ? 'Status-' + Status[1] : ''} ">${ProviderNames.length > 1 ? ProviderNames[1].name : ''}</a>
+                               <a class="js-stkModal-btn ${Status.length > 2 ? 'Status-' + Status[2] : ''} " >${ProviderNames.length > 2 ? ProviderNames[2].name : ''}</a>
+                                   <div type="button"  id="${buttonId}" data-bs-toggle="modal" data-bs-target="${ProviderNames.length > 3 ? '#exampleModal' : ''}" data-month="${month}" data-index="${i}" class="${Status.length > 3 ? 'btn btn-info w-100 text-white rounded-0 view-all-btn' : ''}">${ProviderNames.length > 3 ? 'View All' : ''}</div>
+                                    </li>`;
                 }
 
                 // Loop to add the first dates of the next month
@@ -497,6 +401,33 @@
                 day.innerHTML = lit;
             };
 
+            $(document).on('click', '.view-all-btn', function () {
+                
+                // Get the index associated with the clicked button
+                let index = parseInt($(this).data('index'));
+                let month = parseInt($(this).data('month'));
+                $('#model-head').html(index + ' / ' + months[month] + ' / ' + year);
+                // Retrieve the corresponding dayDataArrayfinal
+                let foundItem = extractedDataArray.find(o => parseInt(o.date) === index);
+                let dayDataArrayfinal = foundItem ? foundItem.dayDataArray : [];
+
+                // Clear previous modal content
+                $('.modal-body').empty();
+
+                // Populate modal with shift details
+                dayDataArrayfinal.forEach(item => {
+                    let shiftDetails = `
+                                                    <div class=" my-1 p-2 ${'model-Status-' + item.status}" >
+                    <div>Physician Name: ${item.physicianName}</div>
+                    <div>Start Time: ${item.startTime}</div>
+                    <div>End Time: ${item.endTime}</div>
+                    <div>
+                    `;
+                    $('.modal-body').append(shiftDetails);
+                });
+            });
+
+
             manipulate();
 
             // Attach a click event listener to each icon
@@ -505,24 +436,26 @@
                 icon.addEventListener("click", () => {
                     // Check if the icon is "calendar-prev" or "calendar-next"
                     month = icon.id === "calendar-prev" ? month - 1 : month + 1;
+                    if (x == 1) {
+                        // Check if the month is out of range
+                        if (month < 0 || month > 11) {
+                            // Set the date to the first day of the month with the new year
+                            date = new Date(year, month, new Date().getDate());
 
-                    // Check if the month is out of range
-                    if (month < 0 || month > 11) {
-                        // Set the date to the first day of the month with the new year
-                        date = new Date(year, month, new Date().getDate());
+                            // Set the year to the new year
+                            year = date.getFullYear();
 
-                        // Set the year to the new year
-                        year = date.getFullYear();
+                            // Set the month to the new month
+                            month = date.getMonth();
+                        } else {
+                            // Set the date to the current date
+                            date = new Date();
+                        }
 
-                        // Set the month to the new month
-                        month = date.getMonth();
-                    } else {
-                        // Set the date to the current date
-                        date = new Date();
+                        // Call the manipulate function to update the calendar display
+                        manipulate();
                     }
 
-                    // Call the manipulate function to update the calendar display
-                    manipulate();
                 });
             });
 
@@ -537,7 +470,7 @@
                 for (let i = 0; i < 24; i++) {
                     const hour = i < 12 ? i === 0 ? 12 : i : i === 12 ? 12 : i - 12;
                     const amPm = i < 12 ? 'A' : 'P';
-                    
+
                     const timeSlot = $('<th>').text(`${hour} ${amPm}`);
                     timeSlotsContainer.append(timeSlot);
                 }
@@ -642,7 +575,7 @@
                         // Check if tbody exists
                         if (tbody) {
                             // Add rows dynamically
-                            for (var i = 0; i < ProviderData.length ;i++) {
+                            for (var i = 0; i < ProviderData.length; i++) {
                                 var row = document.createElement('tr');
                                 for (var j = 0; j < 8; j++) {
                                     var cell = document.createElement('td');
@@ -657,7 +590,7 @@
                                         cell.appendChild(document.createTextNode(ProviderData[i].name)); // Add text content after the image
 
                                         // First cell, add some content or leave it empty
-                                       // cell.textContent = ProviderData[i].name; + (i + 1);
+                                        // cell.textContent = ProviderData[i].name; + (i + 1);
                                     } else {
                                         // Other cells, you can add your content or leave them empty
                                         cell.textContent = '';
@@ -690,10 +623,10 @@
                         $('td,th').css("background-color", "");
                         const firstweek = new Date(year, month, 1).getWeek();
                         const lastweek = new Date(year, month + 1, 0).getWeek();
-                       
+
                         var used = new Date(year, month, 1).getDay() + new Date(year, month + 1, 0).getDate();
                         var numofweeks = Math.ceil(used / 7);
-                       
+
                         removefirst.forEach(removefirstcol);
                         removelast.forEach(removelastcol);
                         function removefirstcol(item, index) { $('td[data-week="0"][data-name="' + item + '"').css({ "background-image": "none", "background-color": "#c9c9c9", "cursor": "not-allowed" }); }
@@ -761,7 +694,7 @@
                 manipulate();
             });
         });
-       
+
         window.onload = function () {
             console.log("@status  d");
             if ("@status" != "null") {

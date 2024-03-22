@@ -39,9 +39,9 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        public async Task<IActionResult> GetShiftForMonth(int? region)
+        public async Task<IActionResult> GetShiftForMonth(int? month)
         {
-            var v = await _schedulingRepository.GetShift(3);
+            var v = await _schedulingRepository.GetShift((int)month);
             return Json(v);
         }
 
@@ -77,6 +77,32 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         public async Task<IActionResult> _CreateShiftPost(Schedule v)
         {
             if (await _schedulingRepository.CreateShift(v,CV.ID()))
+            {
+                TempData["Status"] = "Create Shift Successfully..!";
+            }
+
+            return RedirectToAction("Index");
+        }
+        #endregion
+
+        #endregion
+
+        #region _EditShift
+        public async Task<IActionResult> _EditShift(int id)
+        {
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+           Schedule v = await _schedulingRepository.GetShiftByShiftdetailId(id);
+            ViewBag.ProviderComboBox = await _viewActionRepository.ProviderbyRegion(v.Regionid);
+            return PartialView("../AdminViews/Physician/_EditShift");
+        }
+
+
+        #region _CreateShiftPost
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _EditShiftPost(Schedule v)
+        {
+            if (await _schedulingRepository.CreateShift(v, CV.ID()))
             {
                 TempData["Status"] = "Create Shift Successfully..!";
             }
