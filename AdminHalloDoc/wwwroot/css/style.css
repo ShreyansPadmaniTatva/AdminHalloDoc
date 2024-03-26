@@ -1394,3 +1394,20 @@ li a {
     display: block;
     background-color: lightcoral;
 }
+.employee-schedules thead tr td{
+    width:auto;
+}
+.employee-schedules-table tr > td {
+    border: 1px solid #c9c9c9;
+    padding: 0.2rem;
+}
+.employee-schedules-thead {
+    background-color: #565656;
+    color: white !important;
+    border: 1px solid #f3f3f3;
+}
+    .employee-schedules-thead td {
+        color: white !important;
+        padding: 0.4rem;
+        border: 1px solid #f3f3f3;
+    }
