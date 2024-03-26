@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
+    [AdminAuth("Admin,Provider")]
     public class AdminDashboardController : Controller
     {
         #region Constructor
@@ -131,6 +132,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
+        
         #region ProviderbyRegion
         public async Task<IActionResult> ProviderbyRegion(int? Regionid)
         {

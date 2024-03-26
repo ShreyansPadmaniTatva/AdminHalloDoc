@@ -39,12 +39,13 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        public async Task<IActionResult> GetShiftForMonth(int? month)
+        #region ShiftForMonth
+        public async Task<IActionResult> GetShiftForMonth(int? month,int? regionId)
         {
-            var v = await _schedulingRepository.GetShift((int)month);
+            var v = await _schedulingRepository.GetShift((int)month, regionId);
             return Json(v);
         }
-
+        #endregion
 
         #region PhysicianAll
         public async Task<IActionResult> PhysicianAll(int? region)
@@ -134,5 +135,19 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
         #endregion
+
+        #region _DeleteShiftPost
+
+        public async Task<IActionResult> _DeleteShiftPost(int id)
+        {
+            if (await _schedulingRepository.DeleteShift("" + id, CV.ID()))
+            {
+                TempData["Status"] = "Delete Shift Successfully..!";
+            }
+
+            return RedirectToAction("Index");
+        }
+        #endregion
+
     }
 }

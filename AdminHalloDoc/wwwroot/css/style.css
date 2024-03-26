@@ -1356,7 +1356,7 @@ li a {
 
 .main tr > td {
     border: 1px solid #c9c9c9;
-    padding: 0.3rem;
+    padding: 0.2rem;
 }
 
 .Status-1 {
@@ -1377,5 +1377,20 @@ li a {
 
 .model-Status-0 {
     background-color: lightcoral;
-    border: 1px solid;
+    border: 1px solid white;
+}
+.w-Status-1 {
+    font-size: 0.9rem;
+    color: black !important;
+    display: block;
+    padding: 0.3rem;
+    background-color: #c2f7c2;
+}
+
+.w-Status-0 {
+    font-size: 0.9rem;
+    color: black !important;
+    padding: 0.3rem;
+    display: block;
+    background-color: lightcoral;
 }

@@ -55,7 +55,7 @@
               
                 <input  id="save" style="display:none" type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" />
                 <div id="edit" onclick="toggleCheckboxes()" class="btn btn-info text-white">Edit</div>
-                <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <div id="delete" class="btn btn-danger btn-sm">Delete</div>
             </div>
         </div>
     </form>
@@ -64,11 +64,10 @@
 <script type="text/javascript">
 
     function myFunction() {
-        var email = $("#shiftid").val();
-        console.log(email);
+        var shiftid = $("#shiftid").val();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("_UpdateShiftPost","Scheduling")?id=' + email,
+            url: '@Url.Action("_UpdateShiftPost","Scheduling")?id=' + shiftid,
             cache: false,
             success: function (response) {
 
@@ -81,6 +80,46 @@
         });
     }
 
+    function deleteshift() {
+        var shiftid = $("#shiftid").val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("_DeleteShiftPost","Scheduling")?id=' + shiftid,
+            cache: false,
+            success: function (response) {
+
+                console.log(response);
+                location.reload();
+            },
+            error: function () {
+                alert("Error while checking email.");
+            }
+        });
+    }
+
+
+    document.getElementById('delete').addEventListener('click', (event) => {
+        event.preventDefault();
+
+        Swal.fire({
+            title: "Do you want delete shift ?",
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            denyButtonText: `Don't delete`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteshift();
+            }
+            console.log(result);
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                Swal.fire("Save Changes!", "", "success");
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+    });
     var today = new Date();
 
     // Get the date part of today's date in yyyy-mm-dd format

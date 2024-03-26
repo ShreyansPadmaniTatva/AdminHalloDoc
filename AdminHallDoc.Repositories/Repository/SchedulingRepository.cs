@@ -70,12 +70,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                            join sd in _context.Shiftdetails
                                            on s.Shiftid equals sd.Shiftid into shiftGroup
                                            from sd in shiftGroup.DefaultIfEmpty()
-                                           where s.Physicianid == schedule.Physicianid
+                                           where s.Physicianid == schedule.Physicianid && sd.Isdeleted == new BitArray(1)
                                            select new Schedule
                                            {
                                                Shiftid = sd.Shiftdetailid,
                                                Status = sd.Status,
                                                Starttime = sd.Starttime,
+                                               Shiftdate = sd.Shiftdate,
                                                Endtime = sd.Endtime,
                                                PhysicianName = pd.Firstname + ' ' + pd.Lastname,
                                            })
@@ -114,7 +115,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                         on r.Roleid equals role.Roleid into roleGroup
                                         from roles in roleGroup.DefaultIfEmpty()
 
-                                        where pr.Regionid == region
+                                        where pr.Regionid == region && r.Isdeleted == new BitArray(1)
                                         select new Physicians
                                         {
                                             Createddate = r.Createddate,
@@ -130,7 +131,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                             Lastname = r.Lastname,
                                             notification = nof.Isnotificationstopped,
                                             role = roles.Name,
-                                            Status = r.Status
+                                            Status = r.Status,
+                                            Email = r.Email,
+                                            Photo = r.Photo
 
                                         })
                                         .ToListAsync();
@@ -144,16 +147,17 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                            join sd in _context.Shiftdetails
                                            on s.Shiftid equals sd.Shiftid into shiftGroup
                                            from sd in shiftGroup.DefaultIfEmpty()
-                                           where s.Physicianid == schedule.Physicianid
+                                           where s.Physicianid == schedule.Physicianid && sd.Isdeleted == new BitArray(1)
                                            select new Schedule
                                            {
                                                Shiftid = sd.Shiftdetailid,
                                                Status = sd.Status,
                                                Starttime = sd.Starttime,
+                                               Shiftdate = sd.Shiftdate,
                                                Endtime = sd.Endtime,
                                                PhysicianName = pd.Firstname + ' ' + pd.Lastname,
                                            })
-                                              .ToListAsync();
+                                             .ToListAsync();
 
                 Schedule temp = new Schedule();
                 temp.PhysicianName = schedule.Firstname + ' ' + schedule.Lastname;
@@ -321,13 +325,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
-        #region GetShift
-        public async Task<List<Schedule>> GetShift(int month)
+        #region GetShift_For_Month
+        public async Task<List<Schedule>> GetShift(int month,int? regionId)
         {
             List<Schedule> ScheduleDetails = new List<Schedule>();
 
             var uniqueDates = await _context.Shiftdetails
-                            .Where(sd => sd.Shiftdate.Month == month) // Filter by month if needed
+                            .Where(sd => sd.Shiftdate.Month == month && sd.Isdeleted == new BitArray(1) && (regionId == null || regionId == -1 || sd.Regionid == regionId)) // Filter by month if needed
                             .Select(sd => sd.Shiftdate.Date) // Select the date part of Shiftdate
                             .Distinct() // Get distinct dates
                             .ToListAsync();
@@ -341,7 +345,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                           join sd in _context.Shiftdetails
                                           on s.Shiftid equals sd.Shiftid into shiftGroup
                                           from sd in shiftGroup.DefaultIfEmpty()
-                                          where sd.Shiftdate == schedule
+                                          where sd.Shiftdate == schedule 
                                           select new Schedule
                                           {
                                               Shiftid = sd.Shiftdetailid,
@@ -395,6 +399,42 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
 
             return ss;
+
+        }
+        #endregion
+
+        #region DeleteShift
+        public async Task<bool> DeleteShift(string s, string AdminID)
+        {
+            List<int> shidtID = s.Split(',').Select(int.Parse).ToList();
+            try
+            {
+                foreach (int i in shidtID)
+                {
+                    Shiftdetail sd = _context.Shiftdetails.FirstOrDefault(sd => sd.Shiftdetailid == i);
+                    if (sd != null)
+                    {
+                        sd.Isdeleted[0] = true;
+                        sd.Modifiedby = AdminID;
+                        sd.Modifieddate = DateTime.Now;
+                        _context.Shiftdetails.Update(sd);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
 
         }
         #endregion
