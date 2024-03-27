@@ -1,0 +1,115 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var status = "null";
+    if (TempData["Status"] == null)
+    {
+        status = "null";
+    }
+    else
+    {
+        status = TempData["Status"].ToString();
+
+    }
+}
+@model List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians>
+<div class="container">
+    <div class="justify-content-between d-flex container-fluid  position-relative ">
+        <div class="">
+            <h3 class="fw-bolder">
+                MDs On Call
+            </h3>
+        </div>
+        <div class="">
+            <a onclick="history.back()" class="btn btn-outline-info"> ❮  Back </a>
+        </div>
+    </div>
+    <div class=" border-0  py-1 mx-3 mt-3 rounded">
+        <div class="row">
+            <div class="col-md-7 mt-2">
+                <div class="dropdown bg-white">
+
+                    <select class="form-select form-control form-select-md" id="fregion" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                        <option value="-1">All Region</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-5 mt-2">
+                <div class="d-flex justify-content-end">
+                    <a asp-action="PhysicianProfile" asp-controller="Physician" class="btn btn-info text-white mx-2">
+                        Calendar View
+                    </a>
+                    <!-- Button trigger modal -->
+                    <a asp-action="RequestedShift" asp-controller="Scheduling" class="btn btn-info text-white  mx-2">
+                        Shift For Review
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="card border-0 shadow py-2 mb-5 mx-3 mt-3 rounded">
+        <div class="p-3 ">
+            <h4 class="fw-bold" >MD's On Call</h4>
+            <div class="container-fluid">
+                <div class="row my-4" >
+                    @foreach (var item in Model)
+                    {
+                        @if(item.onCallStatus == 1){
+                            <div class="col-md-4 my-2">
+                                <img src="/Upload/Physician/@item.Physicianid/@item.Photo" style="height: 50px;">
+                                <span> @item.Firstname @item.Lastname</span>
+                            </div>
+                        }
+                       
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="p-3 ">
+            <h4 class="fw-bold" >Physicians off Duty</h4>
+            <div class="container-fluid">
+                <div class="row my-4">
+                    @foreach (var item in Model)
+                    {
+                        @if (item.onCallStatus == 0)
+                        {
+                            <div class="col-md-4 my-2">
+                                <img src="/Upload/Physician/@item.Physicianid/@item.Photo" style="height: 50px;">
+                                @item.Firstname @item.Lastname
+                            </div>
+                        }
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Modal -->
+
+
+
+@section Scripts
+    {
+
+    <script type="text/javascript">
+      
+
+    
+
+        window.onload = function () {
+            $('#monthcontainer').show();
+            $('#weekviewcontainer').hide();
+            $('#daycontainer').hide();
+            console.log("@status  d");
+            if ("@status" != "null") {
+                savealt("@status")
+            }
+
+        };
+
+    </script>
+}

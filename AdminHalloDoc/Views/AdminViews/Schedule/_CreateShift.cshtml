@@ -128,8 +128,6 @@
 
 <script type="text/javascript">
     var today = new Date();
-
-    // Get the date part of today's date in yyyy-mm-dd format
     var formattedDate = today.toISOString().split('T')[0];
 
     // Set the min attribute of the Start Date input to today's date
@@ -144,6 +142,26 @@
         // If the current End Time value is less than the selected Start Time, reset it
         if (document.getElementById('EndTime').value < startTime) {
             document.getElementById('EndTime').value = startTime;
+        }
+    });
+    document.getElementById('EndTime').addEventListener('change', function () {
+        const startTimeInput = document.getElementById('StartTime');
+        const endTimeInput = document.getElementById('EndTime');
+        const startTime = startTimeInput.value; // Get the value of start time
+        const endTime = endTimeInput.value; // Get the value of end time
+
+        // Convert start and end time strings to Date objects for comparison
+        const startDate = new Date('2000-01-01T' + startTime + ':00');
+        const endDate = new Date('2000-01-01T' + endTime + ':00');
+
+        // Check if end time is earlier than start time
+        if (endDate < startDate) {
+            Swal.fire({
+                icon: "error",
+                title: "Wrong End time...",
+                text: "End time cannot be earlier than start time!"
+            });
+            endTimeInput.value = ''; // Clear the end time input
         }
     });
 

@@ -18,5 +18,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<bool> EditShift(Schedule s, string AdminID);
         Task<bool> UpdateStatusShift(string s, string AdminID);
         Task<bool> DeleteShift(string s, string AdminID);
+        Task<List<Schedule>> GetAllNotApprovedShift(int? regionId);
+        Task<List<Physicians>> PhysicianOnCall(int? region);
     }
 }

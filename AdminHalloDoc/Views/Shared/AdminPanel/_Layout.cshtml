@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - AdminHalloDoc</title>
     <link href="~/css/main.css" rel="stylesheet" asp-append-version="true" />
     @*<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">*@
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@sweetalert2/theme-dark@5/dark.css" />
     <link href="~/css/sweetalert2.css" rel="stylesheet" />
 </head>
@@ -36,6 +36,9 @@
     <script src="@Url.Content("~/js/custom2/UI_ModalEvents.js")"></script>
     <script src="@Url.Content("~/js/custom2/UI_BlockUI.js")"></script>
     <script src="@Url.Content("~/js/custom2/InitMain.js")"></script>
+    @*<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>*@
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

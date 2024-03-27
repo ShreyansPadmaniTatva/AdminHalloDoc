@@ -211,11 +211,11 @@
 
             </div>
             <div class="col-md-6 form-floating ">
-                <input asp-for="PhotoFile" id="abcvb" class="form-control form-control-disable rounded provider-prof file-upload-wrapper-1" name="PhotoFile" type="file" placeholder=Suchtext autocomplete=off>
+                <input asp-for="PhotoFile"  class="form-control form-control-disable rounded provider-prof file-upload-wrapper-1" name="PhotoFile" type="file" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Photo</label>
             </div>
             <div class="col-md-6 form-floating d-flex">
-                <input asp-for="SignatureFile" id="abc" class="form-control form-control-disable rounded provider-prof file-upload-wrapper-1" name="SignatureFile" type="file" placeholder=Suchtext autocomplete=off>
+                <input asp-for="SignatureFile" id="signature-file" class="form-control form-control-disable rounded provider-prof file-upload-wrapper-1" name="SignatureFile" type="file" placeholder=Suchtext autocomplete=off>
                 <button class="btn btn-info mx-1 text-white" type="button" id="create-signature-button">Create</button>
                 <label for="floatingInput">Signature</label>
               
@@ -285,7 +285,7 @@
                             @{
                                 bool isChecked = Model!=null ? Model.Isagreementdoc :false;
                             }
-                            <input @(isChecked  ? "" : "disabled") class="fileInput btn btn-info" id="abc" asp-for="Agreementdoc" type="file" name="Agreementdoc" />
+                            <input @(isChecked  ? "" : "disabled") class="fileInput btn btn-info"  asp-for="Agreementdoc" type="file" name="Agreementdoc" />
                             <span class="btn btn-info text-white upload-button">Upload</span>
                         </div>
                         @{
@@ -608,7 +608,7 @@
             var drawing = false;
             var strokes = [];
             var saveButton = $('#save-button');
-            var signatureFileInput = $('#abc');
+            var signatureFileInput = $('#signature-file');
 
             function scaleUp(c, scale) {
 

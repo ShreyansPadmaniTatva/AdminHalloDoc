@@ -1202,7 +1202,7 @@ a{
 }
 .calendar-container {
     background: #fff;
-    width: 450px;
+   
     border-radius: 10px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
@@ -1248,44 +1248,46 @@ header .calendar-current-date {
     padding: 20px;
 }
 
-    .calendar-body ul {
+    .calendar-body tr {
         list-style: none;
         flex-wrap: wrap;
-        display: flex;
         text-align: center;
     }
-
+        .calendar-body tr th {
+            background-color: #565656 !important;
+            color: white !important;
+            padding: 0.4rem;
+            border: 1px solid #f3f3f3;
+        }
     .calendar-body .calendar-dates {
         margin-bottom: 20px;
     }
 
-    .calendar-body li {
+    .calendar-body td {
         width: calc(100% / 7);
         font-size: 1.07rem;
         color: #414141;
     }
 
-    .calendar-body .calendar-weekdays li {
+    .calendar-body .calendar-weekdays td {
         cursor: default;
         font-weight: 500;
     }
 
-    .calendar-body .calendar-dates li {
+    .calendar-body .calendar-dates td {
         border: 0px solid #414141;
         position: relative;
         z-index: 1;
         /*cursor: pointer;*/
     }
 
-.calendar-dates li.inactive {
+.calendar-dates div.inactive {
     color: #aaa;
 }
 
-.calendar-dates li.active {
-    color: #fff;
-}
 
-.calendar-dates li::before {
+
+.calendar-dates td::before {
     position: absolute;
     content: "";
     z-index: -1;
@@ -1297,11 +1299,11 @@ header .calendar-current-date {
     transform: translate(-50%, -50%);
 }
 
-.calendar-dates li.active::before {
+.calendar-dates td.active::before {
     background: #6332c5;
 }
 
-.calendar-dates li:not(.active):hover::before {
+.calendar-dates td:not(.active):hover::before {
     background: #e4e1e1;
 }
 .first {
@@ -1313,20 +1315,7 @@ li div {
     padding: 1px;
 }
 
-li div {
-    height: 34px; /* Set the desired fixed height */
-    overflow: hidden; /* Hide overflow text */
-}
 
-li a {
-    border: 0.5px solid #c9c9c9;
-    padding: 1px;
-}
-
-li a {
-    height: 34px; /* Set the desired fixed height */
-    overflow: hidden; /* Hide overflow text */
-}
 .heading {
     background-color: #565656;
     color: white !important;
@@ -1358,7 +1347,23 @@ li a {
     border: 1px solid #c9c9c9;
     padding: 0.2rem;
 }
-
+.calendar-dates tr > td {
+    border: 1px solid #c9c9c9;
+    padding: 0.2rem;
+}
+.table-text div a{
+    color:black !important;
+}
+.table-text div {
+    height: 34px; /* Set the desired fixed height */
+    overflow: hidden; /* Hide overflow text */
+    border: 0.5px solid #c9c9c9;
+    padding: 1px;
+    color: black !important;
+}
+.table-text div:hover {
+   background-color:antiquewhite;
+}
 .Status-1 {
     font-size: 0.7rem;
     background-color: #c2f7c2;
@@ -1411,3 +1416,23 @@ li a {
         padding: 0.4rem;
         border: 1px solid #f3f3f3;
     }
+
+.dt-paging-button.current {
+    background-color: var(--primary-color) !important;
+    color: aliceblue !important;
+    border: 1px solid white !important;
+}
+.dt-info{
+    padding-left:13px;
+}
+.dt-paging-button.next {
+    background: #7febff78 !important;
+    border-radius: 50% !important;
+}
+.dt-paging-button.previous {
+    background: #7febff78 !important;
+    border-radius: 50% !important;
+}
+.dt-paging-button.current{
+    color:white !important;
+}

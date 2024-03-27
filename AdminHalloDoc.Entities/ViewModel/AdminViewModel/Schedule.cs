@@ -12,12 +12,13 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
     public class Schedule
     {
-        public int Shiftid { get; set; }
+        public int? Shiftid { get; set; }
 
         public int Physicianid { get; set; }
         public string? PhysicianName { get; set; }
         public string? PhysicianPhoto { get; set; }
         public int Regionid { get; set; }
+        public string? RegionName { get; set; }
 
         public DateOnly Startdate { get; set; }
         public DateTime? Shiftdate { get; set; }

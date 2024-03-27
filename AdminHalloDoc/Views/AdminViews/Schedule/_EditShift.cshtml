@@ -139,7 +139,26 @@
             document.getElementById('EndTime').value = startTime;
         }
     });
+    document.getElementById('EndTime').addEventListener('change', function () {
+        const startTimeInput = document.getElementById('StartTime');
+        const endTimeInput = document.getElementById('EndTime');
+        const startTime = startTimeInput.value; // Get the value of start time
+        const endTime = endTimeInput.value; // Get the value of end time
 
+        // Convert start and end time strings to Date objects for comparison
+        const startDate = new Date('2000-01-01T' + startTime + ':00');
+        const endDate = new Date('2000-01-01T' + endTime + ':00');
+
+        // Check if end time is earlier than start time
+        if (endDate < startDate) {
+            Swal.fire({
+                icon: "error",
+                title: "Wrong End time...",
+                text: "End time cannot be earlier than start time!"
+            });
+            endTimeInput.value = ''; // Clear the end time input
+        }
+    });
     function toggleCheckboxes() {
         var StartDate = document.getElementById('StartDate');
         var StartTime = document.getElementById('StartTime');

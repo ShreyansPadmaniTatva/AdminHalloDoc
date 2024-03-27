@@ -11,6 +11,8 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
     public class Physicians
     {
         public int? notificationid { get; set; }
+        public int? onCallStatus { get; set; } = 0;
+        public int? shiftid { get; set; }
         public BitArray? notification { get; set; }
         public string? role { get; set; }
         public int? Physicianid { get; set; }

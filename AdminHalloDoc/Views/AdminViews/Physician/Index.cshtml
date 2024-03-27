@@ -142,35 +142,25 @@
 @section Scripts
     {
 <script>
-
-    $(document).ready(function () {
-
-           $('#saveChangesButton').click(function() {
-            $('#saveChangesForm').submit();
-        });
-
-            // Initialize an object to track the initial state of each checkbox
+        $(document).ready(function () {
             var initialState = {};
-
             // Store the initial state of each checkbox when the page loads
             $('.form-check-inputs').each(function () {
                 initialState[this.id] = this.checked;
             });
+            
 
-            $('.form-check-inputs').change(function () {
+            $(document).on('change', '.form-check-inputs', function () {
                 var changedValues = {};
-
-                // Check each checkbox for changes
                 $('.form-check-inputs').each(function () {
                     if (this.checked !== initialState[this.id]) {
                         changedValues[this.id] = this.checked;
                     }
                 });
 
-                // Update the hidden input with the changed values
                 $('#changedValuesInput').val(JSON.stringify(changedValues));
+                console.log(initialState);
                 console.log(changedValues);
-                // Show or hide the "Save Changes" button based on whether there are any changes
                 if (Object.keys(changedValues).length > 0) {
                     $('#saveChangesButton').show();
                 } else {
@@ -179,7 +169,11 @@
             });
 
 
-    });
+            $('#saveChangesButton').click(function () {
+                $('#saveChangesForm').submit();
+            });
+        });
+
 
     window.onload = function () {
         console.log("@status  d");
@@ -230,7 +224,7 @@
 
                     // Add the checkbox cell
                     var checkboxCell = $('<td class="table-text px-3  justify-content-center" scope="row"  align="center" data-label="Created Date">');
-                    var checkboxInput = $('<input class="form-check-input form-check-inputs" type="checkbox" value="" id="flexCheckDefault">');
+                        var checkboxInput = $('<input class="form-check-input form-check-inputs" type="checkbox" value="" id="' + item.physicianid + '">');
                     if (item.notification[0]) {
                         checkboxInput.prop('checked', true);
                     }

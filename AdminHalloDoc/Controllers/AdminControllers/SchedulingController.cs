@@ -35,7 +35,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         {
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
           
-            return View("../AdminViews/Physician/MySchedule");
+            return View("../AdminViews/Schedule/MySchedule");
         }
         #endregion
 
@@ -68,7 +68,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         public async Task<IActionResult> _CreateShift()
         {
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-            return PartialView("../AdminViews/Physician/_CreateShift");
+            return PartialView("../AdminViews/Schedule/_CreateShift");
         }
 
 
@@ -94,7 +94,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
            Schedule v = await _schedulingRepository.GetShiftByShiftdetailId(id);
             ViewBag.ProviderComboBox = await _viewActionRepository.ProviderbyRegion(v.Regionid);
-            return PartialView("../AdminViews/Physician/_EditShift",v);
+            return PartialView("../AdminViews/Schedule/_EditShift", v);
         }
 
 
@@ -134,7 +134,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             return RedirectToAction("Index");
         }
         #endregion
-        #endregion
 
         #region _DeleteShiftPost
 
@@ -148,6 +147,64 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             return RedirectToAction("Index");
         }
         #endregion
+        #endregion
 
+
+
+        #region RequestedShift
+        public async Task<IActionResult> RequestedShift(int? regionId)
+        {
+            TempData["Status"] = TempData["Status"];
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            List<Schedule> v = await _schedulingRepository.GetAllNotApprovedShift(regionId);
+            if (regionId != null)
+            {
+                return Json(v);
+            }
+            return View("../AdminViews/Schedule/RequestedShift",v);
+        }
+        #endregion
+
+        #region _ApprovedShifts
+
+        public async Task<IActionResult> _ApprovedShifts(string shiftids)
+        {
+            if (await _schedulingRepository.UpdateStatusShift(shiftids, CV.ID()))
+            {
+                TempData["Status"] = "Approved Shifts Successfully..!";
+            }
+
+
+            return RedirectToAction("RequestedShift");
+        }
+        #endregion
+
+        #region _DeleteShifts
+
+        public async Task<IActionResult> _DeleteShifts(string shiftids)
+        {
+            if (await _schedulingRepository.DeleteShift(shiftids, CV.ID()))
+            {
+                TempData["Status"] = "Delete Shifts Successfully..!";
+            }
+
+            return RedirectToAction("RequestedShift");
+        }
+        #endregion
+
+
+        #region Provider_on_call
+        public async Task<IActionResult> ProviderOnCall(int? regionId)
+        {
+            TempData["Status"] = TempData["Status"];
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            List<Physicians> v = await _schedulingRepository.PhysicianOnCall(regionId);
+            if (regionId != null)
+            {
+                return Json(v);
+            }
+            return View("../AdminViews/Schedule/ProviderOnCall",v);
+        }
+        #endregion
     }
 }

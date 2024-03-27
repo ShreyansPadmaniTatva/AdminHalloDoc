@@ -296,7 +296,11 @@
             $('#topflexCheckDefault').change(function () {
                 $('.table tbody input[type="checkbox"]').prop('checked', $(this).is(':checked'));
             });
+            $('.table tbody input[type="checkbox"]').change(function () {
+                var allChecked = $('.table tbody input[type="checkbox"]').length === $('.table tbody input[type="checkbox"]:checked').length;
 
+                $('#topflexCheckDefault').prop('checked', allChecked);
+            });
             // Uncheck main checkbox in header when any checkbox in table body is unchecked
             $('.table tbody input[type="checkbox"]').change(function () {
                 if (!$(this).is(':checked')) {

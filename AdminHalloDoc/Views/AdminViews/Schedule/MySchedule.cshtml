@@ -40,11 +40,11 @@
             </div>
             <div class="col-md-5 mt-2">
                 <div class="d-flex justify-content-end">
-                    <a asp-action="PhysicianProfile" asp-controller="Physician" class="btn btn-info text-white mx-2">
+                    <a asp-action="ProviderOnCall" asp-controller="Scheduling" class="btn btn-info text-white mx-2">
                         Provider On Call
                     </a>
                     <!-- Button trigger modal -->
-                    <a asp-action="PhysicianProfile" asp-controller="Physician" class="btn btn-info text-white  mx-2">
+                    <a asp-action="RequestedShift" asp-controller="Scheduling" class="btn btn-info text-white  mx-2">
                         Shift Review
                     </a>
                     <a class="btn btn-info text-white js-stkModal-btn mx-2"
@@ -90,9 +90,17 @@
         </div>
     </div>
 
-    <div id="monthcontainer" class="calendar-body">
-        <ul class="calendar-weekdays mb-0"></ul>
-        <ul class="calendar-dates"></ul>
+    <div id="monthcontainer" class="calendar-body  calendar-container">
+        <table class="calendar-table w-100 ">
+            <thead>
+                <tr class="calendar-weekdays">
+                    <!-- Weekday headers will be populated dynamically -->
+                </tr>
+            </thead>
+            <tbody class="calendar-dates">
+                <!-- Calendar dates will be populated dynamically -->
+            </tbody>
+        </table>
     </div>
 
     <div style="display:none" id="weekviewcontainer" class="active">
@@ -257,6 +265,7 @@
                     data: { region: regionId },
                     dataType: "json",
                     success: function (response) {
+                        console.log(response);
                         providerList = [];
                         // Array to store converted objects
                         response.forEach(function (item) {
@@ -269,6 +278,7 @@
                                         physicianName: dayItem.physicianName,
                                         physicianPhoto: dayItem.physicianPhoto,
                                         regionid: dayItem.regionid,
+                                        regionname: dayItem.regionName,
                                         startdate: dayItem.startdate,
                                         shiftdate: dayItem.shiftdate,
                                         starttime: dayItem.starttime,
@@ -302,7 +312,13 @@
                             };
                             providerList.push(providerObj);
                         });
+                        console.log(providerList);
+                        if(x == 2){
                         $('#week').click();
+
+                        }else if(x == 3){
+                            $('#day').click();
+                        }
                     },
                     error: function () {
                         // Handle error
@@ -409,7 +425,7 @@
 
                 // Populate weekdays
                 daysOfWeek.forEach(day => {
-                    weekdays.innerHTML += `<li class="heading" >${day}</li>`;
+                    weekdays.innerHTML += `<th>${day}</th>`;
                 });
 
                 // Get the first day of the month
@@ -425,16 +441,22 @@
                 let monthlastdate = new Date(year, month, 0).getDate();
 
                 // Variable to store the generated calendar HTML
-                let lit = "";
-
+                let lit = "<tbody><tr>";
+                let dayCount = 0;
                 // Loop to add the last dates of the previous month
                 for (let i = dayone; i > 0; i--) {
-                    lit += `<li class="inactive"><div class="" ></div><div></div> <div></div> <div></div> <div></div></li>`;
+                    lit += `<td class="inactive"><div></div><div></div><div></div><div></div><div></div></td>
+                        `;
+                    dayCount++;
                 }
 
                 // Loop to add the dates of the current month
                 for (let i = 1; i <= lastdate; i++) {
-                    // Check if the current date is today
+
+                    if (dayCount > 6) {
+                        lit += `</tr><tr>`;
+                        dayCount = 0;
+                    }
                     let isToday = i === date.getDate() && month === new Date().getMonth() && year === new Date().getFullYear() ? "active" : "";
 
                     let foundItem = extractedDataArray.find(o => {
@@ -460,25 +482,30 @@
                         });
                     }
 
-
-                    lit += `<li class="${isToday}"><div class="first" >${i}</div>
-                                                <a  data-form-id="formEdit_UMS"
-                                                    data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 0 ? ProviderNames[0].shiftid : ''}'
-                                                    class="js-stkModal-btn ${Status.length > 0 ? 'Status-' + Status[0] : ''} " >${ProviderNames.length > 0 ? ProviderNames[0].name : ''}</a>
-                                               <a data-form-id="formEdit_UMS"
-                                                    data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 1 ? ProviderNames[1].shiftid : ''}'
-                                                    class="js-stkModal-btn ${Status.length > 1 ? 'Status-' + Status[1] : ''} ">${ProviderNames.length > 1 ? ProviderNames[1].name : ''}</a>
-                                                       <a data-form-id="formEdit_UMS"
-                                                            data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 2 ? ProviderNames[2].shiftid : ''}'
-                                                            class="js-stkModal-btn ${Status.length > 1 ? 'Status-' + Status[2] : ''} ">${ProviderNames.length > 2 ? ProviderNames[2].name : ''}</a>
-                                                   <div type="button"  id="${buttonId}" data-bs-toggle="modal" data-bs-target="${ProviderNames.length > 3 ? '#exampleModal' : ''}" data-month="${month}" data-index="${i}" class="${Status.length > 3 ? 'btn btn-info w-100 text-white rounded-0 view-all-btn' : ''}">${ProviderNames.length > 3 ? 'View All' : ''}</div>
-                                                    </li>`;
+                    lit += `<td class="table-text ${isToday} p-0"> 
+                            <div class="first">${i}</div>
+                                    <div class="js-stkModal-btn ${Status.length > 0 ? 'Status-' + Status[0] : ''}"  data-form-id="formEdit_UMS"
+                                   data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 0 ? ProviderNames[0].shiftid : ''}'
+                                           >${ProviderNames.length > 0 ? ProviderNames[0].name : ''}</div>
+                                            <div class="${Status.length > 1 ? 'Status-' + Status[1] : ''}" ><a data-form-id="formEdit_UMS"
+                                   data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 1 ? ProviderNames[1].shiftid : ''}'
+                                           class="js-stkModal-btn ">${ProviderNames.length > 1 ? ProviderNames[1].name : ''}</a></div>
+                                            <div class="${Status.length > 2 ? 'Status-' + Status[2] : ''}"><a data-form-id="formEdit_UMS"
+                                   data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 2 ? ProviderNames[2].shiftid : ''}'
+                                           class="js-stkModal-btn ${Status.length > 2 ? 'Status-' + Status[2] : ''}">${ProviderNames.length > 2 ? ProviderNames[2].name : ''}</a></div>
+                                    <div type="button"  id="${buttonId}" data-bs-toggle="modal" data-bs-target="${ProviderNames.length > 3 ? '#exampleModal' : ''}" data-month="${month}" data-index="${i}" class="${Status.length > 3 ? 'btn btn-info w-100 text-white rounded-0 view-all-btn' : ''}">${ProviderNames.length > 3 ? 'View All' : ''}</div>
+                        </td>`;
+                    dayCount++;
                 }
 
                 // Loop to add the first dates of the next month
                 for (let i = dayend; i < 6; i++) {
-                    lit += `<li class="inactive"><div class="" ></div><div></div> <div></div> <div></div> <div></div></li>`;
+                    lit += `<td class="inactive">
+                                    <div></div><div></div><div></div><div></div><div></div>
+                        </td>`;
                 }
+
+                lit += "</tr></tbody>";
 
                 // Update the text of the current date element with the formatted current month and year
                 currdate.innerText = `${months[month]} ${year}`;
@@ -486,6 +513,7 @@
                 // Update the HTML of the dates element with the generated calendar
                 day.innerHTML = lit;
             };
+
 
             $(document).on('click', '.view-all-btn', function () {
 
@@ -565,30 +593,21 @@
 
                 // Event listener for the "Next" button
                 $('#calendar-next').on('click', function () {
-                    currentDate.setDate(currentDate.getDate() + 1);
-                    if (currentDate.getMonth() !== currentMonth) {
-                        currentDate.setDate(1);
-                        currentMonth++;
-                        if (currentMonth > 11) {
-                            currentMonth = 0;
-                            currentDate.setFullYear(currentDate.getFullYear() + 1);
-                        }
+                    if(x == 3){
+                      
+                        currentDate.setDate(currentDate.getDate() + 1);
+                        
+                        updateEmployeeSchedules();
                     }
-                    updateEmployeeSchedules();
+                    
                 });
 
-                // Event listener for the "Previous" button
                 $('#calendar-prev').on('click', function () {
-                    currentDate.setDate(currentDate.getDate() - 1);
-                    if (currentDate.getDate() < 1) {
-                        currentMonth--;
-                        if (currentMonth < 0) {
-                            currentMonth = 11;
-                            currentDate.setFullYear(currentDate.getFullYear() - 1);
-                        }
-                        currentDate.setDate(new Date(currentDate.getFullYear(), currentMonth + 1, 0).getDate());
+                    if (x == 3) {
+                        currentDate.setDate(currentDate.getDate() - 1);
+                       
+                        updateEmployeeSchedules();
                     }
-                    updateEmployeeSchedules();
                 });
 
                 updateEmployeeSchedules();
@@ -630,6 +649,7 @@
                             const endTime = item.endtime;
                             let status = 0; // Default status is 0 (not available)
                             const shiftid = item.shiftid;
+                            const regionname = item.regionname;
 
                             // Check the status of the shift
                             if (item.status === 1) {
@@ -638,12 +658,13 @@
                                 status = 0.5; // Partially available
                             }
 
-                            return { startTime, endTime, status, shiftid };
+                            return { startTime, endTime, status, shiftid, regionname  };
                         });
                         const hoursArray = Array(24).fill(0);
                         const shiftidArray = Array(24).fill(0);
+                        const regionArray = Array(24).fill(0);
 
-                        timeRanges.forEach(({ startTime, endTime, status, shiftid }) => {
+                        timeRanges.forEach(({ startTime, endTime, status, shiftid, regionname }) => {
                             // Parse start and end times to obtain hours
                             const startParts = startTime.split(' ')[0].split(':');
                             const endParts = endTime.split(' ')[0].split(':');
@@ -657,11 +678,11 @@
                             for (let hour = startHour; hour <= endHour; hour++) {
                                 shiftidArray[hour] = shiftid;
                             }
-                            console.log(employee.name + 'shreyans ' + startTime + ' ' + shiftid + ' ' + JSON.stringify(shiftidArray))
-
+                           
                             // Loop through hours and mark the corresponding index in the array if it falls within the range
                             for (let hour = startHour; hour <= endHour; hour++) {
                                 hoursArray[hour] = valueToStore;
+                                regionArray[hour] = regionname;
                             }
                         });
 
@@ -671,17 +692,15 @@
                         
                             for (let i = 0; i < 24; i++) {
 
-                               
-
                                 const hour = i < 12 ? i === 0 ? 12 : i : i === 12 ? 12 : i - 12;
                                 const amPm = i < 12 ? 'AM' : 'PM';
                                 const timeSlot = document.createElement('td');
 
                             if (hoursArray[i] === 1) {
-                                timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn Status-1">a</a>`;
+                                timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn fs-5 Status-1">${regionArray[i]}</a>`;
                                 timeSlot.classList.add('p-0');
                             } else if (hoursArray[i] === 0.5) {
-                                timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn Status-0">a</a>`;
+                                timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn fs-5 Status-0">${regionArray[i]}</a>`;
                                 timeSlot.classList.add('p-0');
                                 }
                             else  {
@@ -989,6 +1008,7 @@
                 } else if (x == 2) {
                     getProviderList();
                 } else {
+                    getProviderList();
                     // Handle other cases if needed
                 }
             });
