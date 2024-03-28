@@ -1,4 +1,6 @@
-﻿using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+﻿using AdminHalloDoc.Models.CV;
+using AdminHalloDoc.Repositories.Admin.Repository;
+using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -23,8 +25,10 @@ namespace AdminHalloDoc.Controllers.Login
         public void OnAuthorization(AuthorizationFilterContext filterContext)
         {
             var jwtservice = filterContext.HttpContext.RequestServices.GetService<IJwtService>();
+            var loginservice = filterContext.HttpContext.RequestServices.GetService<ILoginRepository>();
+            
 
-            if(jwtservice == null)
+            if (jwtservice == null)
             {
                 filterContext.Result = new RedirectResult("~/AdminLogin");
                 return;
@@ -64,9 +68,21 @@ namespace AdminHalloDoc.Controllers.Login
                 }
             }
 
+            var Path = filterContext.HttpContext.Request.Path;
+            List<MenuItem> Staticmenu = loginservice.SetMenu(CV.RoleId());
+
+            if (Staticmenu == null)
+            {
+                filterContext.Result = new RedirectResult("~/AdminLogin/AccessDenied");
+            }
+
             if (!flage)
             {
                 filterContext.Result = new RedirectResult("~/AdminLogin/AccessDenied");
+            }
+            else
+            {
+
             }
 
             //var admin = SessionUtils.GetLogginUser(filterContext.HttpContext.Session);

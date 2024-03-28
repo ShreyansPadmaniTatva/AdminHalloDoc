@@ -6,20 +6,7 @@
 @inject ILoginRepository loginRepository
 @{
     string path = Context.Request.Path;
-    List<Menu> MenuItems = await loginRepository.ListMenuByRole(CV.RoleId());
-    List<MenuItem> Staticmenu = new List<MenuItem>();
-    foreach (Menu menu in MenuItems)
-    {
-        MenuItem m = new MenuItem();
-        m = staticmenu.Items.Where(item => item.DbName == menu.Name).FirstOrDefault();
-
-        if (m != null)
-        {
-            Staticmenu.Add(m);
-        }
-        
-    }
-
+    List<MenuItem> Staticmenu = loginRepository.SetMenu(CV.RoleId());
 }
 <nav class="navbar p-0 pt-2 px-5 navbar-expand-lg bg-body shadow mb-5  rounded">
     <div class="container-fluid justify-content-">

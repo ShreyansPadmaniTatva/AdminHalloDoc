@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static AdminHalloDoc.Entities.ViewModel.Constant;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
 {
@@ -12,5 +13,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
     {
         Task<UserInfo> CheckAccessLogin(Aspnetuser aspNetUser);
         Task<List<Menu>> ListMenuByRole(int? roleid);
+        List<MenuItem> SetMenu(int? roleid);
     }
 }

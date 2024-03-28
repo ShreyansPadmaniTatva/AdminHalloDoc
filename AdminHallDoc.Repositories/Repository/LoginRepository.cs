@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static AdminHalloDoc.Entities.ViewModel.Constant;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
@@ -107,6 +108,45 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 return allData;
             }
             return allData;
+        }
+        #endregion
+
+        #region SetMenu
+        public  List<MenuItem> SetMenu(int? roleid)
+        {
+            List<Menu> MenuItems = null;
+            List<MenuItem> Staticmenu = new List<MenuItem>();
+            if (roleid != null)
+            {
+                //Set By DataBase
+                MenuItems =  (from rm in _context.Rolemenus
+                                 join Menus in _context.Menus
+                                 on rm.Menuid equals Menus.Menuid into MenusGroup
+                                 from m in MenusGroup.DefaultIfEmpty()
+                                 where rm.Roleid == roleid
+                                 orderby m.Sortorder
+                                 select m).ToList();
+
+                //Set By DataBase And Static Menu
+                foreach (Menu menu in MenuItems)
+                {
+                    MenuItem m = new MenuItem();
+                    m = staticmenu.Items.Where(item => item.DbName == menu.Name).FirstOrDefault();
+
+                    if (m != null)
+                    {
+                        Staticmenu.Add(m);
+                    }
+
+                }
+            }
+            else
+            {
+                return Staticmenu;
+            }
+
+          
+            return Staticmenu;
         }
 
         #endregion

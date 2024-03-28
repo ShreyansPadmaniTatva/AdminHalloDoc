@@ -25,6 +25,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         [AdminAuth("Admin,Provider")]
+        [Route("Admin/DashBoard")]
+        [Route("Physician/DashBoard")]
         #region DashBoard_Index
         public async Task<IActionResult> Index()
         {

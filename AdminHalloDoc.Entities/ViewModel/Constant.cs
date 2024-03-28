@@ -128,33 +128,33 @@ namespace AdminHalloDoc.Entities.ViewModel
               {
                   DbName ="AdminDashboard",
                 Label = "Dashboard",
-                  Url = "/AdminDashboard/Index",
-                  UrlList = new List<string> { "/AdminDashboard", "/ViewAction", "/SubmitForm" }
+                  Url = "/Admin/DashBoard",
+                  UrlList = new List<string> { "/Admin/DashBoard", "/ViewAction", "/SubmitForm" }
               },
                new MenuItem
               {
                   DbName ="PhysicianDashbord",
                 Label = "Dashboard",
                   Url = "/AdminDashboard/Index",
-                  //IsActive = path.StartsWith("/AdminDashboard") || path.StartsWith("/ViewAction") || path.StartsWith("/SubmitForm")
+                 
               },
               new MenuItem {
                   DbName ="Provider Location",
                 Label = "Provider Location",
                   Url = "/Physician/PhysicianLocation",
-                  // IsActive = path.StartsWith("/Physician/PhysicianLocation")
+                 
               },
               new MenuItem {
                   DbName ="MyProfile",
                 Label = "My Profile",
                   Url = "/AdminProfile/Index",
-                  //  IsActive = path.StartsWith("/AdminProfile")
+               
               },
               new MenuItem {
                   DbName ="MyShedule",
                 Label = "My Schedule",
                   Url = "/Scheduling/Index",
-                  //  IsActive = path.StartsWith("/AdminProfile")
+                
               },
               new MenuItem {
                   DbName = "Provider-Details",

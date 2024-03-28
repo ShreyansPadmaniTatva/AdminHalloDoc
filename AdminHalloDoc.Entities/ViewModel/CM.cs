@@ -68,6 +68,5 @@ namespace AdminHalloDoc.Entities.ViewModel
         }
         #endregion
 
-
     }
 }
