@@ -1,4 +1,5 @@
-﻿using AdminHalloDoc.Entities.Models;
+﻿using AdminHalloDoc.Controllers.Login;
+using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
@@ -32,6 +33,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
+       // [AdminAuth("Admin")]
         #region Role_Access
         public async Task<IActionResult> Index()
         {

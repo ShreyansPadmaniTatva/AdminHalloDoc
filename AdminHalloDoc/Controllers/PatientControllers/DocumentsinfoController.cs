@@ -1,76 +1,46 @@
-﻿using AdminHalloDoc.Entities.Data;
+﻿using AdminHalloDoc.Controllers.Login;
+using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Models;
 using AdminHalloDoc.Models.CV;
+using AdminHalloDoc.Repositories.Patient.Repository.Interface;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace AdminHalloDoc.Controllers.PatientControllers
 {
-    [CheckAccess]
+    [AdminAuth("Patient")]
     public class DocumentsinfoController : Controller
     {
         #region Configuration
-        private readonly ApplicationDbContext _context;
+        private IPatientDashboardRepository _patientDashrepo;
 
-        public DocumentsinfoController(ApplicationDbContext context)
+        public DocumentsinfoController(IPatientDashboardRepository patientDashrepo)
         {
-            _context = context;
+
+            this._patientDashrepo = patientDashrepo;
+
         }
         #endregion
 
         #region Index
-        public IActionResult Index(int? id)
+        public IActionResult Index(int id)
         {
-            var result = _context.Requestwisefiles
-                        .Where(r => r.Requestid == id)
-                        .OrderByDescending(x => x.Createddate)
-                        .Select(r => new ViewPatientDashboard
-                        {
-                            Requestid = r.Requestid,
-                            Createddate = r.Createddate,
-                            Filename = r.Filename
-
-                        })
-                        .ToList();
+            var result = _patientDashrepo.Documentsinfo(id);
 
             
-            return View(result);
+            return View("../PatientViews/Documentsinfo/Index", result);
         }
         #endregion
 
         #region UploadDoc_Files
         public IActionResult UploadDoc(int Requestid,IFormFile file)
         {
-            string UploadDoc;
-            if (file != null)
-            {
-                string FilePath = "wwwroot\\Upload\\" + Requestid;
-                string path = Path.Combine(Directory.GetCurrentDirectory(), FilePath);
-
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-
-                string newfilename = $"{Path.GetFileNameWithoutExtension(file.FileName)}-{DateTime.Now.ToString("yyyyMMddhhmmss")}.{Path.GetExtension(file.FileName).Trim('.')}";
-
-                string fileNameWithPath = Path.Combine(path, newfilename);
-                UploadDoc = FilePath.Replace("wwwroot\\Upload\\", "/Upload/") + "/" + newfilename;
-                using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
-
-                var requestwisefile = new Requestwisefile
-                {
-                    Requestid = Requestid,
-                    Filename = UploadDoc,
-                    Createddate = DateTime.Now,
-                };
-                _context.Requestwisefiles.Add(requestwisefile);
-                _context.SaveChanges();
-            }
+            var result = _patientDashrepo.UploadDoc(Requestid,file);
 
             return RedirectToAction("Index", new { id = Requestid } );
         }

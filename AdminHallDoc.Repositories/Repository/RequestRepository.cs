@@ -128,9 +128,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             int totalItemCount = allData.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
-
+            
             List<ViewDashboardList> list1 = allData.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();
-
+            if (data.PageSize == -1)
+            {
+                list1 = allData.ToList();
+            }
 
             PaginatedViewModel paginatedViewModel = new PaginatedViewModel
             {

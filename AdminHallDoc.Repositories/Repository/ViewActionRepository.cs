@@ -207,10 +207,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #region Provider_By_Region
         public async Task<List<Physician>> ProviderbyRegion(int? regionid)
         {
-            var result = await _context.Physicians
-                        .Where(r => r.Regionid == regionid)
-                        .OrderByDescending(x => x.Createddate)
-                        .ToListAsync();
+            var result = (from pr in _context.Physicianregions
+                              join p in _context.Physicians on pr.Physicianid equals p.Physicianid
+                              where pr.Regionid == regionid
+                              select p).ToList();
 
             return result;
         }

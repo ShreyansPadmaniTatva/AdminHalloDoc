@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AdminHallDoc.Repositories\AdminHalloDoc.Repositories.Admin.csproj" />
     <ProjectReference Include="..\AdminHalloDoc.Entities\AdminHalloDoc.Entities.csproj" />
+    <ProjectReference Include="..\AdminHalloDoc.Repositories.Patient\AdminHalloDoc.Repositories.Patient.csproj" />
   </ItemGroup>
 
   <ItemGroup>

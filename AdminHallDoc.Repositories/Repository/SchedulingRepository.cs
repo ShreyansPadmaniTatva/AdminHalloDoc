@@ -73,7 +73,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                            from sd in shiftGroup.DefaultIfEmpty()
                                            join rg in _context.Regions
                                            on sd.Regionid equals rg.Regionid
-                                           where s.Physicianid == schedule.Physicianid && sd.Isdeleted == new BitArray(1)
+                                           where s.Physicianid == schedule.Physicianid && sd.Isdeleted == new BitArray(1) 
                                            select new Schedule
                                            {
                                                RegionName = rg.Name,
@@ -154,7 +154,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                            from sd in shiftGroup.DefaultIfEmpty()
                                            join rg in _context.Regions
                                            on sd.Regionid equals rg.Regionid
-                                           where s.Physicianid == schedule.Physicianid && sd.Isdeleted == new BitArray(1)
+                                           where s.Physicianid == schedule.Physicianid && sd.Isdeleted == new BitArray(1) && sd.Regionid == region
                                            select new Schedule
                                            {
                                                RegionName = rg.Abbreviation,
@@ -221,8 +221,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 foreach (int d in day)
                 {
                     DayOfWeek desiredDayOfWeek = (DayOfWeek)d;
-                    DateTime today = DateTime.Today;
-                    DateTime nextOccurrence = new DateTime(s.Startdate.Year, s.Startdate.Month, s.Startdate.Day);
+                    DateTime today = DateTime.Today.AddDays(1);
+                    DateTime nextOccurrence = new DateTime(s.Startdate.Year, s.Startdate.Month, s.Startdate.Day+1);
                     int occurrencesFound = 0;
                     while (occurrencesFound < s.Repeatupto)
                     {
@@ -486,7 +486,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             TimeOnly currentTimeOfDay = TimeOnly.FromDateTime(DateTime.Now);
 
             List<Physicians> pl = await (from r in _context.Physicians
-                                         where r.Isdeleted == new BitArray(1)
+                                         where r.Isdeleted == new BitArray(1) 
                                          select new Physicians
                                          {
                                              Createddate = r.Createddate,
@@ -505,6 +505,35 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                              Photo = r.Photo
 
                                          }).ToListAsync();
+            if (region != null)
+            {
+                pl = await (
+                                        from pr in _context.Physicianregions
+
+                                        join ph in _context.Physicians
+                                         on pr.Physicianid equals ph.Physicianid into rGroup
+                                        from r in rGroup.DefaultIfEmpty()
+                                        where pr.Regionid == region && r.Isdeleted == new BitArray(1)
+                                        select new Physicians
+                                        {
+                                            Createddate = r.Createddate,
+                                            Physicianid = r.Physicianid,
+                                            Address1 = r.Address1,
+                                            Address2 = r.Address2,
+                                            Adminnotes = r.Adminnotes,
+                                            Altphone = r.Altphone,
+                                            Businessname = r.Businessname,
+                                            Businesswebsite = r.Businesswebsite,
+                                            City = r.City,
+                                            Firstname = r.Firstname,
+                                            Lastname = r.Lastname,
+                                            Status = r.Status,
+                                            Email = r.Email,
+                                            Photo = r.Photo
+
+                                        })
+                                        .ToListAsync();
+            }
 
             foreach (var item in pl)
             {

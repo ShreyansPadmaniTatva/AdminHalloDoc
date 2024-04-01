@@ -80,8 +80,23 @@ else
 
    
 </form>
+<form id="download-excel" asp-action="DownloadExcelForSearchRecords" asp-controller="Report" data-ajax="true" data-ajax-method="post">
 
+    <input class="form-control rounded" name="Patientname" asp-for="Patientname" type="hidden" placeholder="Patient Name" autocomplete=off>
+    <input class="form-control rounded" name="Status" asp-for="Status" type="hidden" placeholder="Patient Name" autocomplete=off>
+    <input class="form-control rounded" name="Startdate" asp-for="Startdate" type="hidden" placeholder="Patient Name" autocomplete=off>
+    <input class="form-control rounded" name="Enddate" asp-for="Enddate" type="hidden" placeholder="Patient Name" autocomplete=off>
+    <input class="form-control rounded" name="Physicianname" asp-for="Physicianname" type="hidden" placeholder="Patient Name" autocomplete=off>
+    <input class="form-control rounded" name="Email" asp-for="Email" type="hidden" placeholder="Patient Name" autocomplete=off>
+    <input class="form-control rounded" name="Phonenumber" asp-for="Phonenumber" type="hidden" placeholder="Patient Name" autocomplete=off>
+
+</form>
     <script>
+    function exdown() {
+        console.log(485);
+        $('#download-excel').submit();
+    }
+
     const clearBtn = document.getElementById("clearBtn");
     const submitBtn = document.getElementById("submit");
 

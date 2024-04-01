@@ -1,5 +1,6 @@
 ﻿
 @using Microsoft.AspNetCore.Http
+@using static AdminHalloDoc.Entities.ViewModel.Constant;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @model List<AdminHalloDoc.Entities.ViewModel.PatientViewModel.ViewPatientDashboard>
 @{
@@ -36,7 +37,7 @@
                 {
                     <tr>
                         <td scope="row"  data-label="Created Date"> @item.Createddate</td>
-                        <td  class="mobile-hide" data-label="Current Status" >@item.Status</td>
+                        <td class="mobile-hide" data-label="Current Status">  @Enum.GetName(typeof(Status), @item.Status)  </td>
                         <td  class="mobile-hide" data-label="Document" >
                             @{
                                 if (item.FileCount != 0)

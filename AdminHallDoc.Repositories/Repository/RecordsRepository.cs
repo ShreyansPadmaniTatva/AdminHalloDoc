@@ -96,11 +96,17 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             }
 
             dm.TotalPages = (int)Math.Ceiling((double)allData.Count() / rm.PageSize);
-            allData = allData.Skip((rm.CurrentPage - 1) * rm.PageSize).Take(rm.PageSize).ToList();
+            
 
-
-            dm.SearchRecordList = allData.ToList();
-
+           
+            if (rm.PageSize == -1)
+            {
+                dm.SearchRecordList = allData.ToList();
+            }
+            else
+            {
+                dm.SearchRecordList = allData.Skip((rm.CurrentPage - 1) * rm.PageSize).Take(rm.PageSize).ToList();
+            }
 
             for (int i = 0; i < dm.SearchRecordList.Count; i++)
             {

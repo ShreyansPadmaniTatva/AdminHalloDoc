@@ -18,22 +18,25 @@ $(document).ready(function () {
 $(function () {
     $(".t-tab").click(function () {
         $('#requeststatus').val(this.value);
+        $('.exerequeststatus').val(this.value);
         $('#submit').click();
 
     });
     $(".request-type-btn").click(function () {
         $('#requesttypebtn').val(this.value);
+        $('#exerequesttypebtn').val(this.value);
         $('.t-tab.active').click();
 
     });
     $(".regionDashboard").change(function () {
         $('#requestRegionId').val(this.value);
-
+        $('#exerequestRegionId').val(this.value);
         $('.t-tab.active').click();
 
     });
     $("#getSearchInput").keyup(function () {
         $('#SearchInput').val(this.value.trim());
+        $('#exeSearchInput').val(this.value.trim());
         console.log($('#SearchInput').val());
         $('.t-tab.active').click();
 

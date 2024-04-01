@@ -14,6 +14,7 @@
         
     }
 }
+<partial name="../ViewAction/_models/_sendlink.cshtml" />
 <div class="container-fluid ">
     @*<a asp-action="SendSMS" class="btn btn-danger" asp-controller="SendSms">send sms</a>*@
     <partial name="_subtab.cshtml" />
@@ -42,6 +43,7 @@
     boxes.forEach(box => {
         box.addEventListener('click', function handleClick(event) {
             setLastState(this.id);
+            $('#p-side').html('('+this.id+')');
         });
     });
 

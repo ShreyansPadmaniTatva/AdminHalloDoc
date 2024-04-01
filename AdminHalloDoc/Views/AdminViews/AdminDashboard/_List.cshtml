@@ -255,8 +255,20 @@
                 </tbody>
             </table>
         </div>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination pagination-container d-flex justify-content-center">
+        <div aria-label="Page navigation example">
+            <ul class="pagination pagination-container d-flex justify-content-end">
+                <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                      asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
+
+                    <input type="hidden" asp-for="CurrentPage" value="@(Model.CurrentPage-1)" />
+                    <input type="hidden" asp-for="RegionId" />
+                    <input type="hidden" asp-for="RequestType" />
+                    <input type="hidden" asp-for="SearchInput" />
+                    <input type="hidden" asp-for="status" />
+
+                <li class="page-item mx-1 rounded"><button type="submit" class="@(Model.CurrentPage > 1 ? "" : "disabled") dt-paging-button previous page-link" @(Model.CurrentPage > 1 ? "" : "disabled")>‹</button></li>
+                   
+                </form>
                 @{
                     int start;
                     //<li class="page-item"><a class="page-link">&lt;</a></li>
@@ -267,19 +279,32 @@
                             <input type="hidden" asp-for="RegionId" />
                             <input type="hidden" asp-for="RequestType" />
                             <input type="hidden" asp-for="SearchInput" />
+                            <input type="hidden" asp-for="status" />
                             <input type="hidden" asp-for="CurrentPage" value="@start" />
-                        <li class="page-item"><button type="submit" class="@(start == @Model.CurrentPage ? "active" : "") page-link" onclick="pagination(@start)">@start</button></li>
+                        <li class="page-item mx-1 rounded"><button type="submit" class="@(start == @Model.CurrentPage ? "active" : "") rounded page-link" onclick="pagination(@start)">@start</button></li>
                         </form>
 
                     }
                     //<li class="page-item"><a class="page-link">&gt;</a></li>
                 }
+                <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                      asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
+
+                    <input type="hidden" asp-for="CurrentPage" value="@(Model.CurrentPage+1)" />
+                    <input type="hidden" asp-for="RegionId" />
+                    <input type="hidden" asp-for="RequestType" />
+                    <input type="hidden" asp-for="SearchInput" />
+                    <input type="hidden" asp-for="status" />
+
+                <li class="page-item mx-1 rounded"><button type="submit" class="@(Model.CurrentPage < Model.TotalPages ? "" : "disabled") dt-paging-button previous page-link" @(Model.CurrentPage < Model.TotalPages ? "" : "disabled")>›</button></li>
+                   
+                </form>
             </ul>
-        </nav>
+        </div>
     </div>
 </div>
 </div>
-<partial name="../ViewAction/_models/_sendlink.cshtml" />
+
 <script>
 
     function myFunctiona() {

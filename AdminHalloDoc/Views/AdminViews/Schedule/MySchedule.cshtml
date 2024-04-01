@@ -689,19 +689,33 @@
 
                        
                         shiftArrays.push(shiftArray);
-                        
+
+
                             for (let i = 0; i < 24; i++) {
 
                                 const hour = i < 12 ? i === 0 ? 12 : i : i === 12 ? 12 : i - 12;
                                 const amPm = i < 12 ? 'AM' : 'PM';
                                 const timeSlot = document.createElement('td');
+                            const startTime = i;
+                            let endTime = i;
+                            const currentShiftId = shiftidArray[i];
+
+                            // Find the end time for the continuous slot
+                            while (endTime < 23 && (hoursArray[endTime + 1] === 1 || hoursArray[endTime + 1] === 0.5) && shiftidArray[endTime + 1] === currentShiftId) {
+                                endTime++;
+                            }
+
+                            const colspan = endTime - startTime + 1;
+                            timeSlot.colSpan = colspan;
 
                             if (hoursArray[i] === 1) {
                                 timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn fs-5 Status-1">${regionArray[i]}</a>`;
                                 timeSlot.classList.add('p-0');
+                                i = endTime;
                             } else if (hoursArray[i] === 0.5) {
                                 timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn fs-5 Status-0">${regionArray[i]}</a>`;
                                 timeSlot.classList.add('p-0');
+                                i = endTime;
                                 }
                             else  {
                                 timeSlot.textContent = '';

@@ -30,7 +30,7 @@
             <div class="col-md-7 mt-2">
                 <div class="dropdown bg-white">
 
-                    <select class="form-select form-control form-select-md" id="fregion" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                    <select class="form-select form-control form-select-md" onchange="ChangeRole()" id="fregion" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                         <option value="-1">All Region</option>
                     </select>
                 </div>
@@ -53,7 +53,7 @@
         <div class="p-3 ">
             <h4 class="fw-bold" >MD's On Call</h4>
             <div class="container-fluid">
-                <div class="row my-4" >
+                <div class="row my-4 oncall">
                     @foreach (var item in Model)
                     {
                         @if(item.onCallStatus == 1){
@@ -70,7 +70,7 @@
         <div class="p-3 ">
             <h4 class="fw-bold" >Physicians off Duty</h4>
             <div class="container-fluid">
-                <div class="row my-4">
+                <div class="row my-4 offcall">
                     @foreach (var item in Model)
                     {
                         @if (item.onCallStatus == 0)
@@ -96,8 +96,48 @@
     {
 
     <script type="text/javascript">
-      
 
+        function ChangeRole() {
+            var email = $("#fregion").val();
+            if (email == '-1') {
+                email = null;
+                location.reload();
+            }
+            console.log(email);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ProviderOnCall","Scheduling")?regionId=' + email,
+                cache: false,
+                success: function (response) {
+                    console.log(response);
+                    $(".oncall").empty();
+                    $(".offcall").empty();
+
+                    response.forEach(function (item) {
+                        var div = document.createElement('div');
+                        div.className = 'col-md-4 my-2';
+                        var img = document.createElement('img');
+                        img.src = '/Upload/Physician/' + item.physicianid + '/' + item.photo;
+                        img.style.height = '50px';
+                        var span = document.createElement('span');
+                        span.textContent = item.firstname + ' ' + item.lastname;
+                        div.appendChild(img);
+                        div.appendChild(span);
+
+                        if (item.onCallStatus === 1) {
+                            $(".oncall").append(div);
+                        } else if (item.onCallStatus === 0) {
+                            $(".offcall").append(div);
+                        }
+                    });
+                   
+
+                },
+                error: function () {
+                    alert("Error while checking email.");
+                }
+            });
+        }
     
 
         window.onload = function () {

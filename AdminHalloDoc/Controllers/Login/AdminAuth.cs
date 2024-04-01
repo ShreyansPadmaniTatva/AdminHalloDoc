@@ -75,13 +75,13 @@ namespace AdminHalloDoc.Controllers.Login
             bool isPathAvailable = Staticmenu.Any(item => item.Url.Equals(Path, StringComparison.OrdinalIgnoreCase) || item.ContollerAction.Equals(Path, StringComparison.OrdinalIgnoreCase));
 
 
-            if (Staticmenu == null || !flage || !isPathAvailable )
+            if ((Staticmenu == null || !flage || !isPathAvailable) && roles.Value != "Patient")
             {
                 filterContext.Result = new RedirectResult("~/AdminLogin/AccessDenied");
             }
-            else
+            else if (!flage)
             {
-
+                filterContext.Result = new RedirectResult("~/AdminLogin/AccessDenied");
             }
 
             //var admin = SessionUtils.GetLogginUser(filterContext.HttpContext.Session);

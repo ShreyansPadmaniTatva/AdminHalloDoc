@@ -12,11 +12,7 @@
             </div>
             <div class="text-end">
                 <a asp-action="Index" asp-controller="Dashboard" class="btn btn-outline-info btn-back text-end">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                         class="bi bi-arrow-left-short" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                              d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
-                    </svg></i>Back
+                    ❮ Back
                 </a>
             </div>
         </div>
@@ -36,7 +32,8 @@
                                 <input name="file" type="file" class="file-upload-field" id="file" value="">
 
                             </div>
-                        <input type="submit" class="btn text-light btn-info rounded-right " id="fileupload" value="upload" />
+                        <div class="btn  text-light btn-info" id="fileupload" >upload</div>
+                        <input type="submit" class="btn d-none text-light btn-info rounded-right " value="upload" />
                             <!-- <input class="form-control rounded" name="suche" type="file" placeholder=Suchtext autocomplete=off> -->
                         </div>
                     </form>
@@ -74,9 +71,9 @@
                             {
                                 <tr>
                                     <td class="table-text px-3">
-                                        <div class="form-check">
+                                        <span class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                        </div>
+                                        </span>
                                     </td>
                                     <td class="table-text  px-3">@item2.Filename</td>
                                     <td class="table-text  px-3">@item2.Status</td>
@@ -134,8 +131,11 @@
                     $('#topflexCheckDefault').prop('checked', false);
                 }
             });
-     
-         $("#fileupload").submit(function (e) {
+                $("form").on("change", ".file-upload-field", function () {
+                    $(this).parent(".file-upload-wrapper1").attr("data-text", $(this).val().replace(/.*(\/|\\)/, ''));
+                });
+
+        $("#fileupload").click(function (e) {
              e.preventDefault();
              if ($('#file')[0].files[0] == undefined) {
                  swal.fire({
@@ -148,6 +148,8 @@
                      cancelButtonColor: "#01BBE7",
                  })
                  return;
+             }else{
+                $("#myForm").submit();
              }
          })
      });

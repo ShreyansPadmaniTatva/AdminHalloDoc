@@ -4,6 +4,7 @@ using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Models;
 using AdminHalloDoc.Models.CV;
+using AdminHalloDoc.Repositories.Patient.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +18,13 @@ namespace AdminHalloDoc.Controllers.PatientControllers
     public class DashboardController : Controller
     {
         #region Configuration
-        private readonly ApplicationDbContext _context;
+        private IPatientDashboardRepository _patientDashrepo;
 
-        public DashboardController(ApplicationDbContext context)
+        public DashboardController(IPatientDashboardRepository patientDashrepo)
         {
-            _context = context;
+
+            this._patientDashrepo = patientDashrepo;
+
         }
         #endregion
 
@@ -30,19 +33,9 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         {
 
             //ViewPatientDashboard 
-            var result = _context.Requests
-                         .Where(r => r.Userid == Convert.ToInt32(CV.UserID()))
-                         .OrderByDescending(x => x.Createddate)
-                         .Select(r => new ViewPatientDashboard
-                         {
-                             Requestid = r.Requestid,
-                             Createddate = r.Createddate,
-                             Status = r.Status,
-                             FileCount = _context.Requestwisefiles.Count(f => f.Requestid == r.Requestid)
-                         })
-                         .ToList();
+            var result = _patientDashrepo.DashboardData(Convert.ToInt32(CV.UserID()));
 
-            return View(result);
+            return View("../PatientViews/Dashboard/Index", result);  
         }
         #endregion
     }

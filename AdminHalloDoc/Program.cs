@@ -3,6 +3,8 @@ using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+using AdminHalloDoc.Repositories.Patient.Repository;
+using AdminHalloDoc.Repositories.Patient.Repository.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,8 @@ var smsConfig = builder.Configuration
 
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddSingleton(smsConfig);
+
+//Admin Repository
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IViewActionRepository, ViewActionRepository>();
 builder.Services.AddScoped<IViewNotesRepository, ViewNotesRepository>();
@@ -40,6 +44,10 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IRoleAccessRepository, RoleAccessRepository>();
 builder.Services.AddScoped<ISchedulingRepository, SchedulingRepository>();
 builder.Services.AddScoped<IRecordsRepository, RecordsRepository>();
+
+//Patient Repository
+builder.Services.AddScoped<IPatientDashboardRepository, PatientDashboardRepository>();
+builder.Services.AddScoped<IPatientRequestRepository, PatientRequestRepository>();
 
 var app = builder.Build();
 

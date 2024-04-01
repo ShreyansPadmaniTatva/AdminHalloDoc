@@ -77,7 +77,7 @@
         </div>
     </div>
     <div class="justify-content-between d-flex my-4">
-        <div class="heading d-flex">
+        <div class=" d-flex">
             <h3 class="mb-0 pb-0 top-heading">Patient</h3>  <span id="p-side" class="align-bottom  top-side-heading d-flex flex-column justify-content-end pb-1 px-2 text-primary-emphasis fw-bolder"> ()</span>
         </div>
         <din class="d-flex">
@@ -98,26 +98,22 @@
                 </span>
 
             </div>
-            <div class="btn btn-info text-white mx-1">
+            <div class="btn btn-info text-white mx-1" onclick="exsubsubmitonly()">
                 <i class="bi bi-forward"></i>
                 <span class="top-btn">
                     export
                 </span>
 
             </div>
-            <form id="filterFormabc" class="mx-1"
-                  asp-action="ExporttoExcel" asp-controller="Report" novalidate="novalidate">
-                <input type="hidden" name="HtmlTable" />
-                <button type="submit" value="1" id="btnsubmit" name="status" class="btn btn-info text-white">
+
+            <div id="btnexportall" onclick="exsubsubmit()" class="btn btn-info text-white">
                     <i class="bi bi-forward-fill"></i>
                     <span class="top-btn">
                         export all
                     </span>
 
-                </button>
-            </form>
-
-
+                </div>
+            
         </din>
     </div>
     <div class="card border-0 rounded shadow">
@@ -165,10 +161,32 @@
     </div>
     <input type="submit" id="submit" class="d-none" />
 </form>
+<form id="exportonlly" asp-action="DownloadExcel" asp-controller="Report" data-ajax="true" data-ajax-method="post">
+    <input type="hidden" asp-for="status" name="status"  class=" exerequeststatus form-control">
+    <input type="hidden" asp-for="RegionId" name="RegionId" id="exerequestRegionId" class="form-control">
+    <input type="hidden" asp-for="RequestType" name="RequestType" id="exerequesttypebtn" class="form-control">
+    <input type="hidden" asp-for="SearchInput" name="SearchInput" id="exeSearchInput" class="form-control">
+    <input type="submit" class="form-control d-none">
+</form>
+<form id="exportall" asp-action="DownloadExcel" asp-controller="Report" data-ajax="true" data-ajax-method="post">
+    <input type="hidden" asp-for="status" name="status" class="exerequeststatus form-control">
+    <input type="submit"  class="form-control d-none">
+</form>
+<script>
+    function exsubsubmit() {
+        console.log(485);
+        $('#exportall').submit();
+    }
+    function exsubsubmitonly() {
+        console.log(485);
+        $('#exportonlly').submit();
+    }
+</script>
 @section Scripts{
     <script>
 
 
+          
         function changeStatus(e) {
             //  $('#requeststatus').val(e);
             $('#filterForm').submit();
@@ -176,6 +194,10 @@
         function subsubmit() {
             console.log(54);
             $('#subsubmitfom').submit();
+        }
+        function exsubsubmit() {
+                console.log(485);
+                $('#exportall').submit();
         }
                     //$(function () {
 
