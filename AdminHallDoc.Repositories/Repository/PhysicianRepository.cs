@@ -34,18 +34,30 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #region Find_Location_Physician
         public async Task<List<PhysicianLocation>> FindPhysicianLocation()
         {
-            
 
-            List<PhysicianLocation> pl =await _context.Physicianlocations
-                                    .OrderByDescending(x => x.Physicianname)
-                        .Select(r => new PhysicianLocation
-                        {
-                            locationid = r.Locationid,
-                            longitude = r.Longitude,
-                            latitude = r.Latitude,
-                            physicianname = r.Physicianname
 
-                        }).ToListAsync();
+            List<PhysicianLocation> pl = await _context.Physicianlocations
+                                 .Join(
+                                     _context.Physicians,
+                                     pl => pl.Physicianid,
+                                     r => r.Physicianid,
+                                     (pl, r) => new { PhysicianLocation = pl, Physician = r }
+                                 )
+                                 .OrderByDescending(x => x.Physician.Firstname)
+                                 .Select(result => new PhysicianLocation
+                                 {
+                                     locationid = result.PhysicianLocation.Locationid,
+                                     longitude = result.PhysicianLocation.Longitude,
+                                     latitude = result.PhysicianLocation.Latitude,
+                                     physicianname = result.PhysicianLocation.Physicianname,
+                                    photo = result.Physician.Photo,
+                                    physicianid = result.Physician.Physicianid,
+                                     createddate = result.PhysicianLocation.Createddate,
+                                     address = result.PhysicianLocation.Address
+
+                                 })
+                                 .ToListAsync();
+
             return pl;
 
         }

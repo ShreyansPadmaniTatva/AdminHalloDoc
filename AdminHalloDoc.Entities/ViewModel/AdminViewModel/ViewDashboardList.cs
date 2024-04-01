@@ -31,6 +31,8 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 
         public int? ProviderID { get; set; }
         public string? Physician { get; set;}
+        public string? Confirmation { get; set; }
+        public DateTime? ConcludedDate { get; set; }
 
     }
     public class PaginatedViewModel

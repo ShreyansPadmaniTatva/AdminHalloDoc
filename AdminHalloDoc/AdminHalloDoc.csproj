@@ -30,6 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\AdminViews\Records\SMSLog\" />
+    <Folder Include="Views\AdminViews\Records\EmailLog\" />
     <Folder Include="wwwroot\Upload\59\" />
   </ItemGroup>
 

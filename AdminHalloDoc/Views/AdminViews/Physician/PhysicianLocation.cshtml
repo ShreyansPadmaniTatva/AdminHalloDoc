@@ -7,8 +7,36 @@
         width: 50vw;
         margin: 4rem auto;
     }
-    </style>
 
+    .marker-img {
+        background-size: cover;
+        width: 55px;
+        height: 55px;
+    }
+    </style>
+<div class="modal fade" id="physicianModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header  bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"> Physician Details</h1>
+                <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-circle"></i>
+                </button>
+            </div>
+                <div class="modal-body">
+                <h5 class="modal-title " id="exampleModalLabel">Physician Name : <span class="text-info" id="physicianName"> </span></h5>
+                <h6 class="modal-title " id="exampleModalLabel">  <span class="text-" id="physcianAddress"> </span></h6>
+                        <h6 class="modal-title" id="exampleModalLabel">
+                     <span class="text-info" id="physcianActive"> </span>
+                </h6>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Close</button>
+                </div>
+        </div>
+    </div>
+</div>
 <div id="mapAreash"></div>
 
 <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps-web.min.js"></script>
@@ -43,19 +71,67 @@
             sites.push({
                 lat: @location.latitude,
                 lng: @location.longitude,
-                name: '@location.physicianname'
+                name: '@location.physicianname',
+                photo: '/Upload/Physician/@location.physicianid/@location.photo',
+                physicianid: @location.physicianid,
+                createddate: '@location.createddate',
+                address: '@location.address'
             });
             </text>
         }
     }
-    sites.forEach(function (site) {
-        var marker = new tt.Marker().setLngLat([site.lng, site.lat]).addTo(map);
+
+
+
+        sites.forEach(function (site) {
+            var element = document.createElement("div")
+            element.id = "marker" + site.physicianid;
+            element.style.backgroundImage = 'url("'+site.photo+'")';
+            element.classList.add('marker-img');
+
+            var marker = new tt.Marker({ element: element }).setLngLat([site.lng, site.lat]).addTo(map);
             var popup = new tt.Popup({ anchor: 'top' }).setHTML("<b>" + site.name + "</b>");
-        marker.setPopup(popup).togglePopup();
-    });
+            marker.setPopup(popup).togglePopup();
+            marker.getElement().addEventListener('click', function () {
+                // Populate the modal with fetched details
+                
+                populateModal(site);
+                $('#physicianModal').modal('show');
+            });
+        });
+
+    function populateModal(physicianData) {
+        $('#physicianName').text(physicianData.name);
+        $('#physcianAddress').text(physicianData.address);
+        let currentDatetime = new Date();
+        let activeDate = new Date(physicianData.createddate);
+        var diffMs = (currentDatetime - activeDate); // milliseconds
+        var diffDays = Math.floor(diffMs / 86400000); // days
+        var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+        var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+        let lastlogin = "" + diffDays + " days, " + diffHrs + " hours, " + diffMins + " minutes Before";
+        $('#physcianActive').text(lastlogin);
+
+    }
 
 
+    function GetIconColour(leagueId) {
+        // Define color mappings based on league IDs
+        const colorMap = {
+            'league1': 'red',    // Example league ID and color
+            'league2': 'blue',   // Add more league IDs and corresponding colors as needed
+            'league3': 'green'
+            // Add more mappings as needed
+        };
 
+        // Default color if league ID is not found in the map
+        const defaultColor = 'gray';
+
+        // Retrieve color based on league ID from the map
+        const color = colorMap[leagueId] || defaultColor;
+
+        return color;
+    }
 
     // not usefull for temp value
     function moveMapTo(newLoc) {

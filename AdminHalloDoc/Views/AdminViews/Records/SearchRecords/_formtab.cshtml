@@ -1,0 +1,105 @@
+﻿@using AdminHalloDoc.Models.CV;
+@using static AdminHalloDoc.Entities.ViewModel.Constant;
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.RecordsModel;
+@{
+var enumData = from Status e in Enum.GetValues(typeof(Status))
+               select new
+               {
+                   ID = (int)e,
+                   Name = e.ToString()
+               };
+var reqtype = from RequestType e in Enum.GetValues(typeof(RequestType))
+              select new
+              {
+                  ID = (int)e,
+                  Name = e.ToString()
+              };
+var status = "null";
+if (TempData["Status"] == null)
+{
+    status = "null";
+}
+else
+{
+    status = TempData["Status"].ToString();
+
+}
+}
+<form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+      asp-action="_SearchResult" asp-controller="Reports" novalidate="novalidate">
+    @Html.AntiForgeryToken()
+
+    <div class="text-end mx-2 px-3 container-fluid">
+        <div class="row">
+            <div class="my-1 col-md-3 ">
+                <select class="form-select form-select-md h-100 p-2" asp-for="Status" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-allow-clear="true" aria-label="Default select example">
+                    <option value="0" >All Status</option>
+                </select>
+            </div>
+            <div class="my-1 col-md-3 form-floating">
+                <input class="form-control rounded" name="Patientname" asp-for="Patientname" type="text" placeholder="Patient Name" autocomplete=off>
+                <label class="" for="floatingInput">Patient Name </label>
+            </div>
+            <div class="my-1 col-md-3 ">
+                <select class="form-select form-select-md h-100 p-2" asp-for="RequestType" asp-items="@(new SelectList(reqtype, "ID", "Name"))" data-allow-clear="true" aria-label="Default select example">
+                    <option value="0">All Request Type</option>
+                </select>
+            </div>
+            <div class="my-1 col-md-3 form-floating">
+                <input class="form-control rounded" name="Startdate" asp-for="Startdate" placeholder="Patient Name" type="date" autocomplete=off>
+                <label class="" for="floatingInput">Start Date </label>
+            </div>
+            <div class="my-1 col-md-3 form-floating">
+                <input class="form-control rounded" name="Enddate" asp-for="Enddate" placeholder="Patient Name" type="date" autocomplete=off>
+                <label class="" for="floatingInput">End Date </label>
+            </div>
+            <div class="my-1 col-md-3 form-floating">
+                <input class="form-control rounded" name="Physicianname" asp-for="Physicianname" type="text" placeholder="Patient Name" autocomplete=off>
+                <label class="" for="floatingInput">Provider  Name </label>
+            </div>
+            <div class="my-1 col-md-3 form-floating">
+                <input class="form-control rounded" name="Email" asp-for="Email" type="text" placeholder="Patient Name" autocomplete=off>
+                <label class="" for="floatingInput">Email</label>
+            </div>
+            <div class="my-1 col-md-3 form-floating">
+                <input class="form-control rounded" name="Phonenumber" asp-for="Phonenumber" type="text" placeholder="Patient Name" autocomplete=off>
+                <label class="" for="floatingInput">Phone Number</label>
+            </div>
+        </div>
+        <div class="text-end">
+            <div id="clearBtn" class="btn btn-outline-info ">
+               Clear
+            </div>
+            <!-- Button trigger modal -->
+            <input type="submit" id="submit" value="Search" class="btn btn-info text-white">
+                
+        </div>
+
+    </div>
+
+
+   
+</form>
+
+    <script>
+    const clearBtn = document.getElementById("clearBtn");
+    const submitBtn = document.getElementById("submit");
+
+    clearBtn.addEventListener("click", function () {
+        const inputs = document.querySelectorAll("#filterForm input[type='text'], #filterForm input[type='date']");
+        inputs.forEach(input => {
+            input.value = "";
+        });
+
+        const selects = document.querySelectorAll("#filterForm select");
+        selects.forEach(select => {
+            select.value = "0"; // Set the default value of the select
+        });
+        $('#submit').click();
+    });
+        function subsubmit() {
+            console.log(54);
+        $('#submit').click();
+        }
+    </script>
+

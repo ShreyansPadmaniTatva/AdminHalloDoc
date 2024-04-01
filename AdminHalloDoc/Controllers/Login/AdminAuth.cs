@@ -69,14 +69,13 @@ namespace AdminHalloDoc.Controllers.Login
             }
 
             var Path = filterContext.HttpContext.Request.Path;
+
             List<MenuItem> Staticmenu = loginservice.SetMenu(CV.RoleId());
 
-            if (Staticmenu == null)
-            {
-                filterContext.Result = new RedirectResult("~/AdminLogin/AccessDenied");
-            }
+            bool isPathAvailable = Staticmenu.Any(item => item.Url.Equals(Path, StringComparison.OrdinalIgnoreCase) || item.ContollerAction.Equals(Path, StringComparison.OrdinalIgnoreCase));
 
-            if (!flage)
+
+            if (Staticmenu == null || !flage || !isPathAvailable )
             {
                 filterContext.Result = new RedirectResult("~/AdminLogin/AccessDenied");
             }

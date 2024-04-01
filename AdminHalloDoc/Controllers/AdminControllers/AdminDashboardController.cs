@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
-    [AdminAuth("Admin,Provider")]
+   // [AdminAuth("Admin,Provider")]
     public class AdminDashboardController : Controller
     {
         #region Constructor
@@ -25,8 +25,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         [AdminAuth("Admin,Provider")]
-        [Route("Admin/DashBoard")]
         [Route("Physician/DashBoard")]
+        [Route("Admin/DashBoard")]
         #region DashBoard_Index
         public async Task<IActionResult> Index()
         {

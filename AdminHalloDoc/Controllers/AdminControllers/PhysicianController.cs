@@ -30,7 +30,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        [AdminAuth("Provider")]
+        [AdminAuth("Admin,Provider")]
         #region Physician_Location
         public async Task<IActionResult> PhysicianLocation()
         {

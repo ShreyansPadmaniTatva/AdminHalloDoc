@@ -89,25 +89,28 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         #endregion
 
-        #region ListMenuByRole
-        public async Task<List<Menu>> ListMenuByRole(int? roleid)
+        #region SetSubMenu
+        public List<MenuItem> SetSubMenu(int? roleid, int menusub, List<MenuItem> s)
         {
-            List<Menu> allData = null;
-            if (roleid != null)
+            List<MenuItem> StaticSubmenu = new List<MenuItem>();
+
+            List<Menu> MenuItemsSub = (from rm in _context.Rolemenus
+                                     join Menus in _context.Menus
+                                     on rm.Menuid equals Menus.Menuid into MenusGroup
+                                     from men in MenusGroup.DefaultIfEmpty()
+                                     where rm.Roleid == roleid && men.Sortorder.ToString().StartsWith(""+menusub+"")
+                                     orderby men.Sortorder
+                                     select men).ToList();
+            foreach (Menu menu in MenuItemsSub)
             {
-                 allData = await (from rm in _context.Rolemenus
-                                                         join Menus in _context.Menus
-                                                         on rm.Menuid equals Menus.Menuid into MenusGroup
-                                                         from m in MenusGroup.DefaultIfEmpty()
-                                                         where rm.Roleid == roleid
-                                                          orderby m.Sortorder 
-                                                          select  m  ).ToListAsync();
+                MenuItem m = new MenuItem();
+                m = s.Where(item => item.DbName == menu.Name).FirstOrDefault();
+                if (m != null)
+                {
+                    StaticSubmenu.Add(m);
+                }
             }
-            else
-            {
-                return allData;
-            }
-            return allData;
+                return StaticSubmenu;
         }
         #endregion
 
@@ -132,9 +135,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 {
                     MenuItem m = new MenuItem();
                     m = staticmenu.Items.Where(item => item.DbName == menu.Name).FirstOrDefault();
-
+                   
                     if (m != null)
                     {
+                        if (m.Submenu != null)
+                        {
+                            m.Submenu = SetSubMenu(roleid, (int)menu.Sortorder,m.Submenu);
+                        }
                         Staticmenu.Add(m);
                     }
 
@@ -145,7 +152,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 return Staticmenu;
             }
 
-          
             return Staticmenu;
         }
 

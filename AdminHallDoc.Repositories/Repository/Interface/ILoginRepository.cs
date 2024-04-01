@@ -12,7 +12,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
     public interface ILoginRepository
     {
         Task<UserInfo> CheckAccessLogin(Aspnetuser aspNetUser);
-        Task<List<Menu>> ListMenuByRole(int? roleid);
+        List<MenuItem> SetSubMenu(int? roleid, int menusub, List<MenuItem> s);
         List<MenuItem> SetMenu(int? roleid);
     }
 }
