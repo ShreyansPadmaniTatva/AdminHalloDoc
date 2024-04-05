@@ -38,7 +38,7 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public string RoomSite { get; set; }
 
         public string? UploadImage { get; set; }
-        [Required]
+       
         public IFormFile? UploadFile { get; set; }
 
 

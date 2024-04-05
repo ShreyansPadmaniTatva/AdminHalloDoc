@@ -301,6 +301,40 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         #endregion
 
+        #region CancelCase
+
+        public async Task<bool> CancelCaseByProvider(int RequestID)
+        {
+            try
+            {
+                var requestData = await _context.Requests.Where(e => e.Requestid == RequestID).FirstAsync();
+                if (requestData != null)
+                {
+                    requestData.Status = 8;
+                    _context.Requests.Update(requestData);
+                    _context.SaveChanges();
+
+                    Requeststatuslog rsl = new Requeststatuslog
+                    {
+                        Requestid = RequestID,
+                        Status = 8,
+                        Createddate = DateTime.Now
+                    };
+                    _context.Requeststatuslogs.Add(rsl);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else { return false; }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
+        #endregion
+
         #region BlockCase
         public async Task<bool> BlockCase(ViewActions v)
         {
@@ -344,6 +378,80 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
+        #region TransfertoAdmin
+        public async Task<bool> TransfertoAdmin(ViewActions v)
+        {
+
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == v.RequestID);
+            request.Status = 1;
+            request.Physicianid = null;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            Requeststatuslog rsl = new Requeststatuslog();
+            rsl.Requestid = (int)v.RequestID;
+            rsl.Notes = v.Notes;
+            rsl.Createddate = DateTime.Now;
+            rsl.Status = 1;
+            rsl.Physicianid = v.ProviderId;
+            rsl.Transtoadmin = new BitArray(1);
+            rsl.Transtoadmin[0] = true;
+            _context.Requeststatuslogs.Update(rsl);
+            _context.SaveChanges();
+
+            return true;
+
+
+        }
+        #endregion
+
+        #region EncounterModel
+        public async Task<bool> EncounterModel(ViewActions v)
+        {
+
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == v.RequestID);
+            request.Status = (short)v.EncounterState;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            Requeststatuslog rsl = new Requeststatuslog();
+            rsl.Requestid = (int)v.RequestID;
+            rsl.Physicianid = (int)v.ProviderId;
+            rsl.Notes = v.Notes;
+            rsl.Createddate = DateTime.Now;
+            rsl.Status = (short)v.EncounterState;
+            _context.Requeststatuslogs.Update(rsl);
+            _context.SaveChanges();
+
+            return true;
+
+
+        }
+        #endregion
+
+        #region Accept_Physician
+        public async Task<bool> AcceptPhysician(ViewActions v)
+        {
+
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == v.RequestID);
+             request.Status = 2;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            Requeststatuslog rsl = new Requeststatuslog();
+            rsl.Requestid = (int)v.RequestID;
+            rsl.Notes = v.Notes;
+            rsl.Createddate = DateTime.Now;
+            rsl.Status = 2;
+            _context.Requeststatuslogs.Update(rsl);
+            _context.SaveChanges();
+
+            return true;
+
+
+        }
+        #endregion
+
         #region Assign_Physician
         public async Task<bool> AssignPhysician(ViewActions v)
         {
@@ -377,7 +485,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             var agreementUrl = "https://localhost:44376/SendAgreement?RequestID="+ v.RequestID;
 
-            _emailConfig.SendMail(res.Email, "Agreement for your request", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
+            _emailConfig.SendMail(v.Email, "Agreement for your request", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
             return true;
         }
         #endregion
@@ -553,7 +661,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
 
 
-
                 };
                 return enc;
             }
@@ -594,6 +701,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             //try
             //{
             var admindata = _context.Admins.FirstOrDefault(e => e.Aspnetuserid == id);
+            var phydata = _context.Physicians.FirstOrDefault(e => e.Aspnetuserid == id);
             if (Data.EncounterID == 0)
             {
                 Encounterform enc = new Encounterform
@@ -624,7 +732,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Skin = Data.Skin,
                     Temp = Data.Temp,
                     TreatmentPlan = Data.Treatment,
-                    Adminid = admindata.Adminid,
+                    Adminid = admindata == null ?null : admindata.Adminid,
+                    Physicianid = phydata == null ? null : phydata.Physicianid,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
 
@@ -667,7 +776,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     encdetails.Skin = Data.Skin;
                     encdetails.Temp = Data.Temp;
                     encdetails.TreatmentPlan = Data.Treatment;
-                    encdetails.Adminid = admindata.Adminid;
+                    encdetails.Adminid = admindata == null ? encdetails.Adminid : admindata.Adminid;
+                    encdetails.Physicianid = phydata == null ? encdetails.Physicianid : phydata.Physicianid;
                     encdetails.ModifiedDate = DateTime.Now;
                     _context.Encounterforms.Update(encdetails);
                     _context.SaveChanges();
@@ -708,12 +818,14 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 _context.SaveChanges();
 
                 var admindata = _context.Admins.FirstOrDefault(e => e.Aspnetuserid == id);
+                var phydata = _context.Physicians.FirstOrDefault(e => e.Aspnetuserid == id);
                 Requeststatuslog rs = new Requeststatuslog
                 {
                     Requestid = final.Requestid,
                     Status = 6,
                     Createddate = DateTime.Now,
-                    Adminid = admindata.Adminid
+                    Adminid = admindata == null ? null : admindata.Adminid,
+                    Physicianid = phydata == null ? null : phydata.Physicianid,
 
 
                 };

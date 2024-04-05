@@ -69,7 +69,7 @@
                             <td scope="row" data-label="Created Date"> @item.FirstName</td>
                             <td scope="row" data-label="Created Date"> @item.Mobile</td>
                             <td scope="row" data-label="Created Date">  @Enum.GetName(typeof(AdminStatus), item.status)</td>
-                            <td scope="row" data-label="Created Date"> @item.status)</td>
+                            <td scope="row" data-label="Created Date"> @item.OpenRequest</td>
                             <td class="mobile-hide" data-label="Document">
                                 @if(item.isAdmin){
                                     <a asp-action="AdminAddEdit" asp-controller="RoleAccess" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">

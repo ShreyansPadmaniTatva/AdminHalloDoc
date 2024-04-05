@@ -40,9 +40,9 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region ShiftForMonth
-        public async Task<IActionResult> GetShiftForMonth(int? month,int? regionId)
+        public async Task<IActionResult> GetShiftForMonth(int? month,int? regionId, int? year)
         {
-            var v = await _schedulingRepository.GetShift((int)month, regionId);
+            var v = await _schedulingRepository.GetShift((int)year, (int)month, regionId);
             return Json(v);
         }
         #endregion

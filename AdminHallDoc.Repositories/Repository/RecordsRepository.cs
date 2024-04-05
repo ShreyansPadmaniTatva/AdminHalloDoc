@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Helpers;
 using System.Web.WebPages;
+using System.Xml.Linq;
 using Twilio.Types;
 using static AdminHalloDoc.Entities.ViewModel.Constant;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -32,6 +34,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             _emailConfig = emailConfig;
         }
         #endregion
+
+        #region SearchRecords
         public async Task<RecordsModel> GetRequestsbyfilterForRecords(RecordsModel rm)
         {
             RecordsModel dm = new RecordsModel();
@@ -131,7 +135,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             dm.IsAscending = rm.IsAscending;
             return dm;
         }
+        #endregion
 
+        #region Patienthistory
         public async Task<RecordsModel> Patienthistorybyfilter(RecordsModel rm)
         {
             RecordsModel dm = new RecordsModel();
@@ -188,9 +194,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                      join reg in _context.Regions
                                                      on rc.Regionid equals reg.Regionid into RegGroup
                                                      from rg in RegGroup.DefaultIfEmpty()
-                                                     where req.Userid == UserId
+                                                     where req.Userid == (UserId == null ? data.UserId : UserId)
                                                      select new ViewDashboardList
                                                      {
+                                                         
                                                          Physician = p.Firstname + " " + p.Lastname,
                                                          RequestClientid = rc.Requestclientid,
                                                          Status = req.Status,
@@ -213,11 +220,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             int totalItemCount = allData.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
 
-            List<ViewDashboardList> list1 = allData.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();
+            List<ViewDashboardList> list1 = allData.ToList();
 
 
             PaginatedViewModel paginatedViewModel = new PaginatedViewModel
             {
+                UserId = UserId,
                 DashboardList = list1,
                 CurrentPage = data.CurrentPage,
                 TotalPages = totalPages,
@@ -226,5 +234,152 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             };
             return paginatedViewModel;
         }
+        #endregion
+
+        #region EmailLogs
+        public async Task<RecordsModel> EmailLogs(RecordsModel rm)
+        {
+            RecordsModel dm = new RecordsModel();
+            List<Emaillogdata> data = (from req in _context.Emaillogs
+                                       where (rm.AccountType == 0 || req.Roleid == rm.AccountType) &&
+                                             (!rm.Startdate.HasValue || req.Createdate.Date == rm.Startdate.Value.Date) &&
+                                             (!rm.Enddate.HasValue || req.Sentdate.Value.Date == rm.Enddate.Value.Date) &&
+                                             (rm.ReciverName.IsNullOrEmpty() || _context.Aspnetusers.FirstOrDefault(e => e.Email == req.Emailid).Username.ToLower().Contains(rm.ReciverName.ToLower()) ) &&
+                                             (rm.Email.IsNullOrEmpty() || req.Emailid.ToLower().Contains(rm.Email.ToLower()))
+                                       select new Emaillogdata
+                                       {
+                                           Recipient = _context.Aspnetusers.FirstOrDefault(e => e.Email == req.Emailid).Username ?? null,
+                                           Confirmationnumber = req.Confirmationnumber,
+                                           Createdate = req.Createdate,
+                                           Emailtemplate = req.Emailtemplate,
+                                           Filepath = req.Filepath,
+                                           Sentdate = (DateTime)req.Sentdate,
+                                           Roleid = req.Roleid,
+                                           Emailid = req.Emailid,
+                                           Senttries = req.Senttries,
+                                           Subjectname = req.Subjectname,
+                                           Action = req.Action
+                                       }).ToList();
+
+
+
+            dm.TotalPages = (int)Math.Ceiling((double)data.Count() / rm.PageSize);
+            data = data.Skip((rm.CurrentPage - 1) * rm.PageSize).Take(rm.PageSize).ToList();
+            dm.EmailLogList = data.ToList();
+
+            dm.PageSize = rm.PageSize;
+            dm.CurrentPage = rm.CurrentPage;
+            return dm;
+        }
+        #endregion
+
+        #region SMSLogs
+        public async Task<RecordsModel> SMSLogs(RecordsModel rm)
+        {
+            RecordsModel dm = new RecordsModel();
+            List<SMSLogsData> data = (from req in _context.Smslogs
+                                      where (rm.AccountType == 0 || req.Roleid == rm.AccountType) &&
+                                            (!rm.Startdate.HasValue || req.Createdate.Date == rm.Startdate.Value.Date) &&
+                                            (!rm.Enddate.HasValue || req.Sentdate.Value.Date == rm.Enddate.Value.Date) &&
+                                            (rm.ReciverName.IsNullOrEmpty() || _context.Aspnetusers.FirstOrDefault(e => e.Phonenumber == req.Mobilenumber).Username.ToLower().Contains(rm.ReciverName.ToLower()) ) &&
+                                            (rm.Phonenumber.IsNullOrEmpty() || req.Mobilenumber.ToLower().Contains(rm.Phonenumber.ToLower()))
+                                      select new SMSLogsData
+                                      {
+                                          Recipient = _context.Aspnetusers.FirstOrDefault(e => e.Phonenumber == req.Mobilenumber).Username,
+                                          Confirmationnumber = req.Confirmationnumber,
+                                          Createdate = req.Createdate,
+                                          Smstemplate = req.Smstemplate,
+                                          Sentdate = (DateTime)req.Sentdate,
+                                          Roleid = req.Roleid,
+                                          Mobilenumber = req.Mobilenumber,
+                                          Senttries = req.Senttries,
+                                          Action = req.Action
+                                      }).ToList();
+
+
+
+            dm.TotalPages = (int)Math.Ceiling((double)data.Count() / rm.PageSize);
+            data = data.Skip((rm.CurrentPage - 1) * rm.PageSize).Take(rm.PageSize).ToList();
+            dm.SMSLogList = data.ToList();
+
+            dm.PageSize = rm.PageSize;
+            dm.CurrentPage = rm.CurrentPage;
+            return dm;
+        }
+        #endregion
+
+        #region BlockHistory
+        public async Task<RecordsModel> BlockHistory(RecordsModel rm)
+        {
+            RecordsModel dm = new RecordsModel();
+            List<BlockRequestData> data = (from req in _context.Blockrequests
+                                           where (!rm.Startdate.HasValue || req.Createddate.Value.Date == rm.Startdate.Value.Date) &&
+                                                 (rm.Patientname.IsNullOrEmpty() || _context.Requests.FirstOrDefault(e => e.Requestid == Convert.ToInt32(req.Requestid)).Firstname.ToLower().Contains(rm.Patientname.ToLower())) &&
+                                                 (rm.Email.IsNullOrEmpty() || req.Email.ToLower().Contains(rm.Email.ToLower())) &&
+                                                 (rm.Phonenumber.IsNullOrEmpty() || req.Phonenumber.ToLower().Contains(rm.Phonenumber.ToLower()))
+                                           select new BlockRequestData
+                                           {
+                                               PatientName = _context.Requests.FirstOrDefault(e => e.Requestid == Convert.ToInt32(req.Requestid)).Firstname,
+                                               Email = req.Email,
+                                               Createddate = (DateTime)req.Createddate,
+                                               Isactive = req.Isactive,
+                                               Requestid = Convert.ToInt32(req.Requestid),
+                                               Phonenumber = req.Phonenumber,
+                                               Reason = req.Reason
+                                           }).ToList();
+
+
+
+            dm.TotalPages = (int)Math.Ceiling((double)data.Count() / rm.PageSize);
+            data = data.Skip((rm.CurrentPage - 1) * rm.PageSize).Take(rm.PageSize).ToList();
+            dm.BlockRequestList = data.ToList();
+
+            dm.PageSize = rm.PageSize;
+            dm.CurrentPage = rm.CurrentPage;
+            return dm;
+        }
+        #endregion
+
+        #region UnBlock
+        public async Task<bool> UnBlock(int RequestID, string id)
+        {
+            try
+            {
+                Blockrequest br = _context.Blockrequests.FirstOrDefault(e => e.Requestid == RequestID.ToString());
+                br.Isactive = new BitArray(1);
+                br.Isactive[0] = true;
+                _context.Blockrequests.Update(br);
+                _context.SaveChanges();
+
+
+                Request re = _context.Requests.FirstOrDefault(e => e.Requestid == RequestID);
+                re.Status = 1;
+
+                re.Modifieddate = DateTime.Now;
+                _context.Requests.Update(re);
+                _context.SaveChanges();
+                var admindata = _context.Admins.FirstOrDefault(e => e.Aspnetuserid == id);
+                Requeststatuslog rs = new Requeststatuslog();
+                rs.Status = 1;
+                rs.Requestid = RequestID;
+                rs.Adminid = admindata.Adminid;
+                rs.Createddate = DateTime.Now;
+
+                _context.Requeststatuslogs.Add(rs);
+                _context.SaveChanges();
+
+
+
+
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
     }
 }

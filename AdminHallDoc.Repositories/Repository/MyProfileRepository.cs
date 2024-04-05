@@ -162,6 +162,22 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
+        #region Username_Availabl
+        public bool IsUsernameAvailable(string username)
+        {
+            try
+            {
+                bool userExists = _context.Aspnetusers.Any(user => user.Username == username);
+                return !userExists;
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions here
+                return false;
+            }
+        }
+        #endregion
+
         #region Put_Profile
 
         #region SavePhysicianInfo

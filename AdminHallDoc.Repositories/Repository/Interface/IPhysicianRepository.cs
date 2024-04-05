@@ -23,5 +23,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<bool> EditMailBilling(Physicians vm, string AdminId);
         Task<bool> EditProviderProfile(Physicians vm, string AdminId);
         Task<bool> EditProviderOnbording(Physicians vm, string AdminId);
+        Task<bool> GetLocation(int PhysicianId);
     }
 }

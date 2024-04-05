@@ -36,7 +36,8 @@
             <input type="hidden" asp-for="AdminId" name="AdminId" />
             <h4 class=" my-4">Account Information</h4>
             <div class="col-md-6 form-floating  ">
-                <input asp-for="UserName" class="form-control rounded asp" name="UserName" type="text" placeholder="First Name" autocomplete=off>
+                <input  class="form-control bg-disabled rounded " disabled id="UserName"  type="text" placeholder="First Name" autocomplete=off>
+                <input   id="UserNameasp"  type="hidden" name="UserName" asp-for="Lastname">
                 <label class="" for="floatingInput">User Name </label>
             </div>
             <div class="col-md-6 form-floating">
@@ -62,11 +63,11 @@
 
             <input type="hidden" asp-for="AdminId" />
             <div class="col-md-6 form-floating  ">
-                <input asp-for="Firstname" class="form-control rounded admin-input" name="Firstname" type="text" placeholder="First Name" autocomplete=off>
+                <input asp-for="Firstname" class="form-control rounded admin-input" id="FirstName" name="Firstname" type="text" placeholder="First Name" autocomplete=off>
                 <label class="" for="floatingInput">First Name </label>
             </div>
             <div class="col-md-6 form-floating">
-                <input asp-for="Lastname" class="form-control rounded admin-input" name="Lastname" type="text" placeholder=Suchtext autocomplete=off>
+                <input asp-for="Lastname" class="form-control rounded admin-input" id="LastName" name="Lastname" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Last name </label>
             </div>
             <div class="col-md-6 form-floating  ">
@@ -143,7 +144,7 @@
                 <input asp-for="Zipcode" class="form-control rounded mail-billing-imp" name="Zipcode" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Zip Code</label>
             </div>
-            <div class="col-md-6 form-floating  my-1">
+            <div class="col-md-6 form-floating ">
                 <input asp-for="AltMobile" id="phone1" type="tel" name="AltMobile" class="form-control rounded mail-billing-imp" autocomplete=off>
                 <!-- <label for="floatingInput">Phone Number </label> -->
             </div>
@@ -160,7 +161,10 @@
                 </div>
 
             </div>
-            <input type="submit" id="AddAdmin" class="btn btn-info add text-white" style="display:none" value="Add Admin" />  
+            <div class="text-end" >
+
+            <input type="submit" id="AddAdmin" class="btn btn-success add text-white" style="display:none" value="Create Account" />  
+            </div>
         </form>
 
     </div>
@@ -169,6 +173,46 @@
     {
 
     <script type="text/javascript">
+          function updateUsername() {
+        var firstName = $('#FirstName').val().trim();
+        var lastName = $('#LastName').val().trim();
+        var baseUsername = 'AD.' + (lastName.length > 0 ? lastName.toLowerCase() + '.' : '') + (firstName.length > 0 ? firstName.charAt(0).toLowerCase() : '');
+
+        function checkUsernameAvailability(username, count) {
+            $.ajax({
+                url: '/RoleAccess/CheckUsernameAvailability',
+                type: 'POST',
+                data: { username: username },
+                success: function (response) {
+                    console.log(response);
+                    if (response) {
+                        $('#UserName').val(username);
+                        $('#UserNameasp').val(username);
+                    } else {
+                        checkUsernameAvailability(baseUsername + count, count + 1);
+                    }
+                },
+                error: function () {
+                    console.error('Error checking username availability.');
+                }
+            });
+        }
+
+        checkUsernameAvailability(baseUsername, 1);
+    }
+
+    $('#FirstName, #LastName').on('keydown', function () {
+          var modelIsNull = @((Model != null).ToString().ToLower());
+         
+           if (!modelIsNull) {
+        updateUsername();
+           
+           }else{
+
+           }
+    });
+
+
 
         let checkboxes = document.querySelectorAll('.regionbox:checked');
         let regionIds = [];
@@ -198,6 +242,7 @@
         }
         $(document).ready(function () {
             var modelIsNull = @((Model != null).ToString().ToLower());
+           var UserName = " @(Model != null ? "" + Model.UserName.ToString() + "" : "null")";
 
             if (modelIsNull) {
                 console.log(modelIsNull);
@@ -211,6 +256,7 @@
 
                 $("#submitbilling").css("display", "none");
                 $("#cancel1").css("display", "none");
+                $('#UserName').val(UserName);
             } else {
                 console.log(modelIsNull);
 

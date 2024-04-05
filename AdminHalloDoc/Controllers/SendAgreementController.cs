@@ -1,8 +1,11 @@
 ﻿using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+using AdminHalloDoc.Models.CV;
+using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.Ocsp;
 
@@ -49,6 +52,11 @@ namespace AdminHalloDoc.Controllers
                 TempData["Status"] = "Mail Send  Successfully..!";
             }
 
+            if (CV.role() == "Provider")
+            {
+                
+                return Redirect("~/Physician/DashBoard");
+            }
             return RedirectToAction("Index", "AdminDashboard");
         }
         #endregion

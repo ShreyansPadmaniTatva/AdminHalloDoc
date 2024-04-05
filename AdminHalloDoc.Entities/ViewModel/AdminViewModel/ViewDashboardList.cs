@@ -47,6 +47,9 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public int? RegionId { get; set; }
         public int? RequestType { get; set; }
         public string? status { get; set; }
+        public int? UserId { get; set; }
+        public string SortedColumn { get; set; }
+        public bool? IsAscending { get; set; }
 
         //Count
         public int NewRequest { get; set; }

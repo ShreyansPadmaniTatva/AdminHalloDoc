@@ -72,7 +72,7 @@
                             </td>
                             <td scope="row" data-label="Created Date">@item.Firstname  @item.Lastname</td>
                             <td scope="row" data-label="Created Date">@item.role</td>
-                            <td scope="row" data-label="Created Date">@item.Isnondisclosuredoc</td>
+                            <td scope="row" data-label="Created Date">@(item.onCallStatus == 0 ?"false":"True")</td>
                             <td scope="row" data-label="Created Date"> @Enum.GetName(typeof(AdminStatus), item.Status)</td>
                             <td class=" d-flex" data-label="Document">
 

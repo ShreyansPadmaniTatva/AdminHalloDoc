@@ -1,12 +1,13 @@
 ﻿using AdminHalloDoc.Controllers.Login;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
+using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
-    [AdminAuth("Admin")]
+    
     public class AdminProfileController : Controller
     {
         #region Constoter
@@ -14,21 +15,30 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         private readonly IViewActionRepository _viewActionRepository;
         private readonly IViewNotesRepository _viewNotesRepository;
         private readonly IMyProfileRepository _myProfileRepository;
-        public AdminProfileController(IMyProfileRepository myProfileRepository,IRequestRepository requestRepository, IViewActionRepository viewActionRepository, IViewNotesRepository viewNotesRepository)
+        private readonly IPhysicianRepository _physicianRepository;
+        public AdminProfileController(IMyProfileRepository myProfileRepository,IRequestRepository requestRepository, IViewActionRepository viewActionRepository, IViewNotesRepository viewNotesRepository, IPhysicianRepository physicianRepository)
         {
 
             _requestRepository = requestRepository;
             _viewActionRepository = viewActionRepository;
             _viewNotesRepository = viewNotesRepository;
             _myProfileRepository = myProfileRepository;
+            _physicianRepository = physicianRepository;
         }
         #endregion
 
+        [AdminAuth("Admin,Provider")]
         public async Task<IActionResult> Index(int? id)
         {
             ViewAdminProfile p = await _myProfileRepository.GetProfileDetails( (id !=null ? (int) id: Convert.ToInt32(CV.UserID())) );
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
+            if (CV.role() == "Provider")
+            {
+                ViewData["PhysicianAccount"] = "";
+                Physicians v = await _physicianRepository.GetPhysicianById(Convert.ToInt32(CV.UserID()));
+                return View("../AdminViews/Physician/PhysicianAddEdit", v);
+            }
             return  View("../AdminViews/Profile/Index",p);
         }
 

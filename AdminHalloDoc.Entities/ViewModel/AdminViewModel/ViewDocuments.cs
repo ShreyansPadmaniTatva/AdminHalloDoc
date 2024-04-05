@@ -13,7 +13,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string Firstanme { get; set; }
         public string Lastanme { get; set; }
         public string? ConfirmationNumber { get; set; }
-        public int RequestID { get; set; }
+        public int? RequestID { get; set; }
         public int RequesClientid { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }

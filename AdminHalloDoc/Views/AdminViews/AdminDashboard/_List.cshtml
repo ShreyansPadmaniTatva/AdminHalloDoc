@@ -1,5 +1,6 @@
 ﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.PaginatedViewModel;
 @using static AdminHalloDoc.Entities.ViewModel.Constant
+@using static AdminHalloDoc.Entities.ViewModel.CM
 @{
     var Status = -1;
     if (Model.DashboardList.Count > 0)
@@ -119,7 +120,7 @@
                         <th class="d-none"> No. </th>
                         @foreach (var htmlValue in tdHtmlValues)
                         {
-                            <th scope="col">@Html.Raw(htmlValue)</th>
+                            <th scope="col" data-order="@Html.Raw(htmlValue)" class="dashborad-table @Html.Raw(htmlValue)">@Html.Raw(htmlValue)</th>
                         }
                         @*<th class="d-none" style="background-color:antiquewhite" >  @Enum.GetName(typeof(AdminDashStatus), Status) </th>*@
                     </tr>
@@ -156,7 +157,7 @@
                                 <td>@item.Physician</td>
                             }
 
-                            <td>20-2-25</td>
+                            <td>@item.RequestedDate</td>
 
                             @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 6)
                             {
@@ -191,8 +192,8 @@
                                     </button>
                                  
                                     <ul class="dropdown-menu ">
-                                        <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
-                                        <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewNotes" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid.Encode()" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewNotes" asp-route-id="@item.Requestid.Encode()" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
                                         @if (Status == 1)
                                         {
                                             <li>
@@ -230,22 +231,22 @@
                                         }
                                         @if (Status == 2 || Status == 5)
                                         {
-                                            <li><div class="dropdown-item text-dark-emphasis ClearCase" data-bs-id="@item.Requestid" ><i class="px-2 bi bi-journals"></i>Clear Case</div></li>
+                                            <li><div class="dropdown-item text-dark-emphasis ClearCase" data-bs-id="@item.Requestid"><i class="px-2 bi bi-journals"></i>Clear Case</div></li>
 
 
                                         }
                                         @if (Status == 5)
                                         {
-                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="CloseCase" asp-route-id="@item.Requestid" asp-controller="SubmitForm"><i class="px-2 bi bi-journal"></i>Close Case </a></li>
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="CloseCase" asp-route-id="@item.Requestid.Encode()" asp-controller="SubmitForm"><i class="px-2 bi bi-journal"></i>Close Case </a></li>
                                         }
                                         @if (Status == 3 || Status == 4 || Status == 5)
                                         {
-                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewOrder" asp-route-id="@item.Requestid" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
-                                            <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid" asp-action="Encounter" asp-controller="SubmitForm"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewOrder" asp-route-id="@item.Requestid.Encode()" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid.Encode()" asp-action="Encounter" asp-controller="SubmitForm"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
                                         }
                                         @if (Status > 1)
                                         {
-                                            <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid.Encode()" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
                                         }
                                     </ul>
                                 </div>
@@ -265,6 +266,8 @@
                     <input type="hidden" asp-for="RequestType" />
                     <input type="hidden" asp-for="SearchInput" />
                     <input type="hidden" asp-for="status" />
+                    <input type="hidden" asp-for="IsAscending" />
+                    <input type="hidden" asp-for="SortedColumn" />
 
                 <li class="page-item mx-1 rounded"><button type="submit" class="@(Model.CurrentPage > 1 ? "" : "disabled") dt-paging-button previous page-link" @(Model.CurrentPage > 1 ? "" : "disabled")>‹</button></li>
                    
@@ -281,6 +284,8 @@
                             <input type="hidden" asp-for="SearchInput" />
                             <input type="hidden" asp-for="status" />
                             <input type="hidden" asp-for="CurrentPage" value="@start" />
+                            <input type="hidden" asp-for="IsAscending" />
+                            <input type="hidden" asp-for="SortedColumn" />
                         <li class="page-item mx-1 rounded"><button type="submit" class="@(start == @Model.CurrentPage ? "active" : "") rounded page-link" onclick="pagination(@start)">@start</button></li>
                         </form>
 
@@ -295,7 +300,8 @@
                     <input type="hidden" asp-for="RequestType" />
                     <input type="hidden" asp-for="SearchInput" />
                     <input type="hidden" asp-for="status" />
-
+                    <input type="hidden" asp-for="IsAscending" />
+                    <input type="hidden" asp-for="SortedColumn" />
                 <li class="page-item mx-1 rounded"><button type="submit" class="@(Model.CurrentPage < Model.TotalPages ? "" : "disabled") dt-paging-button previous page-link" @(Model.CurrentPage < Model.TotalPages ? "" : "disabled")>›</button></li>
                    
                 </form>
@@ -304,9 +310,74 @@
     </div>
 </div>
 </div>
+ <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                      asp-action="_SearchResult" asp-controller="AdminDashBoard" novalidate="novalidate">
 
+                    <input type="hidden" asp-for="CurrentPage"  />
+                    <input type="hidden" asp-for="RegionId" />
+                    <input type="hidden" asp-for="RequestType" />
+                    <input type="hidden" asp-for="SearchInput" />
+                    <input type="hidden" asp-for="status" />
+    <input type="hidden" id="isAsc" asp-for="IsAscending" />
+    <input type="hidden" id="sortedcol" asp-for="SortedColumn" />
+    <input type="submit" id="dashbordsubmit" class="d-none" />
+</form>
 <script>
+ 
+    setInitialArrowState();
+    // Function to set initial arrow icon state
+    function setInitialArrowState() {
+        const headers = $('.dashborad-table.Name, .dashborad-table.Requestor, .dashborad-table.Requested, .dashborad-table.Physician ');
 
+            // Add the arrow-down icon to each selected header
+            headers.each(function () {
+                if (!$(this).find('.bi-arrow-up').length) {
+                    $(this).append('<i class="bi bi-arrow-up btn"></i>');
+                }
+                $(this).click(function () {
+                    const orderValues = $(this).attr('data-order').split(' ')[0];
+                    // Call the SetColumValue function passing the array of values
+                    SetColumValue(orderValues);
+                });
+            });
+
+        var modeldata = @Html.Raw(Json.Serialize(Model));
+        var headerss = $('.dashborad-table');
+        headerss.each(function () {
+            var orderValues = $(this).attr('data-order').split(' ')[0];
+            // Check if the current column matches the sorted column in the model
+            if (modeldata.sortedColumn === orderValues) {
+                var icon = $(this).find('i.bi.bi-arrow-up, i.bi.bi-arrow-down');
+                console.log(icon.find('i.bi.bi-arrow-up, i.bi.bi-arrow-down'));
+                // Check if the sorting is ascending or descending
+                if (!modeldata.isAscending) {
+                    // Add the arrow-down icon and remove arrow-up icon
+                    icon.removeClass('bi-arrow-up').addClass('bi-arrow-down');
+                } else {
+                    // Add the arrow-up icon and remove arrow-down icon
+                    icon.removeClass('bi-arrow-down').addClass('bi-arrow-up');
+                }
+            }
+        });
+    }
+
+    function SetColumValue(e) {
+        var modeldata = @Html.Raw(Json.Serialize(Model));
+        if (modeldata.sortedColumn === e) {
+            if (modeldata.isAscending == true) {
+                document.getElementById('isAsc').value = false;
+            }
+            else {
+                document.getElementById('isAsc').value = true;
+            }
+            console.log(document.getElementById('isAsc').value);
+        }
+        else {
+            document.getElementById('sortedcol').value = e;
+            document.getElementById('isAsc').value = true;
+        }
+        $("#dashbordsubmit").click();
+    }
     function myFunctiona() {
         var input, filter, table, tr, td, i, txtValue;
         input = document.getElementById("myInput");
@@ -336,6 +407,8 @@
 </script>
 <script>
     $(function () {
+        
+
         $('.ClearCase').click(function () {
            
 
@@ -418,6 +491,8 @@
     }
   $(document)
         .ready(function () {
+            
+            
             // On dropdown open
             $(document).on('shown.bs.dropdown', function (event) {
                 var dropdown = $(event.target);

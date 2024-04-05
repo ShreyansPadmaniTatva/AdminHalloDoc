@@ -30,7 +30,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        [AdminAuth("Admin,Provider")]
+        [AdminAuth("Admin")]
         #region Physician_Location
         public async Task<IActionResult> PhysicianLocation()
         {
@@ -116,7 +116,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             return RedirectToAction("PhysicianAll");
         }
         #endregion
-
 
         #region SendMessage
         public async Task<IActionResult> SendMessage(string? id, string? email, int? way, string? msg)

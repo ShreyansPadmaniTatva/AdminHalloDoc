@@ -1,9 +1,12 @@
-﻿using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+﻿using AdminHalloDoc.Entities.ViewModel;
+using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
+using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Utilities;
+using Rotativa;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -51,10 +54,10 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region Close_Case
-        public async Task<IActionResult> CloseCase(int? id)
+        public async Task<IActionResult> CloseCase(string? id)
         {
             TempData["Status"] = TempData["Status"];
-            ViewDocuments v = await _viewActionRepository.GetDocumentByRequest(id);
+            ViewDocuments v = await _viewActionRepository.GetDocumentByRequest(id.Decode());
             return View("../AdminViews/ViewAction/CloseCase", v);
         }
 
@@ -72,6 +75,57 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         #endregion
 
+        #region Conclude_Care
+        public async Task<IActionResult> ConcludeCare(string? id)
+        {
+            TempData["Status"] = TempData["Status"];
+            ViewDocuments v = await _viewActionRepository.GetDocumentByRequest(id.Decode());
+            return View("../AdminViews/ViewAction/ConcludeCare", v);
+        }
+
+        #region Conclude_Care_Changge
+        public async Task<IActionResult> ConcludeCareChangge(int id)
+        {
+            if (await _viewActionRepository.CloseCase(id))
+            {
+
+                TempData["Status"] = "Close Request Successfully..!";
+            }
+            return RedirectToAction("Index", "AdminDashboard");
+        }
+        #endregion
+
+        #endregion
+
+        #region ChangeNotes
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeNotes(int? RequestID, string? adminnotes, string? physiciannotes)
+        {
+            if (adminnotes != null || physiciannotes != null)
+            {
+                bool result = _viewNotesRepository.PutNotes(adminnotes, physiciannotes, RequestID, CV.ID());
+
+                if (result && await _viewActionRepository.CancelCaseByProvider((int)RequestID))
+                {
+                    TempData["Status"] = "Change Successfully..!";
+                    return Redirect("~/Physician/DashBoard");
+                }
+                else
+                {
+                    TempData["Status"] = "Not Change In Note";
+                    return RedirectToAction("ConcludeCare", new { id = RequestID.Encode() });
+                }
+            }
+            else
+            { 
+                TempData["Status"] = "Please Select one of the note!!";
+                return RedirectToAction("ConcludeCare", new { id = RequestID.Encode() });
+            }
+
+        }
+
+        #endregion
         #region Upadte_Request
         public async Task<IActionResult> UpadteRequest(ViewDocuments viewdocuments)
         {
@@ -85,17 +139,17 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 TempData["Status"] = "Save Successfully..!";
             }
 
-            return RedirectToAction("CloseCase", new { id = viewdocuments.RequestID });
+            return RedirectToAction("CloseCase", new { id = viewdocuments.RequestID.Encode() });
         }
         #endregion
 
         #region Encounter
 
         #region Encounter_View
-        public async Task<IActionResult> Encounter(int id)
+        public async Task<IActionResult> Encounter(string id)
         {
 
-            ViewEncounter v =  _viewActionRepository.GetEncounterDetailsByRequestID(id);
+            ViewEncounter v =  _viewActionRepository.GetEncounterDetailsByRequestID((int)id.Decode());
             return View("../AdminViews/ViewAction/Encounter",v);
         }
         #endregion
@@ -103,9 +157,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         public IActionResult EncounterEdit(ViewEncounter model)
         {
-
-            
-
             bool data = _viewActionRepository.EditEncounterDetails(model, CV.ID());
             if (data)
             {
@@ -118,7 +169,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 TempData["Status"] =  "Encounter Changes Not Saved";
             }
 
-            return RedirectToAction("Encounter", new { id = model.Requesid });
+            return RedirectToAction("Encounter", new { id = model.Requesid.Encode() });
 
         }
 
@@ -132,6 +183,10 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 if (final)
                 {
                     TempData["Status"] = "Case Is Finalized";
+                    if (CV.role() == "Provider")
+                    {
+                        return Redirect("~/Physician/DashBoard");
+                    }
                     return RedirectToAction("Index", "AdminDashboard");
                 }
                 else
@@ -140,17 +195,23 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                     return View("../AdminSite/Action/Encounter", model);
                 }
 
-            }
+            } 
             else
             {
                 TempData["Status"] = "Case Is not Finalized";
                 return View("../AdminSite/Action/Encounter", model);
             }
-
+             
         }
         #endregion
 
-#endregion
+        public IActionResult generatePDF(string id)
+        {
+            var FormDetails = _viewActionRepository.GetEncounterDetailsByRequestID((int)id.Decode());
+            return new ViewAsPdf("../AdminSite/ViewAction/DownLoad", FormDetails) as IActionResult; ;
+        }
+
+        #endregion
 
     }
 }

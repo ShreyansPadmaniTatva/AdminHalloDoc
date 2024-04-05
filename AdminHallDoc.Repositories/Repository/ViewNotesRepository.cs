@@ -125,7 +125,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         #region PutNotes 
 
-        public bool PutNotes(string? adminnotes, string? physiciannotes, int? RequestID)
+        public bool PutNotes(string? adminnotes, string? physiciannotes, int? RequestID, string Id)
         {
             try
             {
@@ -137,6 +137,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
                         notes.Physiciannotes = physiciannotes;
                         notes.Modifieddate = DateTime.Now;
+                        notes.Modifiedby = Id;
 
                         _context.Requestnotes.Update(notes);
                         _context.SaveChangesAsync();
@@ -150,7 +151,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                             Requestid = (int)RequestID,
                             Physiciannotes = physiciannotes,
                             Createddate = DateTime.Now,
-                            Createdby = "001e35a5 - cd12 - 4ec8 - a077 - 95db9d54da0f"
+                            Createdby = Id
                         };
                         _context.Requestnotes.Add(rn);
                         _context.SaveChangesAsync();
@@ -164,6 +165,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
                         notes.Adminnotes = adminnotes;
                         notes.Modifieddate = DateTime.Now;
+                        notes.Modifiedby = Id;
 
                         _context.Requestnotes.Update(notes);
                         _context.SaveChangesAsync();
@@ -176,7 +178,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                             Requestid = (int)RequestID,
                             Adminnotes = adminnotes,
                             Createddate = DateTime.Now,
-                            Createdby = "001e35a5 - cd12 - 4ec8 - a077 - 95db9d54da0f"
+                            Createdby = Id
                         };
                         _context.Requestnotes.Add(rn);
                         _context.SaveChangesAsync();

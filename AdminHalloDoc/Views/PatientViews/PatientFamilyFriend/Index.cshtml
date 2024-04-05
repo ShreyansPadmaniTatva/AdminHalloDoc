@@ -5,7 +5,7 @@
     ViewData["Title"] = "Create Family / friend request";
 }
 @model AdminHalloDoc.Entities.ViewModel.PatientViewModel.ViewPatientFamilyFriend
-<partial name="../_Partial/_PartialConformationModel" />
+<partial name="../../Shared/PatientPanel/_Partial/_PartialConformationModel.cshtml" />
 <div class="justify-content-between d-flex container-fluid my-5 position-relative ">
     <div class="">
         <h1>  Create Family / friend request </h1>
@@ -35,7 +35,7 @@
             <span asp-validation-for="FF_PhoneNumber" class="text-danger"></span>
         </div>
         <div class="col-md-6 form-floating  ">
-            <input asp-for="FF_Email" class="form-control rounded" name="suche" type="email" placeholder=Suchtext autocomplete=off>
+            <input asp-for="FF_Email" class="form-control rounded" name="FF_Email" type="email" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">Your Email </label>
             <span asp-validation-for="FF_Email" class="text-danger"></span>
         </div>
@@ -108,7 +108,7 @@
         <h4 class=" my-4">Upload Photo or Document ( Optional )</h4>
         <div class="col-md-12 form-floating  ">
             <div class="file-upload-wrapper border border-1" data-text="Select your file!">
-                <input asp-for="UploadFile" name="file-upload-field" type="file" class="file-upload-field" value="">
+                <input asp-for="UploadFile" name="UploadFile" type="file" class="file-upload-field" value="">
             </div>
             <span asp-validation-for="UploadFile" class="text-danger"></span>
         </div>

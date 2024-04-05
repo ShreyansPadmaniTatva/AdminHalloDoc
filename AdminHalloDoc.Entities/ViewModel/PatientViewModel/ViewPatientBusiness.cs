@@ -15,7 +15,7 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public string BUP_Email { get; set; }
         public string? BUP_PropertyName { get; set; }
         public string? BUP_CaseNumber { get; set; }
-        public string Id { get; set; } = null!;
+        public string? Id { get; set; } = null!;
         [Required(ErrorMessage = "Symptoms Is Required!")]
         public string Symptoms { get; set; }
         [Required(ErrorMessage = "FirstName Is Required!")]

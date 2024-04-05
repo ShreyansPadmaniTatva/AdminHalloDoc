@@ -60,6 +60,7 @@
                 <div class="text-start my-3 calendar-navigation">
                     <span id="calendar-prev" class="btn btn-info text-white rounded-circle">❮</span>
                     <span class="mx-3"><i class="fa-regular fa-calendar-days"></i></span>
+
                     <span id="calendar-next" class="btn btn-info text-white rounded-circle">❯</span>
                 </div>
             </div>
@@ -90,7 +91,7 @@
         </div>
     </div>
 
-    <div id="monthcontainer" class="calendar-body  calendar-container">
+    <div id="monthcontainer" class="calendar-body ">
         <table class="calendar-table w-100 ">
             <thead>
                 <tr class="calendar-weekdays">
@@ -328,7 +329,7 @@
             }
 
 
-            function GetShiftForMonth(month) {
+            function GetShiftForMonth(month, year) {
                 var regionId = $('#fregion').val();
                 if (regionId === '-1') {
                     regionId = null; // Set regionId to null if the selected value is -1
@@ -336,7 +337,7 @@
                 $.ajax({
                     type: "GET",
                     url: '@Url.Action("GetShiftForMonth", "Scheduling")',
-                    data: { month: month, regionId: regionId },
+                    data: { month: month, regionId: regionId,year:year },
                     dataType: "json",
                     success: function (response) {
                         // Initialize an array to store extracted data
@@ -402,7 +403,7 @@
             let date = new Date();
             let year = date.getFullYear();
             let month = date.getMonth();
-            GetShiftForMonth(month + 1);
+            GetShiftForMonth(month + 1, year);
 
             const day = document.querySelector(".calendar-dates");
             const weekdays = document.querySelector(".calendar-weekdays");
@@ -490,10 +491,11 @@
                                             <div class="${Status.length > 1 ? 'Status-' + Status[1] : ''}" ><a data-form-id="formEdit_UMS"
                                    data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 1 ? ProviderNames[1].shiftid : ''}'
                                            class="js-stkModal-btn ">${ProviderNames.length > 1 ? ProviderNames[1].name : ''}</a></div>
-                                            <div class="${Status.length > 2 ? 'Status-' + Status[2] : ''}"><a data-form-id="formEdit_UMS"
+                                            <div class="${Status.length > 2 ? 'Status-' + Status[2] : ''}">
+                                            <a data-form-id="formEdit_UMS"
                                    data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 2 ? ProviderNames[2].shiftid : ''}'
                                            class="js-stkModal-btn ${Status.length > 2 ? 'Status-' + Status[2] : ''}">${ProviderNames.length > 2 ? ProviderNames[2].name : ''}</a></div>
-                                    <div type="button"  id="${buttonId}" data-bs-toggle="modal" data-bs-target="${ProviderNames.length > 3 ? '#exampleModal' : ''}" data-month="${month}" data-index="${i}" class="${Status.length > 3 ? 'btn btn-info w-100 text-white rounded-0 view-all-btn' : ''}">${ProviderNames.length > 3 ? 'View All' : ''}</div>
+                                    <div type="button"  id="${buttonId}" data-bs-toggle="modal" data-bs-target="${ProviderNames.length > 3 ? '#exampleModal' : ''}" data-month="${month}" data-index="${i}" class="${Status.length > 3 ? 'btn btn-info text-white w-100 text-white rounded-0 view-all-btn' : ''}">${ProviderNames.length > 3 ? 'View All' : ''}</div>
                         </td>`;
                     dayCount++;
                 }
@@ -531,6 +533,9 @@
                 // Populate modal with shift details
                 dayDataArrayfinal.forEach(item => {
                     let shiftDetails = `
+                                   <a data-form-id="formEdit_UMS"
+                                            data-url='@Url.Action("_EditShift", "Scheduling")?id=${item.shiftid}'
+                                            class="js-stkModal-btn text-dark">
                                     <div class="d-flex justify-content-between my-1 p-2 ${'model-Status-' + item.status}" >
                                                     <div >
                                     <div>Physician Name: ${item.physicianName}</div>
@@ -538,11 +543,10 @@
                                     <div>End Time: ${item.endTime}</div>
                                          </div>
                                           <div class="">
-                                    <a data-form-id="formEdit_UMS"
-                                            data-url='@Url.Action("_EditShift", "Scheduling")?id=${item.shiftid}'
-                                            class="js-stkModal-btn btn btn-info">Edit</a>
+                                   
                                          </div>
                                     </div>
+                                    </a>
                                     `;
                     $('.modal-body').append(shiftDetails);
                 });
@@ -574,7 +578,7 @@
                         }
 
                         // Call the manipulate function to update the calendar display
-                        GetShiftForMonth(month + 1);
+                        GetShiftForMonth(month + 1, year);
                     }
 
                 });
@@ -709,11 +713,11 @@
                             timeSlot.colSpan = colspan;
 
                             if (hoursArray[i] === 1) {
-                                timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn fs-5 Status-1">${regionArray[i]}</a>`;
+                                timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn fs-5 Status-1 text-center">${regionArray[i]}</a>`;
                                 timeSlot.classList.add('p-0');
                                 i = endTime;
                             } else if (hoursArray[i] === 0.5) {
-                                timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn fs-5 Status-0">${regionArray[i]}</a>`;
+                                timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn fs-5 Status-0 text-center">${regionArray[i]}</a>`;
                                 timeSlot.classList.add('p-0');
                                 i = endTime;
                                 }
@@ -875,22 +879,15 @@
                                         image.classList.add("img-fluid");
                                         image.classList.add("mx-2");
                                         image.style.height = "50px";
-                                        image.src = '/Upload/Physician/' + providerList[i].id + '/' + providerList[i].photo; // Set the image URL from ProviderData
-                                        image.alt = providerList[i].name; // Set the alt text for accessibility
+                                        image.src = '/Upload/Physician/' + providerList[i].id + '/' + providerList[i].photo; 
+                                        image.alt = providerList[i].name; 
                                         cell.appendChild(image);
-                                        cell.appendChild(document.createTextNode(providerList[i].name)); // Add text content after the image
+                                        cell.appendChild(document.createTextNode(providerList[i].name)); 
 
-                                        // First cell, add some content or leave it empty
-                                        // cell.textContent = ProviderData[i].name; + (i + 1);
                                     } else {
-                                        // Other cells, you can add your content or leave them empty
                                         const currentDate = new Date();
                                         const cellDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + j - 3);
-                                        // cell.textContent = fdweek.getDate() + j - 2;
-                                        //cell.textContent += fdweek.getMonth() + 1;
-                                        //cell.textContent += fdweek.getFullYear();
-                                        //cell.textContent += cellDate;
-                                        // console.log(fdweek);
+                                      
                                         const matchingDates = providerList[i].dayList.filter(item => {
                                             const shiftdate = new Date(item.shiftdate);
                                             return fdweek.getDate() + j - 2 == shiftdate.getDate() && fdweek.getMonth() + 1 == shiftdate.getMonth() + 1 && fdweek.getFullYear() == shiftdate.getFullYear();
@@ -900,14 +897,14 @@
                                             if (matchingDates.length <= 2) {
                                                 matchingDates.forEach((item, index) => {
                                                     cell.classList.add('p-0');
-                                                    cell.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${item.shiftid}" class="mt-1 d-block text-dark js-stkModal-btn w-Status-${item.status}">${item.starttime} - ${item.endtime}</a>`;
+                                                    cell.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${item.shiftid}" class="mt-1 d-block text-dark js-stkModal-btn w-Status-${item.status}">${item.regionname} ${item.starttime} - ${item.endtime}</a>`;
                                                 });
                                             } else {
                                                 let buttonId = `viewAllButton_${i}${j}`;
                                                 for (let i = 0; i < 2; i++) {
                                                     const item = matchingDates[i];
                                                     cell.classList.add('p-0');
-                                                    cell.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${item.shiftid}" class="mt-1 d-block text-dark js-stkModal-btn w-Status-${item.status}">${item.starttime} - ${item.endtime}</a>`;
+                                                    cell.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${item.shiftid}" class="mt-1 d-block text-dark js-stkModal-btn w-Status-${item.status}">${item.regionname} ${item.starttime} - ${item.endtime}</a>`;
                                                 }
                                                 const newdate = new Date(fdweek.getFullYear(), fdweek.getMonth() + 1, fdweek.getDate() + j - 2);
 
@@ -1018,7 +1015,7 @@
                 //  var x = $(this).val(); // Get the selected value of the dropdown
                 //  var month = 1; // Assuming you have the month defined somewhere
                 if (x == 1) {
-                    GetShiftForMonth(month + 1);
+                    GetShiftForMonth(month + 1, year);
                 } else if (x == 2) {
                     getProviderList();
                 } else {

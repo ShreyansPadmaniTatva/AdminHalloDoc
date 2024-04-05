@@ -15,7 +15,7 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         [EmailAddress(ErrorMessage = "Please Enter Valid Email Address!")]
         public string FF_Email { get; set; }
         public string? FF_RelationWithPatient { get; set; }
-        public string Id { get; set; } = null!;
+        public string? Id { get; set; } = null!;
         [Required(ErrorMessage = "Symptoms Is Required!")]
         public string Symptoms { get; set; }
         [Required(ErrorMessage = "FirstName Is Required!")]
@@ -36,7 +36,6 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public string? ZipCode { get; set; }
         public string? RoomSite { get; set; }
         public string? UploadImage { get; set; }
-        [Required(ErrorMessage = "Document Is Required!")]
         public IFormFile? UploadFile { get; set; }
     }
 }

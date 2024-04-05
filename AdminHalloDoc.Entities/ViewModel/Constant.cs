@@ -9,6 +9,17 @@ namespace AdminHalloDoc.Entities.ViewModel
 {
     public class Constant
     {
+        public enum EmailAction
+        {
+            Sendorder = 1, 
+            Request, 
+            SendLink, 
+            SendAgreement, 
+            Forgot, 
+            NewRegistration, 
+            contact
+
+        }
         public string Name { get; set; }
         public enum RequestType
         {
@@ -227,11 +238,11 @@ namespace AdminHalloDoc.Entities.ViewModel
                     },
                     new MenuItem {
                         DbName="Email Log",
-                      Label = "Email Log", Url = "/RoleAccess/UserAccess"
+                      Label = "Email Log", Url = "/Reports/EmailLog"
                     },
                     new MenuItem {
                         DbName="SMS Log",
-                      Label = "SMS Log", Url = "/RoleAccess/Index"
+                      Label = "SMS Log", Url = "/Reports/SMSLog"
                     },
                     new MenuItem {
                         DbName="Patient Record",
@@ -240,7 +251,7 @@ namespace AdminHalloDoc.Entities.ViewModel
                     new MenuItem
                     {
                         DbName="Block History",
-                      Label = "Block History", Url = "/RoleAccess/UserAccess"
+                      Label = "Block History", Url = "/Reports/BlockHistory"
                     }
                   }
               }
@@ -249,26 +260,23 @@ namespace AdminHalloDoc.Entities.ViewModel
 
 
         public static Dictionary<int, List<string>> statusTdHtmlMap = new Dictionary<int, List<string>>
-    {
-           // New
-        { 1, new List<string> { "Name", "Date of Birth", "Requestor", "Requested Date", "Phone" ,"Address", "Notes" ,  "Actions" } }, 
-        // Panding
-        { 2, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name",  "Date Of Service", "Phone" ,"Address", "Notes" , "Actions" } }, 
-        // Active
-        { 3, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name", "Date Of Service", "Phone", "Address", "Notes" , "Actions" } }, 
-        //{ 5, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name", "Date Of Service", "Phone", "Address", "Notes" , "Chat With" , "Actions" } }, 
-        
-        //Conclude
-        { 4, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service", "Phone", "Address" , "Actions" } }, 
+        {
+            { 1, new List<string> { "Name", "Date of Birth", "Requestor", "Requested Date", "Phone" ,"Address", "Notes" ,  "Actions" } }, 
+            { 2, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name",  "Date Of Service", "Phone" ,"Address", "Notes" , "Actions" } }, 
+            { 3, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name", "Date Of Service", "Phone", "Address", "Notes" , "Actions" } }, 
+            { 4, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service", "Phone", "Address" , "Actions" } }, 
+            { 5, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Actions" } }, 
+            { 6, new List<string> { "Name", "Physician Name", "Date Of Service", "Phone" ,"Address" , "Actions" } }
 
-        // to close 
-        { 5, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Actions" } }, 
-       // { 7, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Chat With" , "Actions" } }, 
-        //{ 8, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Chat With" , "Actions" } }, 
+        };
 
-        //un paid
-        { 6, new List<string> { "Name", "Physician Name", "Date Of Service", "Phone" ,"Address" , "Actions" } }
+        public static Dictionary<int, List<string>> PstatusTdHtmlMap = new Dictionary<int, List<string>>
+        {
+            { 1, new List<string> { "Name",  "Phone" ,"Address", "Actions" } },
+            { 2, new List<string> { "Name",  "Phone" ,"Address", "Actions" } },
+            { 3, new List<string> { "Name",  "Phone" ,"Address", "Status", "Actions" } },
+            { 4, new List<string>  { "Name",  "Phone" ,"Address", "Actions" } }
 
-    };
+        };
     }
 }

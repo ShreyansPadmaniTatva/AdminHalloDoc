@@ -13,7 +13,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
     public interface IViewNotesRepository
     {
         Task<ViewNotesModel> GetNotesByRequest(int id);
-        bool PutNotes(string? adminnotes, string? physiciannotes, int? RequestID);
+         bool PutNotes(string? adminnotes, string? physiciannotes, int? RequestID, string Id);
         Task<List<VenderComboBox>> FindVenderByVenderType(int? id);
         Task<ViewOrder> FindVenderByVenderID(int? id);
         Task<List<Healthprofessional>> GetPartnersByProfession(int? regionId);

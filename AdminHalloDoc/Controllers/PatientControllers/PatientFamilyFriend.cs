@@ -3,6 +3,7 @@ using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Models;
+using AdminHalloDoc.Repositories.Patient.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
@@ -12,18 +13,22 @@ namespace AdminHalloDoc.Controllers.PatientControllers
     public class PatientFamilyFriend : Controller
     {
         #region Configuration
-        private readonly ApplicationDbContext _context;
+        private IPatientRequestRepository _patientRequestRepository;
+        public ApplicationDbContext _context;
 
-        public PatientFamilyFriend(ApplicationDbContext context)
+        public PatientFamilyFriend(ApplicationDbContext context, IPatientRequestRepository patientRequestRepository)
         {
+
+            this._patientRequestRepository = patientRequestRepository;
             _context = context;
+
         }
         #endregion
 
         #region Index
         public IActionResult Index()
         {
-            return View();
+            return View("../PatientViews/PatientFamilyFriend/Index");
         }
         #endregion
 
@@ -31,46 +36,13 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         [HttpPost]
         public async Task<IActionResult> Post(ViewPatientFamilyFriend viewdata)
         {
-
-            var Request = new Request();
-            var Requestclient = new Requestclient();
-            if (ModelState.IsValid)
+             if (ModelState.IsValid)
             {
-                Request.Requesttypeid = 3;
-                Request.Status = 1;
-                Request.Firstname = viewdata.FirstName;
-                Request.Lastname = viewdata.LastName;
-                Request.Email = viewdata.Email;
-                Request.Phonenumber = viewdata.PhoneNumber;
-                Request.Isurgentemailsent = new BitArray(1);
-                Request.Createddate = DateTime.Now;
-                _context.Requests.Add(Request);
-                await _context.SaveChangesAsync();
-
-                Requestclient.Requestid = Request.Requestid;
-                Requestclient.Firstname = viewdata.FirstName;
-                Requestclient.Address = viewdata.Street;
-                Requestclient.Lastname = viewdata.LastName;
-                Requestclient.Email = viewdata.Email;
-                Requestclient.Phonenumber = viewdata.PhoneNumber;
-
-                _context.Requestclients.Add(Requestclient);
-                await _context.SaveChangesAsync();
-
-                viewdata.UploadImage = CM.UploadDoc(viewdata.UploadFile, Request.Requestid);
-
-                var requestwisefile = new Requestwisefile
-                {
-                    Requestid = Request.Requestid,
-                    Filename = viewdata.UploadImage,
-                    Createddate = DateTime.Now,
-                };
-                _context.Requestwisefiles.Add(requestwisefile);
-                _context.SaveChanges();
+                bool v = await _patientRequestRepository.PatientFamilyFriend(viewdata);
             }
             else
             {
-                return View("../PatientFamilyFriend/Index", viewdata);
+                return View("../PatientViews/PatientFamilyFriend/Index", viewdata);
             }
 
             return RedirectToAction("Index", "SubmitRequest");

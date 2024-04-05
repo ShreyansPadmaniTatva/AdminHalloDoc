@@ -13,7 +13,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<List<Schedule>> PhysicianAll();
         Task<List<Schedule>> PhysicianByRegion(int? region);
         Task<bool> CreateShift(Schedule s, string AdminID);
-        Task<List<Schedule>> GetShift(int month, int? region);
+        Task<List<Schedule>> GetShift(int year, int month, int? regionId);
         Task<Schedule> GetShiftByShiftdetailId(int Shiftdetailid);
         Task<bool> EditShift(Schedule s, string AdminID);
         Task<bool> UpdateStatusShift(string s, string AdminID);

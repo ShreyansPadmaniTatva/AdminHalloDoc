@@ -21,8 +21,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<ViewActions> GetRequestDetails(int? id);
         Task<bool> TransferToProvider(ViewActions v);
         Task<bool> CancelCase(ViewActions v,string ReasonTag);
+        Task<bool> CancelCaseByProvider(int RequestID);
         Task<bool> BlockCase(ViewActions v);
+        Task<bool> AcceptPhysician(ViewActions v);
         Task<bool> AssignPhysician(ViewActions v);
+        Task<bool> EncounterModel(ViewActions v);
+        Task<bool> TransfertoAdmin(ViewActions v);
         Task<bool> DeleteDocumentByRequest(string ids);
         Task<bool> SendFilEmail(string ids,int Requestid, string SendFilEmail);
         Boolean SendAgreement(ViewActions v);

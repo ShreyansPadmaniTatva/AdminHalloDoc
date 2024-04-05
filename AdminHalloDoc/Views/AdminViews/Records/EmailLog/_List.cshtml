@@ -1,0 +1,153 @@
+﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.RecordsModel
+@using static AdminHalloDoc.Entities.ViewModel.Constant;
+@{
+    var enumData = from RequestType e in Enum.GetValues(typeof(RequestType))
+                   select new
+                   {
+                       ID = (int)e,
+                       Name = e.ToString()
+                   };
+    var i1 = Model.SortedColumn;
+    var J1 = Model.IsAscending;
+}
+
+<div class="table-responsive">
+    <table class="table table-responsive mt-3 p-3 dataTable">
+
+        <thead class=" text-start tablehead">
+            <tr>
+                <th scope="col">Recipient</th>
+                <th scope="col">Action</th>
+                <th scope="col">Role Name</th>
+                <th scope="col">Email</th>
+
+                <th scope="col">Created Date</th>
+                <th scope="col">Send Date</th>
+                <th scope="col">sent </th>
+                <th scope="col">sent Tries </th>
+                <th scope="col">Confirmation Number </th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider mx-5">
+            @foreach (var item in Model.EmailLogList)
+            {
+                <tr>
+                    <td scope="col" class="table-text">@item.Recipient</td>
+                    <td scope="col" class="table-text">@Enum.GetName(typeof(EmailAction), item.Action)</td>
+                    <td scope="col" class="table-text">@Enum.GetName(typeof(AccountType), item.Roleid)</td>
+                    <td scope="col" class="table-text">@item.Emailid</td>
+                    <td scope="col" class="table-text">@item.Createdate</td>
+                    <td scope="col" class="table-text">@item.Sentdate</td>
+                    <td scope="col" class="table-text">YES</td>
+                    <td scope="col" class="table-text">@item.Senttries</td>
+                    <td scope="col" class="table-text">@item.Confirmationnumber</td>
+
+
+                </tr>
+
+            }
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-container d-flex justify-content-end mx-4">
+
+            <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                  asp-action="_SearchResultEmailLog" asp-controller="Reports" novalidate="novalidate">
+
+                <input type="hidden" asp-for="CurrentPage" value="@(Model.CurrentPage-1)" />
+            <li class="page-item mx-1 rounded"><button type="submit" class="@(Model.CurrentPage > 1 ? "" : "disabled") dt-paging-button previous page-link" @(Model.CurrentPage > 1 ? "" : "disabled")>‹</button></li>
+                @foreach (var prop in Model.GetType().GetProperties())
+                {
+                    @(Html.Hidden(prop.Name, prop.GetValue(Model, null)))
+                }
+            </form>
+
+            @{
+                int start;
+                //<li class="page-item"><a class="page-link">&lt;</a></li>
+                @for (start = 1; start <= @Model.TotalPages; start++)
+                {
+                    <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                          asp-action="_SearchResultEmailLog" asp-controller="Reports" novalidate="novalidate">
+
+                        <input type="hidden" asp-for="CurrentPage" value="@start" />
+                    <li class="page-item mx-1 rounded"><button type="submit" class="rounded @(start == @Model.CurrentPage ? "active" : "") page-link">@start</button></li>
+                        @foreach (var prop in Model.GetType().GetProperties())
+                        {
+                            @(Html.Hidden(prop.Name, prop.GetValue(Model, null)))
+                        }
+                    </form>
+
+                }
+                //<li class="page-item"><a class="page-link">&gt;</a></li>
+            }
+
+            <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                  asp-action="_SearchResultEmailLog" asp-controller="Reports" novalidate="novalidate">
+
+                <input type="hidden" asp-for="CurrentPage" value="@(Model.CurrentPage+1)" />
+            <li class="page-item mx-1 rounded"><button type="submit" class="@(Model.CurrentPage < Model.TotalPages ? "" : "disabled") dt-paging-button previous page-link" @(Model.CurrentPage < Model.TotalPages ? "" : "disabled")>›</button></li>
+                @foreach (var prop in Model.GetType().GetProperties())
+                {
+                    @(Html.Hidden(prop.Name, prop.GetValue(Model, null)))
+                }
+            </form>
+        </ul>
+    </nav>
+    <form class="sortingform" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+          asp-action="_SearchResult" asp-controller="Reports" novalidate="novalidate">
+        <input type="hidden" asp-for="SortedColumn" id="sortedcol" />
+        <input type="hidden" asp-for="IsAscending" id="isAsc" />
+        <input asp-for="PageSize" type="hidden" >
+        <input  asp-for="AccountType" type="hidden" >
+        <input  asp-for="ReciverName" type="hidden">
+        <input  asp-for="Email" type="hidden" >
+        <input  asp-for="Startdate" type="hidden" >
+        <input  asp-for="Enddate" type="hidden" >
+        <input type="submit" class="d-none" id="foormsubmit" />
+    </form>
+</div>
+<script>
+    function SetColumValue(e) {
+        var modeldata = @Html.Raw(Json.Serialize(Model));
+        console.log(modeldata)
+        if (modeldata.sortedColumn === e) {
+            if (modeldata.isAscending == true) {
+                document.getElementById('isAsc').value = false;
+            }
+            else {
+                document.getElementById('isAsc').value = true;
+            }
+            console.log(document.getElementById('isAsc').value);
+        }
+        else {
+            document.getElementById('sortedcol').value = e;
+            document.getElementById('isAsc').value = true;
+        }
+
+        $("#foormsubmit").click();
+    }
+    var deleteButtons = document.querySelectorAll('.delete');
+
+    deleteButtons.forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            var form = button.closest('.deleteform');
+            var vendorIdInput = form.querySelector('input[name="venderId"]');
+            var vendorId = vendorIdInput.value;
+
+            Swal.fire({
+                title: "Do you want to delete this partner?",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: "No"
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>

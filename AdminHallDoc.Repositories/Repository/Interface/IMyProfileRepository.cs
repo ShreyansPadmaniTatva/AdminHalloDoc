@@ -15,5 +15,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<bool> EditBillingInfoAsync(ViewAdminProfile vm);
         Task<bool> SaveAdminInfo(ViewAdminProfile vm);
         Task<bool> AdminPost(ViewAdminProfile admindata, string AdminId);
+        bool IsUsernameAvailable(string username);
     }
 }

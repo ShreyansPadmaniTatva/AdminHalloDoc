@@ -20,5 +20,6 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? ReasonTag { get; set; }
         public int? ProviderId { get; set; }
         public int? TransferToProviderId { get; set;}
+        public int? EncounterState { get; set; }
     }
 }

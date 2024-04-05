@@ -252,25 +252,45 @@ padding-left: 1.7rem;
         border-radius: 5px 10px 10px 5px;
         font-weight: 300;
     }
-
-    .file-upload-wrapper-1:before {
-        content: 'Upload';
-        position: absolute;
-        top: 0;
-        right: 0;
-        display: inline-block;
-        height: 55px;
-        background: var(--primary-color);
-        color: #fff;
-        font-weight: 700;
-        z-index: 25;
-        font-size: 16px;
-        line-height: 55px;
-        padding: 0 15px;
-        text-transform: uppercase;
-        pointer-events: none;
-        border-radius: 0 5px 5px 0;
-    }
+.form-control:disabled.file-upload-wrapper-1:after {
+    content: attr(data-text);
+    font-size: 18px;
+    position: absolute;
+    top: 24px;
+    left: 0;
+    background: var(--bs-secondary-bg);
+    padding: 5px 15px;
+    display: block;
+    width: calc(100% - 40px);
+    pointer-events: none;
+    z-index: 20;
+    height: 50px;
+    line-height: 40px;
+    color: var(--bs-body-color);
+    border-radius: 5px 10px 10px 5px;
+    font-weight: 300;
+}
+.bg-disabled {
+    background: var(--bs-secondary-bg);
+}
+.file-upload-wrapper-1:before {
+    content: 'Upload';
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-block;
+    height: 55px;
+    background: var(--primary-color);
+    color: #fff;
+    font-weight: 700;
+    z-index: 25;
+    font-size: 16px;
+    line-height: 55px;
+    padding: 0 15px;
+    text-transform: uppercase;
+    pointer-events: none;
+    border-radius: 0 5px 5px 0;
+}
 
     .file-upload-wrapper-1 input {
         opacity: 0;
@@ -683,7 +703,7 @@ th:nth-child(6) {
     background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+    z-index: 1000;
 }
 
      li a {
@@ -1379,11 +1399,18 @@ li div {
     background-color: #c2f7c2;
     border: 1px solid white;
 }
-
+.model-Status-1:hover {
+    background-color: #9dff9d;
+    border: 1px solid white;
+}
 .model-Status-0 {
     background-color: lightcoral;
     border: 1px solid white;
 }
+    .model-Status-0:hover {
+        background-color: #f47373;
+        border: 1px solid white;
+    }
 .w-Status-1 {
     font-size: 0.9rem;
     color: black !important;

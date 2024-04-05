@@ -16,18 +16,28 @@ using System.Text;
 using System.Threading.Tasks;
 using static AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewAdminProfile;
 using static AdminHalloDoc.Entities.ViewModel.Constant;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using System.Net;
+using Org.BouncyCastle.Utilities.Net;
+using System.Net.Sockets;
+using IPAddress = System.Net.IPAddress;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
     public class PhysicianRepository : IPhysicianRepository
     {
         #region Constructor
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly EmailConfiguration _emailConfig;
         private readonly ApplicationDbContext _context;
-        public PhysicianRepository(ApplicationDbContext context, EmailConfiguration emailConfig)
+        public PhysicianRepository(ApplicationDbContext context, EmailConfiguration emailConfig, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _emailConfig = emailConfig;
+            this.httpContextAccessor = httpContextAccessor;
         }
         #endregion
 
@@ -67,7 +77,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         public async Task<List<Physicians>> PhysicianAll()
         {
 
-
+            var currentDateTime = DateTime.Now;
+            TimeOnly currentTimeOfDay = TimeOnly.FromDateTime(DateTime.Now);
             List<Physicians> pl = await (from r in _context.Physicians
                                          join Notifications in _context.Physiciannotifications
                                          on r.Physicianid equals Notifications.Physicianid into aspGroup
@@ -91,9 +102,17 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                             notification = nof.Isnotificationstopped,
                                             role = roles.Name,
                                             Status = r.Status,
-                                            Email = r.Email
+                                            Email = r.Email,
+                                           onCallStatus = (from s in _context.Shifts
+                                                          join sd in _context.Shiftdetails on s.Shiftid equals sd.Shiftid into sdGroup
+                                                          where s.Physicianid == r.Physicianid
+                                                          from shiftDetail in sdGroup.Where(sd => sd.Shiftdate.Date == currentDateTime.Date &&
+                                                                                                    s.Physicianid == r.Physicianid &&
+                                                                                                   sd.Starttime <= currentTimeOfDay &&
+                                                                                                   currentTimeOfDay <= sd.Endtime)
+                                                          select shiftDetail).FirstOrDefault() == null ? 0:1 
 
-                                        })
+        })
                                         .ToListAsync();
 
             return pl;
@@ -137,7 +156,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                              Lastname = r.Lastname,
                                              notification = nof.Isnotificationstopped,
                                              role = roles.Name,
-                                             Status = r.Status
+                                             Status = r.Status,
+                                             
 
                                          })
                                         .ToListAsync();
@@ -216,7 +236,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     var aspnetuserroles = new Aspnetuserrole();
                     aspnetuserroles.Userid = Aspnetuser.Id;
                     aspnetuserroles.Roleid = "Provider";
-                    _context.Aspnetusers.Add(Aspnetuser);
+                    _context.Aspnetuserroles.Add(aspnetuserroles);
                     _context.SaveChanges();
 
                     // Physician
@@ -743,6 +763,149 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #endregion
+
+        #region GetLocation
+
+        public async Task<bool> GetLocation(int PhysicianId)
+        {
+            try
+            {
+                // Retrieve physician location data
+                Physicianlocation dataForChange = await _context.Physicianlocations
+                    .Where(w => w.Physicianid == PhysicianId)
+                    .FirstOrDefaultAsync();
+
+                if (dataForChange == null)
+                {
+                    // Create a new Physicianlocation entity
+                    Physicianlocation physicianLocation = new Physicianlocation
+                    {
+                        Physicianid = PhysicianId,
+                        Createddate = DateTime.Now,
+                        Physicianname = await _context.Physicians.Where(r => r.Physicianid == PhysicianId).Select(r => r.Firstname+" " + r.Lastname).FirstOrDefaultAsync()
+                    };
+                    string userIpAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
+
+                    // Get current location
+                    var location = await GetCurrentLocationAsync();
+                    physicianLocation.Latitude = location.latitude;
+                    physicianLocation.Longitude = location.longitude;
+                    physicianLocation.Address = await ReverseGeocodeAsync(location.latitude, location.longitude);
+
+                    // Add new Physicianlocation entity to the context
+                    await _context.Physicianlocations.AddAsync(physicianLocation);
+                }
+                else
+                {
+                    // Update existing Physicianlocation entity
+                    dataForChange.Createddate = DateTime.Now;
+                    var location = await GetCurrentLocationAsync();
+                    dataForChange.Latitude = location.latitude;
+                    dataForChange.Longitude = location.longitude;
+                    dataForChange.Address = await ReverseGeocodeAsync(location.latitude, location.longitude);
+                     _context.Physicianlocations.Update(dataForChange);
+                }
+
+                // Save changes asynchronously
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                // Optionally handle or log the exception
+                return false;
+            }
+        }
+
+
+        #endregion
+
+        public async Task<string> ReverseGeocodeAsync(decimal latitude, decimal longitude)
+        {
+            // Construct the request URL
+            string apiUrl = $"https://api.geoapify.com/v1/geocode/reverse?lat={latitude}&lon={longitude}&apiKey=5298b1dffb174ceb9d9d36e999e692aa";
+
+            // Create an instance of HttpClient
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    // Send the GET request
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                    // Check if the response is successful
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Read the response content as a string
+                        string responseBody = await response.Content.ReadAsStringAsync();
+
+                        // Parse the JSON response
+                        JObject jsonObject = JObject.Parse(responseBody);
+
+                        // Get the address components
+                        string village = jsonObject["features"][0]["properties"]["village"].ToString();
+                        string city = jsonObject["features"][0]["properties"]["city"].ToString();
+                        string stateDistrict = jsonObject["features"][0]["properties"]["state_district"].ToString();
+                        string state = jsonObject["features"][0]["properties"]["state"].ToString();
+                        string country = jsonObject["features"][0]["properties"]["country"].ToString();
+                        string postcode = jsonObject["features"][0]["properties"]["postcode"].ToString();
+
+                        // Format the address
+                        string address = $"{village}, {city}, {stateDistrict}, {state}, {country} - {postcode}";
+
+
+                        return address;
+                    }
+                    else
+                    {
+                        // Return null or throw an exception indicating failure
+                        return null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Return null or throw an exception indicating failure
+                    return null;
+                }
+            }
+        }
+
+        public async Task<(decimal latitude, decimal longitude)> GetCurrentLocationAsync()
+        {
+            string ApiKey = "2406fdcc45914a29aec70a55c70225bc";
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string apiUrl = $"https://ipgeolocation.abstractapi.com/v1/?api_key={ApiKey}";
+
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+                    response.EnsureSuccessStatusCode(); 
+
+                    string responseBody =await  response.Content.ReadAsStringAsync();
+                    // Parse the JSON response
+                    JObject jsonResponse = JObject.Parse(responseBody);
+
+                    // Get the latitude and longitude values
+                    decimal latitude = jsonResponse["latitude"].Value<decimal>();
+                    decimal longitude = jsonResponse["longitude"].Value<decimal>();
+
+                    return (latitude, longitude);
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                Console.WriteLine($"Error fetching location: {ex.Message}");
+                return (0, 0); // Default values
+            }
+
+            
+            return (0, 0);
+        }
 
     }
 }

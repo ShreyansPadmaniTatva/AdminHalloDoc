@@ -290,5 +290,14 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         #endregion
 
+        public IActionResult CheckUsernameAvailability(string username)
+        {
+            
+            return Json(new
+            {
+               
+                Message = _myProfileRepository.IsUsernameAvailable(username)
+        });
+        }
     }
 }

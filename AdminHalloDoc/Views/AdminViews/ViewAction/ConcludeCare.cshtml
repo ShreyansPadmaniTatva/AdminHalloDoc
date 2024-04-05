@@ -1,0 +1,143 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDocuments
+@{
+    var status = "null";
+    if (TempData["Status"] == null)
+    {
+        status = "null";
+    }
+    else
+    {
+        status = TempData["Status"].ToString();
+
+    }
+}
+<div class="container">
+    <div class="card bg-transparent border-0 " style="border-radius: 15px;">
+        <div class="card-header d-flex justify-content-between  border-0  bg-transparent  mb-2">
+            <div class="text-start">
+                <h3 class="mt-2 fw-bolder"> Conclude Care</h3>
+            </div>
+            <div class="text-end">
+                <a onclick="history.back()" class="btn btn-outline-info btn-back text-end">
+                    ❮ Back
+                </a>
+            </div>
+        </div>
+        <div class="card-body bg-white m-1 shadow" style="border-radius: 15px;">
+            <div class="">Patient Name</div>
+            <h3 class="doc-text-card text-info fw-bold">@Model.Firstanme  @Model.Lastanme <span class="text-dark" >   </span></h3>
+           
+            <div class="col-md-12 mt-2">
+
+
+                <div class="card-header-2 mt-3 d-flex justify-content-between  border-0  bg-transparent ">
+                    <div class="mt-1">
+                        <h5> Enciunter Form</h5>
+                    </div>
+                    <div class="btn btn-info text-white ">
+                        <i class="bi bi-upload" ></i>
+                        Upload
+                    </div>
+                </div>
+                <div class="table-responsive mt-2 ">
+                    <table class="table">
+                        <thead class="border-0">
+                            <tr class="table-secondary">
+                               
+                                <th scope="col" class="table-text-header px-3"></th>
+
+                                <th scope="col" class="table-text-header ">uplode date</th>
+                                <th scope="col" class="table-text-header ">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item2 in Model.documentslist)
+                            {
+                                <tr>
+                                    <td class="table-text  px-3 flnamae"> <span> @item2.Filename </span></td>
+                                    <td class="table-text  px-3">@item2.Createddate</td>
+
+                                    <td class="table-text text-center ">
+                                        <a class="btn btn-sm  btn-outline-info document-button" download href="@item2.Filename.Replace("~","")">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                                 class="bi bi-arrow-down-circle mx-1" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                      d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z" />
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <form asp-action="ChangeNotes" asp-controller="SubmitForm" class="row g-3 " enctype="multipart/form-data">
+                <h4 class=" my-4">Provider Notes</h4>
+                <input value="@Model.RequestID" name="RequestID" type="hidden">
+
+               
+               
+                <div class="col-md-12 form-floating ">
+                     <textarea id="changenote"  class="form-control rounded "  name="physiciannotes" type="text" rows="4" cols="50" placeholder=Suchtext autocomplete=off></textarea>
+                     <label id="notedata" for="Symptoms">  Provider Notes </label>
+                     <span  class="text-danger"></span>
+                </div>
+                <div class=" col-md-12 text-end my-5">
+                    
+                    <input id="submit" type="submit" class="btn btn-info text-white p-2" value="Conclude Care">
+                </div>
+
+
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+
+    function toggleFormElements(bDisabled) {
+        var phone = document.getElementById("phone");
+        var email = document.getElementById("email");
+
+        var submit = document.getElementById("submit");
+        var editprofile = document.getElementById("editprofile");
+        var closecase = document.getElementById("closecase");
+        var cancel = document.getElementById("cancel");
+
+        phone.disabled = !phone.disabled;
+        email.disabled = !email.disabled;
+      
+        if (phone.disabled) {
+            submit.style.display = "none";
+            cancel.style.display = "none";
+            closecase.style.display = "inline-block";
+            editprofile.style.display = "inline-block";
+        } else {
+            submit.style.display = "inline-block";
+            cancel.style.display = "inline-block";
+            closecase.style.display = "none";
+            editprofile.style.display = "none";
+        }
+    }
+    window.onload = function (e) {
+        console.log(5);
+        toggleFormElements('true');
+
+       
+
+            if ("@status" != "null") {
+                savealt("@status");
+            }
+       
+    }
+
+</script>

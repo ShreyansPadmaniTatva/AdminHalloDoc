@@ -16,60 +16,40 @@
 
         <thead class=" text-start tablehead">
             <tr>
-                <th scope="col">Patient Name</th>
-                <th scope="col">Requestor</th>
-                <th scope="col">Date Of service</th>
-                <th scope="col" class="position-relative dt-orderable-asc dt-orderable-desc @(i1 == "CloseCaseDate" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('CloseCaseDate')">Close Case Date   <span class="dt-column-order"></span></th>
+                <th scope="col">Patient name</th>
+                <th scope="col">Phone Number</th>
                 <th scope="col">Email</th>
-                <th scope="col">Phone number</th>
-                <th scope="col">Address</th>
-                <th scope="col">Zip</th>
-                <th scope="col">Request Status</th>
-                <th scope="col">Physician</th>
-                <th scope="col">Physician Notes </th>
-                <th scope="col">Cancel By Provider Note</th>
-                <th scope="col">Admin Notes</th>
-                <th scope="col">Patient Notes</th>
-                <th scope="col">Delete Permanently</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">Notes</th>
+                <th scope="col">Is Active</th>
+                <th scope="col">Action </th>
+
             </tr>
         </thead>
         <tbody class="table-group-divider mx-5">
-            @foreach (var item in Model.SearchRecordList)
+            @foreach (var item in Model.BlockRequestList)
             {
                 <tr>
                     <td scope="col" class="table-text">@item.PatientName</td>
-                    <td scope="col" class="table-text">@Enum.GetName(typeof(RequestType), item.RequestTypeID)</td>
-                    <td scope="col" class="table-text">@item.DateOfService</td>
-                    @if (item.CloseCaseDate != null)
-                    {
-                        <td scope="col" class="table-text">@item.CloseCaseDate</td>
-                    }
-                    else
-                    {
-                        <td scope="col" class="table-text">-</td>
-                    }
 
+                    <td scope="col" class="table-text">@item.Phonenumber</td>
                     <td scope="col" class="table-text">@item.Email</td>
-                    <td scope="col" class="table-text">@item.PhoneNumber</td>
-                    <td scope="col" class="table-text">@item.Address</td>
-                    <td scope="col" class="table-text">@item.Zip</td>
-                    <td scope="col" class="table-text">@Enum.GetName(typeof(Status), item.Status)</td>
-                    <td scope="col" class="table-text">@item.PhysicianName</td>
-                    <td scope="col" class="table-text">@item.PhysicianNote</td>
-                    @if (item.CancelByProviderNote != "")
-                    {
-                        <td scope="col" class="table-text">@item.CancelByProviderNote</td>
-                    }
-                    else
-                    {
-                        <td scope="col" class="table-text">-</td>
-                    }
-                    <td scope="col" class="table-text">@item.AdminNote</td>
-                    <td scope="col" class="table-text">@item.PatientNote</td>
+                    <td scope="col" class="table-text">@item.Createddate</td>
+                    <td scope="col" class="table-text">@item.Reason</td>
                     <td scope="col" class="table-text">
-                        <button  class="btn btn-sm btn-outline-info  mx-2 ">
-                            Delete
-                        </button>
+                        @{
+                            var check = false;
+                            if (item.Isactive != null)
+                            {
+                                check = item.Isactive[0];
+                            }
+                            <input class="form-check-input form-check-inputs" readonly type="checkbox" onclick="return false;" value="" @(check ? "checked" : "")>
+                        }
+                    </td>
+                    <td scope="col" class="table-text">
+                        <a class="btn btn-sm btn-outline-info" asp-action="UnBlock" asp-controller="Reports" asp-route-RequestId="@item.Requestid">
+                            Unblock
+                        </a>
                     </td>
                 </tr>
 
@@ -80,7 +60,7 @@
         <ul class="pagination pagination-container d-flex justify-content-end mx-4">
 
             <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
-                  asp-action="_SearchResult" asp-controller="Reports" novalidate="novalidate">
+                  asp-action="_SearchResultBlockHistory" asp-controller="Reports" novalidate="novalidate">
 
                 <input type="hidden" asp-for="CurrentPage" value="@(Model.CurrentPage-1)" />
             <li class="page-item mx-1 rounded"><button type="submit" class="@(Model.CurrentPage > 1 ? "" : "disabled") dt-paging-button previous page-link" @(Model.CurrentPage > 1 ? "" : "disabled")>‹</button></li>
@@ -96,7 +76,7 @@
                 @for (start = 1; start <= @Model.TotalPages; start++)
                 {
                     <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
-                          asp-action="_SearchResult" asp-controller="Reports" novalidate="novalidate">
+                          asp-action="_SearchResultBlockHistory" asp-controller="Reports" novalidate="novalidate">
 
                         <input type="hidden" asp-for="CurrentPage" value="@start" />
                     <li class="page-item mx-1 rounded"><button type="submit" class="rounded @(start == @Model.CurrentPage ? "active" : "") page-link">@start</button></li>
@@ -111,7 +91,7 @@
             }
 
             <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
-                  asp-action="_SearchResult" asp-controller="Reports" novalidate="novalidate">
+                  asp-action="_SearchResultBlockHistory" asp-controller="Reports" novalidate="novalidate">
 
                 <input type="hidden" asp-for="CurrentPage" value="@(Model.CurrentPage+1)" />
             <li class="page-item mx-1 rounded"><button type="submit" class="@(Model.CurrentPage < Model.TotalPages ? "" : "disabled") dt-paging-button previous page-link" @(Model.CurrentPage < Model.TotalPages ? "" : "disabled")>›</button></li>
@@ -123,18 +103,13 @@
         </ul>
     </nav>
     <form class="sortingform" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
-          asp-action="_SearchResult" asp-controller="Reports" novalidate="novalidate">
+          asp-action="_SearchResultBlockHistory" asp-controller="Reports" novalidate="novalidate">
         <input type="hidden" asp-for="SortedColumn" id="sortedcol" />
         <input type="hidden" asp-for="IsAscending" id="isAsc" />
         <input asp-for="PageSize" type="hidden" >
-        <input  asp-for="SearchInput" type="hidden" >
-        <input asp-for="RegionId" type="hidden" >
-        <input  asp-for="RequestType" type="hidden" >
-        <input  asp-for="Status" type="hidden">
-        <input  asp-for="Physicianname" type="hidden" >
+        <input  asp-for="AccountType" type="hidden" >
+        <input  asp-for="ReciverName" type="hidden">
         <input  asp-for="Email" type="hidden" >
-        <input  asp-for="Phonenumber" type="hidden">
-        <input  asp-for="Patientname" type="hidden" >
         <input  asp-for="Startdate" type="hidden" >
         <input  asp-for="Enddate" type="hidden" >
         <input type="submit" class="d-none" id="foormsubmit" />

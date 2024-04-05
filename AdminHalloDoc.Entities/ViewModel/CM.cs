@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace AdminHalloDoc.Entities.ViewModel
 {
-    public class CM
+    public static class CM
     {
         #region UploadFile
         public static string UploadProviderDoc(IFormFile UploadFile, int Physicianid, string FileName)
@@ -67,6 +67,28 @@ namespace AdminHalloDoc.Entities.ViewModel
             return upload_path;
         }
         #endregion
+
+        public static string Encode(this int? userId)
+        {
+            if (userId == null)
+            {
+                throw new ArgumentNullException(nameof(userId), "userId cannot be null");
+            }
+
+            byte[] userIdBytes = BitConverter.GetBytes(userId.Value);
+            return Convert.ToBase64String(userIdBytes);
+        }
+
+        public static int? Decode(this string encodedUserId)
+        {
+            if (string.IsNullOrEmpty(encodedUserId))
+            {
+                throw new ArgumentNullException(nameof(encodedUserId), "encodedUserId cannot be null or empty");
+            }
+
+            byte[] userIdBytes = Convert.FromBase64String(encodedUserId);
+            return BitConverter.ToInt32(userIdBytes, 0);
+        }
 
     }
 }

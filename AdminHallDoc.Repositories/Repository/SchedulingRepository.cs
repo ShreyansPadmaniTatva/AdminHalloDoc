@@ -334,12 +334,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region GetShift_For_Month
-        public async Task<List<Schedule>> GetShift(int month,int? regionId)
+        public async Task<List<Schedule>> GetShift(int year,int month,int? regionId)
         {
             List<Schedule> ScheduleDetails = new List<Schedule>();
 
             var uniqueDates = await _context.Shiftdetails
-                            .Where(sd => sd.Shiftdate.Month == month && sd.Isdeleted == new BitArray(1) && (regionId == null || regionId == -1 || sd.Regionid == regionId)) // Filter by month if needed
+                            .Where(sd => sd.Shiftdate.Month == month && sd.Shiftdate.Year == year && sd.Isdeleted == new BitArray(1) && (regionId == null || regionId == -1 || sd.Regionid == regionId)) // Filter by month if needed
                             .Select(sd => sd.Shiftdate.Date) // Select the date part of Shiftdate
                             .Distinct() // Get distinct dates
                             .ToListAsync();

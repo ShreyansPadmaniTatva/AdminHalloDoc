@@ -185,7 +185,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
                 {
                     Aspnetuser U = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == Email);
                     var hasher = new PasswordHasher<string>();
-                    U.Passwordhash = hasher.HashPassword(null, Password); ;
+                    U.Passwordhash = hasher.HashPassword(null, Password); 
                     _context.Update(U);
                     await _context.SaveChangesAsync();
                     ViewData["error"] = "Pass is Upadated";
@@ -212,11 +212,12 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         public async Task<IActionResult> CreatNewAccont(string Email, string Password)
         {
             Guid id = Guid.NewGuid();
+            var hasher = new PasswordHasher<string>();
             Aspnetuser aspnetuser = new Aspnetuser
             {
                 Id = id.ToString(),
                 Email = Email,
-                Passwordhash = Password,
+                Passwordhash = hasher.HashPassword(null, Password),
                 Username = Email
             };
             _context.Aspnetusers.Add(aspnetuser);
@@ -235,6 +236,12 @@ namespace AdminHalloDoc.Controllers.PatientControllers
             _context.Users.Add(User);
             await _context.SaveChangesAsync();
 
+            var aspnetuserroles = new Aspnetuserrole();
+            aspnetuserroles.Userid = User.Aspnetuserid;
+            aspnetuserroles.Roleid = "Patient";
+            _context.Aspnetuserroles.Add(aspnetuserroles);
+            _context.SaveChanges();
+
             var rc = _context.Requestclients.Where(e => e.Email == Email).ToList();
 
             foreach (var r in rc)
@@ -244,9 +251,13 @@ namespace AdminHalloDoc.Controllers.PatientControllers
                    n => n.Userid,
                    n => User.Userid));
             }
-
-            HttpContext.Session.SetString("UserName", aspnetuser.Username.ToString());
-            HttpContext.Session.SetString("UserID", User.Userid.ToString());
+            if(rc.Count > 0)
+            {
+                User.Intdate = rc[0].Intdate;
+                User.Intyear = rc[0].Intyear;
+                User.Strmonth = rc[0].Strmonth;
+                _context.Users.Update(User);
+            }
 
             return RedirectToAction("Index", "Dashboard");
         }

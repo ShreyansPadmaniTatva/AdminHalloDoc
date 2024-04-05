@@ -1,5 +1,6 @@
 ﻿using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Twilio.Types;
+using System.Diagnostics.Metrics;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -33,7 +35,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 TempData["Status"] = "Update Data Successfully..!";
             }
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-            return RedirectToAction("Viewcase", "AdminDashboard", new { id = viewcase.RequesClientid});
+            return RedirectToAction("Viewcase", "AdminDashboard", new { id = viewcase.RequesClientid.Encode()});
         }
         #endregion
 
@@ -50,15 +52,15 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region UploadDoc_Files
-        public IActionResult UploadDoc(int Requestid, IFormFile file)
+        public IActionResult UploadDoc(int? Requestid, IFormFile file)
         {
 
-            if (_viewActionRepository.SaveDoc(Requestid, file))
+            if (_viewActionRepository.SaveDoc((int)Requestid, file))
             {
 
                 TempData["Status"] = "Upload File Successfully..!";
             }
-            return RedirectToAction("ViewUpload", "AdminDashboard", new { id = Requestid });
+            return RedirectToAction("ViewUpload", "AdminDashboard", new { id = Requestid.Encode() });
         }
         #endregion
 
@@ -73,6 +75,83 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
             return RedirectToAction("Index", "AdminDashboard");
         }
+        #endregion
+
+        #region _EncounterModel
+        public async Task<IActionResult> _EncounterModel(int? requestid)
+        {
+            var v = await _viewActionRepository.GetRequestDetails(requestid);
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            return PartialView("../AdminViews/ViewAction/_models/_encountermodel", v);
+        }
+
+
+        #region _EncounterModelPost
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _EncounterModelPost(ViewActions v, string encounter)
+        {
+            v.EncounterState = Convert.ToInt32(encounter);
+
+            if (await _viewActionRepository.EncounterModel(v))
+            {
+                TempData["Status"] = "Accept Request Successfully..!";
+            }
+
+            return Redirect("~/Physician/DashBoard");
+        }
+        #endregion
+
+        #endregion
+
+        #region _AcceptRequestProvider
+        public async Task<IActionResult> _AcceptRequest(int? requestid)
+        {
+            var v = await _viewActionRepository.GetRequestDetails(requestid);
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            return PartialView("../AdminViews/ViewAction/_models/_acceptrequest", v);
+        }
+
+
+        #region _AcceptRequestProviderPost
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _AcceptRequestPost(ViewActions v)
+        {
+            if (await _viewActionRepository.AcceptPhysician(v))
+            {
+                TempData["Status"] = "Accept Request Successfully..!";
+            }
+
+            return Redirect("~/Physician/DashBoard");
+        }
+        #endregion
+
+        #endregion
+
+        #region _TransfertoAdmin
+        public async Task<IActionResult> _TransfertoAdmin(int? requestid)
+        {
+            var v = await _viewActionRepository.GetRequestDetails(requestid);
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            return PartialView("../AdminViews/ViewAction/_models/_transfertoadmin", v);
+        }
+
+
+        #region __TransfertoAdminPost
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _TransfertoAdminPost(ViewActions v)
+        {
+            if (await _viewActionRepository.TransfertoAdmin(v))
+            {
+                TempData["Status"] = "Accept Request Successfully..!";
+            }
+
+            return Redirect("~/Physician/DashBoard");
+        }
+        #endregion
+
         #endregion
 
         #region _TransferToProvider
@@ -195,39 +274,41 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region DeleteOnesFile
-        public async Task<IActionResult> DeleteFile(int? id,int Requestid)
+        public async Task<IActionResult> DeleteFile(int? id,int? Requestid)
         {
             if (await _viewActionRepository.DeleteDocumentByRequest(id.ToString()))
             {
 
                 TempData["Status"] = "Delete File Successfully..!";
             }
-            return RedirectToAction("ViewUpload", "AdminDashboard", new { id = Requestid });
+            return RedirectToAction("ViewUpload", "AdminDashboard", new { id = Requestid.Encode() });
         }
         #endregion
 
         #region AllFilesDelete
-        public async Task<IActionResult> AllFilesDelete(string deleteids, int Requestid)
+        public async Task<IActionResult> AllFilesDelete(string deleteids, int? Requestid)
         {
             if (await _viewActionRepository.DeleteDocumentByRequest(deleteids))
             {
 
                 TempData["Status"] = "Delete File Successfully..!";
             }
-            return RedirectToAction("ViewUpload", "AdminDashboard", new { id = Requestid });
+            return RedirectToAction("ViewUpload", "AdminDashboard", new { id = Requestid.Encode() });
         }
         #endregion
 
         #region SendFilEmail
-        public async Task<IActionResult> SendFilEmail(string mailids, int Requestid, string email)
+        public async Task<IActionResult> SendFilEmail(string mailids, int? Requestid, string email)
         {
-            if(await _viewActionRepository.SendFilEmail(mailids, Requestid , email))
+            if(await _viewActionRepository.SendFilEmail(mailids, (int)Requestid , email))
             {
 
                 TempData["Status"] = "Send File in Mail Successfully..!";
             }
-            return RedirectToAction("ViewUpload", "AdminDashboard", new { id = Requestid });
+            return RedirectToAction("ViewUpload", "AdminDashboard", new { id = Requestid.Encode() });
         }
         #endregion
+
+
     }
 }

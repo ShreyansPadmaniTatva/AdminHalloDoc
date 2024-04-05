@@ -12,6 +12,9 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         //Search Record
         public List<ViewSearchRecord>? SearchRecordList { get; set; }
         public List<User>? PatientHistorybList { get; set; }
+        public List<Emaillogdata>? EmailLogList { get; set; }
+        public List<SMSLogsData>? SMSLogList { get; set; }
+        public List<BlockRequestData>? BlockRequestList { get; set; }
 
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; } = 1;
@@ -36,5 +39,9 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         //Patient Record
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+
+        //Email Logs
+        public int? AccountType { get; set; }
+        public string? ReciverName { get; set; }
     }
 }

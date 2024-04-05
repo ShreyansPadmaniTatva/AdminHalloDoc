@@ -16,6 +16,7 @@ $(document).ready(function () {
     });
 });
 $(function () {
+    $('#staticBackdrop').modal('show');
     $(".t-tab").click(function () {
         $('#requeststatus').val(this.value);
         $('.exerequeststatus').val(this.value);

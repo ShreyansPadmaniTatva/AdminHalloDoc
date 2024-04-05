@@ -126,6 +126,31 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         RequestorPhoneNumber = req.Phonenumber
                     }).ToListAsync();
 
+            if (data.SortedColumn != null)
+            {
+                if (data.IsAscending == true)
+            {
+                allData = data.SortedColumn switch
+                {
+                    "Name" => allData.OrderBy(x => x.PatientName).ToList(),
+                    "Requestor" => allData.OrderBy(x => x.Physician).ToList(),
+                    "Requested" => allData.OrderBy(x => x.RequestedDate).ToList(),
+                    "Physician" => allData.OrderBy(x => x.Physician).ToList()
+                };
+            }
+            else
+            {
+                allData = data.SortedColumn switch
+                {
+                    "Name" => allData.OrderByDescending(x => x.PatientName).ToList(),
+                    "Requestor" => allData.OrderByDescending(x => x.Physician).ToList(),
+                    "Requested" => allData.OrderByDescending(x => x.RequestedDate).ToList(),
+                    "Physician" => allData.OrderByDescending(x => x.Physician).ToList()
+                };
+            }
+            }
+            
+
             int totalItemCount = allData.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
             
@@ -141,8 +166,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 CurrentPage = data.CurrentPage,
                 TotalPages = totalPages,
                 PageSize = 10,
-                SearchInput = data.SearchInput
-            };
+                SearchInput = data.SearchInput,
+                SortedColumn = data.SortedColumn,
+                IsAscending = data.IsAscending
+        };
             return paginatedViewModel;
         }
 

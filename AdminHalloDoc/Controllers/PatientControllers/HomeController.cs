@@ -25,7 +25,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         public IActionResult Index()
         {
             
-           return View();
+           return View("../PatientViews/Home/Index");
         }
         #endregion
 

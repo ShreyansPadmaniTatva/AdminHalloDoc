@@ -6,7 +6,6 @@ using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 namespace AdminHalloDoc.Controllers.Login
 {
 
@@ -17,12 +16,14 @@ namespace AdminHalloDoc.Controllers.Login
         private readonly ApplicationDbContext _context;
         private readonly ILoginRepository _loginRepository;
         private readonly IJwtService _jwtService;
-        public AdminLoginController(ApplicationDbContext context, EmailConfiguration emailConfig, ILoginRepository loginRepository, IJwtService jwtService)
+        private readonly IPhysicianRepository _physicianRepository;
+        public AdminLoginController(ApplicationDbContext context, EmailConfiguration emailConfig, ILoginRepository loginRepository, IJwtService jwtService, IPhysicianRepository physicianRepository)
         {
             _context = context;
             _emailConfig = emailConfig;
             _loginRepository = loginRepository;
             _jwtService = jwtService;
+            _physicianRepository = physicianRepository;
         }
         #endregion
         public IActionResult Index()
@@ -34,7 +35,7 @@ namespace AdminHalloDoc.Controllers.Login
             return View();
         }
 
-        #region Start_session
+        #region Start_Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckAccessLogin(Aspnetuser aspNetUser)
@@ -54,6 +55,7 @@ namespace AdminHalloDoc.Controllers.Login
                 }
                 else if (admin.Role == "Provider")
                 {
+                    await _physicianRepository.GetLocation(admin.UserId);
                     return Redirect("~/Physician/DashBoard");
                 }
                 
@@ -71,7 +73,7 @@ namespace AdminHalloDoc.Controllers.Login
         }
         #endregion
 
-        #region Start_session
+        #region Logout
         public async Task<IActionResult> Logout()
         {
             Response.Cookies.Delete("jwt");
