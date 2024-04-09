@@ -7,8 +7,9 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
     {
         [Required(ErrorMessage = "Symptoms is required")]
         public string Symptoms { get; set; }
-        [Required(ErrorMessage = "Name is required")]
-        [MaxLength(12)]
+        [Required(ErrorMessage = "First Name is required")]
+        [StringLength(100)]
+        [RegularExpression(@"^(?!\s+$).+", ErrorMessage = "Enter a valid Name")]
         public string FirstName { get; set; }
 
         public int? UserId { get; set; }
@@ -16,7 +17,9 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public string? UserName { get; set; }
 
         public string? PassWord { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Last Name is required")]
+        [StringLength(100)]
+        [RegularExpression(@"^(?!\s+$).+", ErrorMessage = "Enter a valid Name")]
         public string LastName { get; set; }
         [Required]
         public DateTime BirthDate { get; set; }
@@ -28,11 +31,16 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public string PhoneNumber { get; set; }
         [Required]
         public string Street { get; set; }
-        [Required]
+       
+        [Required(ErrorMessage = "City is required")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Enter valid City")]
+        [RegularExpression(@"^(?=.*\S)[a-zA-Z\s.'-]+$", ErrorMessage = "Enter a valid city name")]
         public string City { get; set; }
         [Required]
         public string State { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Zip Code is required")]
+        [StringLength(10, ErrorMessage = "Enter valid Zip Code")]
+        [RegularExpression(@"^\d{6}$", ErrorMessage = "Enter a valid 6-digit zip code")]
         public string ZipCode { get; set; }
         [Required]
         public string RoomSite { get; set; }

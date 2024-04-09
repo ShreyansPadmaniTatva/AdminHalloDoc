@@ -16,7 +16,7 @@
 
         <div class="form-group row my-3">
             <div class="col-md-12">
-                <textarea class="form-control rounded" asp-for="Notes" cols="50" type="text" rows="5" placeholder=Symptoms autocomplete=off></textarea>
+                <textarea class="form-control rounded" asp-for="Notes" cols="50" type="text" rows="5" placeholder=Symptoms autocomplete=off aria-describedby="inputGroupPrepend" required></textarea>
 
 
             </div>
@@ -24,7 +24,7 @@
         <hr class="form-button-divider" />
         <div class="row">
             <div class="offset-md-4 col-md-8">
-                <input type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" />
+                <input type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" data-check-before-submit="validateForm()" />
                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>

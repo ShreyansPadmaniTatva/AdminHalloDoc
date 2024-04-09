@@ -70,15 +70,15 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                         PatientName = req.Firstname + " " + req.Lastname,
                                                         RequestID = req.Requestid,
                                                         DateOfService = req.Createddate,
-                                                        PhoneNumber = rc.Phonenumber ?? "",
-                                                        Email = rc.Email ?? "",
+                                                        PhoneNumber = rc.Phonenumber ?? "-",
+                                                        Email = rc.Email ?? "-",
                                                         Address = rc.Address + "," + rc.City + " " + rc.Zipcode,
                                                         RequestTypeID = req.Requesttypeid,
                                                         Status = req.Status,
-                                                        PhysicianName = p.Firstname + " " + p.Lastname ?? "",
-                                                        AdminNote = nt != null ? nt.Adminnotes ?? "" : "",
-                                                        PhysicianNote = nt != null ? nt.Physiciannotes ?? "" : "",
-                                                        PatientNote = rc.Notes ?? ""
+                                                        PhysicianName = p.Firstname + " " + p.Lastname ?? "-",
+                                                        AdminNote = nt != null ? nt.Adminnotes ?? "-" : "-",
+                                                        PhysicianNote = nt != null ? nt.Physiciannotes ?? "-" : "-",
+                                                        PatientNote = rc.Notes ?? "-"
                                                     }).ToList();
 
 

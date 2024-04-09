@@ -34,7 +34,10 @@
         <div class="d-flex justify-content-between" >
             <div class="text-start mx-2 px-3">
                 <div class="dropdown ">
-                    <select class="form-select form-select-md " data-allow-clear="true" tabindex="-1" id="accounttype" onchange="ChangeRole()" asp-items="@(new SelectList(enumData,"ID","Name"))" data-control="select2" data-placeholder="Select Level">
+                    <select class="form-select form-select-md " data-allow-clear="true" tabindex="-1" id="accounttype" onchange="ChangeRole()" data-control="select2" data-placeholder="Select Level">
+                        <option value="1">All</option>
+                        <option value="2">Admin</option>
+                        <option value="3">Physician</option>
                     </select>
                 </div>
             </div>

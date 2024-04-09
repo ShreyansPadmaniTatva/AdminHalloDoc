@@ -17,8 +17,8 @@ using System.Net;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using static AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDocuments;
-using Request = Org.BouncyCastle.Asn1.Ocsp.Request;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -35,6 +35,38 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             _emailConfig = emailConfig;
         }
         #endregion
+
+        public int GetCountOfTodayRequests()
+        {
+            var currentDate = DateTime.Now.Date;
+
+            return _context.Requests.Where(u => u.Createddate.Date == currentDate).Count();
+        }
+
+        public string GetConfirmationNumber(string state, string lastname, string firstname)
+        {
+            state = (state.Length >= 2) ? state.Substring(0, 2).ToUpperInvariant() : state.PadRight(2, 'X');
+            lastname = (lastname.Length >= 2) ? lastname.Substring(0, 2).ToUpperInvariant() : lastname.PadRight(2, 'X');
+            firstname = (firstname.Length >= 2) ? firstname.Substring(0, 2).ToUpperInvariant() : firstname.PadRight(2, 'X');
+
+
+            string Region = state.Substring(0, 2).ToUpperInvariant();
+
+            string NameAbbr = lastname.Substring(0, 2).ToUpperInvariant() + firstname.Substring(0, 2).ToUpperInvariant();
+
+            DateTime requestDateTime = DateTime.Now;
+
+            string datePart = requestDateTime.ToString("ddMMyy");
+
+            int requestsCount = GetCountOfTodayRequests() + 1;
+
+            string newRequestCount = requestsCount.ToString("D4");
+
+            string ConfirmationNumber = Region + datePart + NameAbbr + newRequestCount;
+
+            return ConfirmationNumber;
+
+        }
 
         #region GetDocumentByRequest
         public async Task<ViewDocuments> GetDocumentByRequest(int? id)
@@ -229,7 +261,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 rsl.Requestid = RequestId;
                 rsl.Physicianid = ProviderId;
                 rsl.Notes = notes;
-                rsl.Createddate = DateTime.Now;
+            rsl.Createddate = DateTime.Now;
                 rsl.Status = 1;
                 _context.Requeststatuslogs.Update(rsl);
                 _context.SaveChanges();
@@ -245,7 +277,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
 
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == v.RequestID);
-            request.Physicianid = v.ProviderId;
+            request.Physicianid = v.TransferToProviderId;
             _context.Requests.Update(request);
             _context.SaveChanges();
 
@@ -254,8 +286,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             rsl.Physicianid = v.ProviderId;
             rsl.Transtophysicianid = v.TransferToProviderId;
             rsl.Notes = v.Notes;
+            rsl.Adminid = v.AdminId;
+
             rsl.Createddate = DateTime.Now;
-            rsl.Status = 2;
+            rsl.Status = 1;
             _context.Requeststatuslogs.Update(rsl);
             _context.SaveChanges();
 
@@ -393,6 +427,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             rsl.Notes = v.Notes;
             rsl.Createddate = DateTime.Now;
             rsl.Status = 1;
+            rsl.Adminid = v.AdminId;
+
             rsl.Physicianid = v.ProviderId;
             rsl.Transtoadmin = new BitArray(1);
             rsl.Transtoadmin[0] = true;
@@ -418,6 +454,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             rsl.Requestid = (int)v.RequestID;
             rsl.Physicianid = (int)v.ProviderId;
             rsl.Notes = v.Notes;
+            rsl.Adminid = v.AdminId;
             rsl.Createddate = DateTime.Now;
             rsl.Status = (short)v.EncounterState;
             _context.Requeststatuslogs.Update(rsl);
@@ -435,12 +472,15 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == v.RequestID);
              request.Status = 2;
+             request.Accepteddate = DateTime.Now;
             _context.Requests.Update(request);
             _context.SaveChanges();
 
             Requeststatuslog rsl = new Requeststatuslog();
             rsl.Requestid = (int)v.RequestID;
             rsl.Notes = v.Notes;
+            rsl.Adminid = v.AdminId;
+
             rsl.Createddate = DateTime.Now;
             rsl.Status = 2;
             _context.Requeststatuslogs.Update(rsl);
@@ -465,6 +505,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             Requeststatuslog rsl = new Requeststatuslog();
             rsl.Requestid = (int)v.RequestID;
             rsl.Physicianid = v.ProviderId;
+            rsl.Adminid = v.AdminId;
             rsl.Notes = v.Notes;
             rsl.Createddate = DateTime.Now;
             //rsl.Status = 2;
@@ -589,6 +630,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
                     Requeststatuslog rsl = new Requeststatuslog
                     {
+
                         Requestid = RequestID,
                         Status = 9,
                         Createddate = DateTime.Now
@@ -606,8 +648,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         }
         #endregion
-
-
 
         #region Encounter
         public ViewEncounter GetEncounterDetailsByRequestID(int RequestID)
@@ -706,6 +746,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             {
                 Encounterform enc = new Encounterform
                 {
+                    Admin = admindata,
                     Abd = Data.ABD,
                     Encounterformid = (int)Data.EncounterID,
                     Allergies = Data.Allergies,
@@ -843,6 +884,94 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
 
         #endregion
+
+        public bool SubmitCreateRequest(ViewAdminCreateRequest model, string Id)
+        {
+            var admin = _context.Admins.FirstOrDefault(x => x.Aspnetuserid == Id);
+            var region = _context.Regions.FirstOrDefault(x => x.Regionid == model.region);
+            var confirmation = "";
+            string month = model.DateOfBirth.ToString("MMMM", CultureInfo.InvariantCulture);
+            if (region.Name != null)
+            {
+                confirmation = GetConfirmationNumber(region.Name, model.FirstName, model.LastName);
+            }
+            try
+            {
+                Entities.Models.Request request = new Entities.Models.Request
+                {
+                    Requesttypeid = 2,
+                    Userid = admin.Adminid, 
+                    Firstname = model.FirstName,
+                    Lastname = model.LastName,
+                    Email = model.Email,
+                    Phonenumber = model.PhoneNumber,
+                    Status = 1,
+                    Isurgentemailsent = new BitArray(1),
+                    Createddate = DateTime.Now,
+                    Confirmationnumber = confirmation
+
+                };
+                _context.Requests.Add(request);
+                _context.SaveChanges();
+
+                Requestclient requestclient = new Requestclient
+                {
+                    Requestid = request.Requestid,
+                    Firstname = model.FirstName,
+                    Location = model.Street + ", " + model.City + ", " + region.Name + "-" + model.ZipCode,
+                    Address = model.Street + ", " + model.City + ", " + region.Name + "-" + model.ZipCode,
+                    Lastname = model.LastName,
+                    Email = model.Email,
+                    Phonenumber = model.PhoneNumber,
+                    Intdate = model.DateOfBirth.Day,
+                    Intyear = model.DateOfBirth.Year,
+                    Strmonth = model.DateOfBirth.Month.ToString(),
+                    Street = model.Street,
+                    City = model.City,
+                    State = region.Name,
+                    Regionid = model.region,
+                    Zipcode = model.ZipCode
+                };
+                _context.Requestclients.Add(requestclient);
+                _context.SaveChanges();
+
+                Requestnote requestnote = new Requestnote
+                {
+                    Requestid = request.Requestid,
+                    Createddate = DateTime.Now,
+                    Createdby = admin.Aspnetuserid,
+                    Adminnotes = model.AdminNotes
+                };
+                _context.Requestnotes.Add(requestnote);
+                _context.SaveChanges();
+
+                var user = _context.Users.FirstOrDefault(x => x.Email == model.Email);
+                if (user == null)
+                {
+                    //string encryptedEmail =  _encryptdecryptrepo.EncryptStringToBase64_Aes(model.Email, key, iv);
+                    //string encryptedRequestId = _encryptdecryptrepo.EncryptStringToBase64_Aes(request.Requestid.ToString(), key, iv);
+                    //string encodedRequestId = HttpUtility.UrlEncode(encryptedRequestId);
+                    //string encodedEmail = HttpUtility.UrlEncode(encryptedEmail);
+                    //string body = "https://localhost:7128/Login/CreateAccount?requestid=" + encodedRequestId + "&email=" + encodedEmail;
+                    //string subject = "Create Account";
+                    //string To = model.Email;
+                    //_sendmailrepo.SendMail(subject, body, To);
+                }
+                else
+                {
+                    //var requestregistered = _requestrepo.registeredUser(requestclient.Requestid);
+                    //requestregistered.UserId = user.Userid;
+                    //_requestrepo.updateRequest(requestregistered);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Failed to submit Form", ex);
+                return false;
+            }
+        }
 
     }
 }

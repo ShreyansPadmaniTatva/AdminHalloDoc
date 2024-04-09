@@ -27,6 +27,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             this.Configuration = Configuration;
         }
         #endregion
+
         public  string GenerateJWTAuthetication(UserInfo userinfo)
         {
             var claims = new List<Claim>

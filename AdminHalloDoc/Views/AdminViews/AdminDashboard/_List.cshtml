@@ -12,7 +12,7 @@
 
 
 <div class="card border-0 shadow pb-2 mb-3">
-    <div class="table-responsive">
+    <div class="table-responsive" style="overflow-x: visible !important;">
         <div class="accordion accordion-flush" id="accordionFlushExample">
             @foreach (var item in Model.DashboardList)
             {
@@ -114,7 +114,7 @@
             }
         </div>
         <div id="a1a" >
-            <table class="table table-responsive" id="table" >
+            <table class="table table-responsive" style="overflow-x: visible !important;" id="table">
                 <thead class="fw-lighter">
                     <tr>
                         <th class="d-none"> No. </th>
@@ -187,7 +187,7 @@
                             }
                             <td scope="col" class="action">
                                 <div class="dropdown ">
-                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="true">
                                         Actions
                                     </button>
                                  
@@ -198,7 +198,7 @@
                                         {
                                             <li>
                                                 <a class="dropdown-item text-dark-emphasis js-stkModal-btn"
-                                                data-form-id="formEdit_UMS"
+                                                   data-form-id="AssignPhysician"
                                                 data-url='@Url.Action("_AssignPhysician", "ViewAction", new {requestid = @item.Requestid})'
                                                 data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Assign Physician </a>
                                             </li>
@@ -407,7 +407,41 @@
 </script>
 <script>
     $(function () {
-        
+        // Add hover-triggered dropdown behavior
+        $('.dropdown').hover(function () {
+            var $dropdownMenu = $(this).find('.dropdown-menu');
+            $dropdownMenu.addClass('show');
+            // Adjust position if menu extends beyond viewport
+            var dropdownMenuRect = $dropdownMenu[0].getBoundingClientRect();
+            var windowWidth = window.innerWidth;
+            var windowHeight = window.innerHeight;
+
+            // Check if menu extends beyond the right of the viewport
+            if (dropdownMenuRect.right > windowWidth) {
+                $dropdownMenu.css('right', 0);
+                $dropdownMenu.css('left', 'auto');
+            }
+            // Check if menu extends beyond the bottom of the viewport
+            if (dropdownMenuRect.bottom > windowHeight) {
+                $dropdownMenu.css('top', 'auto');
+                $dropdownMenu.css('bottom', '100%');
+            }
+            // Check if menu extends beyond the top of the viewport
+            if (dropdownMenuRect.top < 0) {
+                $dropdownMenu.css('top', '100%');
+                $dropdownMenu.css('bottom', 'auto');
+            }
+        }, function () {
+            $(this).find('.dropdown-menu').removeClass('show');
+        });
+
+        // Close dropdown when clicked outside
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.dropdown').length) {
+                $('.dropdown-menu').removeClass('show');
+            }
+        });
+
 
         $('.ClearCase').click(function () {
            

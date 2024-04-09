@@ -8,14 +8,101 @@ function mode() {
 
     console.log(body.getAttribute('data-bs-theme'));
 }
+
+function validateForm() {
+    // Implement your validation logic here
+    var formIsValid = true; // Assume form is valid by default
+
+    // Example: Validate form fields
+    var inputs = document.querySelectorAll('#formAddEditSave_UMS inputs');
+    inputs.forEach(function (input) {
+        if (!input.value) {
+            formIsValid = false;
+        }
+    });
+    var textarea = document.querySelectorAll('#formAddEditSave_UMS textarea');
+    textarea.forEach(function (input) {
+        if (!input.value) {
+            formIsValid = false;
+        }
+    });
+    var select = document.querySelectorAll('#formAddEditSave_UMS select');
+    select.forEach(function (input) {
+        if (!input.value) {
+            formIsValid = false;
+        }
+    });
+    // Return validation result
+    return formIsValid;
+}
+var duplicateDivs = document.querySelectorAll('.modal-backdrop.fade.show');
+
+// Remove duplicate elements except the first one
+for (var i = 1; i < duplicateDivs.length; i++) {
+    duplicateDivs[i].parentNode.removeChild(duplicateDivs[i]);
+}
 $(document).ready(function () {
+    // Remove duplicate elements except the first one
+    $('.modal-backdrop.fade.show:gt(0)').remove();
     $(".t-tab").click(function () {
         $(".t-tab").removeClass("active");
         $(this).addClass("active");
 
     });
 });
+(function () {
+    'use strict'
+
+    var forms = document.querySelectorAll('.needs-validation')
+
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+})()
 $(function () {
+    // Add hover-triggered dropdown behavior
+    $('.dropdown').hover(function () {
+        var $dropdownMenu = $(this).find('.dropdown-menu');
+        $dropdownMenu.addClass('show');
+        // Adjust position if menu extends beyond viewport
+        var dropdownMenuRect = $dropdownMenu[0].getBoundingClientRect();
+        var windowWidth = window.innerWidth;
+        var windowHeight = window.innerHeight;
+
+        // Check if menu extends beyond the right of the viewport
+        if (dropdownMenuRect.right > windowWidth) {
+            $dropdownMenu.css('right', 0);
+            $dropdownMenu.css('left', 'auto');
+        }
+        // Check if menu extends beyond the bottom of the viewport
+        if (dropdownMenuRect.bottom > windowHeight) {
+            $dropdownMenu.css('top', 'auto');
+            $dropdownMenu.css('bottom', '100%');
+        }
+        // Check if menu extends beyond the top of the viewport
+        if (dropdownMenuRect.top < 0) {
+            $dropdownMenu.css('top', '100%');
+            $dropdownMenu.css('bottom', 'auto');
+        }
+    }, function () {
+        $(this).find('.dropdown-menu').removeClass('show');
+    });
+
+    // Close dropdown when clicked outside
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.dropdown').length) {
+            $('.dropdown-menu').removeClass('show');
+        }
+    });
+
     $('#staticBackdrop').modal('show');
     $(".t-tab").click(function () {
         $('#requeststatus').val(this.value);
@@ -129,24 +216,35 @@ function savealt(title) {
     });
 }
 
-const phoneInputField = document.querySelector("#phone");
-const phoneInput = window.intlTelInput(phoneInputField, {
+const phoneInputFieldphone = document.querySelector("#phone");
+const phoneInput = window.intlTelInput(phoneInputFieldphone, {
     separateDialCode: true,
-    hiddenInput: "full",
+    hiddenInput: "country_code",
     preferredCountries: ["us", "co", "in", "de"],
     utilsScript:
         "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+});
+phoneInputFieldphone.addEventListener("input", function () {
+    // Get the formatted phone number
+    const formattedNumber = phoneInput.getNumber();
+    document.getElementById("phone").value = formattedNumber;
+
 });
 const phoneInputField1 = document.querySelector("#phone1");
 const phoneInput1 = window.intlTelInput(phoneInputField1, {
     separateDialCode: true,
-    hiddenInput: "full",
+    hiddenInput: "country_code",
     preferredCountries: ["us", "co", "in", "de"],
     utilsScript:
         "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
 });
 
+phoneInputField1.addEventListener("input", function () {
+    // Get the formatted phone number
+    const formattedNumber = phoneInput.getNumber();
+    document.getElementById("phone1").value = formattedNumber;
 
+});
 function getLocation() {
     const x = document.getElementById("map");
 

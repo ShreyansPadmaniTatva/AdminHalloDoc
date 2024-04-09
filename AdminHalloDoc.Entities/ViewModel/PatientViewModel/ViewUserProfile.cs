@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
 
 namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
 {
@@ -7,6 +8,9 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public int? Userid { get; set; }
 
         public string? Aspnetuserid { get; set; }
+        [Required(ErrorMessage = "First Name is required")]
+        [StringLength(100)]
+        [RegularExpression(@"^(?!\s+$).+", ErrorMessage = "Enter a valid Name")]
 
         public string Firstname { get; set; } = null!;
 

@@ -171,9 +171,9 @@
                                    
                                     @if (item.Status == 5)
                                     {
-                                        <div class="btn btn-info text-white">
+                                        <a class="btn btn-info text-white">
                                             House Call
-                                        </div>
+                                        </a>
                                     }else{
                                     <div>
                                         -
@@ -182,12 +182,12 @@
                                 </td>
                             }
                             <td scope="col" class="action">
-                                <div class="dropdown ">
-                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="dropdown">
+                                    <button class="btn border border-1 p-2 rounded-2 text-center w-75 py-1 text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="true">
                                         Actions
                                     </button>
-                                 
-                                    <ul class="dropdown-menu ">
+
+                                    <ul class="dropdown-menu">
                                         @if (Status == 1)
                                         {
                                             <li>
@@ -329,16 +329,12 @@
         var headerss = $('.dashborad-table');
         headerss.each(function () {
             var orderValues = $(this).attr('data-order').split(' ')[0];
-            // Check if the current column matches the sorted column in the model
             if (modeldata.sortedColumn === orderValues) {
                 var icon = $(this).find('i.bi.bi-arrow-up, i.bi.bi-arrow-down');
                 console.log(icon.find('i.bi.bi-arrow-up, i.bi.bi-arrow-down'));
-                // Check if the sorting is ascending or descending
                 if (!modeldata.isAscending) {
-                    // Add the arrow-down icon and remove arrow-up icon
                     icon.removeClass('bi-arrow-up').addClass('bi-arrow-down');
                 } else {
-                    // Add the arrow-up icon and remove arrow-down icon
                     icon.removeClass('bi-arrow-down').addClass('bi-arrow-up');
                 }
             }
@@ -375,6 +371,40 @@
 </script>
 <script>
     $(function () {
+        // Add hover-triggered dropdown behavior
+        $('.dropdown').hover(function () {
+            var $dropdownMenu = $(this).find('.dropdown-menu');
+            $dropdownMenu.addClass('show');
+            // Adjust position if menu extends beyond viewport
+            var dropdownMenuRect = $dropdownMenu[0].getBoundingClientRect();
+            var windowWidth = window.innerWidth;
+            var windowHeight = window.innerHeight;
+
+            // Check if menu extends beyond the right of the viewport
+            if (dropdownMenuRect.right > windowWidth) {
+                $dropdownMenu.css('right', 0);
+                $dropdownMenu.css('left', 'auto');
+            }
+            // Check if menu extends beyond the bottom of the viewport
+            if (dropdownMenuRect.bottom > windowHeight) {
+                $dropdownMenu.css('top', 'auto');
+                $dropdownMenu.css('bottom', '100%');
+            }
+            // Check if menu extends beyond the top of the viewport
+            if (dropdownMenuRect.top < 0) {
+                $dropdownMenu.css('top', '100%');
+                $dropdownMenu.css('bottom', 'auto');
+            }
+        }, function () {
+            $(this).find('.dropdown-menu').removeClass('show');
+        });
+
+        // Close dropdown when clicked outside
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.dropdown').length) {
+                $('.dropdown-menu').removeClass('show');
+            }
+        });
         
 
         $('.ClearCase').click(function () {

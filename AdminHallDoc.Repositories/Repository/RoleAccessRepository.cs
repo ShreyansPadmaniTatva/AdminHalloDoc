@@ -52,7 +52,14 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #region GetMenusByAccount
         public async Task<List<AdminHalloDoc.Entities.Models.Menu>> GetMenusByAccount(short Accounttype)
         {
-            return await _context.Menus.Where(r => r.Accounttype == Accounttype).ToListAsync();
+            if (Accounttype == 1)
+            {
+                return await _context.Menus.ToListAsync();
+            }
+            else
+            {
+                return await _context.Menus.Where(r => r.Accounttype == Accounttype).ToListAsync();
+            }
         }
         #endregion
 

@@ -119,16 +119,13 @@
         });
     });
 
-    // Reset when resizing
     window.addEventListener('resize', function () {
         var details = document.querySelectorAll('.mobile-hide');
         if (window.innerWidth > 600) {
-            // Reset display property for desktop view
             details.forEach(function (detail) {
                 detail.style.removeProperty('display');
             });
         } else {
-            // Apply correct display property for mobile view
             details.forEach(function (detail) {
                 detail.style.display = 'none';
             });

@@ -30,16 +30,12 @@
 </div>
 
 <script>
-    // Get all buttons with class 'btn'
     const buttonss = document.querySelectorAll('.btn');
 
-    // Add click event listener to each button
     buttonss.forEach(button => {
         button.addEventListener('click', function () {
-            // Get the value attribute of the clicked button
             const encounterValue = this.value;
 
-            // Redirect to the page with the encounter value in the URL query string
             window.location.href = `/Physician/DashBoard`;
         });
     });

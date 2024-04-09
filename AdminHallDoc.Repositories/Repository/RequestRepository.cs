@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -9,6 +10,7 @@ using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Ocsp;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -30,6 +32,16 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             })
                 .ToListAsync();
         }
+        public async Task<List<UserRoleCombobox>> UserRoleComboBox(int accounttype)
+        {
+            return await _context.Roles.Where(r => r.Accounttype == accounttype).Select(req => new UserRoleCombobox()
+            {
+                RoleId = req.Roleid,
+                RoleName = req.Name
+            })
+                .ToListAsync();
+        }
+
         public async Task<List<VenderTypeComboBox>> VenderTypeComboBox()
         {
             return await _context.Healthprofessionaltypes.Select(req => new VenderTypeComboBox()
@@ -47,6 +59,25 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                    RegionId =req.Regionid,
                    RegionName =req.Name
                 })
+                .ToListAsync();
+        }
+        public async Task<List<RegionComboBox>> RegionComboBox(int UserId)
+        {
+            List<int> combinedData = ((from pr in _context.Physicianregions
+                                where pr.Physicianid == UserId
+                                select   pr.Regionid)
+                             .Union
+                             (from ar in _context.Adminregions
+                              where ar.Adminid == UserId
+                              select ar.Regionid)).ToList();
+
+
+
+            return await _context.Regions .Where(r => combinedData.Contains(r.Regionid)).Select(req => new RegionComboBox()
+            {
+                RegionId = req.Regionid,
+                RegionName = req.Name
+            })
                 .ToListAsync();
         }
         public async Task<List<CaseReasonComboBox>> CaseReasonComboBox()
@@ -82,6 +113,65 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 ToCloseRequest = _context.Requests.Where(r => (r.Status == 3 || r.Status == 7 || r.Status == 8) && r.Physicianid == ProviderId).Count(),
                 UnpaidRequest = _context.Requests.Where(r => r.Status == 9 && r.Physicianid == ProviderId).Count()
             };
+        }
+
+        public string GetDashboardNotesName(int requestid)
+        {
+            Requeststatuslog requeststatuslog = _context.Requeststatuslogs.OrderByDescending(x => x.Createddate).Where(x => x.Requestid == requestid).FirstOrDefault();
+            AdminHalloDoc.Entities.Models.Admin admin = new AdminHalloDoc.Entities.Models.Admin();
+            Physician physician = new Physician();
+            Physician transphysician = new Physician();
+
+            if (requeststatuslog != null)
+            {
+                if (requeststatuslog.Adminid != null)
+                {
+                    admin = _context.Admins.FirstOrDefault(x => x.Adminid == requeststatuslog.Adminid);
+                }
+                if (requeststatuslog.Physicianid != null)
+                {
+                    physician = _context.Physicians.FirstOrDefault(x => x.Physicianid == requeststatuslog.Physicianid);
+                }
+                if (requeststatuslog.Transtophysicianid != null)
+                {
+                    transphysician = _context.Physicians.FirstOrDefault(x => x.Physicianid == requeststatuslog.Transtophysicianid);
+                }
+
+                if (requeststatuslog.Adminid != null)
+                {
+                    if (requeststatuslog.Status == 2 && requeststatuslog.Transtophysicianid != null)
+                    {
+                        return "Admin " + admin.Firstname + " " + admin.Lastname + " transferred to Physician " + transphysician.Firstname + " " + transphysician.Lastname + " on " + requeststatuslog.Createddate.ToString();
+                    }
+                    if (requeststatuslog.Status == 3)
+                    {
+                        return "Admin " + admin.Firstname + " " + admin.Lastname + " cancelled on " + requeststatuslog.Createddate.ToString();
+                    }
+                }
+
+                if (requeststatuslog.Physicianid != null)
+                {
+                    if (requeststatuslog.Status == 3)
+                    {
+                        return "Physician " + physician.Firstname + " " + physician.Lastname + " cancelled on " + requeststatuslog.Createddate.ToString();
+                    }
+                    return "";
+                }
+
+                if (requeststatuslog.Adminid == null && requeststatuslog.Physicianid == null)
+                {
+                    if (requeststatuslog.Status == 4)
+                    {
+                        return "Patient accepted agreement on " + requeststatuslog.Createddate.ToString();
+                    }
+                    if (requeststatuslog.Status == 7)
+                    {
+                        return "Patient rejected agreement on " + requeststatuslog.Createddate.ToString();
+                    }
+                }
+            }
+
+            return "";
         }
 
         public async Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data)
@@ -120,11 +210,16 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         Dob = new DateTime((int)rc.Intyear,(int) Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
                         PhoneNumber = rc.Phonenumber,
                         Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.Zipcode,
-                        Notes = rc.Notes,
                         ProviderID = req.Physicianid,
                         RegionID = rc.Regionid,
                         RequestorPhoneNumber = req.Phonenumber
-                    }).ToListAsync();
+                    })
+                    .OrderByDescending(x => x.RequestedDate).ToListAsync();
+
+            foreach (ViewDashboardList item in allData)
+            {
+                item.Notes = GetDashboardNotesName((int)item.Requestid) + " ";
+            }
 
             if (data.SortedColumn != null)
             {

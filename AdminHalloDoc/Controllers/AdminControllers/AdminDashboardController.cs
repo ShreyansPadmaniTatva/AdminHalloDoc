@@ -34,6 +34,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             TempData["Status"] = TempData["Status"];
             PaginatedViewModel sm = _requestRepository.Indexdata(-1);
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            //ViewBag.RegionComboBox = await _requestRepository.RegionComboBox(Convert.ToInt32(CV.UserID()));
             ViewBag.CaseReasonComboBox = await _requestRepository.CaseReasonComboBox();
             if (CV.role() == "Provider")
             {

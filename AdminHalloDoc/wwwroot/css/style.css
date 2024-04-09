@@ -717,9 +717,9 @@ th:nth-child(6) {
             background-color: #f1f1f1 !important ;
         }
 
-.dropdown:hover .dropdown-menu {
+/*.dropdown:hover .dropdown-menu {
     display: block;
-}
+}*/
 
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;

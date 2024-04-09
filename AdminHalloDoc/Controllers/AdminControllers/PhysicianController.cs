@@ -77,7 +77,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             
             //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
+            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox(3);
             if (id == null)
             {
                 ViewData["PhysicianAccount"] = "Add";

@@ -8,34 +8,41 @@
 
 <div class=" modal-body">
     <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> @Model.PatientName </span></h3>
-    <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post"
+    <form id="formAddEditSave_UMS"  data-ajax="true" data-ajax-method="post"
           data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
-          asp-action="_AssignPhysicianPost" asp-controller="ViewAction">
+          asp-action="_AssignPhysicianPost" asp-controller="ViewAction" class="needs-validation " novalidate>
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="RequestID" />
-
         <div class="mb-4">
-            <select class="form-select form-select-sm mt-3 p-2" required asp-for="RegionID" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
-                <option>All Region</option>
+            <select class="form-select " required asp-for="RegionID" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                <option selected disabled value="">Choose Region</option>
             </select>
+            <div class="invalid-feedback">
+                Please select a valid region.
+            </div>
         </div>
         <div class="mb-4">
-            <select class="form-select form-select-sm p-2" required asp-for="ProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
-                <option>All Provider</option>
+            <select class="form-select" required asp-for="ProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
+                <option selected disabled value="">Choose Provider</option>
             </select>
+            <div class="invalid-feedback">
+                Please select a valid Provider.
+            </div>
         </div>
         <div class=" row my-2">
             <div class="col-md-12 form-floating">
-                <textarea class="form-control rounded" asp-for="Notes" cols="50" type="text" rows="5" placeholder=Symptoms autocomplete=off></textarea>
-                <label for="floatingInput">Notes </label>
-
+                <textarea class="form-control rounded" required id="validationCustomUsername" asp-for="Notes" cols="50" type="text" rows="5" placeholder=Symptoms autocomplete=off></textarea>
+                <label for="validationCustomUsername">Notes </label>
+                <div class="invalid-feedback">
+                    Please Add Notes.
+                </div>
 
             </div>
         </div>
         <hr class="form-button-divider" />
         <div class="row">
             <div class="offset-md-4 col-md-8">
-                <input type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" />
+                <input type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" data-check-before-submit="validateForm()" />
                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -43,6 +50,49 @@
 </div>
 
 <script type="text/javascript">
+    function validateForm() {
+        // Implement your validation logic here
+        var formIsValid = true; // Assume form is valid by default
+
+        // Example: Validate form fields
+        var inputs = document.querySelectorAll('#formAddEditSave_UMS inputs');
+        inputs.forEach(function (input) {
+            if (!input.value) {
+                formIsValid = false; 
+            }
+        });
+        var textarea = document.querySelectorAll('#formAddEditSave_UMS textarea');
+        textarea.forEach(function (input) {
+            if (!input.value) {
+                formIsValid = false;
+            }
+        });
+        var select = document.querySelectorAll('#formAddEditSave_UMS select');
+        select.forEach(function (input) {
+            if (!input.value) {
+                formIsValid = false;
+            }
+        });
+        // Return validation result
+        return formIsValid;
+    }
+
+    (function () {
+        'use strict'
+
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
 
     function myFunction() {
         var email = $("#region2").val();
@@ -54,7 +104,7 @@
             success: function (response) {
 
                 console.log(response);
-                var s = '<option value="-1">Please Select</option>';
+                var s = '<option selected disabled value="">Please Choose Provider</option>';
                 for (var i = 0; i < response.length; i++) {
                     s += '<option value="' + response[i].physicianid + '">' + response[i].firstname + ' ' + response[i].lastname + '</option>';
                 }

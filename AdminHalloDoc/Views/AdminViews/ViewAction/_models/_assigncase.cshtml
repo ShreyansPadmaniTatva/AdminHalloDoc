@@ -7,24 +7,34 @@
                     <i class="bi bi-x-circle"></i>
                 </button>
             </div>
-            <form asp-action="AssignProvider" asp-controller="ViewAction">
+            <form asp-action="AssignProvider" asp-controller="ViewAction" class="needs-validation" novalidate>
             <div class="modal-body">
                 <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> </span></h3>
                
                     <input type="hidden" name="requestid" id="requestid" />
                     <div class="mb-4">
-                        <select class="form-select form-select-sm mt-3 p-2" required name="region" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
-                            <option>All Region</option>
+                        <select class="form-select " required name="region" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                            <option selected disabled value="">Choose region...</option>
                         </select>
+                        <div class="invalid-feedback">
+                            Please select a valid region.
+                        </div>
                     </div>
                     <div class="mb-4">
-                        <select class="form-select form-select-sm p-2" required name="ProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
-                            <option>All Provider</option>
+                        <select class="form-select " required name="ProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
+                            <option selected disabled value="">Choose Provider...</option>
                         </select>
+                        <div class="invalid-feedback">
+                            Please select a valid provider.
+                        </div>
+
                     </div>
                     <div class="mb-4 form-floating ">
-                        <textarea class="form-control rounded" name="Notes" required cols="50" type="text" rows="8" placeholder=Suchtext autocomplete=off></textarea>
-                        <label for="floatingInput">Notes </label>
+                        <textarea class="form-control rounded" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="Notes" required cols="50" type="text" rows="8" placeholder=Suchtext autocomplete=off></textarea>
+                        <label for="validationCustomUsername">Notes </label>
+                        <div class="invalid-feedback">
+                            Please  Add Notes
+                        </div>
                     </div>
                 
             </div>
@@ -39,6 +49,8 @@
 
 <script type="text/javascript">
 
+    
+
     function myFunction(){
         var email = $("#region2").val();
         console.log(email);
@@ -47,9 +59,9 @@
             url: '@Url.Action("ProviderbyRegion","AdminDashboard")?Regionid=' + email,
             cache: false,
             success: function (response) {
-                
+                $("#provider").empty();
                 console.log(response);
-                var s = '<option value="-1">Please Select</option>';
+                var s = '<option  selected disabled value="">Choose Provider...</option>';
                 for (var i = 0; i < response.length; i++) {
                     s += '<option value="' + response[i].physicianid + '">' + response[i].firstname +' '+ response[i].lastname + '</option>';
                 }

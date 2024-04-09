@@ -8,8 +8,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
 	{
         Task<List<VenderTypeComboBox>> VenderTypeComboBox();
         Task<List<RegionComboBox>> RegionComboBox();
+        Task<List<RegionComboBox>> RegionComboBox(int UserId);
         Task<List<CaseReasonComboBox>> CaseReasonComboBox();
         Task<List<UserRoleCombobox>> UserRoleComboBox();
+        Task<List<UserRoleCombobox>> UserRoleComboBox(int accounttype);
         PaginatedViewModel Indexdata(int ProviderId);
         Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data);
         Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data, int ProviderId);

@@ -24,6 +24,10 @@ using System.Net;
 using Org.BouncyCastle.Utilities.Net;
 using System.Net.Sockets;
 using IPAddress = System.Net.IPAddress;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium;
+using System.Diagnostics;
+using System.Web.Helpers;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -764,7 +768,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         #endregion
 
-        #region GetLocation
+        #region PostLocation
 
         public async Task<bool> GetLocation(int PhysicianId)
         {
@@ -784,16 +788,17 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         Createddate = DateTime.Now,
                         Physicianname = await _context.Physicians.Where(r => r.Physicianid == PhysicianId).Select(r => r.Firstname+" " + r.Lastname).FirstOrDefaultAsync()
                     };
-                    string userIpAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
 
-                    // Get current location
                     var location = await GetCurrentLocationAsync();
-                    physicianLocation.Latitude = location.latitude;
-                    physicianLocation.Longitude = location.longitude;
-                    physicianLocation.Address = await ReverseGeocodeAsync(location.latitude, location.longitude);
 
-                    // Add new Physicianlocation entity to the context
-                    await _context.Physicianlocations.AddAsync(physicianLocation);
+                    physicianLocation.Latitude = location.latitude;
+                            physicianLocation.Longitude = location.longitude;
+                            physicianLocation.Address = await ReverseGeocodeAsync(location.latitude, location.longitude);
+
+                            // Add new Physicianlocation entity to the context
+                            await _context.Physicianlocations.AddAsync(physicianLocation);
+                        
+                    
                 }
                 else
                 {
@@ -819,8 +824,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             }
         }
 
-
-        #endregion
+        #region ReverseGeocodeAsync
 
         public async Task<string> ReverseGeocodeAsync(decimal latitude, decimal longitude)
         {
@@ -842,18 +846,24 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         string responseBody = await response.Content.ReadAsStringAsync();
 
                         // Parse the JSON response
-                        JObject jsonObject = JObject.Parse(responseBody);
+                        dynamic jsonData = JObject.Parse(responseBody);
+                        // Deserialize JSON into dynamic object
 
-                        // Get the address components
-                        string village = jsonObject["features"][0]["properties"]["village"].ToString();
-                        string city = jsonObject["features"][0]["properties"]["city"].ToString();
-                        string stateDistrict = jsonObject["features"][0]["properties"]["state_district"].ToString();
-                        string state = jsonObject["features"][0]["properties"]["state"].ToString();
-                        string country = jsonObject["features"][0]["properties"]["country"].ToString();
-                        string postcode = jsonObject["features"][0]["properties"]["postcode"].ToString();
+                        // Extract address information
+                        string name = jsonData.features[0].properties.name;
+                        string country = jsonData.features[0].properties.country;
+                        string state = jsonData.features[0].properties.state;
+                        string county = jsonData.features[0].properties.county;
+                        string city = jsonData.features[0].properties.city;
+                        string postcode = jsonData.features[0].properties.postcode;
+                        string suburb = jsonData.features[0].properties.suburb;
+                        string street = jsonData.features[0].properties.street;
+                        string housenumber = jsonData.features[0].properties.housenumber;
+
+                        
 
                         // Format the address
-                        string address = $"{village}, {city}, {stateDistrict}, {state}, {country} - {postcode}";
+                        string address = $"{name}, {city}, {suburb}, {state}, {country} - {postcode}";
 
 
                         return address;
@@ -871,27 +881,33 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 }
             }
         }
+        #endregion
 
+        #region GetCurrentLocationAsync
         public async Task<(decimal latitude, decimal longitude)> GetCurrentLocationAsync()
         {
-            string ApiKey = "2406fdcc45914a29aec70a55c70225bc";
-
+            Decimal latitude = 0;
+            Decimal longitude = 0;
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    string apiUrl = $"https://ipgeolocation.abstractapi.com/v1/?api_key={ApiKey}";
+                    string apiKey = "3a5759a23c5b00";
+                    string apiUrl = $"https://ipinfo.io?token={apiKey}";
 
                     HttpResponseMessage response = await client.GetAsync(apiUrl);
-                    response.EnsureSuccessStatusCode(); 
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        dynamic ipInfo = Newtonsoft.Json.JsonConvert.DeserializeObject(responseBody);
 
-                    string responseBody =await  response.Content.ReadAsStringAsync();
-                    // Parse the JSON response
-                    JObject jsonResponse = JObject.Parse(responseBody);
+                        string[] coordinates = ipInfo.loc.ToString().Split(',');
+                         latitude = Convert.ToDecimal(coordinates[0]);
+                         longitude = Convert.ToDecimal(coordinates[1]);
 
-                    // Get the latitude and longitude values
-                    decimal latitude = jsonResponse["latitude"].Value<decimal>();
-                    decimal longitude = jsonResponse["longitude"].Value<decimal>();
+                       
+                    }
+
 
                     return (latitude, longitude);
                 }
@@ -906,6 +922,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             
             return (0, 0);
         }
+        #endregion
+
+        #endregion
 
     }
 }

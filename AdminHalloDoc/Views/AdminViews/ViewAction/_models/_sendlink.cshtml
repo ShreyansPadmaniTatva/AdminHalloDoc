@@ -7,23 +7,23 @@
                     <i class="bi bi-x-circle"></i>
                 </button>
             </div>
-                <form asp-action="SendLink" asp-controller="ViewAction">
+            <form asp-action="SendLink" asp-controller="ViewAction" class="needs-validation " novalidate>
             <div class="modal-body">
                     <div class=" form-floating  my-2">
-                        <input class="form-control rounded" name="firstname" type="text" placeholder="First Name" autocomplete=off>
+                        <input class="form-control rounded" name="firstname" aria-describedby="inputGroupPrepend" required type="text" placeholder="First Name" autocomplete=off>
                         <label class="" for="floatingInput">First Name </label>
                     </div>
                     <div class="form-floating my-2">
-                        <input class="form-control rounded" name="lastname" type="text" placeholder=Suchtext autocomplete=off>
+                        <input class="form-control rounded" name="lastname" aria-describedby="inputGroupPrepend" required type="text" placeholder=Suchtext autocomplete=off>
                         <label for="floatingInput">Last Name </label>
                     </div>
                     <div class=" form-floating my-2">
-                        <input id="sendlink" type="tel" name="phonenumber" class="form-control rounded" placeholder="Phone Number" autocomplete=off>
+                        <input id="sendlink" type="tel" name="phonenumber" aria-describedby="inputGroupPrepend" required class="form-control rounded" placeholder="Phone Number" autocomplete=off>
                         <label for="floatingInput">Phone Number </label>
 
                     </div>
                     <div class=" form-floating my-2">
-                        <input class="form-control rounded" name="email" type="text" placeholder=Suchtext autocomplete=off>
+                        <input class="form-control rounded" name="email" aria-describedby="inputGroupPrepend" required type="text" placeholder=Suchtext autocomplete=off>
                         <label for="floatingInput">Email </label>
                     </div>
             </div>

@@ -63,7 +63,7 @@ $(document).on("click", ".js-btn-modal-form-submit", function (e) {
     var hdModalId = $(btn).closest('.modal-content').find("#hd-modal-id").html();
 
     var vSubmitModalForm = true;
-
+    
     // Check Custom Form Validation JS before submit 
     // if attribute "data-check-before-submit" is set on "Submit" Button
     if ($(btn).data("check-before-submit") !== null && $(btn).data("check-before-submit") !== "" && $(btn).data("check-before-submit") !== undefined) {
@@ -72,9 +72,14 @@ $(document).on("click", ".js-btn-modal-form-submit", function (e) {
 
     if (vSubmitModalForm) {
         $(btn).closest('form').submit(function (event) {
+           
                 $(hdModalId).modal('hide');
+          
         });
         $(btn).closest('form').submit();
+    } else {
+        console.log($(btn).closest('form'));
+        $(btn).closest('form').addClass('was-validated');
     }
 });
 

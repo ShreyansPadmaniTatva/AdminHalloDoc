@@ -10,24 +10,24 @@
     <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> @Model.PatientName </span></h3>
     <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post"
           data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
-          asp-action="_TransferToProviderPost" asp-controller="ViewAction">
+          asp-action="_TransferToProviderPost" asp-controller="ViewAction" class="needs-validation " novalidate>
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="RequestID" />
         <input type="hidden" asp-for="ProviderId" />
 
         <div class="mb-4">
-            <select class="form-select form-select-sm mt-3 p-2" required asp-for="RegionID" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
-                <option>All Region</option>
+            <select class="form-select " aria-describedby="inputGroupPrepend"  required asp-for="RegionID" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                <option selected disabled value="">Choose Region...</option>
             </select>
         </div>
         <div class="mb-4">
-            <select class="form-select form-select-sm p-2" required asp-for="TransferToProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
-                <option>All Provider</option>
+            <select class="form-select " aria-describedby="inputGroupPrepend" required asp-for="TransferToProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
+                <option selected disabled value="">Choose Provider...</option>
             </select>
         </div>
         <div class=" row my-2">
-            <div class="col-md-12 form-floating">
-                <textarea class="form-control rounded" asp-for="Notes" cols="50" type="text" rows="5" placeholder=Symptoms autocomplete=off></textarea>
+            <div class="col-md-12 form-floating"> 
+                <textarea class="form-control rounded" required aria-describedby="inputGroupPrepend" asp-for="Notes" cols="50" type="text" rows="5" placeholder=Symptoms autocomplete=off></textarea>
                 <label for="floatingInput">Notes </label>
 
 
@@ -36,7 +36,7 @@
         <hr class="form-button-divider" />
         <div class="row">
             <div class="offset-md-4 col-md-8">
-                <input type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" />
+                <input type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" data-check-before-submit="validateForm()" />
                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -55,7 +55,7 @@
             success: function (response) {
 
                 console.log(response);
-                var s = '<option value="-1">Please Select</option>';
+                var s = ' <option selected disabled value="">Choose Provider...</option>';
                 for (var i = 0; i < response.length; i++) {
                     s += '<option value="' + response[i].physicianid + '">' + response[i].firstname + ' ' + response[i].lastname + '</option>';
                 }

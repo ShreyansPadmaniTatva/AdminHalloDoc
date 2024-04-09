@@ -28,13 +28,12 @@ h2 {
 
 .chosen-container-multi {
   border: none; }
-  .chosen-container-multi .chosen-choices {
-    background-image: none;
-    padding: 7px;
-    border: none !important;
-    border-radius: 4px;
-    -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1) !important;
-    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1) !important; }
+    .chosen-container-multi .chosen-choices {
+        background-image: none;
+        padding: 7px;
+        border: var(--bs-border-width) solid var(--bs-border-color) !important;
+        border-radius: 4px;
+    }
     .chosen-container-multi .chosen-choices li.search-choice {
       -webkit-box-shadow: none;
       box-shadow: none;

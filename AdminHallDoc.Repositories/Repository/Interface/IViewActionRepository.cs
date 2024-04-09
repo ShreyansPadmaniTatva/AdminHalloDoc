@@ -37,5 +37,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         ViewEncounter GetEncounterDetailsByRequestID(int RequestID);
         bool EditEncounterDetails(ViewEncounter Data, string id);
         bool CaseFinalized(ViewEncounter model, string id);
+        bool SubmitCreateRequest(ViewAdminCreateRequest model, string email);
     }
 }

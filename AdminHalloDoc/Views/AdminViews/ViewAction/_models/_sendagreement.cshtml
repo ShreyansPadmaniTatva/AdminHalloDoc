@@ -1,6 +1,6 @@
 ﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewActions
 <div class="modal-header  bg-info text-white">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Block</h1>
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Send Agreement</h1>
     <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
         <i class="bi bi-x-circle"></i>
     </button>
@@ -10,22 +10,23 @@
     <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> @Model.PatientName </span></h3>
     <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post"
           data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
-          asp-action="_SendAgreementPost" asp-controller="SendAgreement">
+          asp-action="_SendAgreementPost" asp-controller="SendAgreement" class="needs-validation " novalidate>
         @Html.AntiForgeryToken()
         <input  asp-for="RequestID" type="hidden">
-        <div class="form-floating  ">
-            <input id="phone" asp-for="PhoneNumber" class="form-control rounded" type="text" placeholder=" " autocomplete=off>
-            <label class="" for="floatingInput">Phone Number </label>
+
+        <div class="form-floating  my-2">
+            <input id="phone" asp-for="PhoneNumber" class="form-control rounded" aria-describedby="inputGroupPrepend" required type="text" placeholder=" " autocomplete=off>
+            <label class="" for="phone">Phone Number </label>
         </div>
-        <div class="form-floating  ">
-            <input id="phone" asp-for="Email" class="form-control rounded" type="email" placeholder=" " autocomplete=off>
+        <div class="form-floating  my-2">
+            <input asp-for="Email" class="form-control rounded" aria-describedby="inputGroupPrepend" required type="email" placeholder=" " autocomplete=off>
             <label class="" for="floatingInput">Email</label>
         </div>
 
         <hr class="form-button-divider" />
         <div class="row">
             <div class="offset-md-4 col-md-8">
-                <input type="submit" value="Send" class="btn btn-info text-white js-btn-modal-form-submit" />
+                <input type="submit" value="Send" class="btn btn-info text-white js-btn-modal-form-submit" data-check-before-submit="validateForm()" />
                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>

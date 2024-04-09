@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Twilio.Types;
 using System.Diagnostics.Metrics;
+using AdminHalloDoc.Models.CV;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -91,6 +92,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _EncounterModelPost(ViewActions v, string encounter)
         {
+            v.AdminId = Convert.ToInt32(CV.UserID());
             v.EncounterState = Convert.ToInt32(encounter);
 
             if (await _viewActionRepository.EncounterModel(v))
@@ -118,6 +120,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _AcceptRequestPost(ViewActions v)
         {
+            v.AdminId = Convert.ToInt32(CV.UserID());
             if (await _viewActionRepository.AcceptPhysician(v))
             {
                 TempData["Status"] = "Accept Request Successfully..!";
@@ -143,6 +146,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _TransfertoAdminPost(ViewActions v)
         {
+            v.AdminId = Convert.ToInt32(CV.UserID());
             if (await _viewActionRepository.TransfertoAdmin(v))
             {
                 TempData["Status"] = "Accept Request Successfully..!";
@@ -168,6 +172,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _TransferToProviderPost(ViewActions v)
         {
+            v.AdminId = Convert.ToInt32(CV.UserID());
             if (await _viewActionRepository.TransferToProvider(v))
             {
                 TempData["Status"] = "Transfer Provider Successfully..!";
@@ -192,6 +197,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _CaseReasonPost(ViewActions v,string ReasonTag)
         {
+            v.AdminId = Convert.ToInt32(CV.UserID());
             if (await _viewActionRepository.CancelCase(v, ReasonTag))
             {
                 TempData["Status"] = "Cancel Request Provider Successfully..!";
@@ -229,6 +235,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _BlockcasePost(ViewActions v)
         {
+            v.AdminId = Convert.ToInt32(CV.UserID());
             if (await _viewActionRepository.BlockCase(v))
             {
                 TempData["Status"] = "Block  Request  Successfully..!";
@@ -254,6 +261,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _AssignPhysicianPost(ViewActions v)
         {
+            v.AdminId = Convert.ToInt32(CV.UserID());
             if (await _viewActionRepository.AssignPhysician(v))
             {
                 TempData["Status"] = "Assign  Physician  Successfully..!";
@@ -309,6 +317,23 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
+        #region ViewAdminCreateRequest
+        public async Task<IActionResult> ViewAdminCreateRequest()
+        {
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            return View("../AdminViews/ViewAction/CreateRequest");
+        }
+        #endregion
+        #region ViewAdminCreateRequest_Post
+        public async Task<IActionResult> ViewAdminCreateRequestPost(ViewAdminCreateRequest vr)
+        {
+            if (  _viewActionRepository.SubmitCreateRequest(vr, CV.ID()) )
+            {
+                TempData["Status"] = "Add  Request  Successfully..!";
+            }
+            return RedirectToAction("Index", "AdminDashboard");
+        }
+        #endregion
 
     }
 }
