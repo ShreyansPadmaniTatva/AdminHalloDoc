@@ -15,12 +15,12 @@
         <input type="hidden" asp-for="Shiftid" />
 
         <div class="col-md-12 form-floating my-2">
-            <select class="form-select form-select-sm mt-3 p-2" required asp-for="Regionid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+            <select class="form-select" required asp-for="Regionid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                 <option>All Region</option>
             </select>
         </div>
         <div class="col-md-12 form-floating my-2">
-            <select class="form-select form-select-sm p-2" required asp-for="Physicianid" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
+            <select class="form-select " required asp-for="Physicianid" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
                 <option>All Provider</option>
             </select>
         </div>
@@ -125,7 +125,27 @@
         </div>
     </form>
 </div>
+<script>
+    // Get the date from local storage
+    var storedDate = localStorage.getItem("date");
 
+    if (storedDate !== null && storedDate !== undefined) {
+        var parts = storedDate.split('/');
+        var day = parts[0];
+        var month = parts[1];
+        var year = parts[2];
+        var dateObject = new Date(year, month, day);
+        var today = new Date();
+
+        if (dateObject >= today) {
+            dateObject.setDate(dateObject.getDate() + 1);
+            var formattedDate = dateObject.toISOString().split('T')[0];
+            console.log(formattedDate);
+
+            document.getElementById("StartDate").value = formattedDate;
+        }
+    }
+</script>
 <script type="text/javascript">
     var today = new Date();
     var formattedDate = today.toISOString().split('T')[0];

@@ -28,6 +28,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public int? RegionID { get; set; }
         public string? Address { get; set; }
         public string? Notes { get; set; }
+        public bool? IsFinalize { get; set; }
 
         public int? ProviderID { get; set; }
         public string? Physician { get; set;}

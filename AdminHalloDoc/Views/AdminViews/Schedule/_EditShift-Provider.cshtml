@@ -1,0 +1,192 @@
+﻿@using AdminHalloDoc.Models.CV;
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Schedule;
+<div class="modal-header  bg-info text-white">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">View Shift</h1>
+    <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
+        <i class="bi bi-x-circle"></i>
+    </button>
+</div>
+
+<div class=" modal-body container-fluid">
+    <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post" class="row"
+          data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
+          asp-action="_EditShiftPost" asp-controller="Scheduling">
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="shiftid" asp-for="Shiftid" />
+
+        <div class="col-md-12 form-floating my-2">
+            <select class="form-select form-select-md  p-2" disabled  asp-for="Regionid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+            </select>
+        </div>
+        <div class="col-md-12 form-floating my-2">
+            <select class="form-select form-select-md p-2" disabled asp-for="Physicianid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.ProviderComboBox,"Physicianid","Firstname"))" data-control="select2" data-placeholder="Select Level">
+            </select>
+        </div>
+        <div class="col-md-12 form-floating my-2">
+            <input id="StartDate" asp-for="Shiftdate" disabled class="form-control rounded vcs" name="Shiftdate" type="date" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">Starting Date</label>
+            <span asp-validation-for="Shiftdate" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-floating my-2">
+            <input id="StartTime" asp-for="Starttime" disabled class="form-control rounded vcs" name="Starttime" type="time" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">Start</label>
+            <span asp-validation-for="Starttime" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-floating my-2">
+            <input id="EndTime" asp-for="Endtime" disabled class="form-control rounded vcs" name="Endtime" type="time" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">End</label>
+            <span asp-validation-for="Endtime" class="text-danger"></span>
+        </div>
+        @{
+            short i = 0;
+
+            if (CV.role() == "Admin")
+            {
+                i = 1;
+            }
+        }
+        <input type="hidden" asp-for="Status" value="@i" id="checkWeekday" />
+
+        <div class="row my-3">
+            <div class="text-end col-md-12">
+               
+
+              
+                <input  id="save" style="display:none" type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" />
+                @{
+                    if(Convert.ToInt32(CV.UserID()) == Model.Physicianid)
+                    {
+                        <div id="edit" onclick="toggleCheckboxes()" class="btn btn-info text-white">Edit</div>
+                        <div id="delete" class="btn btn-danger btn-sm">Delete</div>
+                    }
+                }
+               
+              
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+
+    function myFunction() {
+        var shiftid = $("#shiftid").val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("_UpdateShiftPost","Scheduling")?id=' + shiftid,
+            cache: false,
+            success: function (response) {
+
+                console.log(response);
+                location.reload();
+            },
+            error: function () {
+                alert("Error while checking email.");
+            }
+        });
+    }
+
+    function deleteshift() {
+        var shiftid = $("#shiftid").val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("_DeleteShiftPost","Scheduling")?id=' + shiftid,
+            cache: false,
+            success: function (response) {
+
+                console.log(response);
+                location.reload();
+            },
+            error: function () {
+                alert("Error while checking email.");
+            }
+        });
+    }
+
+
+    document.getElementById('delete').addEventListener('click', (event) => {
+        event.preventDefault();
+
+        Swal.fire({
+            title: "Do you want delete shift ?",
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            denyButtonText: `Don't delete`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteshift();
+            }
+            console.log(result);
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                Swal.fire("Save Changes!", "", "success");
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+    });
+    var today = new Date();
+
+    // Get the date part of today's date in yyyy-mm-dd format
+    var formattedDate = today.toISOString().split('T')[0];
+
+    // Set the min attribute of the Start Date input to today's date
+    document.getElementById('StartDate').min = formattedDate;
+    document.getElementById('StartTime').addEventListener('change', function () {
+        // Get the selected Start Time
+        var startTime = this.value;
+
+        // Set the min attribute of the End Time input to the selected Start Time
+        document.getElementById('EndTime').min = startTime;
+
+        // If the current End Time value is less than the selected Start Time, reset it
+        if (document.getElementById('EndTime').value < startTime) {
+            document.getElementById('EndTime').value = startTime;
+        }
+    });
+    document.getElementById('EndTime').addEventListener('change', function () {
+        const startTimeInput = document.getElementById('StartTime');
+        const endTimeInput = document.getElementById('EndTime');
+        const startTime = startTimeInput.value; // Get the value of start time
+        const endTime = endTimeInput.value; // Get the value of end time
+
+        // Convert start and end time strings to Date objects for comparison
+        const startDate = new Date('2000-01-01T' + startTime + ':00');
+        const endDate = new Date('2000-01-01T' + endTime + ':00');
+
+        // Check if end time is earlier than start time
+        if (endDate < startDate) {
+            Swal.fire({
+                icon: "error",
+                title: "Wrong End time...",
+                text: "End time cannot be earlier than start time!"
+            });
+            endTimeInput.value = ''; // Clear the end time input
+        }
+    });
+    function toggleCheckboxes() {
+        var StartDate = document.getElementById('StartDate');
+        var StartTime = document.getElementById('StartTime');
+        var EndTime = document.getElementById('EndTime');
+        var save = document.getElementById('save');
+        var edit = document.getElementById('edit');
+
+        if (StartDate.disabled) {
+            // Show the Save button and enable input fields
+            save.style.display = 'inline-block';
+            edit.style.display = 'none';
+            StartDate.disabled = false;
+            StartTime.disabled = false;
+            EndTime.disabled = false;
+        } else {
+            // Hide the Save button and disable input fields
+            edit.style.display = 'inline-block';
+            save.style.display = 'none';
+            StartDate.disabled = true;
+            StartTime.disabled = true;
+            EndTime.disabled = true;
+        }
+    }
+
+</script>

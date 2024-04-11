@@ -13,6 +13,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
 {
     public interface IViewActionRepository
     {
+        public bool Conculde(int Requesid, int id);
         public Boolean SendLink(string firstname, string lastname, string email, string phonenumber);
         public Task<ViewDocuments> GetDocumentByRequest(int? id);
         public Boolean SaveDoc(int Requestid, IFormFile file);

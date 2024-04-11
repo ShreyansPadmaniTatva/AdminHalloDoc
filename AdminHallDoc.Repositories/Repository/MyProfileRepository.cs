@@ -112,7 +112,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Admin.Aspnetuserid = Aspnetuser.Id;
                     Admin.Firstname = admindata.Firstname;
                     Admin.Lastname = admindata.Lastname;
-                    Admin.Status = admindata.Status;
+                    Admin.Status = 2;
                     Admin.Roleid = admindata.Roleid;
                     Admin.Email = admindata.Email;
                     Admin.Mobile = admindata.Mobile;
@@ -328,6 +328,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         DataForChange.Address2 = vm.Address2;
                         DataForChange.City = vm.City;
                         DataForChange.Mobile = vm.Mobile;
+                        DataForChange.Zip = vm.Zipcode;
+                        DataForChange.Regionid = vm.Regionid;
 
 
                         _context.Admins.Update(DataForChange);

@@ -16,7 +16,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
          bool PutNotes(string? adminnotes, string? physiciannotes, int? RequestID, string Id);
         Task<List<VenderComboBox>> FindVenderByVenderType(int? id);
         Task<ViewOrder> FindVenderByVenderID(int? id);
-        Task<List<Healthprofessional>> GetPartnersByProfession(int? regionId);
+        Task<List<ViewVendorList>> GetPartnersByProfession(int? regionId, string? searchvender);
         Task<bool> SaveViewOrder(ViewOrder viewOrder);
         Task<bool> SavePartner(Healthprofessional SavePartner);
         Task<Healthprofessional> GetPartnerById(int? venderId);

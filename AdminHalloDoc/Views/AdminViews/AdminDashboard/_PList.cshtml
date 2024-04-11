@@ -1,4 +1,5 @@
-﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.PaginatedViewModel;
+﻿@using AdminHalloDoc.Models.CV;
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.PaginatedViewModel;
 @using static AdminHalloDoc.Entities.ViewModel.Constant
 @using static AdminHalloDoc.Entities.ViewModel.CM
 @{
@@ -12,7 +13,7 @@
 
 
 <div class="card border-0 shadow pb-2 mb-3">
-    <div class="table-responsive">
+    <div class="table-responsive" style="overflow-x: visible !important;">
         <div class="accordion accordion-flush" id="accordionFlushExample">
             @foreach (var item in Model.DashboardList)
             {
@@ -131,7 +132,8 @@
                     @foreach (var item in Model.DashboardList)
                     {
                         <tr class="bg-@item.RequestTypeID  filterDiv @item.RegionID">
-                            <td class="d-none"> @i @{
+                            <td class="d-none"> @i 
+                                @{
                                     i = i + 1;
                                 }  </td>
                             <td scope="col">
@@ -171,9 +173,9 @@
                                    
                                     @if (item.Status == 5)
                                     {
-                                        <a class="btn btn-info text-white">
+                                        <div data-requestid="@item.Requestid" class="change-state btn btn-info text-white">
                                             House Call
-                                        </a>
+                                        </div>
                                     }else{
                                     <div>
                                         -
@@ -219,25 +221,30 @@
                                         {
                                             <li><a class="dropdown-item text-dark-emphasis" asp-action="ConcludeCare" asp-route-id="@item.Requestid.Encode()" asp-controller="SubmitForm"><i class="px-2 bi bi-journal"></i>Conclude Care</a></li>
                                         }
-                                        @if (Status == 3 && item.Status == 4)
+
+                                        @if (Status == 4 || (@item.IsFinalize != null && @item.IsFinalize == true && Status == 3))
                                         {
                                             <li>
                                                 <a class="dropdown-item text-dark-emphasis js-stkModal-btn "
                                                    data-form-id="formEdit_UMS"
-                                                   data-url='@Url.Action("_EncounterModel", "ViewAction", new {requestid = @item.Requestid})'
-                                                   data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Encounter  </a>
+                                                   data-url='@Url.Action("_EncounterPdf", "ViewAction", new {requestid = @item.Requestid})'
+                                                   data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Encounter pdf </a>
                                             </li>
+
                                         }
-                                        @if (Status == 4)
+                                        else if (@item.Status == 4  && Status == 3)
                                         {
-                                            <li>
-                                                <a class="dropdown-item text-dark-emphasis js-stkModal-btn "
-                                                   asp-action="generatePDF" asp-route-id="@item.Requestid.Encode()" asp-controller="SubmitForm"><i class="px-2 bi bi-journal-plus"></i>Encounter p  </a>
+
+                                        <li>
+                                            <a class="dropdown-item text-dark-emphasis js-stkModal-btn "
+                                               data-form-id="formEdit_UMS"
+                                               data-url='@Url.Action("_EncounterModel", "ViewAction", new {requestid = @item.Requestid})'
+                                               data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Encounter  model</a>
                                             </li>
-                                        }
-                                        @if (Status == 3 && item.Status == 5)
-                                        {
-                                            <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid.Encode()" asp-action="Encounter" asp-controller="SubmitForm"><i class="px-2 bi bi-journals"></i>Encounter</a></li>
+
+                                        }else{
+
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid.Encode()" asp-action="Encounter" asp-controller="SubmitForm"><i class="px-2 bi bi-journals"></i>Encounter form</a></li>
                                         }
                                         @if (Status > 1)
                                         {
@@ -305,7 +312,10 @@
     </div>
 </div>
 </div>
-
+<form id="finlize" asp-action="Conculde" asp-controller="SubmitForm">
+    <input name="requestId" type="hidden" value="" id="finalarequestId" />
+    <input name="providerId" type="hidden" value="@CV.UserID()" />
+</form>
 <script>
  
     
@@ -370,6 +380,7 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js">
 </script>
 <script>
+
     $(function () {
         // Add hover-triggered dropdown behavior
         $('.dropdown').hover(function () {
@@ -489,8 +500,17 @@
     }
   $(document)
         .ready(function () {
-            
-            
+
+            var changeStateButtons = document.querySelectorAll('.change-state');
+
+            changeStateButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var requestId = this.dataset.requestid;
+                    document.getElementById('finalarequestId').value = requestId;
+                    document.getElementById('finlize').submit();
+                });
+            });
+
             // On dropdown open
             $(document).on('shown.bs.dropdown', function (event) {
                 var dropdown = $(event.target);
@@ -514,13 +534,6 @@
                 // Set focus back to dropdown toggle
                 dropdown.find('.dropdown-toggle').focus();
             });
-            //$('#table')
-            //    .DataTable(
-            //        { 
-            //            searching: false
-            //            , info: false
-            //        }
-            //    );
             $("#table_length").hide();
         });
 </script>

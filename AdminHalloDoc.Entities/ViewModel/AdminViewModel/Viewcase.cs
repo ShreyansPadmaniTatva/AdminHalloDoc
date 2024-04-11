@@ -15,6 +15,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public int? RequesClientid { get; set; }
         public string? Notes { get; set; }
         public string? FirstName { get; set; }
+        public short? Status { get; set; }
 
         public int? RequestTypeID { get; set; }
         public int? RegionID { get; set; }

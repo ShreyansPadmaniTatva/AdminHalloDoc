@@ -63,22 +63,36 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         public async Task<List<RegionComboBox>> RegionComboBox(int UserId)
         {
-            List<int> combinedData = ((from pr in _context.Physicianregions
-                                where pr.Physicianid == UserId
-                                select   pr.Regionid)
-                             .Union
-                             (from ar in _context.Adminregions
-                              where ar.Adminid == UserId
-                              select ar.Regionid)).ToList();
-
-
-
-            return await _context.Regions .Where(r => combinedData.Contains(r.Regionid)).Select(req => new RegionComboBox()
+            if(UserId < 0 || UserId == null)
             {
-                RegionId = req.Regionid,
-                RegionName = req.Name
-            })
-                .ToListAsync();
+                return await _context.Regions.Select(req => new RegionComboBox()
+                {
+                    RegionId = req.Regionid,
+                    RegionName = req.Name
+                })
+               .ToListAsync();
+               
+            }
+            else
+            {
+                List<int> combinedData = ((from pr in _context.Physicianregions
+                                           where pr.Physicianid == UserId
+                                           select pr.Regionid)
+                            .Union
+                            (from ar in _context.Adminregions
+                             where ar.Adminid == UserId
+                             select ar.Regionid)).ToList();
+
+
+
+                return await _context.Regions.Where(r => combinedData.Contains(r.Regionid)).Select(req => new RegionComboBox()
+                {
+                    RegionId = req.Regionid,
+                    RegionName = req.Name
+                })
+                    .ToListAsync();
+            }
+            
         }
         public async Task<List<CaseReasonComboBox>> CaseReasonComboBox()
         {
@@ -190,12 +204,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     on rc.Regionid equals reg.Regionid into RegGroup
                     from rg in RegGroup.DefaultIfEmpty()
                     where statusdata.Contains(req.Status) && (data.SearchInput == null ||
-                    rc.Firstname.Contains(data.SearchInput) || rc.Lastname.Contains(data.SearchInput) ||
-                    req.Firstname.Contains(data.SearchInput) || req.Lastname.Contains(data.SearchInput) ||
-                    rc.Email.Contains(data.SearchInput) || rc.Phonenumber.Contains(data.SearchInput) ||
-                    rc.Address.Contains(data.SearchInput) || rc.Notes.Contains(data.SearchInput) ||
-                    p.Firstname.Contains(data.SearchInput) || p.Lastname.Contains(data.SearchInput) ||
-                    rg.Name.Contains(data.SearchInput)) && (data.RegionId == null || rc.Regionid == data.RegionId)
+                    rc.Firstname.ToLower().Contains(data.SearchInput.ToLower()) || rc.Lastname.ToLower().Contains(data.SearchInput.ToLower()) ||
+                    req.Firstname.ToLower().Contains(data.SearchInput.ToLower()) || req.Lastname.ToLower().Contains(data.SearchInput.ToLower()) ||
+                    rc.Email.ToLower().Contains(data.SearchInput.ToLower()) || rc.Phonenumber.ToLower().Contains(data.SearchInput.ToLower()) ||
+                    rc.Address.ToLower().Contains(data.SearchInput.ToLower()) || rc.Notes.ToLower().Contains(data.SearchInput.ToLower()) ||
+                    p.Firstname.ToLower().Contains(data.SearchInput.ToLower()) || p.Lastname.ToLower().Contains(data.SearchInput.ToLower()) ||
+                    rg.Name.ToLower().Contains(data.SearchInput.ToLower())) && (data.RegionId == null || rc.Regionid == data.RegionId)
                      && (data.RequestType == null || req.Requesttypeid == data.RequestType)
                      select new ViewDashboardList
                     {
@@ -307,7 +321,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                          Notes = rc.Notes,
                                                          ProviderID = req.Physicianid,
                                                          RegionID = rc.Regionid,
-                                                         RequestorPhoneNumber = req.Phonenumber
+                                                         RequestorPhoneNumber = req.Phonenumber,
+                                                         IsFinalize = _context.Encounterforms.Any(ef => ef.Requestid == req.Requestid && ef.Isfinalize)
                                                      }).ToListAsync();
 
             int totalItemCount = allData.Count();
@@ -346,6 +361,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Notes = requestclients.Notes,
                     BirthDate = new DateTime(requestclients.Intyear != null ? (int)requestclients.Intyear : 0001, Convert.ToInt32(requestclients.Strmonth != null ? requestclients.Strmonth : 1), requestclients.Intdate != null ? (int)requestclients.Intdate : 01) != new DateTime(0001, 01, 01) ? new DateTime((int)requestclients.Intyear != 0 ? (int)requestclients.Intyear : 1, Convert.ToInt32(requestclients.Strmonth != null ? requestclients.Strmonth : 1), (int)requestclients.Intdate != 0 ? (int)requestclients.Intdate : 1) : null,
                    // BirthDate = new DateTime((int)requestclients.Intyear, Convert.ToInt32(requestclients.Strmonth), (int)requestclients.Intdate),
+                   Status = requests.Status,
                     PhoneNumber = requestclients.Phonenumber,
                     Address = requestclients.Address + "," + requestclients.Street + "," + requestclients.City + "," + requestclients.State + "," + requestclients.Zipcode,
                    

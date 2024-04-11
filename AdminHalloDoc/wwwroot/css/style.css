@@ -51,11 +51,10 @@ body {
   background-color: var(--primary-color);
 }
 .btn-outline-info{
-  color: var(--nav-active);
-  border-color: var(--nav-active);
+  
 }
 .btn-outline-info:hover{
-  background-color: var(--nav-active);
+ 
   color: var(--white-color);
 }
 .btn-outline-info.active{
@@ -1320,11 +1319,11 @@ header .calendar-current-date {
 }
 
 .calendar-dates td.active::before {
-    background: #6332c5;
+    /*background: #6332c5;*/
 }
 
 .calendar-dates td:not(.active):hover::before {
-    background: #e4e1e1;
+    /*background: #e4e1e1;*/
 }
 .first {
     background-color: #ffabd5;
@@ -1379,7 +1378,7 @@ li div {
     overflow: hidden; /* Hide overflow text */
     border: 0.5px solid #c9c9c9;
     padding: 1px;
-    color: black !important;
+    color: black;
 }
 .table-text div:hover {
    background-color:antiquewhite;
@@ -1388,7 +1387,14 @@ li div {
     font-size: 0.7rem;
     background-color: #c2f7c2;
 }
-
+    .Status-1.true-physician {
+        background-color: #2ec430 !important;
+        color: white !important;
+    }
+.Status-0.true-physician {
+    background-color: #f85454 !important;
+    color: white !important;
+}
 .Status-0 {
     font-size: 0.7rem;
     background-color: lightcoral;

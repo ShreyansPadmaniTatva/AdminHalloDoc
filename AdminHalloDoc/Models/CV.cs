@@ -93,9 +93,6 @@ namespace AdminHalloDoc.Models.CV
             return UserID;
         }
 
-        #region SetMenu 
-      
-        #endregion
 
     }
 }

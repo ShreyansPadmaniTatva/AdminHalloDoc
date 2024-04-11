@@ -521,12 +521,35 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #region SendAgreement
         public Boolean SendAgreement(ViewActions v)
         {
+            var d = httpContextAccessor.HttpContext.Request.Host;
+            //var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == v.RequestID);
+            string emailContent = @"
+                                <!DOCTYPE html>
+                                <html lang=""en"">
+                                <head>
+                                 <meta charset=""UTF-8"">
+                                 <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                                 <title>Patient Registration</title>
+                                </head>
+                                <body>
+                                 <div style=""background-color: #f5f5f5; padding: 20px;"">
+                                 <h2>Welcome to Our Healthcare Platform!</h2>
+                                <p>Dear Patient ,</p>
+                                <p>Your request for a patient account has been successfully created. To complete your registration, please follow the steps below:</p>
+                                <ol>
+                                    <li>Click the following link to register:</li>
+                                     <p><a target='_blank' href=""https://"+ d + "/SendAgreement?RequestID=" + v.RequestID.Encode() + @""">Patient Registration</a></p>
+                                    <li>Follow the on-screen instructions to complete the registration process.</li>
+                                </ol>
+                                <p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>
+                                <p>Thank you,</p>
+                                <p>The Healthcare Team</p>
+                                </div>
+                                </body>
+                                </html>
+                                ";
 
-            var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == v.RequestID);
-
-            var agreementUrl = "https://localhost:44376/SendAgreement?RequestID="+ v.RequestID;
-
-            _emailConfig.SendMail(v.Email, "Agreement for your request", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
+            _emailConfig.SendMail(v.Email, "Agreement for your request", emailContent);
             return true;
         }
         #endregion
@@ -840,6 +863,41 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         }
 
+        public bool Conculde(int Requesid, int id)
+        {
+            try
+            {
+               
+
+
+                var final = _context.Requests.FirstOrDefault(e => e.Requestid == Requesid);
+                final.Modifieddate = DateTime.Now;
+                final.Status = 6;
+                _context.Requests.Update(final);
+                _context.SaveChanges();
+
+                Requeststatuslog rs = new Requeststatuslog
+                {
+                    Requestid = final.Requestid,
+                    Status = 6,
+                    Createddate = DateTime.Now,
+                   
+                    Physicianid = id,
+
+
+                };
+                _context.Requeststatuslogs.Add(rs);
+                _context.SaveChanges();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
+        }
 
         public bool CaseFinalized(ViewEncounter model, string id)
         {
@@ -852,26 +910,26 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 _context.SaveChanges();
 
 
-                var final = _context.Requests.FirstOrDefault(e => e.Requestid == model.Requesid);
-                final.Modifieddate = DateTime.Now;
-                final.Status = 6;
-                _context.Requests.Update(final);
-                _context.SaveChanges();
+                //var final = _context.Requests.FirstOrDefault(e => e.Requestid == model.Requesid);
+                //final.Modifieddate = DateTime.Now;
+                //final.Status = 6;
+                //_context.Requests.Update(final);
+                //_context.SaveChanges();
 
-                var admindata = _context.Admins.FirstOrDefault(e => e.Aspnetuserid == id);
-                var phydata = _context.Physicians.FirstOrDefault(e => e.Aspnetuserid == id);
-                Requeststatuslog rs = new Requeststatuslog
-                {
-                    Requestid = final.Requestid,
-                    Status = 6,
-                    Createddate = DateTime.Now,
-                    Adminid = admindata == null ? null : admindata.Adminid,
-                    Physicianid = phydata == null ? null : phydata.Physicianid,
+                //var admindata = _context.Admins.FirstOrDefault(e => e.Aspnetuserid == id);
+                //var phydata = _context.Physicians.FirstOrDefault(e => e.Aspnetuserid == id);
+                //Requeststatuslog rs = new Requeststatuslog
+                //{
+                //    Requestid = final.Requestid,
+                //    Status = 6,
+                //    Createddate = DateTime.Now,
+                //    Adminid = admindata == null ? null : admindata.Adminid,
+                //    Physicianid = phydata == null ? null : phydata.Physicianid,
 
 
-                };
-                _context.Requeststatuslogs.Add(rs);
-                _context.SaveChanges();
+                //};
+                //_context.Requeststatuslogs.Add(rs);
+                //_context.SaveChanges();
 
                 return true;
             }

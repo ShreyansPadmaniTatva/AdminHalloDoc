@@ -6,7 +6,9 @@ using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Utilities;
-using Rotativa;
+
+using Rotativa.AspNetCore;
+using ViewAsPdf = Rotativa.AspNetCore.ViewAsPdf;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -126,6 +128,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
 
         #endregion
+
         #region Upadte_Request
         public async Task<IActionResult> UpadteRequest(ViewDocuments viewdocuments)
         {
@@ -173,6 +176,29 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         }
 
+        #region ACTION-Conculde
+        public IActionResult Conculde(int requestId, int providerId)
+        {
+                bool final = _viewActionRepository.Conculde(requestId, providerId);
+                if (final)
+                {
+                    TempData["Status"] = "Case Is Conculde";
+                    if (CV.role() == "Provider")
+                    {
+                        return Redirect("~/Physician/DashBoard");
+                    }
+                    return RedirectToAction("Index", "AdminDashboard");
+                }
+                else
+                {
+                    TempData["Status"] = "Case Is not Finalized";
+                return Redirect("~/Physician/DashBoard");
+            }
+
+
+        }
+        #endregion
+
         #region ACTION-FINALIZE
         public IActionResult Finalize(ViewEncounter model)
         {
@@ -192,14 +218,14 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 else
                 {
                     TempData["Status"] = "Case Is not Finalized";
-                    return View("../AdminSite/Action/Encounter", model);
+                    return View("../AdminViews/ViewAction/Encounter", model);
                 }
 
             } 
             else
             {
                 TempData["Status"] = "Case Is not Finalized";
-                return View("../AdminSite/Action/Encounter", model);
+                return View("../AdminViews/ViewAction/Encounter", model);
             }
              
         }
@@ -208,7 +234,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         public IActionResult generatePDF(string id)
         {
             var FormDetails = _viewActionRepository.GetEncounterDetailsByRequestID((int)id.Decode());
-            return new ViewAsPdf("../AdminSite/ViewAction/DownLoad", FormDetails) as IActionResult; ;
+            return new ViewAsPdf("../AdminViews/ViewAction/EncounterPdf", FormDetails);
         }
 
         #endregion

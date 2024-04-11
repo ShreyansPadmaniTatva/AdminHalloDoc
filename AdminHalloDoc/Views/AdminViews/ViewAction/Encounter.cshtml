@@ -60,7 +60,7 @@
 
             <div class="col-md-6 form-floating  ">
                 <input asp-for="HistoryOfP" class="form-control rounded" name="HistoryOfP" type="text" placeholder=Suchtext autocomplete=off>
-                <label asp-for="HistoryOfP" for="Symptoms"> Patient Notes </label>
+                <label asp-for="HistoryOfP" for="Symptoms"> History Of Patient  </label>
                 <span asp-validation-for="HistoryOfP" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating  ">
@@ -71,12 +71,12 @@
 
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Medications" class="form-control rounded" name="Medications" type="text" placeholder=Suchtext autocomplete=off>
-                <label asp-for="Medications" for="Symptoms"> Patient Notes </label>
+                <label asp-for="Medications" for="Symptoms"> Medications </label>
                 <span asp-validation-for="Medications" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Allergies" class="form-control rounded" name="Allergies" type="text" placeholder=Suchtext autocomplete=off>
-                <label asp-for="Allergies" for="Symptoms"> Patient Notes </label>
+                <label asp-for="Allergies" for="Symptoms"> Allergies </label>
                 <span asp-validation-for="Allergies" class="text-danger"></span>
             </div>
 
@@ -188,15 +188,11 @@
 
             <div class="card-footer border-0 bg-transparent text-end">
                 <button type="submit" class="btn btn-info text-white">Save Changes</button>
-                @{
-                    if (Model.Isfinalize == false)
-                    {
+               
                         <button type="submit" value="Finalize" asp-action="Finalize" asp-controller="SubmitForm" class="btn btn-danger btn-cancel ">Finalize</button>
-                    }
+                   
 
-                }
-
-                <a class="btn btn-outline-danger btn-cancel " asp-action="Index" asp-controller="AdminDashboard">
+                <a class="btn btn-outline-info btn-cancel " asp-action="Index" asp-controller="AdminDashboard">
                     cancel
                 </a>
             </div>

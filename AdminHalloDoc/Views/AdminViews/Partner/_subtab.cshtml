@@ -5,10 +5,13 @@
     @Html.AntiForgeryToken()
 
     <div class="text-end mx-2 px-3 d-flex justify-content-between">
-        <div class="dropdown ">
-
-            <select class="form-select form-select-md " name="regionId" data-allow-clear="true" tabindex="-1" onchange="subsubmit()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
-                <option value="">All Region</option>
+        
+        <div class="dropdown d-flex">
+            <div class=" for mx-2">
+                <input type="text" name="searchvender" placeholder="Search vender" onkeyup="subsubmit()" class="form-control" />
+            </div>
+            <select class="form-select form-select-md " name="regionId" data-allow-clear="true" tabindex="-1" onchange="subsubmit()" asp-items="@(new SelectList(ViewBag.VenderTypeComboBox,"VenderTypeId","Name"))" data-control="select2" data-placeholder="Select Level">
+                <option value="">All Profession</option>
             </select>
         </div>
         <div class="d-flex">

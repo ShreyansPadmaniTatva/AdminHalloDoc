@@ -6,6 +6,7 @@
 
 @using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.PaginatedViewModel;
+@using static AdminHalloDoc.Entities.ViewModel.CM
 @{
 
     var status = "null";
@@ -38,7 +39,7 @@
                 </a>
             </div>
 
-            <div class="table-responsive">
+        <div class="table-responsive" style="overflow-x: visible !important;">
             <table id="PatientHistory" class="table table-responsive mt-3 p-3">
                     <thead>
                         <tr>
@@ -63,20 +64,29 @@
                                 <td scope="row"> @item.ConcludedDate</td>
                                 <td scope="row"> @item.Status</td>
                                 <td class="mobile-hide" data-label="Document">
-                                    <a asp-action="CreateRoleAccess" asp-controller="RoleAccess" class="btn btn-outline-info btn-sm document-button">
+                                @if (FindStatus(item.Status) > 3 ){
+                                    <a asp-action="generatePDF" asp-route-id="@item.Requestid.Encode()" asp-controller="SubmitForm" class="btn btn-outline-info btn-sm document-button">
                                         View
-                                       
+
                                     </a>
+                                }
+                                else
+                                {
+                                    <div>-</div>
+                                }
+
                                 </td>
                                 <td class="mobile-hide" data-label="Document">
-                                    <a asp-action="CreateRoleAccess" asp-controller="RoleAccess" class="btn btn-outline-info btn-sm document-button">
-                                        Edit
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                                             class="bi bi-arrow-down-circle mx-1" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd"
-                                                  d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z" />
-                                        </svg>
-                                    </a>
+                                <div class="dropdown w-100">
+                                    <button class="btn  border-1 p-2 rounded-2 text-center w-75 py-1 btn-outline-info dropdown-" type="button" data-bs-toggle="dropdown" aria-expanded="true">
+                                        Actions
+                                    </button>
+
+                                    <ul class="dropdown-menu ">
+                                        <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid.Encode()" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid.Encode()" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                    </ul>
+                                </div>
                                 </td>
                             </tr>
                         }
@@ -94,6 +104,38 @@
     {
 
     <script type="text/javascript">
+
+        $(function () {
+            $('.dropdown').hover(function () {
+                var $dropdownMenu = $(this).find('.dropdown-menu');
+                $dropdownMenu.addClass('show');
+                var dropdownMenuRect = $dropdownMenu[0].getBoundingClientRect();
+                var windowWidth = window.innerWidth;
+                var windowHeight = window.innerHeight;
+
+                if (dropdownMenuRect.right > windowWidth) {
+                    $dropdownMenu.css('right', 0);
+                    $dropdownMenu.css('left', 'auto');
+                }
+                if (dropdownMenuRect.bottom > windowHeight) {
+                    $dropdownMenu.css('top', 'auto');
+                    $dropdownMenu.css('bottom', '100%');
+                }
+                if (dropdownMenuRect.top < 0) {
+                    $dropdownMenu.css('top', '100%');
+                    $dropdownMenu.css('bottom', 'auto');
+                }
+            }, function () {
+                $(this).find('.dropdown-menu').removeClass('show');
+            });
+
+            // Close dropdown when clicked outside
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.dropdown').length) {
+                    $('.dropdown-menu').removeClass('show');
+                }
+            });
+        });
         new DataTable('#PatientHistory', {
             pagingType: 'simple_numbers',
             lengthChange: false, // Disable table length dropdown

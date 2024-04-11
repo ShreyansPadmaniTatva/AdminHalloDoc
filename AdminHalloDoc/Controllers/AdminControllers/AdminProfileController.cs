@@ -28,6 +28,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         [AdminAuth("Admin,Provider")]
+        [Route("Physician/Profile")]
+        [Route("Admin/Profile")]
         public async Task<IActionResult> Index(int? id)
         {
             ViewAdminProfile p = await _myProfileRepository.GetProfileDetails( (id !=null ? (int) id: Convert.ToInt32(CV.UserID())) );

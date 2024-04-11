@@ -1,0 +1,41 @@
+﻿@using AdminHalloDoc.Entities.ViewModel;
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewActions
+<div class="modal-header  bg-info text-white">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Block</h1>
+    <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
+        <i class="bi bi-x-circle"></i>
+    </button>
+</div>
+
+<div class=" modal-body">
+    <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> @Model.PatientName </span></h3>
+    <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post"
+          data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
+          asp-action="_EncounterModelPost" asp-controller="ViewAction">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="RequestID" />
+        <input type="hidden" asp-for="ProviderId" />
+
+        <div class="form-group row my-3">
+            <div class="col-md-12 txet-center">
+                <a asp-action="generatePDF" asp-route-id="@Model.RequestID.Encode()" asp-controller="SubmitForm" name="encounter" value="5" class="btn btn-info text-white">
+                    House call
+                </a>
+
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    const buttonss = document.querySelectorAll('.btngt');
+
+    buttonss.forEach(button => {
+        button.addEventListener('click', function () {
+            const encounterValue = this.value;
+
+            window.location.href = `/Physician/DashBoard`;
+        });
+    });
+</script>

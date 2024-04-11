@@ -2,48 +2,46 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    Layout = "../Shared/_Layout";
 }
 
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewEncounter;
-@{
-    Layout = "~/Views/Shared/_Layout1.cshtml";
-}
-@section style{
-    <style>         
-        body{
-            height: 100vh !important;
-        }
-        .encounterForm {
-            font-family: "poppins";
-        }
-        .encounterForm h2{
-               width:100%;
-               text-align:center;
-        }
-        .details{
-            margin: auto;
-            height: 100%;
-            margin-top: 20px;
-            display: grid;
 
-        }
-        .data-row{
-            font-size:25px;
-        }
-        h2{
-            text-decoration: underline;
-            font-weight: bold;
-            color: #01BCE9;
-        }
-        h5 {
-            height: 50px;
-        }
-          
+<style>
+    body {
+        height: 100vh !important;
+    }
 
-    </style>
+    .encounterForm {
+        font-family: "poppins";
+    }
 
-}
+        .encounterForm h2 {
+            width: 100%;
+            text-align: center;
+        }
 
+    .details {
+        margin: auto;
+        height: 100%;
+        margin-top: 20px;
+        display: grid;
+    }
+
+    .data-row {
+        font-size: 25px;
+    }
+
+    h2 {
+        text-decoration: underline;
+        font-weight: bold;
+        color: #01BCE9;
+    }
+
+    h5 {
+        height: 50px;
+    }
+</style>
 <div class="encounterForm h-100 mt-3">
     <div class="text-center text-info w-100 fw-semibold fs-5">
         <h2 class="fs-4">Encounter Form Details</h2>

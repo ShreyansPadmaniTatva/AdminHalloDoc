@@ -40,8 +40,11 @@
                 <label class="" for="floatingInput">User Name </label>
             </div>
             <div class="col-md-6 form-floating">
-                <input  class="form-control rounded" name="Password" type="text" placeholder=Suchtext autocomplete=off>
+                <input class="form-control rounded" name="Password" id="passwordInput" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Password </label>
+                <div class="invalid-feedback invalid-feedback-pass">
+                    Please  Add PassWord
+                </div>
             </div>
 
             <div class="col-md-6 form-floating">
@@ -49,11 +52,11 @@
                 </select>
             </div>
             <div class="col-md-6 form-floating">
-                <select class="form-select form-select-md p-2" disabled required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
+                <select class="form-select form-select-md p-2" disabled required name="Roleid" asp-for="Roleid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
                 </select>
             </div>
             <div class="text-end edits">
-                <button class="text-end btn btn-outline-info " id="submitresetpass">Reset Password</button>
+                <div class="text-end btn btn-outline-info " id="submitresetpass">Reset Password</div>
             </div>
         </form>
 
@@ -64,21 +67,36 @@
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Firstname" class="form-control rounded admin-input" name="Firstname" type="text" placeholder="First Name" autocomplete=off>
                 <label class="" for="floatingInput">First Name </label>
+                <div class="invalid-feedback invalid-feedback-firstname">
+                    Please  Add First Name
+                </div>
             </div>
             <div class="col-md-6 form-floating">
                 <input asp-for="Lastname" class="form-control rounded admin-input" name="Lastname" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Last name </label>
+                <div class="invalid-feedback invalid-feedback-lastname">
+                    Please  Add Last Name
+                </div>
             </div>
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Email" class="form-control  rounded admin-input" id="email" name="Email" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Email </label>
+                <div class="invalid-feedback invalid-feedback-email">
+                    Please  Add Email
+                </div>
             </div>
             <div class="col-md-6 form-floating  ">
-                <input asp-for="Email" class="form-control  rounded admin-input" id="email" name="Email" type="text" placeholder=Suchtext autocomplete=off>
+                <input asp-for="Email" class="form-control  rounded admin-input" id="confirmEmail" name="Email" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Confirm Email </label>
+                <div class="invalid-feedback invalid-feedback-confirm-email">
+                    Email And Confirm Email Are not same
+                </div>
             </div>
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Mobile" id="phone" type="tel" name="Mobile" class="form-control rounded admin-input" autocomplete=off>
+                <div class="invalid-feedback invalid-feedback-mobile">
+                    Please  Add Mobile Number
+                </div>
                 <!-- <label for="floatingInput">Phone Number </label> -->
             </div>
             <input asp-for="Regionsid" type="hidden" id="regionids" />
@@ -109,10 +127,10 @@
                 }
             </div>
             <div class="text-end edits">
-                <a onclick="enable_disable_administration()" id="edit" class="btn  btn-info btn-submit ">
+                <a onclick="enable_disable_administration()" id="edit" class="btn text-white btn-info btn-submit ">
                     Edit
                 </a>
-                <div id="submit" class="btn  btn-outline-info btn-submit mx-2 ">
+                <div id="submit" class="btn  btn-outline-info  mx-2 ">
                     save
                 </div>
                 <div id="cancel" class="btn  btn-outline-danger ">
@@ -138,15 +156,25 @@
                 <label for="floatingInput">City</label>
             </div>
             <div class="col-md-6 form-floating ">
-                <input asp-for="State" class="form-control rounded mail-billing-imp" name="State" type="text" placeholder=Suchtext autocomplete=off>
+                <select class="form-select form-select-md mt-3 p-2 mail-billing-imp" asp-for="Regionid" name="Regionid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                </select>
                 <label for="floatingInput">State</label>
+                <div class="invalid-feedback invalid-feedback-Regionid">
+                    Please  Add Mobile Number
+                </div>
             </div>
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Zipcode" class="form-control rounded mail-billing-imp" name="Zipcode" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Zip Code</label>
+                <div class="invalid-feedback invalid-feedback-zipcode">
+                    Please Add 6 Digit Valid  Zip Code
+                </div>
             </div>
-            <div class="col-md-6 form-floating  my-1">
+            <div class="col-md-6 form-floating  ">
                 <input asp-for="AltMobile" id="phone1" type="tel" name="AltMobile" class="form-control rounded mail-billing-imp" autocomplete=off>
+                <div class="invalid-feedback invalid-feedback-phone1">
+                    Please  Add Mobile Number
+                </div>
                 <!-- <label for="floatingInput">Phone Number </label> -->
             </div>
 
@@ -247,9 +275,9 @@
         const resetbtn = document.querySelector('#submitresetpass');
         const billingbtn = document.querySelector('#submitbilling');
 
-        billingbtn.addEventListener('click', (event) => {
+        function billingbtns(){
             event.preventDefault();
-          
+
             Swal.fire({
                 title: "Do you want Reset PAssword  Changes ?",
                 showDenyButton: false,
@@ -268,11 +296,11 @@
                     Swal.fire("Changes are not saved", "", "info");
                 }
             });
-        });
+        }
 
-        resetbtn.addEventListener('click', (event) => {
+        function resetpass(){
             event.preventDefault();
-          
+
             Swal.fire({
                 title: "Do you want Reset PAssword  Changes ?",
                 showDenyButton: false,
@@ -291,9 +319,9 @@
                     Swal.fire("Changes are not saved", "", "info");
                 }
             });
-        });
+        }
 
-        btn.addEventListener('click', (event) => {
+        function saveinfo() {
             event.preventDefault();
             let checkboxes = document.querySelectorAll('input[name="Region"]:checked');
             let regionIds = [];
@@ -320,7 +348,115 @@
                     Swal.fire("Changes are not saved", "", "info");
                 }
             });
+        }
+        document.getElementById('submitresetpass').addEventListener('click', function () {
+            // Get the value of the password input field
+            var password = document.getElementById('passwordInput').value;
+            // Check if password is empty
+            if (!password) {
+                // Display alert if password is empty
+                $('.invalid-feedback-pass').show();
+            }else{
+                resetpass();
+            }
         });
 
+        function validateForm() {
+            // Get the values of the input fields
+            var firstName = document.getElementById("Firstname").value.trim();
+            var lastName = document.getElementById("Lastname").value.trim();
+            var email = document.getElementById("email").value.trim();
+            var mobile = document.getElementById("phone").value.trim();
+            var confirmEmail = document.getElementById("confirmEmail").value.trim();
+            var isValid = true;
+           
+            if (firstName === "") {
+                document.querySelector('.invalid-feedback-firstname').style.display = 'block';
+                isValid = false;
+            } else {
+                document.querySelector('.invalid-feedback-firstname').style.display = 'none';
+            }
+
+            if (lastName === "") {
+                document.querySelector('.invalid-feedback-lastname').style.display = 'block';
+                isValid = false;
+            } else {
+                document.querySelector('.invalid-feedback-lastname').style.display = 'none';
+            }
+
+            if (email === "") {
+                document.querySelector('.invalid-feedback-email').style.display = 'block';
+                isValid = false;
+            } else {
+                document.querySelector('.invalid-feedback-email').style.display = 'none';
+            }
+
+            if (mobile === "") {
+                document.querySelector('.invalid-feedback-mobile').style.display = 'block';
+                isValid = false;
+            } else {
+                document.querySelector('.invalid-feedback-mobile').style.display = 'none';
+            }
+
+            if (email !== confirmEmail) {
+                document.querySelector('.invalid-feedback-confirm-email').style.display = 'block';
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        document.getElementById("submit").addEventListener("click", function () {
+            // Validate the form fields
+            var isValid = validateForm();
+
+            // If form is valid, proceed with form submission
+            if (isValid) {
+                saveinfo();
+            }
+        });
+
+        function validateFormbiil() {
+            // Get the values of the input fields
+            var firstName = document.getElementById("Regionid").value.trim();
+            var lastName = document.getElementById("phone1").value.trim();
+            var zipcodeValue = document.getElementById("Zipcode").value.trim();
+
+            var isValid = true;
+           
+            if (firstName === "") {
+                document.querySelector('.invalid-feedback-Regionid').style.display = 'block';
+                isValid = false;
+            } else {
+                document.querySelector('.invalid-feedback-Regionid').style.display = 'none';
+            }
+
+            if (!/^\d{6}$/.test(zipcodeValue)) {
+                isValid = false;
+                document.querySelector('.invalid-feedback-zipcode').style.display = 'block';
+            } else {
+                document.querySelector('.invalid-feedback-zipcode').style.display = 'none';
+
+            }
+
+            if (lastName === "") {
+                document.querySelector('.invalid-feedback-phone1').style.display = 'block';
+                isValid = false;
+            } else {
+                document.querySelector('.invalid-feedback-phone1').style.display = 'none';
+            }
+
+           
+            return isValid;
+        }
+
+        document.getElementById("submitbilling").addEventListener("click", function () {
+            // Validate the form fields
+            var isValid = validateFormbiil();
+
+            // If form is valid, proceed with form submission
+            if (isValid) {
+                billingbtns();
+            }
+        });
     </script>
 }

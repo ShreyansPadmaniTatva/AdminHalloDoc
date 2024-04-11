@@ -27,7 +27,7 @@
             </h1>
         </div>
         <div>
-            <div onclick="history.back()" class="btn btn-outline-info"> ❮  Back </div>
+            <div href="javascript:void(0)" onclick="goBack()" class="btn btn-outline-info"> ❮  Back </div>
         </div>
     </div>
     <div class="card border-0 shadow p-4 mb-5  rounded">
@@ -45,17 +45,21 @@
                 <label for="floatingInput">Password </label>
             </div>
 
-            <div class="col-md-6 form-floating">
+            @if (Model != null)
+            {
+                 <div class="col-md-6 form-floating">
                 <select class="form-select form-select-md p-2 asp" required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
                 </select>
             </div>
+            }
+           
             <div class="col-md-6 form-floating">
                 <select class="form-select form-select-md p-2 asp" required name="Roleid" asp-for="Roleid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
                 </select>
             </div>
             <div class="text-end edits">
                 <button type="submit" asp-action="SaveAdminInfo" asp-controller="RoleAccess" class="btn-info btn" id="saveasp" style="display:none">Save</button>
-                <div class="btn btn-info" id="editasp">edit</div>
+                <div class="btn btn-info text-white" id="editasp">edit</div>
                 <button type="submit" asp-action="ResetPassAdmin" asp-controller="RoleAccess" class="text-end btn btn-outline-info " id="submitresetpass">Reset Password</button>
             </div>
 
@@ -110,7 +114,7 @@
                 }
             </div>
             <div class="text-end edits">
-                <a onclick="enable_disable_administration()" id="edit" class="btn  btn-info btn-submit ">
+                <a onclick="enable_disable_administration()" id="edit" class="btn  text-white btn-info btn-submit ">
                     Edit
                 </a>
                 <button id="submit" type="submit" asp-action="SaveAdministrationinfo" asp-controller="RoleAccess" class="btn  btn-outline-info btn-submit mx-2 ">

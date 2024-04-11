@@ -248,7 +248,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Physician.Aspnetuserid = Aspnetuser.Id;
                     Physician.Firstname = physiciandata.Firstname;
                     Physician.Lastname = physiciandata.Lastname;
-                    Physician.Status = physiciandata.Status;
+                    Physician.Status = 2;
                     Physician.Roleid = physiciandata.Roleid;
                     Physician.Email = physiciandata.Email;
                     Physician.Mobile = physiciandata.Mobile;

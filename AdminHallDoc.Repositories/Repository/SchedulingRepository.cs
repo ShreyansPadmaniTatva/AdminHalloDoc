@@ -361,6 +361,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                               Starttime = sd.Starttime,
                                               Endtime = sd.Endtime,
                                               PhysicianName = pd.Firstname + ' '+pd.Lastname,
+                                              Physicianid = pd.Physicianid
                                           })
                                              .ToListAsync();
 

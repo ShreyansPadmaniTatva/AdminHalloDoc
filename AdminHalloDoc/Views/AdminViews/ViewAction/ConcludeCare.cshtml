@@ -21,7 +21,7 @@
                 <h3 class="mt-2 fw-bolder"> Conclude Care</h3>
             </div>
             <div class="text-end">
-                <a onclick="history.back()" class="btn btn-outline-info btn-back text-end">
+                <a href="javascript:void(0)" onclick="goBack()" class="btn btn-outline-info btn-back text-end">
                     ❮ Back
                 </a>
             </div>
@@ -37,28 +37,32 @@
                     <div class="mt-1">
                         <h5> Enciunter Form</h5>
                     </div>
-                    <div class="btn btn-info text-white ">
-                        <i class="bi bi-upload" ></i>
-                        Upload
-                    </div>
+                    <form id="uploadForm" asp-action="UploadDocFromConculde" asp-controller="ViewAction" method="post" enctype="multipart/form-data">
+                        <input type="hidden" value="@Model.RequestID" name="RequestID" />
+                        <label for="fileInput" class="btn btn-outline-info">
+                            <i class="bi bi-upload"></i>
+                            Upload
+                        </label>
+                        <input type="file" name="file" id="fileInput" style="display: none;" onchange="submitForm()" />
+                        <button type="submit" style="display: none;"></button>
+                    </form>
+
                 </div>
-                <div class="table-responsive mt-2 ">
+                <div class="table-responsive my-4 ">
                     <table class="table">
-                        <thead class="border-0">
+                        <thead class="border-1 border-light">
                             <tr class="table-secondary">
                                
-                                <th scope="col" class="table-text-header px-3"></th>
+                                <th scope="col" class="table-text-header px-3">Documents</th>
 
-                                <th scope="col" class="table-text-header ">uplode date</th>
-                                <th scope="col" class="table-text-header ">Action</th>
+                                <th scope="col" class="table-text-header text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item2 in Model.documentslist)
                             {
                                 <tr>
-                                    <td class="table-text  px-3 flnamae"> <span> @item2.Filename </span></td>
-                                    <td class="table-text  px-3">@item2.Createddate</td>
+                                    <td class="table-text  px-3 flnamae"> <span> @item2.Filename.Substring(item2.Filename.LastIndexOf("/") + 1) </span></td>
 
                                     <td class="table-text text-center ">
                                         <a class="btn btn-sm  btn-outline-info document-button" download href="@item2.Filename.Replace("~","")">
@@ -71,13 +75,21 @@
                                     </td>
                                 </tr>
                             }
+                            @if (Model.documentslist.Count <= 0)
+                            {
+                                <tr>
+                                    <td colspan="2" class="text-center" >
+                                        No Documnet Found
+                                    </td>
+                                    </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
 
             </div>
             <form asp-action="ChangeNotes" asp-controller="SubmitForm" class="row g-3 " enctype="multipart/form-data">
-                <h4 class=" my-4">Provider Notes</h4>
+                <h4 class=" my-2">Provider Notes</h4>
                 <input value="@Model.RequestID" name="RequestID" type="hidden">
 
                
@@ -102,31 +114,12 @@
 </div>
 
 <script>
+    function submitForm() {
+        // Get the form element
+        var form = document.getElementById("uploadForm");
 
-
-    function toggleFormElements(bDisabled) {
-        var phone = document.getElementById("phone");
-        var email = document.getElementById("email");
-
-        var submit = document.getElementById("submit");
-        var editprofile = document.getElementById("editprofile");
-        var closecase = document.getElementById("closecase");
-        var cancel = document.getElementById("cancel");
-
-        phone.disabled = !phone.disabled;
-        email.disabled = !email.disabled;
-      
-        if (phone.disabled) {
-            submit.style.display = "none";
-            cancel.style.display = "none";
-            closecase.style.display = "inline-block";
-            editprofile.style.display = "inline-block";
-        } else {
-            submit.style.display = "inline-block";
-            cancel.style.display = "inline-block";
-            closecase.style.display = "none";
-            editprofile.style.display = "none";
-        }
+        // Submit the form
+        form.submit();
     }
     window.onload = function (e) {
         console.log(5);

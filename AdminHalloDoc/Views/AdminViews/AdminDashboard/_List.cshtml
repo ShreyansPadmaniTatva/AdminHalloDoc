@@ -325,18 +325,15 @@
 <script>
  
     setInitialArrowState();
-    // Function to set initial arrow icon state
     function setInitialArrowState() {
         const headers = $('.dashborad-table.Name, .dashborad-table.Requestor, .dashborad-table.Requested, .dashborad-table.Physician ');
 
-            // Add the arrow-down icon to each selected header
             headers.each(function () {
                 if (!$(this).find('.bi-arrow-up').length) {
                     $(this).append('<i class="bi bi-arrow-up btn"></i>');
                 }
                 $(this).click(function () {
                     const orderValues = $(this).attr('data-order').split(' ')[0];
-                    // Call the SetColumValue function passing the array of values
                     SetColumValue(orderValues);
                 });
             });
@@ -345,16 +342,12 @@
         var headerss = $('.dashborad-table');
         headerss.each(function () {
             var orderValues = $(this).attr('data-order').split(' ')[0];
-            // Check if the current column matches the sorted column in the model
             if (modeldata.sortedColumn === orderValues) {
                 var icon = $(this).find('i.bi.bi-arrow-up, i.bi.bi-arrow-down');
                 console.log(icon.find('i.bi.bi-arrow-up, i.bi.bi-arrow-down'));
-                // Check if the sorting is ascending or descending
                 if (!modeldata.isAscending) {
-                    // Add the arrow-down icon and remove arrow-up icon
                     icon.removeClass('bi-arrow-up').addClass('bi-arrow-down');
                 } else {
-                    // Add the arrow-up icon and remove arrow-down icon
                     icon.removeClass('bi-arrow-down').addClass('bi-arrow-up');
                 }
             }
@@ -385,7 +378,6 @@
         table = document.getElementById("table");
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
-            //if (tr[i].style.display != "none") {
 
             
                 td = tr[i].getElementsByTagName("td")[0];
@@ -397,7 +389,6 @@
                         tr[i].style.display = "none";
                     }
                 }
-           // }
         }
     }
 </script>
@@ -407,26 +398,21 @@
 </script>
 <script>
     $(function () {
-        // Add hover-triggered dropdown behavior
         $('.dropdown').hover(function () {
             var $dropdownMenu = $(this).find('.dropdown-menu');
             $dropdownMenu.addClass('show');
-            // Adjust position if menu extends beyond viewport
             var dropdownMenuRect = $dropdownMenu[0].getBoundingClientRect();
             var windowWidth = window.innerWidth;
             var windowHeight = window.innerHeight;
 
-            // Check if menu extends beyond the right of the viewport
             if (dropdownMenuRect.right > windowWidth) {
                 $dropdownMenu.css('right', 0);
                 $dropdownMenu.css('left', 'auto');
             }
-            // Check if menu extends beyond the bottom of the viewport
             if (dropdownMenuRect.bottom > windowHeight) {
                 $dropdownMenu.css('top', 'auto');
                 $dropdownMenu.css('bottom', '100%');
             }
-            // Check if menu extends beyond the top of the viewport
             if (dropdownMenuRect.top < 0) {
                 $dropdownMenu.css('top', '100%');
                 $dropdownMenu.css('bottom', 'auto');

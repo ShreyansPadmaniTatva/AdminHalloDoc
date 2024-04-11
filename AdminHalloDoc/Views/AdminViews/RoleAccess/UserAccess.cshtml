@@ -52,8 +52,8 @@
             </div>
         </div>
        
-        <div class="table-responsive">
-            <table class="table table-responsive mt-3 p-3">
+        <div id="shiftrequest" class="table-responsive">
+            <table id="shiftrequesttable" class="table table-responsive mt-3 p-3">
                 <thead>
                     <tr>
                         <th scope="col">Account Type</th>
@@ -102,6 +102,12 @@
     {
 
     <script type="text/javascript">
+        new DataTable('#shiftrequesttable', {
+            pagingType: 'simple_numbers',
+            lengthChange: false, // Disable table length dropdown
+            searching: false // Disable search feature
+        });
+
         var AdminStatus = {
         @foreach (int value in Enum.GetValues(typeof(AdminStatus)))
         {
@@ -128,7 +134,7 @@
                 success: function (response) {
 
                     console.log(response);
-                    $('table tbody').empty();
+                     var tableContent = ''; // Variable to hold the table content
                     // Assuming response is an array of objects, iterate through each object
                     response.forEach(function (item) {
                        
@@ -148,9 +154,35 @@
                         } newRow.append(actionButtonsCell);
                         
                         // Append the new row to the table
-                        $('table tbody').append(newRow);
-                    });
+                        tableContent += newRow.prop('outerHTML');
 
+                   
+                    });
+                     var fullTable = `
+        <div id="shiftrequest" class="table-responsive">
+                        <table id="shiftrequesttable" class="table table-responsive mt-3 p-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Account Type</th>
+                        <th scope="col">Account POC</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Open Request</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                        <tbody class="table-group-divider mx-5">
+                            ${tableContent}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+             $('#shiftrequest').replaceWith(fullTable);
+                        new DataTable('#shiftrequesttable', {
+                        pagingType: 'simple_numbers',
+                        lengthChange: false, // Disable table length dropdown
+                        searching: false // Disable search feature
+                    });
                 },
                 error: function () {
                     alert("Error while checking email.");

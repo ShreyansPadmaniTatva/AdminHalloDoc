@@ -65,7 +65,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                                    State = r.State,
                                    City = r.City,
                                    Zipcode = r.Zipcode,
-                                   Birthdate = new DateTime((int)r.Intyear, Convert.ToInt32(r.Strmonth.Trim()), (int)r.Intdate),
+                                   Birthdate = new DateTime((int)r.Intyear, Convert.ToInt32(r.Strmonth.Trim()), (int)r.Intdate) == null ? null  : new DateTime((int)r.Intyear, Convert.ToInt32(r.Strmonth.Trim()), (int)r.Intdate),
                                })
                                .FirstOrDefault();
             return UsersProfile;
@@ -88,9 +88,9 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                     userToUpdate.Street = userprofile.Street;
                     userToUpdate.City = userprofile.City;
                     userToUpdate.Zipcode = userprofile.Zipcode;
-                    userToUpdate.Intdate = userprofile.Birthdate.Day;
-                    userToUpdate.Intyear = userprofile.Birthdate.Year;
-                    userToUpdate.Strmonth = userprofile.Birthdate.Month.ToString();
+                    userToUpdate.Intdate = userprofile.Birthdate.Value.Day;
+                    userToUpdate.Intyear = userprofile.Birthdate.Value.Year;
+                    userToUpdate.Strmonth = userprofile.Birthdate.Value.Month.ToString();
                     userToUpdate.Modifiedby = userprofile.Createdby;
                     userToUpdate.Modifieddate = DateTime.Now;
                     _context.Update(userToUpdate);

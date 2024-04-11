@@ -33,7 +33,7 @@
             </a>
         </div>
         <div class="table-responsive">
-            <table class="table table-responsive mt-3 p-3">
+            <table id="shiftrequesttable" class="table table-responsive mt-3 p-3">
                 <thead>
                     <tr>
                         <th scope="col">Name</th>
@@ -71,7 +71,11 @@
     {
 
     <script type="text/javascript">
-
+        new DataTable('#shiftrequesttable', {
+            pagingType: 'simple_numbers',
+            lengthChange: false, // Disable table length dropdown
+            searching: false // Disable search feature
+        });
         window.onload = function () {
             
             console.log("@status  d");

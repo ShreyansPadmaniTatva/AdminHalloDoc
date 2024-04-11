@@ -7,7 +7,6 @@
 </div>
 
 <div class=" modal-body">
-    <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> @Model.PatientName </span></h3>
     <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post"
           data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
           asp-action="_EncounterModelPost" asp-controller="ViewAction">
@@ -16,27 +15,49 @@
         <input type="hidden" asp-for="ProviderId" />
 
         <div class="form-group row my-3">
-            <div class="col-md-12 txet-center">
-               <button type="submit" name="encounter" value="5" class="btn btn-info text-white">
-                   House call
-               </button>
-                <button type="submit" name="encounter" value="6" class="btn btn-info text-white">
-                    Consult
-                </button>
+            <div class="col-md-12 text-center">
+                <input type="radio" class="btn-check" name="encounter" id="house-call" value="5">
+                <label class="btn btn-outline-info " for="house-call">House call</label>
+
+                <input type="radio" class="btn-check" name="encounter" id="consult" value="6">
+                <label class="btn btn-outline-info " for="consult">Consult</label>
             </div>
         </div>
-        
+
+         <button type="submit" name="encounter" value="5" id="btn-house" class="btn d-none btn-info text-white">
+             House call
+         </button>
+        <button type="submit" name="encounter" value="6" id="btn-consult" class="btn d-none btn-info text-white">
+              Consult
+          </button>
+           
+        <div class="modal-footer">
+            <input value="Save" id="continueButton" type="button" class="btn btn-outline-info">
+            <button type="button" class="btn btn-info text-white" data-bs-dismiss="modal">Close</button>
+        </div>
     </form>
 </div>
 
 <script>
-    const buttonss = document.querySelectorAll('.btn');
-
-    buttonss.forEach(button => {
-        button.addEventListener('click', function () {
-            const encounterValue = this.value;
-
-            window.location.href = `/Physician/DashBoard`;
-        });
+    document.getElementById("continueButton").addEventListener("click", function () {
+        var selectedOption = document.querySelector('input[name="encounter"]:checked').id;
+        if (selectedOption === "house-call") {
+            document.getElementById("btn-house").click(); // Simulate click on "House call" button
+        } else if (selectedOption === "consult") {
+            document.getElementById("btn-consult").click();
+        }
+        window.location.href = `/Physician/DashBoard`;
     });
+
+    // Get the modal dialog element
+    var modalDialog = document.getElementById("myModal-ViewAction-_EncounterModel");
+
+    // Get the modal dialog with class modal-dialog modal-lg
+    var modalDialogInside = modalDialog.querySelector(".modal-dialog.modal-lg");
+    var modalDialogInsidecontent = modalDialog.querySelector(".modal-dialog.modal-lg .modal-content");
+
+    // Add CSS styles to center align the modal dialog inside
+    modalDialogInside.style.cssText += "align-items: center !important; justify-content: center !important; justify-self: center !important; display: flex !important;";
+    modalDialogInsidecontent.style.cssText += "width: 77% !important;";
+
 </script>

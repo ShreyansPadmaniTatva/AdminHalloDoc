@@ -68,6 +68,11 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         public async Task<IActionResult> _CreateShift()
         {
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            if (CV.role() == "Provider")
+            {
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox(Convert.ToInt32(CV.UserID()));
+                return PartialView("../AdminViews/Schedule/_CreateShift-Provider");
+            }
             return PartialView("../AdminViews/Schedule/_CreateShift");
         }
 
@@ -94,6 +99,11 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
            Schedule v = await _schedulingRepository.GetShiftByShiftdetailId(id);
             ViewBag.ProviderComboBox = await _viewActionRepository.ProviderbyRegion(v.Regionid);
+
+            if(CV.role() == "Provider")
+            {
+                return PartialView("../AdminViews/Schedule/_EditShift-Provider", v);
+            }
             return PartialView("../AdminViews/Schedule/_EditShift", v);
         }
 

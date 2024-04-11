@@ -1,4 +1,5 @@
-﻿@using static AdminHalloDoc.Entities.ViewModel.Constant;
+﻿@using AdminHalloDoc.Models.CV;
+@using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians;
 @{
     var enumData = from AdminStatus e in Enum.GetValues(typeof(AdminStatus))
@@ -33,7 +34,7 @@
             </h1>
         </div>
         <div>
-            <a onclick="history.back()" class="btn btn-outline-info"> ❮  Back </a>
+            <a href="javascript:void(0)" onclick="goBack()" class="btn btn-outline-info"> ❮  Back </a>
         </div>
     </div>
     <div class="card border-0 shadow p-4 mb-5  rounded">
@@ -52,21 +53,37 @@
                 <span asp-validation-for="PassWord" class="text-danger"></span>
 
             </div>
+            @{
+            if(Model != null && Model.Physicianid != Convert.ToInt32(CV.UserID()) ){
+                <div class="col-md-6 form-floating">
+                    <select class="form-select form-select-md form-control-disable p-2 asp" required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
+                    </select>
+                </div>
+                <div class="col-md-6 form-floating">
+                    <select class="form-select form-select-md  form-control-disable p-2 asp" required name="Roleid" asp-for="Roleid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
+                    </select>
+                </div>
+                <div class="text-end editable edits" style="display:none">
+                    <button type="submit" asp-action="SavePhysicianInfo" asp-controller="Physician" class="btn-info btn" id="saveasp" style="display:none">Save</button>
+                    <div class="btn btn-info" id="editasp">edit</div>
+                    <button class="text-end btn btn-outline-info " asp-action="ResetPassAdmin" asp-controller="Physician" id="submitresetpass">Reset Password</button>
+                </div>
+            }
+             else if(Model == null ){
+                  <div class="col-md-6 form-floating">
+                    <select class="form-select form-select-md  form-control-disable p-2 asp" required name="Roleid" asp-for="Roleid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
+                    </select>
+                </div>
+            }
+            else
+            {
+                <div class="text-end editable edits" style="display:none">
+                    <button class="text-end btn btn-outline-info " asp-action="ResetPassAdmin" asp-controller="Physician" id="submitresetpass">Reset Password</button>
+                </div>
+            }
+            }
 
-            <div class="col-md-6 form-floating">
-                <select class="form-select form-select-md form-control-disable p-2 asp" required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
-                </select>
-            </div>
-            <div class="col-md-6 form-floating">
-                <select class="form-select form-select-md  form-control-disable p-2 asp" required name="Roleid" asp-for="Roleid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
-                </select>
-            </div>
-
-            <div class="text-end editable edits" style="display:none">
-                <button type="submit" asp-action="SavePhysicianInfo" asp-controller="Physician" class="btn-info btn" id="saveasp" style="display:none">Save</button>
-                <div class="btn btn-info" id="editasp">edit</div>
-                <button class="text-end btn btn-outline-info " asp-action="ResetPassAdmin" asp-controller="Physician" id="submitresetpass">Reset Password</button>
-            </div>
+           
         
 
         <h4 class=" my-4"> Physician Information</h4>
@@ -274,14 +291,14 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-check mx-2">
-                            <input class="form-check-input agreement-checkbox" asp-for="Isagreementdoc" name="Isagreementdoc" type="checkbox" id="flexCheckDefault">
+                            <input class="form-check-input agreement-checkbox not-show" asp-for="Isagreementdoc" name="Isagreementdoc" type="checkbox" id="flexCheckDefault">
                             <label class="form-check-label" for="flexCheckDefault">
                                 Independent Contractor Agreement
                             </label>
                         </div>
                     </div>
                     <div class="col-md-4 d-flex">
-                        <div class="inputWrapper" >
+                        <div class="inputWrapper not-show">
                             @{
                                 bool isChecked = Model!=null ? Model.Isagreementdoc :false;
                             }
@@ -310,14 +327,14 @@
                 <div class="row" > 
                     <div class="col-md-3">
                         <div class="form-check mx-2">
-                            <input class="form-check-input agreement-checkbox" asp-for="Isbackgrounddoc" type="checkbox" id="Isbackgrounddoc">
+                            <input class="form-check-input agreement-checkbox not-show" asp-for="Isbackgrounddoc" type="checkbox" id="Isbackgrounddoc">
                             <label class="form-check-label" for="Isbackgrounddoc">
                                 Background Check
                             </label>
                         </div>
                     </div>
                     <div class="col-md-4 d-flex">
-                        <div class="inputWrapper">
+                        <div class="inputWrapper not-show">
                             @{
                                  isChecked = Model != null ? Model.Isbackgrounddoc : false;
                             }
@@ -343,14 +360,14 @@
                 <div class="row" > 
                     <div class="col-md-3">
                         <div class="form-check mx-2">
-                            <input class="form-check-input agreement-checkbox" asp-for="Istrainingdoc" type="checkbox"  id="flexCheckDefault">
+                            <input class="form-check-input agreement-checkbox not-show" asp-for="Istrainingdoc" type="checkbox" id="flexCheckDefault">
                             <label class="form-check-label" for="flexCheckDefault">
                                 HIPAA Compliance
                             </label>
                         </div>
                     </div>
                     <div class="col-md-4 d-flex">
-                        <div class="inputWrapper">
+                        <div class="inputWrapper not-show">
                             @{
                                 isChecked = Model != null ? Model.Istrainingdoc : false;
                             }
@@ -377,14 +394,14 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-check mx-2">
-                            <input  class="form-check-input agreement-checkbox" asp-for="Isnondisclosuredoc" type="checkbox" id="Isnondisclosuredoc">
+                            <input class="form-check-input agreement-checkbox not-show" asp-for="Isnondisclosuredoc" type="checkbox" id="Isnondisclosuredoc">
                             <label class="form-check-label" for="Isnondisclosuredoc">
                                 Non-disclosure Agreement
                             </label>
                         </div>
                     </div>
                     <div class="col-md-4 d-flex">
-                        <div class="inputWrapper">
+                        <div class="inputWrapper not-show">
                             @{
                                 isChecked = Model != null ? Model.Isnondisclosuredoc : false;
                             }
@@ -410,14 +427,14 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-check mx-2">
-                            <input class="form-check-input agreement-checkbox" asp-for="Islicensedoc" type="checkbox" id="Islicensedoc">
+                            <input class="form-check-input agreement-checkbox not-show" asp-for="Islicensedoc" type="checkbox" id="Islicensedoc">
                             <label class="form-check-label" for="Islicensedoc">
                                 License Document
                             </label>
                         </div>
                     </div>
                     <div class="col-md-4 d-flex">
-                        <div class="inputWrapper">
+                        <div class="inputWrapper not-show">
                             @{
                                 isChecked = Model != null ? Model.Islicensedoc : false;
                             }
@@ -443,15 +460,22 @@
        <hr/> 
             <div class="text-end mt-2 edits" >
 
-                <button type="submit" asp-action="EditProviderOnbording" asp-controller="Physician" id="save1" class="btn text-white btn-info btn-submit mx-2 ">
-                    save
-                </button>
-                <a asp-action="DeletePhysician" asp-controller="Physician" asp-route-PhysicianID="@(Model!= null?Model.Physicianid:null)" class="btn  btn-danger ">
-                    Delete Account
-                </a>
+               
+                @if (Model != null &&  Model.Physicianid != Convert.ToInt32(CV.UserID()))
+                {
+                    <button type="submit" asp-action="EditProviderOnbording" asp-controller="Physician" id="save1" class="btn text-white btn-info btn-submit mx-2 ">
+                        save
+                    </button>
+                    <a asp-action="DeletePhysician" asp-controller="Physician" asp-route-PhysicianID="@(Model!= null?Model.Physicianid:null)" class="btn  btn-danger ">
+                        Delete Account
+                    </a>
+                }
+                
             </div>
+            <div class="text-end" >
+            <input type="submit" class="btn btn-success" id="add" value="Create Account" />
 
-        <input type="submit" class="btn btn-info" id="add" value="Add" />
+            </div>
         </form>
     </div>
 </div>
@@ -459,7 +483,11 @@
     {
 
     <script type="text/javascript">
-
+        var loginId = @CV.UserID();
+        var providerId = @(Model != null ? Model.Physicianid : -1);
+        if(loginId == providerId){
+            $('.not-show').hide();
+        }
         $(function () {
             $('#edit-mail-billing').on('click', function (e) {
                 $('.mail-billing-imp').prop('disabled', false);

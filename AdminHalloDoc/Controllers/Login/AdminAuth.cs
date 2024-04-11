@@ -72,7 +72,17 @@ namespace AdminHalloDoc.Controllers.Login
 
             List<MenuItem> Staticmenu = loginservice.SetMenu(CV.RoleId());
 
-            bool isPathAvailable = Staticmenu.Any(item => item.Url.Equals(Path, StringComparison.OrdinalIgnoreCase) || item.ContollerAction.Equals(Path, StringComparison.OrdinalIgnoreCase));
+
+            bool isPathAvailable = Staticmenu.Any(item =>
+                item.Url.Equals(Path, StringComparison.OrdinalIgnoreCase) ||
+                item.ContollerAction.Equals(Path, StringComparison.OrdinalIgnoreCase)
+                ||
+                (item.Submenu != null && item.Submenu.Any(submenu =>
+                    submenu.Url.Equals(Path, StringComparison.OrdinalIgnoreCase) 
+                    )));
+
+
+            //bool isPathAvailable = Staticmenu.Any(item => item.Url.Equals(Path, StringComparison.OrdinalIgnoreCase) || item.ContollerAction.Equals(Path, StringComparison.OrdinalIgnoreCase));
 
 
             if ((Staticmenu == null || !flage || !isPathAvailable) && roles.Value != "Patient")

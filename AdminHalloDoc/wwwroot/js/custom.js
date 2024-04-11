@@ -8,6 +8,39 @@ function mode() {
 
     console.log(body.getAttribute('data-bs-theme'));
 }
+function goBack() {
+    // Check if there is a previous unique URL
+    var previousUrl = getPreviousUniqueUrl();
+    if (previousUrl) {
+        // If there is a previous URL, navigate to it
+        window.location.href = previousUrl;
+    } else {
+        // If there is no previous URL, go back in history
+        history.back();
+    }
+}
+
+// Function to get the previous unique URL
+function getPreviousUniqueUrl() {
+    var currentUrl = window.location.href;
+    var uniqueUrls = JSON.parse(localStorage.getItem('uniqueUrls')) || [];
+    var previousUrl = uniqueUrls.pop();
+    while (previousUrl === currentUrl) {
+        // Remove current URL if it's the same as the previous one
+        previousUrl = uniqueUrls.pop();
+    }
+    // Update the unique URLs in local storage
+    localStorage.setItem('uniqueUrls', JSON.stringify(uniqueUrls));
+    return previousUrl;
+}
+
+// Store the current URL when the page loads
+var currentUrl = window.location.href;
+var uniqueUrls = JSON.parse(localStorage.getItem('uniqueUrls')) || [];
+if (!uniqueUrls.includes(currentUrl)) {
+    uniqueUrls.push(currentUrl);
+    localStorage.setItem('uniqueUrls', JSON.stringify(uniqueUrls));
+}
 
 function validateForm() {
     // Implement your validation logic here
@@ -215,21 +248,26 @@ function savealt(title) {
         title: title
     });
 }
+document.addEventListener("DOMContentLoaded", function () {
+    const phoneInputFieldphone = document.querySelector("#phone");
+    const phoneInput = window.intlTelInput(phoneInputFieldphone, {
+        separateDialCode: true,
+        hiddenInput: "country_code",
+        preferredCountries: ["us", "co", "in", "de"],
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
 
-const phoneInputFieldphone = document.querySelector("#phone");
-const phoneInput = window.intlTelInput(phoneInputFieldphone, {
-    separateDialCode: true,
-    hiddenInput: "country_code",
-    preferredCountries: ["us", "co", "in", "de"],
-    utilsScript:
-        "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-});
-phoneInputFieldphone.addEventListener("input", function () {
-    // Get the formatted phone number
-    const formattedNumber = phoneInput.getNumber();
-    document.getElementById("phone").value = formattedNumber;
+    // Trigger the input event to format the phone number initially
+    phoneInputFieldphone.dispatchEvent(new Event('input'));
 
-});
+    phoneInputFieldphone.addEventListener("input", function () {
+        // Get the formatted phone number
+        const formattedNumber = phoneInput.getNumber();
+        // Update the input field value with the formatted number
+        document.getElementById("phone").value = formattedNumber;
+    });
+   
+
 const phoneInputField1 = document.querySelector("#phone1");
 const phoneInput1 = window.intlTelInput(phoneInputField1, {
     separateDialCode: true,
@@ -240,10 +278,19 @@ const phoneInput1 = window.intlTelInput(phoneInputField1, {
 });
 
 phoneInputField1.addEventListener("input", function () {
-    // Get the formatted phone number
-    const formattedNumber = phoneInput.getNumber();
+    const formattedNumber = phoneInput1.getNumber();
+    // Update the input field value with the formatted number
     document.getElementById("phone1").value = formattedNumber;
 
+});
+    function dispatchInputEvent() {
+        phoneInputFieldphone.dispatchEvent(new Event('input'));
+        phoneInputField1.dispatchEvent(new Event('input'));
+    }
+
+    var delayMilliseconds = 100;
+
+    setTimeout(dispatchInputEvent, delayMilliseconds);
 });
 function getLocation() {
     const x = document.getElementById("map");

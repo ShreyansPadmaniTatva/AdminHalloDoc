@@ -1,4 +1,6 @@
-﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Viewcase;
+﻿@using AdminHalloDoc.Entities.ViewModel;
+@using AdminHalloDoc.Models.CV;
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Viewcase;
 @{
     ViewData["Title"] = "View Case";
     var status = "null";
@@ -18,46 +20,46 @@
             <h1>  View Patient request <span class="badge badge-success p-2">Success</span> </h1>
         </div>
         <div>
-            <a onclick="history.back()" class="btn btn-outline-info"> ❮  Back </a>
+            <a href="javascript:void(0)" onclick="goBack()" class="btn btn-outline-info"> ❮  Back </a>
         </div>
     </div>
     <div class="card border-0 shadow p-4 mb-5  rounded">
-        <form asp-action="SaveViewcase" asp-controller="ViewAction" class="row g-3 " enctype="multipart/form-data">
+        <form asp-action="SaveViewcase" asp-controller="ViewAction" class="row g-3 needs-validation " enctype="multipart/form-data" novalidate>
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <h4 class=" my-4">Patient Information</h4>
             <input asp-for="RequesClientid" name="RequesClientid" type="hidden">
 
             <div class="col-md-12 form-floating  my-1">
-                <textarea asp-for="Notes" disabled class="form-control rounded" name="Symptoms" type="text" rows="4" cols="50" placeholder=Suchtext autocomplete=off></textarea>
+                <textarea asp-for="Notes" disabled class="form-control rounded" name="Notes" type="text" rows="4" cols="50" placeholder=Suchtext autocomplete=off></textarea>
                 <label asp-for="Notes" for="Symptoms"> Patient Notes </label>
                 <span asp-validation-for="Notes" class="text-danger"></span>
             </div>
 
             <hr/>
             <div class="col-md-6 form-floating  ">
-                <input asp-for="FirstName" class="form-control rounded vcs" name="FirstName" type="text" placeholder="First Name" autocomplete=off>
+                <input asp-for="FirstName" class="form-control rounded vcs" required name="FirstName" type="text" placeholder="First Name" autocomplete=off>
                 <label class="" for="floatingInput">First Name </label>
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
-                <input asp-for="LastName" class="form-control rounded vcs" name="LastName" type="text" placeholder=Suchtext autocomplete=off>
+                <input asp-for="LastName" class="form-control rounded vcs" required name="LastName" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Last Name </label>
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
-                <input asp-for="BirthDate" class="form-control rounded vcs" name="BirthDate" type="date" placeholder=Suchtext autocomplete=off>
+                <input asp-for="BirthDate" class="form-control rounded vcs" required name="BirthDate" type="date" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Birth Date </label>
                 <span asp-validation-for="BirthDate" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating d-flex align-items-center">
-                <input asp-for="PhoneNumber" id="phone" type="tel" name="PhoneNumber" class="form-control rounded vcs" autocomplete=off>
+                <input asp-for="PhoneNumber" id="phone" required type="tel" name="PhoneNumber" class="form-control rounded vcs" autocomplete=off>
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 <div >
                     <a class=" btn btn-outline-info text-center rounded fs-4 mx-2" href="tel:@Model.PhoneNumber"><i class="bi bi-telephone"></i></a>
                 </div>
             </div>
             <div class="col-md-6 form-floating ">
-                <input id="email" asp-for="Email" class="form-control rounded vcs" name="Email" type="text" placeholder=Suchtext autocomplete=off>
+                <input id="email" asp-for="Email" required class="form-control rounded vcs" name="Email" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Email </label>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
@@ -85,10 +87,20 @@
 
         </form>
         <div class="text-end my-4">
+            @if (Model.Status == 1 && CV.role() == "Admin")
+            {
+                <a data-bs-toggle="modal" data-bs-target="#Assigncase" data-bs-requestid="@Model.Requestid" data-bs-patientname="@Model.FirstName" class="btn btn-outline-info"> Assign </a>
+            }
+            <a asp-action="ViewNotes" asp-controller="AdminDashboard" asp-route-id="@Model.Requestid.Encode()" class="btn btn-info text-white"> View Notes </a>
+            @if (CV.role() == "Admin")
+            {
+                <a class=" btn btn-danger  js-stkModal-btn"
+                   data-form-id="formEdit_UMS"
+                   data-url='@Url.Action("_Cancelcase", "ViewAction", new {requestid = Model.Requestid})'
+                   data-modal-size="lg">Cancel  </a>
+
+            }
            
-            <a data-bs-toggle="modal" data-bs-target="#Assigncase" data-bs-requestid="@Model.Requestid" data-bs-patientname="@Model.FirstName" class="btn btn-outline-info"> Assign </a>
-            <a asp-action="ViewNotes" asp-controller="AdminDashboard" class="btn btn-info text-white"> View Notes </a>
-            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-danger"> Cancel </a>
         </div>
     </div>
 </div>

@@ -1,4 +1,5 @@
-﻿@*
+﻿@using AdminHalloDoc.Models.CV;
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
@@ -25,35 +26,43 @@
             </h3>
         </div>
         <div class="">
-            <a href="history.back()" class="btn btn-outline-info"> ❮  Back </a>
+            <a href="javascript:void(0)" onclick="goBack()" class="btn btn-outline-info"> ❮  Back </a>
         </div>
     </div>
     <div class=" border-0  py-1 mx-3 mt-3 rounded">
-        <div class="row">
-            <div class="col-md-7 mt-2">
-                <div class="dropdown bg-white">
+        @{
+            if (CV.role() != "Provider")
+            {
+                <div class="row">
+                    <div class="col-md-7 mt-2">
+                        <div class="dropdown bg-white">
 
-                    <select class="form-select form-control form-select-md" id="fregion" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
-                        <option value="-1">All Region</option>
-                    </select>
+                            <select class="form-select form-control form-select-md" id="fregion" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                                <option value="-1">All Region</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-5 mt-2">
+                        <div class="d-flex justify-content-end">
+                            <a asp-action="ProviderOnCall" asp-controller="Scheduling" class="btn btn-info text-white mx-2">
+                                Provider On Call
+                            </a>
+                            <!-- Button trigger modal -->
+                            <a asp-action="RequestedShift" asp-controller="Scheduling" class="btn btn-info text-white  mx-2">
+                                Shift Review
+                            </a>
+                            <a class="storeToLocalStorage btn btn-info text-white js-stkModal-btn mx-2"
+                            data-date=""
+                               data-form-id="formEdit_UMS"
+                               data-url='@Url.Action("_CreateShift", "Scheduling")'
+                               data-modal-size="lg">Add New Shift  </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-5 mt-2">
-                <div class="d-flex justify-content-end">
-                    <a asp-action="ProviderOnCall" asp-controller="Scheduling" class="btn btn-info text-white mx-2">
-                        Provider On Call
-                    </a>
-                    <!-- Button trigger modal -->
-                    <a asp-action="RequestedShift" asp-controller="Scheduling" class="btn btn-info text-white  mx-2">
-                        Shift Review
-                    </a>
-                    <a class="btn btn-info text-white js-stkModal-btn mx-2"
-                       data-form-id="formEdit_UMS"
-                       data-url='@Url.Action("_CreateShift", "Scheduling")'
-                       data-modal-size="lg">Add New Shift  </a>
-                </div>
-            </div>
-        </div>
+
+            }
+        }
+
         <div class="row my-4">
             <div class="col-md-7 mt-2">
                 <div class="calendar-current-date fs-4 fw-bolder">Dec 2023</div>
@@ -75,18 +84,35 @@
                     <span class="mx-1">Appoved Shifts</span>
 
                 </div>
-                <div class="d-flex justify-content-end">
-                    <div id="day" class="btn btn-outline-info  mx-2">
-                        Day
-                    </div>
-                    <!-- Button trigger modal -->
-                    <div id="week" class="btn btn-outline-info   mx-2">
-                        Week
-                    </div>
-                    <div id="month" class="btn btn-outline-info   mx-2">
-                        Month
-                    </div>
-                </div>
+                @{
+                    if (CV.role() == "Provider")
+                    {
+                        <div class="d-flex justify-content-end" >
+                            <a class="storeToLocalStorage btn btn-success text-white js-stkModal-btn mx-2"
+                               data-date=""
+                               data-form-id="formEdit_UMS"
+                               data-url='@Url.Action("_CreateShift", "Scheduling")'
+                               data-modal-size="lg">Add New Shift  </a>
+                        </div>
+                       
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-end">
+                            <div id="day" class="btn btn-outline-info  mx-2">
+                                Day
+                            </div>
+                            <!-- Button trigger modal -->
+                            <div id="week" class="btn btn-outline-info   mx-2">
+                                Week
+                            </div>
+                            <div id="month" class="btn btn-outline-info   mx-2">
+                                Month
+                            </div>
+                        </div>
+                    }
+                }
+                    
             </div>
         </div>
     </div>
@@ -251,6 +277,7 @@
       
 
         $(function () {
+            var loginId = @CV.UserID();
             var x = 1;
             var providerList = [];
             var extractedDataArray = [];
@@ -266,7 +293,6 @@
                     data: { region: regionId },
                     dataType: "json",
                     success: function (response) {
-                        console.log(response);
                         providerList = [];
                         // Array to store converted objects
                         response.forEach(function (item) {
@@ -313,7 +339,6 @@
                             };
                             providerList.push(providerObj);
                         });
-                        console.log(providerList);
                         if(x == 2){
                         $('#week').click();
 
@@ -340,6 +365,7 @@
                     data: { month: month, regionId: regionId,year:year },
                     dataType: "json",
                     success: function (response) {
+                        console.log(response);
                         // Initialize an array to store extracted data
                         extractedDataArray = [];
 
@@ -370,6 +396,7 @@
                                         startTime: day.starttime,
                                         endTime: day.endtime,
                                         status: day.status,
+                                        physicianid: day.physicianid
                                     };
                                     // Push day data into dayDataArray
                                     dayDataArray.push(dayData);
@@ -476,7 +503,8 @@
                             let providerObj = {
                                 name: item.physicianName + ' <br/> ' + item.startTime + item.endTime,
                                 status: item.status,
-                                shiftid: item.shiftid
+                                shiftid: item.shiftid,
+                                physicianid: item.physicianid == loginId
                             };
                             ProviderNames.push(providerObj);
                             Status.push(item.status);
@@ -485,17 +513,53 @@
 
                     lit += `<td class="table-text ${isToday} p-0"> 
                             <div class="first">${i}</div>
-                                    <div class="js-stkModal-btn ${Status.length > 0 ? 'Status-' + Status[0] : ''}"  data-form-id="formEdit_UMS"
-                                   data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 0 ? ProviderNames[0].shiftid : ''}'
-                                           >${ProviderNames.length > 0 ? ProviderNames[0].name : ''}</div>
-                                            <div class="${Status.length > 1 ? 'Status-' + Status[1] : ''}" ><a data-form-id="formEdit_UMS"
-                                   data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 1 ? ProviderNames[1].shiftid : ''}'
-                                           class="js-stkModal-btn ">${ProviderNames.length > 1 ? ProviderNames[1].name : ''}</a></div>
-                                            <div class="${Status.length > 2 ? 'Status-' + Status[2] : ''}">
-                                            <a data-form-id="formEdit_UMS"
-                                   data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames.length > 2 ? ProviderNames[2].shiftid : ''}'
-                                           class="js-stkModal-btn ${Status.length > 2 ? 'Status-' + Status[2] : ''}">${ProviderNames.length > 2 ? ProviderNames[2].name : ''}</a></div>
-                                    <div type="button"  id="${buttonId}" data-bs-toggle="modal" data-bs-target="${ProviderNames.length > 3 ? '#exampleModal' : ''}" data-month="${month}" data-index="${i}" class="${Status.length > 3 ? 'btn btn-info text-white w-100 text-white rounded-0 view-all-btn' : ''}">${ProviderNames.length > 3 ? 'View All' : ''}</div>
+
+                            ${Status.length > 0 ?
+                            ` <a data-form-id="formEdit_UMS"
+                               data-url='@Url.Action("_EditShift", "Scheduling")?id=${ ProviderNames[0].shiftid}'
+                               class="js-stkModal-btn ">
+                               <div class="${'Status-' + Status[0]+' '+ProviderNames[0].physicianid}-physician" >${ ProviderNames[0].name }</div>
+                                </a>`
+                                :
+                            ` <div class="storeToLocalStorage text-white js-stkModal-btn "
+                               data-date="${i + '/' + month + '/' + year}"
+                              data-form-id="formEdit_UMS"
+                              data-url='@Url.Action("_CreateShift", "Scheduling")'
+                              data-modal-size="lg" > </div>`
+                            }
+
+                                    ${Status.length > 1 ?
+                                    ` <a data-form-id="formEdit_UMS"
+                                       data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames[1].shiftid}'
+                                       class="js-stkModal-btn ">
+                                       <div class="${'Status-' + Status[1]+' '+ProviderNames[1].physicianid}-physician" >${ProviderNames[1].name}</div>
+                                        </a>`
+                                        :
+                            ` <div class="storeToLocalStorage text-white js-stkModal-btn "
+                                            data-date="${i + '/' + month + '/' + year}"
+                                      data-form-id="formEdit_UMS"
+                                      data-url='@Url.Action("_CreateShift", "Scheduling")'
+                                      data-modal-size="lg" > </div>`
+                                      }
+
+
+                             ${Status.length > 2 ?
+                            ` <a data-form-id="formEdit_UMS"
+                              data-url='@Url.Action("_EditShift", "Scheduling")?id=${ProviderNames[2].shiftid}'
+                              class="js-stkModal-btn ">
+                              <div class="${'Status-' + Status[2]+' '+ProviderNames[2].physicianid}-physician" >${ProviderNames[2].name}</div>
+                               </a>`
+                            :
+                            ` <div class="storeToLocalStorage text-white js-stkModal-btn "
+                                    data-date="${i + '/' + month + '/' + year}"
+                              data-form-id="formEdit_UMS"
+                              data-url='@Url.Action("_CreateShift", "Scheduling")'
+                              data-modal-size="lg" > </div>`
+                            }
+                                                 
+
+                                            
+                                    <div type=""  id="${buttonId}" data-bs-toggle="modal" data-bs-target="${ProviderNames.length > 3 ? '#exampleModal' : ''}" data-month="${month}" data-index="${i}" class="${Status.length > 3 ? 'btn btn-info text-white w-100 text-white rounded-0 view-all-btn' : ''}">${ProviderNames.length > 3 ? 'View All' : ''}</div>
                         </td>`;
                     dayCount++;
                 }
@@ -516,6 +580,13 @@
                 day.innerHTML = lit;
             };
 
+                $(document).on('click', '.storeToLocalStorage', function () {
+                // Retrieve the data-date attribute value
+                var date = $(this).data("date");
+                console.log(date);
+                // Logic to store data in local storage
+                localStorage.setItem("date", date);
+            });
 
             $(document).on('click', '.view-all-btn', function () {
 

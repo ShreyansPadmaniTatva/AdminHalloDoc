@@ -1,8 +1,11 @@
-﻿@*
+﻿@using System.Text;
+@using AdminHalloDoc.Models.CV;
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     var status = "null";
+    var transferNotesHtml = new StringBuilder();
     if (TempData["Status"] == null)
     {
         status = "null";
@@ -15,6 +18,22 @@
 }
 @using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewNotesModel;
+<!-- Modal -->
+<div class="modal fade" id="Assigncase" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">All Transfer Notes</h1>
+                <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-circle"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="transferNotesBody">
+                <!-- Transfer notes content will be populated here -->
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container">
 
         <div class="card-header  border-0  bg-transparent text-end mt-2">
@@ -26,7 +45,7 @@
 
 
                 <div class="text-end">
-                <a onclick="history.back()"
+                <a href="javascript:void(0)" onclick="goBack()"
                        class="btn btn-outline-info btn-back">
                     ❮ Back
                     </a>
@@ -35,11 +54,11 @@
         </div>
 
 
-    <div class="row align-items-center  justify-content-around my-3 " >
+    <div class="row  my-3 " >
        @if (Model.transfernotes.Count > 0)
        {
-                <div class="col-md-6" style="min-height:100px">
-                    <div class="card border-0 shadow" style="cursor:pointer">
+                <div class="col-md-6 mb-3" style="min-height:100px">
+                    <div class="card border-0 shadow" >
                         <div class="card-body">
                             <h5 class="card-title">
                                 <img src="~/images/transfer-alt-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" /> <b>
@@ -47,19 +66,40 @@
                                 </b>
                             </h5>
                             <hr />
-                            <p class="card-text p-2">
-                                @{
-                            int i = 1;
-                                }
+                            <p class="card-text p-2 mb-0">
+                            @{
+                                int i = 1;
+                                transferNotesHtml = new StringBuilder();
+                            }
                             
                             @foreach (var item in Model.transfernotes)
                             {
-                                <b>( @i ) </b> @Html.Raw(System.Web.HttpUtility.HtmlDecode(item.TransferNotes))   <br />
+                                if( i <= 2)
+                                {
+                                <b>( @i ) </b> @Html.Raw(System.Web.HttpUtility.HtmlDecode(item.TransferNotes)) <br />
+                                    
+                                }
+                                transferNotesHtml
+                                .Append("<div class=\"d-flex\">")
+                                .Append("<span class=\"  align-self-center fs-2 \" >" + i + ". </span>")
+                                .Append("<div class=\"border border-secondary m-2 p-2 rounded bg-light\">")
                                 
+                                .Append(Html.Raw(System.Web.HttpUtility.HtmlDecode(item.TransferNotes)))
+                                .Append("</div>")
+                                    .Append("</div>");
+
+
+
                                     i = i + 1;
                                 
                             }
-                      
+                            @if (i > 2)
+                            {
+                                <div class="text-end" >
+                                    <button type="button" class="btn btn-info text-white " onclick="openModals()">View More</button>
+                                </div>
+                            // Exit the loop
+                            }
                             </p>
                         </div>
                     </div>
@@ -69,8 +109,8 @@
         {
             @foreach (var item in Model.cancelnotes)
             {
-                    <div class="col-md-6" style="min-height:100px">
-                        <div class="card border-0 shadow" style="cursor:pointer">
+                    <div class="col-md-6 mb-3" style="min-height:100px">
+                        <div class="card border-0 shadow">
                             <div class="card-body">
                                 <h5 class="card-title">
                                     <i class="fa fa-window-close" aria-hidden="true"></i>
@@ -87,10 +127,8 @@
                 </div>
            }
         }
-        </div>
-        <div class="row align-items-center  justify-content-around  ">
-        <div class="col-md-6">
-            <div class="card border-0 shadow" style="cursor:pointer" onclick="adminnotestext()">
+        <div class="col-md-6 mb-3">
+            <div class="card border-0 shadow" style="cursor:pointer" onclick="handleClicka('@CV.role()')">
                 <div class="card-body">
                     <h5 class="card-title"><img src="~/images/health-care-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" /> <b>
                         Admin Notes
@@ -103,8 +141,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card border-0 shadow po " onclick="phynotetext()" style="cursor:pointer">
+        <div class="col-md-6 mb-3">
+            <div class="card border-0 shadow po " onclick="handleClickp('@CV.role()')"  style="cursor:pointer">
                 <div class="card-body">
                     <h5 class="card-title">
                         <img src="~/images/doctor-svgrepo-com.svg" style="height:50px;width:50px" class="mx-3 icn-img" /> <b> Physician Notes</b>
@@ -127,7 +165,7 @@
                         <div class="card border-0">
                             <div class=" form-floating  m-3">
                                 <input type="hidden" name="RequestID" value="@Model.Requestid" />
-                                <textarea id="changenote"  class="form-control rounded " name="Symptoms" type="text" rows="4" cols="50" placeholder=Suchtext autocomplete=off></textarea>
+                                <textarea style="height: 159px;" id="changenote" class="form-control rounded " name="Symptoms" type="text" rows="4" cols="50" placeholder=Suchtext autocomplete=off></textarea>
                                 <label id="notedata" for="Symptoms">  Notes </label>
                                 <span  class="text-danger"></span>
                             </div>
@@ -145,7 +183,28 @@
         </div>
         
 </div>
+@section Scripts
+    {
 
+    <script>
+        var transferNotesHtml = '@Html.Raw(transferNotesHtml)';
+        $(document).ready(function () {
+            //populateAndShowModal(transferNotesHtml);
+        });
+        function openModals() {
+            populateAndShowModal(transferNotesHtml);
+        }
+        function openModal() {
+           
+            $('#Assigncase').modal('show');
+        }
+
+        function populateAndShowModal(htmlContent) {
+            $('#transferNotesBody').html(htmlContent);
+            openModal();
+        }
+    </script>
+    }
 <script>
     window.onload = function () {
         console.log("@status  d");
@@ -165,8 +224,22 @@
         $("#changenote").attr("name", "adminnotes");
         $("#notedata").html("Admin Note");
     }
+    function handleClicka(role) {
 
+        if (role === "Admin") {
+            adminnotestext();
+        } else {
+            cancelalt("You are not able to change the notes.");
+        }
+    }
+    function handleClickp(role) {
 
+        if (role === "Provider") {
+            phynotetext();
+        } else {
+            cancelalt("You are not able to change the notes.");
+        }
+    }
     function enable_disable() {
         $(".edit-frm").prop("readonly", false);
         $("#save").prop("readonly", false);

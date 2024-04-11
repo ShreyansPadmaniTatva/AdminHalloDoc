@@ -75,10 +75,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                         Address = rc.Address + "," + rc.City + " " + rc.Zipcode,
                                                         RequestTypeID = req.Requesttypeid,
                                                         Status = req.Status,
-                                                        PhysicianName = p.Firstname + " " + p.Lastname ?? "-",
+                                                        PhysicianName = p.Firstname + " " + p.Lastname == " " ? "-" : p.Firstname + " " + p.Lastname,
                                                         AdminNote = nt != null ? nt.Adminnotes ?? "-" : "-",
                                                         PhysicianNote = nt != null ? nt.Physiciannotes ?? "-" : "-",
-                                                        PatientNote = rc.Notes ?? "-"
+                                                        PatientNote = rc.Notes ?? "-",
+                                                        Zip = rc.Zipcode ?? "-"
                                                     }).ToList();
 
 
@@ -154,13 +155,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
                                       Userid = user.Userid,
                                       Firstname = user.Firstname,
-                                      Lastname = user.Lastname,
-                                      Email = user.Email,
-                                      Mobile = user.Mobile,
-                                      Street = user.Street,
-                                      City = user.City,
-                                      State = user.State,
-                                      Zipcode = user.Zipcode
+                                      Lastname = user.Lastname ?? "-",
+                                      Email = user.Email ?? "-",
+                                      Mobile = user.Mobile ?? "-",
+                                      Street = user.Street ?? "-",
+                                      City = user.City ?? "-",
+                                      State = user.State ?? "-",
+                                      Zipcode = user.Zipcode ?? "-",
 
 
                                   }).ToList();
@@ -206,10 +207,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                          Requestor = req.Firstname + " " + req.Lastname,
                                                          PatientName = rc.Firstname + " " + rc.Lastname,
                                                          RequestedDate = req.Createddate,
-                                                         Dob = new DateTime((int)rc.Intyear, (int)Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
+                                                         Dob = new DateTime((int)rc.Intyear, (int)Convert.ToInt32(rc.Strmonth), (int)rc.Intdate) ,
                                                          PhoneNumber = rc.Phonenumber,
                                                          Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.Zipcode,
-                                                         Notes = rc.Notes,
+                                                         Notes = rc.Notes ?? "-",
                                                          ProviderID = req.Physicianid,
                                                          RegionID = rc.Regionid,
                                                          RequestorPhoneNumber = req.Phonenumber,
@@ -316,7 +317,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                            where (!rm.Startdate.HasValue || req.Createddate.Value.Date == rm.Startdate.Value.Date) &&
                                                  (rm.Patientname.IsNullOrEmpty() || _context.Requests.FirstOrDefault(e => e.Requestid == Convert.ToInt32(req.Requestid)).Firstname.ToLower().Contains(rm.Patientname.ToLower())) &&
                                                  (rm.Email.IsNullOrEmpty() || req.Email.ToLower().Contains(rm.Email.ToLower())) &&
-                                                 (rm.Phonenumber.IsNullOrEmpty() || req.Phonenumber.ToLower().Contains(rm.Phonenumber.ToLower()))
+                                                 (rm.Phonenumber.IsNullOrEmpty() || req.Phonenumber.ToLower().Contains(rm.Phonenumber.ToLower())) && req.Isactive  == new BitArray(1)  
                                            select new BlockRequestData
                                            {
                                                PatientName = _context.Requests.FirstOrDefault(e => e.Requestid == Convert.ToInt32(req.Requestid)).Firstname,
@@ -325,7 +326,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                Isactive = req.Isactive,
                                                Requestid = Convert.ToInt32(req.Requestid),
                                                Phonenumber = req.Phonenumber,
-                                               Reason = req.Reason
+                                               Reason = req.Reason ?? "-"
                                            }).ToList();
 
 
@@ -347,7 +348,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             {
                 Blockrequest br = _context.Blockrequests.FirstOrDefault(e => e.Requestid == RequestID.ToString());
                 br.Isactive = new BitArray(1);
-                br.Isactive[0] = true;
+                br.Isactive[0] = false;
                 _context.Blockrequests.Update(br);
                 _context.SaveChanges();
 

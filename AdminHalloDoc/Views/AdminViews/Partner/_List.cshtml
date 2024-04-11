@@ -1,14 +1,14 @@
-﻿@model List<AdminHalloDoc.Entities.Models.Healthprofessional>;
+﻿@model List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewVendorList>;
 <div class="table-responsive">
     <table class="table table-responsive mt-3 p-3">
         <thead>
             <tr>
-                <th></th>
-                <th scope="col">Stoop Notification </th>
-                <th scope="col">Provider Name</th>
-                <th scope="col">Role</th>
-                <th scope="col">On Call Status </th>
-                <th scope="col">Status</th>
+                <th>Profession</th>
+                <th scope="col">Business Name </th>
+                <th scope="col">Email</th>
+                <th scope="col">Fax Number</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Business Contact</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -16,23 +16,24 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td class="table-text px-3 text-center justify-content-center" align="center" scope="row" data-label="Created Date">
+                    <td class="table-text px-3 " align="center" scope="row" data-label="Created Date">
+                    @item.Profession
                     </td>
-                    <td scope="row" data-label="Created Date">@item.Vendorname  </td>
+                    <td scope="row" data-label="Created Date">@item.VendorName  </td>
                     <td scope="row" data-label="Created Date">@item.Email</td>
-                    <td scope="row" data-label="Created Date">@item.Faxnumber</td>
-                    <td scope="row" data-label="Created Date">@item.Phonenumber</td>
-                    <td scope="row" data-label="Created Date">@item.Businesscontact</td>
+                    <td scope="row" data-label="Created Date">@item.FaxNumber</td>
+                    <td scope="row" data-label="Created Date">@item.PhoneNumber</td>
+                    <td scope="row" data-label="Created Date">@item.BusinessContact</td>
                     <td class=" d-flex" data-label="Document">
 
                         
                         
-                        <a asp-action="PartnerAddEdit" asp-controller="Partner" asp-route-id="@item.Vendorid" class="btn btn-outline-info btn-sm document-button mx-1">
+                        <a asp-action="PartnerAddEdit" asp-controller="Partner" asp-route-id="@item.VendorID" class="btn btn-outline-info btn-sm document-button mx-1">
                             Edit
 
                         </a>
                         <form class="deleteform" asp-action="DeletePartner" asp-controller="Partner">
-                            <input type="hidden" name="venderId" value="@item.Vendorid" />
+                            <input type="hidden" name="venderId" value="@item.VendorID" />
                             <div  class="btn btn-outline-info btn-sm document-button mx-1 delete">
                                 Delete
 

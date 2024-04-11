@@ -29,7 +29,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
         public async Task<IActionResult> Index()
         {
-            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+            ViewBag.VenderTypeComboBox = await _requestRepository.VenderTypeComboBox();
             return View("../AdminViews/Partner/Index");
         }
 
@@ -37,9 +37,9 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region _SearchResult
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> _SearchResult(int? regionId)
+        public async Task<IActionResult> _SearchResult(int? regionId,string? searchvender = null)
         {
-            List<Healthprofessional> r =await _viewNotesRepository.GetPartnersByProfession(regionId);
+            List<ViewVendorList> r =await _viewNotesRepository.GetPartnersByProfession(regionId, searchvender);
             return PartialView("../AdminViews/Partner/_List", r);
         }
         #endregion

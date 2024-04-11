@@ -1,5 +1,6 @@
 ﻿using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.Models;
+using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository;
@@ -25,10 +26,10 @@ namespace AdminHalloDoc.Controllers
             _viewActionRepository = viewActionRepository;
         }
         #endregion
-        public IActionResult Index(int RequestID)
+        public IActionResult Index(string RequestID)
         {
-            var request = _context.Requests.Find(RequestID);
-            TempData["RequestID"] = RequestID;
+            var request = _context.Requests.Find(RequestID.Decode());
+            TempData["RequestID"] = RequestID.Decode();
             TempData["PatientName"] = request.Firstname + " " + request.Lastname;
             return View();
         }

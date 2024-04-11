@@ -165,7 +165,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
             //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
+            ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox(2);
             if (id == null)
             {
                 ViewData["AdminAccount"] = "Add Admin";
@@ -175,8 +175,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 ViewData["AdminAccount"] = "Edit Admin";
 
                 ViewAdminProfile p = await _myProfileRepository.GetProfileDetails((int)id);
-                ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-                ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
                 return View("../AdminViews/RoleAccess/AdminAddEdit", p);
 
             }

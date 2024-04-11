@@ -1,0 +1,232 @@
+﻿@using AdminHalloDoc.Models.CV;
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Schedule;
+<div class="modal-header  bg-info text-white">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Create Shift</h1>
+    <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
+        <i class="bi bi-x-circle"></i>
+    </button>
+</div>
+
+<div class=" modal-body container-fluid">
+    <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post" class="row"
+          data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
+          asp-action="_CreateShiftPost" asp-controller="Scheduling">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Shiftid" />
+        <input type="hidden" asp-for="Physicianid" value="@Convert.ToInt32(CV.UserID())" />
+
+        <div class="col-md-12 form-floating my-2">
+            <select class="form-select " required asp-for="Regionid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                <option>All Region</option>
+            </select>
+        </div>
+       
+        <div class="col-md-12 form-floating my-2">
+            <input id="StartDate" asp-for="Startdate" class="form-control rounded vcs" name="Startdate" type="date" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">Starting Date</label>
+            <span asp-validation-for="Startdate" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-floating">
+            <input id="StartTime" asp-for="Starttime" class="form-control rounded vcs" name="Starttime" type="time" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">Start</label>
+            <span asp-validation-for="Starttime" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-floating">
+            <input id="EndTime" asp-for="Endtime" class="form-control rounded vcs" name="Endtime" type="time" placeholder=Suchtext autocomplete=off>
+            <label for="floatingInput">End</label>
+            <span asp-validation-for="Endtime" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form- my-4">
+            <label for="floatingInput" class="mx-2" >Repeat</label>
+            <label class="switch">
+                <input type="checkbox" asp-for="Isrepeat" class="switch-input" onchange="toggleCheckboxes()">
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+            </label>
+            <span asp-validation-for="Isrepeat" class="text-danger"></span>
+        </div>
+
+          <label class="my-1" for="Sunday">Repeat Days</label>
+          <input type="hidden" asp-for="checkWeekday" id="checkWeekday" />
+
+        <div class="col-md-12 row form-floating">
+            <div class="col-md-3 ">
+                <div class="form-check mx-2">
+                    <input onchange="menubox()" class="form-check-input Every disabled" disabled type="checkbox" name="Sunday" value="0">
+                    <label class="form-check-label" for="Sunday">Every Sunday</label>
+                </div>
+                </div>
+            <div class="col-md-3 ">
+                <div class="form-check mx-2">
+                    <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Monday" value="1">
+                    <label class="form-check-label" for="Monday">Every Monday</label>
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <div class="form-check mx-2">
+                    <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Tuesday" value="2">
+                    <label class="form-check-label" for="Tuesday">Every Tuesday</label>
+                </div>
+                </div>
+            <div class="col-md-3 ">
+                <div class="form-check mx-2">
+                    <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Wednesday" value="3">
+                    <label class="form-check-label" for="Wednesday">Every Wednesday</label>
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <div class="form-check mx-2">
+                    <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Thursday" value="4">
+                    <label class="form-check-label" for="Thursday">Every Thursday</label>
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <div class="form-check mx-2">
+                    <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Friday" value="5">
+                    <label class="form-check-label" for="Friday">Every Friday</label>
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <div class="form-check mx-2">
+                    <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Saturday" value="6">
+                    <label class="form-check-label" for="Saturday">Every Saturday</label>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6 form-floating  my-2">
+            <select class="form-select form-select-sm mt-3 p-2" id="Refile" disabled asp-for="Repeatupto" data-allow-clear="true" tabindex="-1" data-control="select2" data-placeholder="Number Of Refile">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+            </select>
+            <label class="" for="Sunday">Repeat End</label>
+
+        </div>
+        <hr class="form-button-divider" />
+        @{
+            short i = 0;
+
+            if (CV.role() == "Admin")
+            {
+                i = 1;
+            }
+        }
+        <input type="hidden" asp-for="Status" value="@i" id="checkWeekday" />
+
+        <div class="row">
+            <div class="offset-md-4 col-md-8">
+                <input type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" />
+                <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    // Get the date from local storage
+    var storedDate = localStorage.getItem("date");
+
+    if (storedDate !== null && storedDate !== undefined) {
+        var parts = storedDate.split('/');
+        var day = parts[0];
+        var month = parts[1];
+        var year = parts[2];
+        var dateObject = new Date(year, month , day);
+        var today = new Date();
+
+        if (dateObject >= today) {
+        dateObject.setDate(dateObject.getDate() + 1);
+        var formattedDate = dateObject.toISOString().split('T')[0];
+        console.log(formattedDate);
+
+        document.getElementById("StartDate").value = formattedDate;
+        }
+    }
+</script>
+<script type="text/javascript">
+    var today = new Date();
+    var formattedDate = today.toISOString().split('T')[0];
+
+    document.getElementById('StartDate').min = formattedDate;
+    document.getElementById('StartTime').addEventListener('change', function () {
+        var startTime = this.value;
+
+        document.getElementById('EndTime').min = startTime;
+
+        if (document.getElementById('EndTime').value < startTime) {
+            document.getElementById('EndTime').value = startTime;
+        }
+    });
+    document.getElementById('EndTime').addEventListener('change', function () {
+        const startTimeInput = document.getElementById('StartTime');
+        const endTimeInput = document.getElementById('EndTime');
+        const startTime = startTimeInput.value; // Get the value of start time
+        const endTime = endTimeInput.value; // Get the value of end time
+
+        // Convert start and end time strings to Date objects for comparison
+        const startDate = new Date('2000-01-01T' + startTime + ':00');
+        const endDate = new Date('2000-01-01T' + endTime + ':00');
+
+        // Check if end time is earlier than start time
+        if (endDate < startDate) {
+            Swal.fire({
+                icon: "error",
+                title: "Wrong End time...",
+                text: "End time cannot be earlier than start time!"
+            });
+            endTimeInput.value = ''; // Clear the end time input
+        }
+    });
+
+    window.onload = toggleCheckboxes;
+    function toggleCheckboxes() {
+        var repeatCheckbox = document.getElementById('Isrepeat');
+        var refile = document.getElementById('Refile');
+        var checkboxes = document.querySelectorAll('.Every');
+
+        if (!repeatCheckbox.checked) {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = false;
+                checkbox.disabled = true;
+                refile.disabled = true;
+            });
+        } else {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.disabled = false;
+                refile.disabled = false;
+            });
+        }
+    }
+    function menubox() {
+        event.preventDefault();
+        let checkboxes = document.querySelectorAll('.Every:checked');
+        let regionIds = [];
+        checkboxes.forEach((checkbox) => {
+            regionIds.push(checkbox.value);
+        });
+        document.querySelector('#checkWeekday').value = regionIds.join(',');
+        console.log(document.querySelector('#checkWeekday').value);
+    };
+    function myFunction() {
+        var email = $("#region2").val();
+        console.log(email);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ProviderbyRegion","AdminDashboard")?Regionid=' + email,
+            cache: false,
+            success: function (response) {
+
+                console.log(response);
+                var s = '<option value="-1">Please Select</option>';
+                for (var i = 0; i < response.length; i++) {
+                    s += '<option value="' + response[i].physicianid + '">' + response[i].firstname + ' ' + response[i].lastname + '</option>';
+                }
+                $("#provider").html(s);
+            },
+            error: function () {
+                alert("Error while checking email.");
+            }
+        });
+    }
+
+</script>

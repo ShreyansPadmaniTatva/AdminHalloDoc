@@ -5,6 +5,7 @@ using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using AdminHalloDoc.Repositories.Patient.Repository;
 using AdminHalloDoc.Repositories.Patient.Repository.Interface;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,7 +63,7 @@ if (!app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 app.UseSession();
 app.UseStaticFiles();
-
+app.UseRotativa();
 app.UseRouting();
 
 app.UseAuthorization();

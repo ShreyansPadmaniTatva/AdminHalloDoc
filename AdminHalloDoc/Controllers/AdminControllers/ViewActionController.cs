@@ -78,6 +78,14 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
+        #region _EncounterPdf
+        public async Task<IActionResult> _EncounterPdf(int? requestid)
+        {
+            var v = await _viewActionRepository.GetRequestDetails(requestid);
+            return PartialView("../AdminViews/ViewAction/_models/_encounterpdf", v);
+        }
+        #endregion
+
         #region _EncounterModel
         public async Task<IActionResult> _EncounterModel(int? requestid)
         {
@@ -324,6 +332,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             return View("../AdminViews/ViewAction/CreateRequest");
         }
         #endregion
+
         #region ViewAdminCreateRequest_Post
         public async Task<IActionResult> ViewAdminCreateRequestPost(ViewAdminCreateRequest vr)
         {
@@ -335,5 +344,17 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
+        #region
+        [HttpPost]
+        public async Task<IActionResult> UploadDocFromConculde(int? Requestid, IFormFile file)
+        {
+            if (_viewActionRepository.SaveDoc((int)Requestid, file))
+            {
+
+                TempData["Status"] = "Upload File Successfully..!";
+            }
+            return RedirectToAction("ConcludeCare", "SubmitForm", new { id = Requestid.Encode() });
+        }
+        #endregion
     }
 }

@@ -227,10 +227,16 @@ namespace AdminHalloDoc.Controllers.PatientControllers
             {
                 Aspnetuserid = aspnetuser.Id,
                 Firstname = U.Firstname,
+                Lastname = U.Lastname,
+                Mobile = U.Phonenumber,
+                Intdate = U.Intdate,
+                Intyear = U.Intyear,
+                Strmonth = U.Strmonth,
                 Email = Email,
                 Createdby = aspnetuser.Id,
                 Createddate = DateTime.Now,
                 Isrequestwithemail = new BitArray(1),
+
 
             };
             _context.Users.Add(User);

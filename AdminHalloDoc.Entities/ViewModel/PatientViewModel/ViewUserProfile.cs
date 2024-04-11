@@ -33,7 +33,7 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public string? Zipcode { get; set; }
 
         public string? Strmonth { get; set; }
-        public DateTime Birthdate { get; set; }
+        public DateTime? Birthdate { get; set; }
 
         public int? Intyear { get; set; }
 

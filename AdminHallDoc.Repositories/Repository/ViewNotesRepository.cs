@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -260,15 +261,28 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region GetPartnersByProfession
-        public async Task<List<Healthprofessional>> GetPartnersByProfession(int? regionId)
+        public async Task<List<ViewVendorList>> GetPartnersByProfession(int? regionId,string? searchvender)
         {
 
 
-            List<Healthprofessional> pl = await (from r in _context.Healthprofessionals
-                                               
-                                         where r.Isdeleted == new BitArray(1) && (!regionId.HasValue || r.Regionid == regionId)
-                                                 select r )
-                                        .ToListAsync();
+            List<ViewVendorList> pl = await (from r in _context.Healthprofessionals
+                                                 join t in _context.Healthprofessionaltypes on r.Profession equals t.Healthprofessionalid
+                                                 where r.Isdeleted == new BitArray(1) &&
+                                                       (!regionId.HasValue || r.Profession == regionId) &&
+                                                       (searchvender == null || r.Vendorname.ToLower().Contains(searchvender.ToLower()))
+                                                 select new ViewVendorList
+                                                 {
+                                                     VendorID = r.Vendorid,
+                                                     Profession = t.Professionname,
+                                                     BusinessContact = r.Businesscontact ?? "",
+                                                     Email = r.Email,
+                                                     FaxNumber = r.Faxnumber,
+                                                     PhoneNumber = r.Phonenumber,
+                                                     VendorName = r.Vendorname,
+
+                                                 })
+                                     .ToListAsync();
+
 
             return pl;
 

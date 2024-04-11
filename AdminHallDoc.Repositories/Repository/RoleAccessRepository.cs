@@ -207,12 +207,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 select new ViewUserAcces
                 {
                     UserName = user.Username,
-                    FirstName = admin != null ? admin.Firstname : (physician != null ? physician.Firstname : null),
+                    FirstName = admin != null ? admin.Firstname : (physician != null ? physician.Firstname : null) ?? "-",
                     isAdmin = admin != null,
                     UserID = admin != null ? admin.Adminid : (physician != null ? physician.Physicianid : null),
                     accounttype = admin != null ? 2 : (physician != null ? 3 : null),
                     status = admin != null ? admin.Status : (physician != null ? physician.Status : null),
-                    Mobile = admin != null ? admin.Mobile : (physician != null ? physician.Mobile : null),
+                    Mobile = admin != null ? admin.Mobile : (physician != null ? physician.Mobile : null) ?? "-",
                     OpenRequest = physician != null ? _context.Requests.Count(r => r.Physicianid == physician.Physicianid) : 0
                 };
 

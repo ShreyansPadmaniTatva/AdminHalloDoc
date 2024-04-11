@@ -98,20 +98,6 @@ namespace AdminHalloDoc.Entities.ViewModel
 
         }
 
-        Dictionary<string, object> menuItems = new Dictionary<string, object>
-    {
-        { "MyShedule", "//AdminDashboard/Index" },
-        { "MyProfile", "/Physician/PhysicianLocation" },
-        { "3", "/AdminProfile/Index" },
-        { "4", "/Physician/PhysicianAll" },
-        { "5", new Dictionary<string, string>
-            {
-                { "Account Access", "/RoleAccess/Index" },
-                { "User Access", "/RoleAccess/UserAccess" }
-            }
-        },
-        // Add more menu items as needed
-    };
         public class MenuItem
         {
             public string DbName { get; set; }
@@ -142,7 +128,8 @@ namespace AdminHalloDoc.Entities.ViewModel
                   Label = "Dashboard",
                   Url = "/Admin/DashBoard",
                   ContollerAction ="/AdminDashboard/Index",
-                  UrlList = new List<string> { "/Admin/DashBoard", "/ViewAction", "/SubmitForm" }
+                  UrlList = new List<string> { "/Admin/DashBoard", "/ViewAction", "/SubmitForm","/Admin/DashBoard" },
+                   Submenu = null
               },
                new MenuItem
               {
@@ -150,28 +137,38 @@ namespace AdminHalloDoc.Entities.ViewModel
                   Label = "Dashboard",
                   ContollerAction ="/AdminDashboard/Index",
                   Url = "/Physician/DashBoard",
-                 
+                   Submenu = null
+
               },
               new MenuItem {
                   DbName ="Provider Location",
                   Label = "Provider Location",
                   ContollerAction ="/AdminDashboard/Index",
                   Url = "/Physician/PhysicianLocation",
-                 
+                  Submenu = null
               },
               new MenuItem {
-                  DbName ="MyProfile",
+                  DbName ="MyProfile-Admin",
                   Label = "My Profile",
-                  Url = "/AdminProfile/Index",
-                  ContollerAction ="/AdminDashboard/Index",
-               
+                  Url = "/Admin/Profile",
+                  ContollerAction ="/AdminProfile/Index",
+                  Submenu = null
+
+              },
+               new MenuItem {
+                  DbName ="MyProfile-Physician",
+                  Label = "My Profile",
+                  Url = "/Physician/Profile",
+                  ContollerAction ="/AdminProfile/Index",
+                  Submenu = null
+
               },
               new MenuItem {
                   DbName ="MyShedule",
                   Label = "My Schedule",
                   ContollerAction ="/AdminDashboard/Index",
                   Url = "/Scheduling/Index",
-                
+                  Submenu = null
               },
               new MenuItem {
                   DbName = "Provider-Details",
@@ -206,7 +203,8 @@ namespace AdminHalloDoc.Entities.ViewModel
                 Label = "Partner",
                   ContollerAction ="/AdminDashboard/Index",
                   Url = "/Partner/Index",
-                UrlList = new List<string> { "/Partner/Index", "/Partner/PartnerAddEdit", "/Partner" }
+                UrlList = new List<string> { "/Partner/Index", "/Partner/PartnerAddEdit", "/Partner" },
+                Submenu = null
               },
               new MenuItem {
                   DbName ="Access-Details",
@@ -228,13 +226,14 @@ namespace AdminHalloDoc.Entities.ViewModel
               new MenuItem {
                   DbName ="Records",
                 Label = "Records",
-                  ContollerAction ="/AdminDashboard/Index",
-                  Url = "/Patient_Profile.html",
+                  ContollerAction ="/Repsworts/Index",
+                  Url = "/Repowsrts/Index",
                   Submenu = new List < MenuItem > {
 
                     new MenuItem {
                         DbName="Search Records",
-                      Label = "Search Records", Url = "/Reports/Index"
+                      Label = "Search Records", Url = "/Reports/Index",
+                       ContollerAction ="/Reports/Index",
                     },
                     new MenuItem {
                         DbName="Email Log",
