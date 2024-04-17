@@ -180,21 +180,24 @@ namespace AdminHalloDoc.Entities.ViewModel
                     new MenuItem {
                         DbName = "Provider",
                       Label = "Provider", Url = "/Physician/PhysicianAll",
-                       UrlList = new List<string> { "/Physician/PhysicianAll" }
+                       UrlList = new List<string> { "/Physician/PhysicianAll" },
+                        ContollerAction ="/Reports",
                     },
                     new MenuItem {
                         DbName = "Scheduling",
 
                       Label = "Scheduling", 
                         Url = "/Scheduling/Index",
-                       UrlList = new List<string> { "/Scheduling/Index" }
+                       UrlList = new List<string> { "/Scheduling/Index" },
+                        ContollerAction ="/Reports",
 
                     },
                     new MenuItem {
                         DbName = "Invoicing",    
                       Label = "Invoicing",
                         Url = "#",
-                       UrlList = new List<string> { "/Scheduling/Index" }
+                       UrlList = new List<string> { "/Scheduling/Index" },
+                        ContollerAction ="/Reports",
                     }
                   }
               },
@@ -215,42 +218,48 @@ namespace AdminHalloDoc.Entities.ViewModel
                       
                     new MenuItem {
                         DbName="Account Access",
-                      Label = "Account Access", Url = "/RoleAccess/Index"
+                      Label = "Account Access", Url = "/RoleAccess/Index",
+                       ContollerAction ="/Reports",
                     },
                     new MenuItem {
                         DbName="User Access",
-                      Label = "User Access", Url = "/RoleAccess/UserAccess"
+                      Label = "User Access", Url = "/RoleAccess/UserAccess",
+                       ContollerAction ="/Reports",
                     }
                   }
               },
               new MenuItem {
                   DbName ="Records",
                 Label = "Records",
-                  ContollerAction ="/Repsworts/Index",
-                  Url = "/Repowsrts/Index",
+                  ContollerAction ="/Reports/Index",
+                  Url = "/Reports/Index",
                   Submenu = new List < MenuItem > {
 
                     new MenuItem {
                         DbName="Search Records",
                       Label = "Search Records", Url = "/Reports/Index",
-                       ContollerAction ="/Reports/Index",
+                       ContollerAction ="/Reports",
                     },
                     new MenuItem {
                         DbName="Email Log",
-                      Label = "Email Log", Url = "/Reports/EmailLog"
+                      Label = "Email Log", Url = "/Reports/EmailLog",
+                       ContollerAction ="/Reports",
                     },
                     new MenuItem {
                         DbName="SMS Log",
-                      Label = "SMS Log", Url = "/Reports/SMSLog"
+                      Label = "SMS Log", Url = "/Reports/SMSLog",
+                       ContollerAction ="/Reports",
                     },
                     new MenuItem {
                         DbName="Patient Record",
-                      Label = "Patient Record", Url = "/Reports/PatientHistory"
+                      Label = "Patient Record", Url = "/Reports/PatientHistory",
+                       ContollerAction ="/Reports",
                     },
                     new MenuItem
                     {
                         DbName="Block History",
-                      Label = "Block History", Url = "/Reports/BlockHistory"
+                      Label = "Block History", Url = "/Reports/BlockHistory",
+                       ContollerAction ="/Reports",
                     }
                   }
               }

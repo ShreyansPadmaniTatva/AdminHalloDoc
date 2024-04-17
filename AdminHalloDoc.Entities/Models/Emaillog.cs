@@ -12,8 +12,7 @@ public partial class Emaillog
 {
     [Key]
     [Column("emaillogid")]
-    [Precision(9, 0)]
-    public decimal Emaillogid { get; set; }
+    public int Emaillogid { get; set; }
 
     [Column("emailtemplate")]
     public string Emailtemplate { get; set; } = null!;
@@ -59,4 +58,7 @@ public partial class Emaillog
 
     [Column("action")]
     public int? Action { get; set; }
+
+    [StringLength(1000)]
+    public string? Recipient { get; set; }
 }

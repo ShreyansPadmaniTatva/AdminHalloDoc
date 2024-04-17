@@ -4,6 +4,7 @@ using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Models;
 using AdminHalloDoc.Models.CV;
+using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using AdminHalloDoc.Repositories.Patient.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
@@ -16,12 +17,14 @@ namespace AdminHalloDoc.Controllers.PatientControllers
     {
         #region Configuration
         private IPatientRequestRepository _patientRequestRepository;
+        private readonly IRequestRepository _requestRepository;
         public ApplicationDbContext _context;
 
-        public RequestByPatient(ApplicationDbContext context, IPatientRequestRepository patientRequestRepository)
+        public RequestByPatient(ApplicationDbContext context, IPatientRequestRepository patientRequestRepository, IRequestRepository requestRepository)
         {
 
             this._patientRequestRepository = patientRequestRepository;
+            this._requestRepository = requestRepository;
             _context = context;
 
         }
@@ -35,13 +38,14 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         #endregion
 
         #region SubmitForSomeoneElse
-        public IActionResult SubmitForSomeoneElse()
+        public async Task<IActionResult> SubmitForSomeoneElseAsync()
         {
-           
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             return View("../PatientViews/RequestByPatient/SubmitForSomeoneElse");
         }
-        public IActionResult SubmitForMe()
+        public async Task<IActionResult> SubmitForMeAsync()
         {
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             var ViewPatientCreateRequest = _context.Users
                                .Where(r => r.Userid == Convert.ToInt32(CV.UserID()))
                                .Select(r => new ViewPatientCreateRequest
@@ -77,6 +81,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
                                    BirthDate = new DateTime((int)r.Intyear, Convert.ToInt32(r.Strmonth.Trim()), (int)r.Intdate),
                                })
                                .FirstOrDefault();
+                ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
                 return View("../PatientViews/RequestByPatient/SubmitForMe", ViewPatientCreateRequest);
             }
             return RedirectToAction("Index", "Dashboard");
@@ -92,6 +97,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
             }
             else
             {
+                ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
                 return View("../PatientViews/RequestByPatient/SubmitForSomeoneElse", viewpatientcreaterequest);
             }
             return RedirectToAction("Index", "Dashboard");

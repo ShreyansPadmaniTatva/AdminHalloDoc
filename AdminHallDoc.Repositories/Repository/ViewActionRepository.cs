@@ -6,6 +6,7 @@ using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Org.BouncyCastle.Utilities;
 using System;
@@ -27,22 +28,38 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #region Constructor
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly EmailConfiguration _emailConfig;
+        private readonly IRequestRepository _requestRepository;
+        private readonly ISchedulingRepository _schedulingRepository;
         private readonly ApplicationDbContext _context;
-        public ViewActionRepository(ApplicationDbContext context, EmailConfiguration emailConfig, IHttpContextAccessor httpContextAccessor)
+        public ViewActionRepository(ApplicationDbContext context, EmailConfiguration emailConfig, IHttpContextAccessor httpContextAccessor, IRequestRepository requestRepository, ISchedulingRepository schedulingRepository)
         {
             this.httpContextAccessor = httpContextAccessor;
             _context = context;
             _emailConfig = emailConfig;
+            _requestRepository = requestRepository;
+            _schedulingRepository = schedulingRepository;
         }
         #endregion
 
+        #region Crate_ConFirmationNumber
         public int GetCountOfTodayRequests()
         {
             var currentDate = DateTime.Now.Date;
 
             return _context.Requests.Where(u => u.Createddate.Date == currentDate).Count();
         }
-
+        /// <summary>
+        /// Create Unique Confirmation Number with State LastNAme FirstName  The first 2 characters will represent the
+        ///   region abbreviation, then next 4 numbers will represent the date
+        ///   of created date, then next 2 characters will represent first 2
+        ///   characters of last-name, then next 2 characters will represent
+        ///   first 2 characters of first-name, then next 4 digits is representing
+        ///   how many requests are done in same day.
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="lastname"></param>
+        /// <param name="firstname"></param>
+        /// <returns></returns>
         public string GetConfirmationNumber(string state, string lastname, string firstname)
         {
             state = (state.Length >= 2) ? state.Substring(0, 2).ToUpperInvariant() : state.PadRight(2, 'X');
@@ -67,6 +84,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             return ConfirmationNumber;
 
         }
+        #endregion
 
         #region GetDocumentByRequest
         public async Task<ViewDocuments> GetDocumentByRequest(int? id)
@@ -226,7 +244,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             {
                 Requestid = Requestid,
                 Filename = UploadDoc,
-                Isdeleted = new BitArray(1),
+                Isdeleted = new BitArray(new[] { false }),
                 Createddate = DateTime.Now,
             };
             _context.Requestwisefiles.Add(requestwisefile);
@@ -309,7 +327,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 if (requestData != null)
                 {
                     requestData.Casetag = ReasonTag;
-                    requestData.Status = 8;
+                    requestData.Status = 3;
                     _context.Requests.Update(requestData);
                     _context.SaveChanges();
 
@@ -317,7 +335,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     {
                         Requestid = (int)v.RequestID,
                         Notes = v.Notes,
-                        Status = 8,
+                        Status = 3,
                         Createddate = DateTime.Now
                     };
                     _context.Requeststatuslogs.Add(rsl);
@@ -388,7 +406,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         Phonenumber = requestData.Phonenumber,
                         Email = requestData.Email,
                         Reason = v.Notes,
-                        Createddate = DateTime.Now,
+                        Isactive = new BitArray(new[] { true }),
+                    Createddate = DateTime.Now,
                         Modifieddate = DateTime.Now
 
 
@@ -519,7 +538,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region SendAgreement
-        public Boolean SendAgreement(ViewActions v)
+        public async Task<Boolean> SendAgreement(ViewActions v)
         {
             var d = httpContextAccessor.HttpContext.Request.Host;
             //var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == v.RequestID);
@@ -529,16 +548,15 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                 <head>
                                  <meta charset=""UTF-8"">
                                  <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
-                                 <title>Patient Registration</title>
+                                 <title>Patient Agreement</title>
                                 </head>
                                 <body>
                                  <div style=""background-color: #f5f5f5; padding: 20px;"">
                                  <h2>Welcome to Our Healthcare Platform!</h2>
                                 <p>Dear Patient ,</p>
-                                <p>Your request for a patient account has been successfully created. To complete your registration, please follow the steps below:</p>
                                 <ol>
-                                    <li>Click the following link to register:</li>
-                                     <p><a target='_blank' href=""https://"+ d + "/SendAgreement?RequestID=" + v.RequestID.Encode() + @""">Patient Registration</a></p>
+                                    <li>Click the following link to Agreement:</li>
+                                     <p><a target='_blank' href=""https://" + d + "/SendAgreement?RequestID=" + v.RequestID.Encode() + @""">Patient Agreement Submit That</a></p>
                                     <li>Follow the on-screen instructions to complete the registration process.</li>
                                 </ol>
                                 <p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>
@@ -548,9 +566,21 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                 </body>
                                 </html>
                                 ";
-
-            _emailConfig.SendMail(v.Email, "Agreement for your request", emailContent);
-            return true;
+            Emaillogdata elog = new Emaillogdata();
+           elog.Emailtemplate = emailContent;
+           elog.Subjectname = " for your request";
+           elog.Emailid = v.Email;
+           elog.Createdate = DateTime.Now;
+           elog.Sentdate = DateTime.Now;
+           elog.Adminid = v.AdminId != null ? v.AdminId : null;
+           elog.Requestid = v.RequestID;
+           elog.Physicianid = v.ProviderId != null ? v.ProviderId : null;
+           elog.Action = 4;
+            elog.Recipient = v.PatientName;
+            elog.Roleid = 4;
+            await _requestRepository.EmailLog(elog);
+            //_emailConfig.SendMail(v.Email, "Agreement for your request", emailContent);
+                return true;
         }
         #endregion
 
@@ -943,6 +973,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         #endregion
 
+        #region SubmitCreateRequest_Admin
         public bool SubmitCreateRequest(ViewAdminCreateRequest model, string Id)
         {
             var admin = _context.Admins.FirstOrDefault(x => x.Aspnetuserid == Id);
@@ -1030,6 +1061,65 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 return false;
             }
         }
+        #endregion
+
+        #region SendEmailForRequestSupport
+        public async Task<bool> SendEmailForRequestSupport(string notes, int AdminId)
+        {
+            
+            try
+            {
+                var d = httpContextAccessor.HttpContext.Request.Host;
+                //var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == v.RequestID);
+                
+
+                foreach ( var note in await _schedulingRepository.PhysicianOnCall(null))
+                {
+                    if(note.onCallStatus != 1)
+                    {
+                        string emailContent = @"
+                                <!DOCTYPE html>
+                                <html lang=""en"">
+                                <head>
+                                 <meta charset=""UTF-8"">
+                                 <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                                 <title>Provider " + note.UserName + @"</title>
+                                </head>
+                                <body>
+                                 <div style=""background-color: #f5f5f5; padding: 20px;"">
+                                 <h2>Welcome to Our Healthcare Platform!</h2>
+                                <p>Dear Provider " + note.UserName + @" ,</p>
+                                <p>We Want to Your Support " + notes + @"</p>
+                                
+                                <p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>
+                                <p>Thank you,</p>
+                                <p>The Healthcare Team</p>
+                                </div>
+                                </body>
+                                </html>
+                                ";
+                        Emaillogdata elog = new Emaillogdata();
+                        elog.Emailtemplate = emailContent;
+                        elog.Subjectname = "Request support";
+                        elog.Emailid = note.Email;
+                        elog.Createdate = DateTime.Now;
+                        elog.Sentdate = DateTime.Now;
+                        elog.Adminid = AdminId;
+                        await _requestRepository.EmailLog(elog);
+                    }
+                    
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Failed to submit Form", ex);
+                return false;
+            }
+        }
+        #endregion
+
 
     }
 }

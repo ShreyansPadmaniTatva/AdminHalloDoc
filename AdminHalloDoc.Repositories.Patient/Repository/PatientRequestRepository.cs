@@ -1,8 +1,11 @@
 ﻿using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
+using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
+using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using AdminHalloDoc.Repositories.Patient.Repository.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,14 +21,31 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
     {
         #region Contractor
         private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly EmailConfiguration _email;
-        public PatientRequestRepository(ApplicationDbContext context, EmailConfiguration email)
+        private readonly IRequestRepository _requestRepository;
+        public PatientRequestRepository(ApplicationDbContext context, EmailConfiguration email, IHttpContextAccessor httpContextAccessor, IRequestRepository requestRepository)
         {
+            this.httpContextAccessor = httpContextAccessor;
             _context = context;
             _email = email;
+            _requestRepository = requestRepository;
         }
         #endregion
 
+        #region Crate_ConFirmationNumber
+        /// <summary>
+        /// Create Unique Confirmation Number with State LastNAme FirstName  The first 2 characters will represent the
+        ///   region abbreviation, then next 4 numbers will represent the date
+        ///   of created date, then next 2 characters will represent first 2
+        ///   characters of last-name, then next 2 characters will represent
+        ///   first 2 characters of first-name, then next 4 digits is representing
+        ///   how many requests are done in same day.
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="lastname"></param>
+        /// <param name="firstname"></param>
+        /// <returns></returns>
         public int GetCountOfTodayRequests()
         {
             var currentDate = DateTime.Now.Date;
@@ -57,6 +77,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
             return ConfirmationNumber;
 
         }
+        #endregion
 
         #region PatientCreateRequest
         public async Task<bool> PatientCreateRequest(ViewPatientCreateRequest viewpatientcreaterequest)
@@ -91,6 +112,11 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                     User.Aspnetuserid = Aspnetuser.Id;
                     User.Firstname = viewpatientcreaterequest.FirstName;
                     User.Lastname = viewpatientcreaterequest.LastName;
+                    User.Mobile = viewpatientcreaterequest.PhoneNumber;
+                    User.City = viewpatientcreaterequest.City;
+                    User.Regionid = viewpatientcreaterequest.RegionId;
+                    User.Zipcode = viewpatientcreaterequest.ZipCode;
+                    User.State = viewpatientcreaterequest.State;
                     User.Email = viewpatientcreaterequest.Email;
                     User.Createdby = Aspnetuser.Id;
                     User.Createddate = DateTime.Now;
@@ -118,6 +144,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 Request.Phonenumber = viewpatientcreaterequest.PhoneNumber;
                 Request.Isurgentemailsent = new BitArray(1);
                 Request.Createddate = DateTime.Now;
+                Request.Status = 1;
                 Request.Isdeleted = new BitArray(1);
                 Request.Isdeleted[0] = false;
                 _context.Requests.Add(Request);
@@ -132,7 +159,11 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 Requestclient.Email = viewpatientcreaterequest.Email;
                 Requestclient.Phonenumber = viewpatientcreaterequest.PhoneNumber;
                 Requestclient.Street = viewpatientcreaterequest.Street;
+                Requestclient.Notes = viewpatientcreaterequest.Symptoms;
                 Requestclient.City = viewpatientcreaterequest.City;
+                Requestclient.Regionid = viewpatientcreaterequest.RegionId;
+                Requestclient.Zipcode = viewpatientcreaterequest.ZipCode;
+
                 Requestclient.State = viewpatientcreaterequest.State;
                 Requestclient.Intdate = viewpatientcreaterequest.BirthDate.Day;
                 Requestclient.Intyear = viewpatientcreaterequest.BirthDate.Year;
@@ -151,7 +182,8 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                         Requestid = Request.Requestid,
                         Filename = viewpatientcreaterequest.UploadImage,
                         Createddate = DateTime.Now,
-                    };
+                        Isdeleted = new BitArray(new[] { false})
+                };
                     _context.Requestwisefiles.Add(requestwisefile);
                     _context.SaveChanges();
                 }
@@ -197,7 +229,11 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                     Requestclient.State = viewpatientcreaterequest.State;
                     Requestclient.Address = viewpatientcreaterequest.Street + "," + viewpatientcreaterequest.City + "," + viewpatientcreaterequest.State + "," + viewpatientcreaterequest.ZipCode;
                     Requestclient.Lastname = viewpatientcreaterequest.LastName;
-                    Requestclient.Intdate = viewpatientcreaterequest.BirthDate.Value.Day;
+                Requestclient.Notes = viewpatientcreaterequest.Symptoms;
+                Requestclient.Regionid = viewpatientcreaterequest.RegionId;
+                Requestclient.Zipcode = viewpatientcreaterequest.ZipCode;
+
+                Requestclient.Intdate = viewpatientcreaterequest.BirthDate.Value.Day;
                     Requestclient.Intyear = viewpatientcreaterequest.BirthDate.Value.Year;
                     Requestclient.Strmonth = viewpatientcreaterequest.BirthDate.Value.Month.ToString();
                     Requestclient.Email = viewpatientcreaterequest.Email;
@@ -214,6 +250,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                              Requestid = Request.Requestid,
                              Filename = viewpatientcreaterequest.UploadImage,
                              Createddate = DateTime.Now,
+                             Isdeleted = new BitArray(new[] { false})
                          };
                          _context.Requestwisefiles.Add(requestwisefile);
                          _context.SaveChanges();
@@ -272,13 +309,17 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 Requestclient.Location = viewdata.Symptoms;
                 Requestclient.Firstname = viewdata.FirstName;
                 Requestclient.Lastname = viewdata.LastName;
+                Requestclient.Notes = viewdata.Symptoms;
                 Requestclient.Email = viewdata.Email;
                 Requestclient.Phonenumber = viewdata.PhoneNumber;
                 Requestclient.Street = viewdata.CON_Street;
                 Requestclient.City = viewdata.CON_City;
+                Requestclient.Regionid = viewdata.RegionId;
                 Requestclient.State = viewdata.CON_State;
                 Requestclient.Address = viewdata.CON_Street + "," + viewdata.CON_City + "," + viewdata.CON_State + "," + viewdata.CON_ZipCode;
                 Requestclient.Intdate = viewdata.BirthDate.Value.Day;
+                Requestclient.Zipcode = viewdata.CON_ZipCode;
+
                 Requestclient.Intyear = viewdata.BirthDate.Value.Year;
                 Requestclient.Strmonth = viewdata.BirthDate.Value.Month.ToString();
                 _context.Requestclients.Add(Requestclient);
@@ -290,7 +331,46 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 _context.Requestconcierges.Add(Requestconcierge);
                 await _context.SaveChangesAsync();
 
-                _email.SendMail(viewdata.Email, "Your Request For patient Account is crearted please register with the link https://localhost:44376/Login/CreateAccount ", "New Patient Account Creation");
+                var d = httpContextAccessor.HttpContext.Request.Host;
+                //var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == v.RequestID);
+                string emailContent = @"
+                                <!DOCTYPE html>
+                                <html lang=""en"">
+                                <head>
+                                 <meta charset=""UTF-8"">
+                                 <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                                 <title>Patient Agreement</title>
+                                </head>
+                                <body>
+                                 <div style=""background-color: #f5f5f5; padding: 20px;"">
+                                 <h2>Welcome to Our Healthcare Platform!</h2>
+                                <p>Dear Patient ,</p>
+                                <ol>
+                                    <li>Click the following link to Agreement:</li>
+                                     <p><a target='_blank' href=""https://" + d + @"/Login/CreateAccount"" > Patient Agreement Submit That</a></p>
+                                    <li>Follow the on-screen instructions to complete the registration process.</li>
+                                </ol>
+                                <p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>
+                                <p>Thank you,</p>
+                                <p>The Healthcare Team</p>
+                                </div>
+                                </body>
+                                </html>
+                                ";
+                Emaillogdata elog = new Emaillogdata();
+                elog.Emailtemplate = emailContent;
+                elog.Subjectname = " New Patient Account Creation";
+                elog.Emailid = viewdata.Email;
+                elog.Createdate = DateTime.Now;
+                elog.Sentdate = DateTime.Now;
+                elog.Recipient = Request.Firstname + ' ' + Request.Lastname;
+                elog.Requestid = id2;
+               
+                elog.Action = 6;
+                elog.Roleid = 4;
+                await _requestRepository.EmailLog(elog);
+
+                //_email.SendMail(viewdata.Email, "Your Request For patient Account is crearted please register with the link <a href='https://localhost:44376/Login/CreateAccount' class='btn btn info' > Creat Account  </a> ", "New Patient Account Creation");
 
 
                 return true;
@@ -343,8 +423,12 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 Requestclient.Email = viewdata.Email;
                 Requestclient.Location = viewdata.Symptoms;
                 Requestclient.Phonenumber = viewdata.PhoneNumber;
+                Requestclient.Regionid = viewdata.RegionId;
+                Requestclient.Notes = viewdata.Symptoms;
                 Requestclient.Street = viewdata.Street;
                 Requestclient.City = viewdata.City;
+                Requestclient.Zipcode = viewdata.ZipCode;
+
                 Requestclient.State = viewdata.State;
                 Requestclient.Address = viewdata.Street + "," + viewdata.City + "," + viewdata.State + "," + viewdata.ZipCode;
                 Requestclient.Intdate = viewdata.BirthDate.Day;
@@ -359,7 +443,46 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 _context.Requestbusinesses.Add(Requestbusiness);
                 await _context.SaveChangesAsync();
 
-                _email.SendMail(viewdata.Email, "Your Request For patient Account is crearted please register with the link https://localhost:44376/Login/CreateAccount ", "New Patient Account Creation");
+                var d = httpContextAccessor.HttpContext.Request.Host;
+                //var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == v.RequestID);
+                string emailContent = @"
+                                <!DOCTYPE html>
+                                <html lang=""en"">
+                                <head>
+                                 <meta charset=""UTF-8"">
+                                 <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                                 <title>Patient Agreement</title>
+                                </head>
+                                <body>
+                                 <div style=""background-color: #f5f5f5; padding: 20px;"">
+                                 <h2>Welcome to Our Healthcare Platform!</h2>
+                                <p>Dear Patient ,</p>
+                                <ol>
+                                    <li>Click the following link to Agreement:</li>
+                                     <p><a target='_blank' href=""https://" + d + @"/Login/CreateAccount"" > Patient Agreement Submit That</a></p>
+                                    <li>Follow the on-screen instructions to complete the registration process.</li>
+                                </ol>
+                                <p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>
+                                <p>Thank you,</p>
+                                <p>The Healthcare Team</p>
+                                </div>
+                                </body>
+                                </html>
+                                ";
+                Emaillogdata elog = new Emaillogdata();
+                elog.Emailtemplate = emailContent;
+                elog.Subjectname = " New Patient Account Creation";
+                elog.Emailid = viewdata.Email;
+                elog.Createdate = DateTime.Now;
+                elog.Sentdate = DateTime.Now;
+                elog.Recipient = Request.Firstname + ' ' + Request.Lastname;
+
+                elog.Requestid = id2;
+
+                elog.Action = 6;
+                elog.Roleid = 4;
+                await _requestRepository.EmailLog(elog);
+                //_email.SendMail(viewdata.Email, "Your Request For patient Account is crearted please register with the link https://localhost:44376/Login/CreateAccount ", "New Patient Account Creation");
 
                 return true;
             }
@@ -403,9 +526,13 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 Requestclient.Location = viewpatientcreaterequest.Symptoms;
                 Requestclient.Phonenumber = viewpatientcreaterequest.PhoneNumber;
                 Requestclient.Latitude = viewpatientcreaterequest.latitude;
+                Requestclient.Regionid = viewpatientcreaterequest.RegionId;
                 Requestclient.Longitude = viewpatientcreaterequest.longitude;
+                Requestclient.Notes = viewpatientcreaterequest.Symptoms;
                 Requestclient.Street = viewpatientcreaterequest.Street;
                 Requestclient.City = viewpatientcreaterequest.City;
+                Requestclient.Zipcode = viewpatientcreaterequest.ZipCode;
+
                 Requestclient.State = viewpatientcreaterequest.State;
                 Requestclient.Intdate = viewpatientcreaterequest.BirthDate.Day;
                 Requestclient.Intyear = viewpatientcreaterequest.BirthDate.Year;
@@ -424,6 +551,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                         Requestid = Request.Requestid,
                         Filename = viewpatientcreaterequest.UploadImage,
                         Createddate = DateTime.Now,
+                        Isdeleted = new BitArray(new[] { false})
                     };
                     _context.Requestwisefiles.Add(requestwisefile);
                     _context.SaveChanges();
@@ -472,7 +600,10 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 Requestclient.Street = viewpatientcreaterequest.Street;
                 Requestclient.City = viewpatientcreaterequest.City;
                 Requestclient.Location = viewpatientcreaterequest.Symptoms;
+                Requestclient.Regionid = viewpatientcreaterequest.RegionId;
+                Requestclient.Zipcode = viewpatientcreaterequest.ZipCode;
                 Requestclient.State = viewpatientcreaterequest.State;
+                Requestclient.Notes = viewpatientcreaterequest.Symptoms;
                 Requestclient.Intdate = viewpatientcreaterequest.BirthDate.Day;
                 Requestclient.Intyear = viewpatientcreaterequest.BirthDate.Year;
                 Requestclient.Strmonth = viewpatientcreaterequest.BirthDate.Month.ToString();
@@ -480,7 +611,45 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
 
                 _context.Requestclients.Add(Requestclient);
                 await _context.SaveChangesAsync();
-                _email.SendMail(viewpatientcreaterequest.Email, "Your Request For patient Account is crearted please register with the link https://localhost:44376/Login/CreateAccount ", "New Patient Account Creation");
+                var d = httpContextAccessor.HttpContext.Request.Host;
+                //var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == v.RequestID);
+                string emailContent = @"
+                                <!DOCTYPE html>
+                                <html lang=""en"">
+                                <head>
+                                 <meta charset=""UTF-8"">
+                                 <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                                 <title>Patient Agreement</title>
+                                </head>
+                                <body>
+                                 <div style=""background-color: #f5f5f5; padding: 20px;"">
+                                 <h2>Welcome to Our Healthcare Platform!</h2>
+                                <p>Dear Patient ,</p>
+                                <ol>
+                                    <li>Click the following link to Agreement:</li>
+                                     <p><a target='_blank' href=""https://" + d + @"/Login/CreateAccount"" > Patient Agreement Submit That</a></p>
+                                    <li>Follow the on-screen instructions to complete the registration process.</li>
+                                </ol>
+                                <p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>
+                                <p>Thank you,</p>
+                                <p>The Healthcare Team</p>
+                                </div>
+                                </body>
+                                </html>
+                                ";
+                Emaillogdata elog = new Emaillogdata();
+                elog.Emailtemplate = emailContent;
+                elog.Subjectname = " New Patient Account Creation";
+                elog.Emailid = viewpatientcreaterequest.Email;
+                elog.Createdate = DateTime.Now;
+                elog.Sentdate = DateTime.Now;
+                elog.Recipient = Request.Firstname + ' ' + Request.Lastname;
+                elog.Requestid = Request.Requestid;
+                elog.Action = 6;
+                elog.Roleid = 4;
+                await _requestRepository.EmailLog(elog);
+
+                //_email.SendMail(viewpatientcreaterequest.Email, "Your Request For patient Account is crearted please register with the link https://localhost:44376/Login/CreateAccount ", "New Patient Account Creation");
 
                 if (viewpatientcreaterequest.UploadFile != null)
                 {
@@ -491,6 +660,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                         Requestid = Request.Requestid,
                         Filename = viewpatientcreaterequest.UploadImage,
                         Createddate = DateTime.Now,
+                        Isdeleted = new BitArray(new[] { false})
                     };
                     _context.Requestwisefiles.Add(requestwisefile);
                     _context.SaveChanges();

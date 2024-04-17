@@ -13,6 +13,31 @@
     <header>
 
         @{
+            string path = Context.Request.Path;
+            if (path.StartsWith("/SubmitRequest") || path.StartsWith("/PatientCreateRequest") || path.StartsWith("/PatientFamilyFriend") || path.StartsWith("/PatientConcierge") || path.StartsWith("/PatientBusiness") || path.StartsWith("/PatientCreateRequest") || path.StartsWith("/PatientCreateRequest") )
+            {
+                <nav class="navbar px-5  border-2 border-bottom navbar-expand-lg bg-white">
+                    <div class="container-fluid">
+                        <a class="navbar-brand " asp-action="Index" asp-controller="Home">
+                            <img src="~/images/Fig56. Patient site 1.png" class="img-fluid logo" />
+                        </a>
+
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        </ul>
+                        <div class=" top-0 end-0 my-4 mx-5 position-absolute text-info border-info rounded-3 d-flex">
+                            <h5 class="text-dark align-bottom pt-2 ">
+                                Welcome <span class="fw-bolder"> @CV.UserName() </span>
+                            </h5>
+                            <a asp-action="Logout" asp-controller="AdminLogin" class="btn btn-outline-info mx-2">Logout</a>
+
+                            <button class=" btn-outline-info btn btn-sm " onclick="mode()">
+                                <span id="thm"> <i class="fa-solid fa-sun p-2"></i></span>
+                                <span id="thm2"> <i class="fa-solid fa-moon p-2"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+            }
             if (CV.UserID() != null)
             {
                 <nav class="navbar px-5  border-2 border-bottom navbar-expand-lg bg-white">
@@ -28,8 +53,10 @@
                                 Welcome <span class="fw-bolder"> @CV.UserName() </span>
                             </h5>
                             <a asp-action="Logout" asp-controller="AdminLogin" class="btn btn-outline-info mx-2">Logout</a>
-                            <button class="btn btn-outline-info" onclick="mode()">
-                                <i class="bi bi-moon"></i>
+
+                            <button class=" btn-outline-info btn btn-sm " onclick="mode()">
+                                <span id="thm"> <i class="fa-solid fa-sun p-2"></i></span>
+                                <span id="thm2"> <i class="fa-solid fa-moon p-2"></i></span>
                             </button>
                         </div>
                     </div>

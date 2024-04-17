@@ -17,5 +17,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data, int ProviderId);
         Task<Viewcase> GetRequestDetails(int? Requestid);
         Task<Boolean> PutViewcase(Viewcase viewcase);
+        Task<bool> EmailLog(Emaillogdata elog);
     }
 }

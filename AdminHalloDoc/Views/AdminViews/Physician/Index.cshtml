@@ -1,4 +1,5 @@
-﻿@using static AdminHalloDoc.Entities.ViewModel.Constant;
+﻿@using AdminHalloDoc.Entities.ViewModel;
+@using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians>;
 @{
     var status = "null";
@@ -76,11 +77,11 @@
                             <td scope="row" data-label="Created Date"> @Enum.GetName(typeof(AdminStatus), item.Status)</td>
                             <td class=" d-flex" data-label="Document">
 
-                                <button data-bs-toggle="modal" data-bs-id="@item.Physicianid" data-bs-email="@item.Email" data-bs-target="#myModal" class="btn btn-outline-info btn-sm document-button mx-1">
+                                <button data-bs-toggle="modal"  data-bs-id="@item.Physicianid" data-bs-email="@item.Email" data-bs-target="#myModal" class="btn btn-outline-info btn-sm document-button mx-1">
                                     Contact
                                  
                                 </button>
-                                <a asp-action="PhysicianProfile" asp-controller="Physician" asp-route-id="@item.Physicianid" class="btn btn-outline-info btn-sm document-button mx-1">
+                                <a asp-action="PhysicianProfile" asp-controller="Physician" asp-route-id="@item.Physicianid.Encode()" class="btn btn-outline-info btn-sm document-button mx-1">
                                     Edit
                                    
                                 </a>
@@ -120,7 +121,7 @@
                         </div>
                         <div class="form-check p-2 fs-5">
                             <input class="form-check-input" value="3" type="radio" name="way" id="flexRadioDefault3" >
-                            <label class="form-check-label" for="flexRadioDefault2">
+                            <label class="form-check-label" for="flexRadioDefault3">
                                 Both
                             </label>
                         </div>
@@ -225,7 +226,7 @@
                     // Add the checkbox cell
                     var checkboxCell = $('<td class="table-text px-3  justify-content-center" scope="row"  align="center" data-label="Created Date">');
                         var checkboxInput = $('<input class="form-check-input form-check-inputs" type="checkbox" value="" id="' + item.physicianid + '">');
-                    if (item.notification[0]) {
+                        if (item.notification!= null && item.notification[0]) {
                         checkboxInput.prop('checked', true);
                     }
                     checkboxCell.append(checkboxInput);

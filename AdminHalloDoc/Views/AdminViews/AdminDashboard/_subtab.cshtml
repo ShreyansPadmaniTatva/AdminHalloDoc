@@ -85,7 +85,7 @@
 
             </span>
 
-            <div class="btn btn-info text-white mx-1" data-bs-toggle="modal" data-bs-target="#sendlink">
+            <div class="btn btn-info text-white mx-1" onclick="blackshow()" data-bs-toggle="modal" data-bs-target="#sendlink">
                 <i class="bi bi-send"></i>
                 <span class="top-btn">
                     send link
@@ -98,22 +98,31 @@
                 </span>
 
             </a>
-            <div class="btn btn-info text-white mx-1" onclick="exsubsubmitonly()">
-                <i class="bi bi-forward"></i>
-                <span class="top-btn">
-                    export
-                </span>
+            @if (CV.role() != "Provider")
+            {
+                <div class="btn btn-info text-white mx-1" onclick="exsubsubmitonly()">
+                    <i class="bi bi-forward"></i>
+                    <span class="top-btn">
+                        export
+                    </span>
 
-            </div>
+                </div>
 
-            <div id="btnexportall" onclick="exsubsubmit()" class="btn btn-info text-white">
+                <div id="btnexportall" onclick="exsubsubmit()" class="btn btn-info text-white">
                     <i class="bi bi-forward-fill"></i>
                     <span class="top-btn">
                         export all
                     </span>
 
                 </div>
-            
+                <a data-bs-toggle="modal" data-bs-target="#RequestSupport" class="btn btn-info text-white mx-2" onclick="blackshow()">
+                    <i class="bi bi-forward-fill"></i>
+                <span class="top-btn">
+                    Request Support
+                </span>
+
+            </a>
+            }
         </din>
     </div>
     <div class="card border-0 rounded shadow">
@@ -126,7 +135,7 @@
                 <div class="col-sm-4">
                     <div class="">
 
-                        <select class="form-select form-select-sm p-2 mt-3 mb-3 w-100 regionDashboard"  data-allow-clear="true" tabindex="-1" id="regionDashboard" asp-items="@(new SelectList(ViewBag.RegionComboBox, "RegionId", "RegionName"))" data-control="select" data-placeholder="Region">
+                        <select class="form-select  p-2 mt-3 mb-3 w-100 regionDashboard"  data-allow-clear="true" tabindex="-1" id="regionDashboard" asp-items="@(new SelectList(ViewBag.RegionComboBox, "RegionId", "RegionName"))" data-control="select" data-placeholder="Region">
                             <option id="defaultregion" value="">All Regions</option>
                         </select>
                     </div>
@@ -172,6 +181,36 @@
     <input type="hidden" asp-for="status" name="status" class="exerequeststatus form-control">
     <input type="submit"  class="form-control d-none">
 </form>
+<div class="modal fade" id="RequestSupport" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header  bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"> Request Support </h1>
+                <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-circle"></i>
+                </button>
+            </div>
+            <form asp-action="SendEmailForRequestSupport" asp-controller="ViewAction" class="needs-validation" novalidate>
+                <div class="modal-body">
+                    <input type="hidden" name="requestid" id="requestid" />
+                    <p>To all unscheduled Physicians: We are short on coverage and needs additional support On Call to respond to Requests.</p>
+                    <div class="mb-4 form-floating ">
+                        <textarea class="form-control rounded" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="Notes" required cols="50" type="text" rows="10" placeholder=Suchtext autocomplete=off></textarea>
+                        <label for="validationCustomUsername">Notes </label>
+                        <div class="invalid-feedback">
+                            Please  Add Notes
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class=" btn btn-info text-white" value="Send" style="display:block !important">
+                    <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     function exsubsubmit() {
         console.log(485);
@@ -181,21 +220,42 @@
         console.log(485);
         $('#exportonlly').submit();
     }
+    function blackshow() {
+        var modalBackdrops = document.querySelectorAll('.modal-backdrop:not(:first-of-type)');
+
+        // Loop through the modal-backdrop elements starting from the second one
+        for (var i = 1; i < modalBackdrops.length; i++) {
+            // Remove the modal-backdrop element
+            modalBackdrops[i].parentNode.removeChild(modalBackdrops[i]);
+        }
+    }
 </script>
 @section Scripts{
     <script>
 
 
-          
+        function blackshow() {
+            var modalBackdrops = document.querySelectorAll('.modal-backdrop:not(:first-of-type)');
+
+            // Loop through the modal-backdrop elements starting from the second one
+            for (var i = 1; i < modalBackdrops.length; i++) {
+                // Remove the modal-backdrop element
+                modalBackdrops[i].parentNode.removeChild(modalBackdrops[i]);
+            }
+        }
+
         function changeStatus(e) {
+            $('.loader').fadeIn();
             //  $('#requeststatus').val(e);
             $('#filterForm').submit();
         }
         function subsubmit() {
             console.log(54);
+            $('.loader').fadeIn();
             $('#subsubmitfom').submit();
         }
         function exsubsubmit() {
+            $('.loader').fadeIn();
                 console.log(485);
                 $('#exportall').submit();
         }

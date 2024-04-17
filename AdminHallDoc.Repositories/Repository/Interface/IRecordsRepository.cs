@@ -16,5 +16,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<RecordsModel> SMSLogs(RecordsModel rm);
         Task<RecordsModel> BlockHistory(RecordsModel rm);
         Task<bool> UnBlock(int RequestID, string id);
+        bool Delete(int RequestID, string id);
     }
 }

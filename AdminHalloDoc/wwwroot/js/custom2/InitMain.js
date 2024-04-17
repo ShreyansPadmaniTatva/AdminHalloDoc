@@ -39,7 +39,7 @@ $(document).ajaxStart(function () {
     //For validating Form in Modal
     $.validator.unobtrusive.parse($("form"));
 
-    KTApp.init(KTAppOptions);
+    //KTApp.init(KTAppOptions);
 
 
     //if (typeof fn_redirectToLogout !== 'undefined' && $.isFunction(fn_redirectToLogout)) {

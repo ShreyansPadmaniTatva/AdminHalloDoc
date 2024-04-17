@@ -34,92 +34,102 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         public async Task<ViewNotesModel> GetNotesByRequest(int id)
         {
             var req = _context.Requests.FirstOrDefault(W => W.Requestid == id);
-
-            var rsa = (from rs in _context.Requeststatuslogs
-                       join py in _context.Physicians on rs.Physicianid equals py.Physicianid into pyGroup
-                       from py in pyGroup.DefaultIfEmpty()
-                       join p in _context.Physicians on rs.Transtophysicianid equals p.Physicianid into pGroup
-                       from p in pGroup.DefaultIfEmpty()
-                       join a in _context.Admins on rs.Adminid equals a.Adminid into aGroup
-                       from a in aGroup.DefaultIfEmpty()
-                       where rs.Requestid == id
-                       select new TransfernotesModel
-                       {
-                           TransPhysician = p.Firstname,
-                           Admin = a.Firstname,
-                           Physician = py.Firstname,
-                           Requestid = rs.Requestid,
-                           Notes = rs.Notes,
-                           Status = rs.Status,
-                           Physicianid = rs.Physicianid,
-                           Createddate = rs.Createddate,
-                           Requeststatuslogid = rs.Requeststatuslogid,
-                           Transtoadmin = rs.Transtoadmin,
-                           Transtophysicianid = rs.Transtophysicianid
-
-                       }).ToList();
-
-            var requestlog = _context.Requeststatuslogs.Where(E => E.Requestid == id && E.Physicianid != null);
-            var cancelnotes = _context.Requeststatuslogs.Where(E => E.Requestid == id && ((E.Status == 3) || (E.Status == 7) || (E.Status == 8)));
-            var model = _context.Requestnotes.FirstOrDefault(E => E.Requestid == id);
             ViewNotesModel allData = new ViewNotesModel();
-            if (model == null)
-            {
-                allData.Requestid = id;
 
-                allData.Physiciannotes = "-";
-                allData.Administrativenotes = "-";
-                allData.Adminnotes = "-";
-            }
-            else
+            if (req == null)
             {
-                allData.Status = req.Status;
-                allData.Requestid = id;
-                allData.Requestnotesid = model.Requestnotesid;
-                allData.Physiciannotes = model.Physiciannotes;
-                allData.Administrativenotes = model.Administrativenotes;
-                allData.Adminnotes = model.Adminnotes;
+                return null;
             }
+            try
+            {
+                var rsa = (from rs in _context.Requeststatuslogs
+                           join py in _context.Physicians on rs.Physicianid equals py.Physicianid into pyGroup
+                           from py in pyGroup.DefaultIfEmpty()
+                           join p in _context.Physicians on rs.Transtophysicianid equals p.Physicianid into pGroup
+                           from p in pGroup.DefaultIfEmpty()
+                           join a in _context.Admins on rs.Adminid equals a.Adminid into aGroup
+                           from a in aGroup.DefaultIfEmpty()
+                           where rs.Requestid == id
+                           select new TransfernotesModel
+                           {
+                               TransPhysician = p.Firstname,
+                               Admin = a.Firstname,
+                               Physician = py.Firstname,
+                               Requestid = rs.Requestid,
+                               Notes = rs.Notes,
+                               Status = rs.Status,
+                               Physicianid = rs.Physicianid,
+                               Createddate = rs.Createddate,
+                               Requeststatuslogid = rs.Requeststatuslogid,
+                               Transtoadmin = rs.Transtoadmin,
+                               Transtophysicianid = rs.Transtophysicianid
 
-            List<TransfernotesModel> list = new List<TransfernotesModel>();
-            foreach (var e in cancelnotes)
-            {
-                list.Add(new TransfernotesModel
+                           }).ToList();
+
+                var requestlog = _context.Requeststatuslogs.Where(E => E.Requestid == id && E.Physicianid != null);
+                var cancelnotes = _context.Requeststatuslogs.Where(E => E.Requestid == id && ((E.Status == 3) || (E.Status == 7) || (E.Status == 8)));
+                var model = _context.Requestnotes.FirstOrDefault(E => E.Requestid == id);
+                if (model == null)
                 {
+                    allData.Requestid = id;
 
-                    Requestid = e.Requestid,
-                    Notes = e.Notes,
-                    Status = e.Status,
-                    Physicianid = e.Physicianid,
-                    Createddate = e.Createddate,
-                    Requeststatuslogid = e.Requeststatuslogid,
-                    Transtoadmin = e.Transtoadmin,
-                    Transtophysicianid = e.Transtophysicianid
-
-                });
-            }
-            allData.cancelnotes = list;
-
-            List<TransfernotesModel> md = new List<TransfernotesModel>();
-            foreach (var e in rsa)
-            {
-                md.Add(new TransfernotesModel
+                    allData.Physiciannotes = "-";
+                    allData.Administrativenotes = "-";
+                    allData.Adminnotes = "-";
+                }
+                else
                 {
-                    TransPhysician = e.TransPhysician,
-                    Admin = e.Admin,
-                    Physician = e.Physician,
-                    Requestid = e.Requestid,
-                    Notes = e.Notes,
-                    Status = e.Status,
-                    Physicianid = e.Physicianid,
-                    Createddate = e.Createddate,
-                    Requeststatuslogid = e.Requeststatuslogid,
-                    Transtoadmin = e.Transtoadmin,
-                    Transtophysicianid = e.Transtophysicianid
-                });
+                    allData.Status = req.Status;
+                    allData.Requestid = id;
+                    allData.Requestnotesid = model.Requestnotesid;
+                    allData.Physiciannotes = model.Physiciannotes;
+                    allData.Administrativenotes = model.Administrativenotes;
+                    allData.Adminnotes = model.Adminnotes;
+                }
+
+                List<TransfernotesModel> list = new List<TransfernotesModel>();
+                foreach (var e in cancelnotes)
+                {
+                    list.Add(new TransfernotesModel
+                    {
+
+                        Requestid = e.Requestid,
+                        Notes = e.Notes,
+                        Status = e.Status,
+                        Physicianid = e.Physicianid,
+                        Createddate = e.Createddate,
+                        Requeststatuslogid = e.Requeststatuslogid,
+                        Transtoadmin = e.Transtoadmin,
+                        Transtophysicianid = e.Transtophysicianid
+
+                    });
+                }
+                allData.cancelnotes = list;
+
+                List<TransfernotesModel> md = new List<TransfernotesModel>();
+                foreach (var e in rsa)
+                {
+                    md.Add(new TransfernotesModel
+                    {
+                        TransPhysician = e.TransPhysician,
+                        Admin = e.Admin,
+                        Physician = e.Physician,
+                        Requestid = e.Requestid,
+                        Notes = e.Notes,
+                        Status = e.Status,
+                        Physicianid = e.Physicianid,
+                        Createddate = e.Createddate,
+                        Requeststatuslogid = e.Requeststatuslogid,
+                        Transtoadmin = e.Transtoadmin,
+                        Transtophysicianid = e.Transtophysicianid
+                    });
+                }
+                allData.transfernotes = md;
+                return allData;
+            }catch(Exception e)
+            {
+                return null;
             }
-            allData.transfernotes = md;
-            return allData;
 
         }
         #endregion
@@ -204,7 +214,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             List<VenderComboBox> Vender = await _context.Healthprofessionals.Where(E => E.Profession == id)
                 .Select(r => new VenderComboBox
                 {
-                   VenderId = r.Vendorid,
+                   VenderId = (int)r.Vendorid,
                    VenderName = r.Vendorname
                 })
                 .ToListAsync();
@@ -245,6 +255,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 Orderdetail.Noofrefill = viewOrder.Refills;
                 Orderdetail.Prescription = viewOrder.Prescription;
                 Orderdetail.Businesscontact = viewOrder.BusinessContact;
+                Orderdetail.Createdby = viewOrder.UserId;
                 _context.Orderdetails.Add(Orderdetail);
                 await _context.SaveChangesAsync();
 
@@ -377,6 +388,22 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             }
           
 
+        }
+        #endregion
+
+        #region isBusinessNameExist
+        public List<Healthprofessional> isBusinessNameExist(string businessName)
+        {
+            List<Healthprofessional> data = _context.Healthprofessionals.Where(e => e.Vendorname.ToLower().Equals(businessName.ToLower())).ToList();
+            return data;
+        }
+        #endregion
+
+        #region isEmailExist
+        public List<Healthprofessional> isEmailExist(string Email)
+        {
+            List<Healthprofessional> data = _context.Healthprofessionals.Where(e => e.Email.ToLower().Equals(Email.ToLower())).ToList();
+            return data;
         }
         #endregion
     }

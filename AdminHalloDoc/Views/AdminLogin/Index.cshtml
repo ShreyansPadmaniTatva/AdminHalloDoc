@@ -32,9 +32,12 @@
             <div class="content m-5 ">
                 
                 <form asp-action="CheckAccessLogin" asp-controller="AdminLogin" method="post">
+                    <div class="d-flex justify-content-between">
                     <h1 class="login fs-1 fw-bolder">Login To Your Account</h1>
-
-
+                    <a asp-action="Index" asp-controller="Home" class="text-primary text-decoration-none py-2 fw-bolder">
+                        ❮ &nbsp; Back
+                    </a>
+                    </div>
                     <div class="form-floating input-group with-icon mb-3    ">
                         <input asp-for="Username" value="shreyans.s@gmail.com" required class="form-control rounded" name="Username" type="text" placeholder=Suchtext autocomplete=off>
                         <i class="bi bi-person"></i>

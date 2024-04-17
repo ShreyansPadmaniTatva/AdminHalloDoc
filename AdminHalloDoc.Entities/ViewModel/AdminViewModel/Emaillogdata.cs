@@ -9,14 +9,14 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
     public class Emaillogdata
     {
-        public int Emaillogid { get; set; }
+        public int? Emaillogid { get; set; }
 
-        public string Emailtemplate { get; set; } = null!;
-        public string Recipient { get; set; }
+        public string? Emailtemplate { get; set; } = null!;
+        public string? Recipient { get; set; }
 
-        public string Subjectname { get; set; } = null!;
+        public string? Subjectname { get; set; } = null!;
 
-        public string Emailid { get; set; } = null!;
+        public string? Emailid { get; set; } = null!;
 
         public string? Confirmationnumber { get; set; }
 
@@ -30,9 +30,9 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 
         public int? Physicianid { get; set; }
 
-        public DateTime Createdate { get; set; }
+        public DateTime? Createdate { get; set; }
 
-        public DateTime Sentdate { get; set; }
+        public DateTime? Sentdate { get; set; }
 
         public BitArray? Isemailsent { get; set; }
 

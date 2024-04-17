@@ -54,8 +54,9 @@
               
                 <input  id="save" style="display:none" type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" />
                 @{
-                    if(Convert.ToInt32(CV.UserID()) == Model.Physicianid)
-                    {
+                    // Check if the user is the physician and the shift date is in the past
+                    if (Convert.ToInt32(CV.UserID()) == Model.Physicianid && Model.Shiftdate >= DateTime.Now.Date)
+                    { 
                         <div id="edit" onclick="toggleCheckboxes()" class="btn btn-info text-white">Edit</div>
                         <div id="delete" class="btn btn-danger btn-sm">Delete</div>
                     }

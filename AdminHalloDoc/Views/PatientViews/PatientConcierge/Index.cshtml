@@ -56,9 +56,13 @@
             <span asp-validation-for="CON_City" class="text-danger"></span>
         </div>
         <div class="col-md-6 form-floating ">
-            <input asp-for="CON_State" class="form-control rounded" name="CON_State" type="text" placeholder=Suchtext autocomplete=off>
+            <select class="form-select  p-2 mt-3 mb-3 w-100 regionDashboard" asp-for="RegionId" data-allow-clear="true" onchange="myFunction()" tabindex="-1" id="regionDashboard" asp-items="@(new SelectList(ViewBag.RegionComboBox, "RegionId", "RegionName"))" data-control="select" data-placeholder="Region">
+                <option id="defaultregion" value="">Select State</option>
+            </select>
+            <input asp-for="CON_State" class="form-control rounded d-none" id="State" name="CON_State" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">State</label>
             <span asp-validation-for="CON_State" class="text-danger"></span>
+           
         </div>
         <div class="col-md-6 form-floating  ">
             <input asp-for="CON_ZipCode" class="form-control rounded" name="CON_ZipCode" type="text" placeholder=Suchtext autocomplete=off>
@@ -114,3 +118,14 @@
         </div>
     </form>
 </div>
+
+@section Scripts
+    {
+
+    <script type="text/javascript">
+        function myFunction() {
+            var val = $("#regionDashboard").val();
+            $("#State").val($('#regionDashboard').find('option[value="' + val + '"]').html())
+        }
+        </script>
+    }

@@ -62,8 +62,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                           (rm.Patientname.IsNullOrEmpty() || (rc.Firstname + " " + rc.Lastname).ToLower().Contains(rm.Patientname.ToLower())) &&
                                                           (rm.Physicianname.IsNullOrEmpty() || (p.Firstname + " " + p.Lastname).ToLower().Contains(rm.Physicianname.ToLower())) &&
                                                           (rm.Email.IsNullOrEmpty() || rc.Email.ToLower().Contains(rm.Email.ToLower())) &&
-                                                          (rm.Phonenumber.IsNullOrEmpty() || rc.Phonenumber.ToLower().Contains(rm.Phonenumber.ToLower()))
-                                                          orderby req.Createddate   
+                                                          (rm.Phonenumber.IsNullOrEmpty() || rc.Phonenumber.ToLower().Contains(rm.Phonenumber.ToLower())) && ( req.Isdeleted == new BitArray(new[] { false }))
+                                              orderby req.Createddate   
                                                     select new ViewSearchRecord
                                                     {
                                                         Modifieddate = req.Modifieddate,
@@ -162,9 +162,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                       City = user.City ?? "-",
                                       State = user.State ?? "-",
                                       Zipcode = user.Zipcode ?? "-",
+                                      Createddate = user.Createddate
 
 
-                                  }).ToList();
+                                  }).OrderByDescending(x => x.Createddate).ToList();
 
 
 
@@ -199,7 +200,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                      select new ViewDashboardList
                                                      {
                                                          
-                                                         Physician = p.Firstname + " " + p.Lastname,
+                                                         Physician = p.Firstname + " " + p.Lastname ?? "-",
                                                          RequestClientid = rc.Requestclientid,
                                                          Status = req.Status,
                                                          Requestid = req.Requestid,
@@ -215,7 +216,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                          RegionID = rc.Regionid,
                                                          RequestorPhoneNumber = req.Phonenumber,
                                                          ConcludedDate = req.Createddate,
-                                                         Confirmation = req.Confirmationnumber
+                                                         Confirmation = req.Confirmationnumber ?? "-"
                                                      }).ToListAsync();
 
             int totalItemCount = allData.Count();
@@ -245,11 +246,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                        where (rm.AccountType == 0 || req.Roleid == rm.AccountType) &&
                                              (!rm.Startdate.HasValue || req.Createdate.Date == rm.Startdate.Value.Date) &&
                                              (!rm.Enddate.HasValue || req.Sentdate.Value.Date == rm.Enddate.Value.Date) &&
-                                             (rm.ReciverName.IsNullOrEmpty() || _context.Aspnetusers.FirstOrDefault(e => e.Email == req.Emailid).Username.ToLower().Contains(rm.ReciverName.ToLower()) ) &&
+                                             (rm.ReciverName.IsNullOrEmpty() || req.Recipient.ToLower().Contains(rm.ReciverName.ToLower()) ) &&
                                              (rm.Email.IsNullOrEmpty() || req.Emailid.ToLower().Contains(rm.Email.ToLower()))
                                        select new Emaillogdata
                                        {
-                                           Recipient = _context.Aspnetusers.FirstOrDefault(e => e.Email == req.Emailid).Username ?? null,
+                                           Recipient = req.Recipient,
                                            Confirmationnumber = req.Confirmationnumber,
                                            Createdate = req.Createdate,
                                            Emailtemplate = req.Emailtemplate,
@@ -317,8 +318,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                            where (!rm.Startdate.HasValue || req.Createddate.Value.Date == rm.Startdate.Value.Date) &&
                                                  (rm.Patientname.IsNullOrEmpty() || _context.Requests.FirstOrDefault(e => e.Requestid == Convert.ToInt32(req.Requestid)).Firstname.ToLower().Contains(rm.Patientname.ToLower())) &&
                                                  (rm.Email.IsNullOrEmpty() || req.Email.ToLower().Contains(rm.Email.ToLower())) &&
-                                                 (rm.Phonenumber.IsNullOrEmpty() || req.Phonenumber.ToLower().Contains(rm.Phonenumber.ToLower())) && req.Isactive  == new BitArray(1)  
-                                           select new BlockRequestData
+                                                 (rm.Phonenumber.IsNullOrEmpty() || req.Phonenumber.ToLower().Contains(rm.Phonenumber.ToLower())) && req.Isactive == new BitArray(new[] { true })
+            select new BlockRequestData
                                            {
                                                PatientName = _context.Requests.FirstOrDefault(e => e.Requestid == Convert.ToInt32(req.Requestid)).Firstname,
                                                Email = req.Email,
@@ -373,6 +374,30 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
 
 
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region delete_request
+        public bool Delete(int RequestID, string id)
+        {
+            try
+            {
+                BitArray bt = new BitArray(1);
+                bt.Set(0, true);
+                Request re = _context.Requests.FirstOrDefault(e => e.Requestid == RequestID);
+                re.Isdeleted = bt;
+
+                re.Modifieddate = DateTime.Now;
+
+                _context.Requests.Update(re);
+                _context.SaveChanges();
 
                 return true;
             }

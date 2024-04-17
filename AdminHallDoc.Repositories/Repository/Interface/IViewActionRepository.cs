@@ -30,7 +30,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<bool> TransfertoAdmin(ViewActions v);
         Task<bool> DeleteDocumentByRequest(string ids);
         Task<bool> SendFilEmail(string ids,int Requestid, string SendFilEmail);
-        Boolean SendAgreement(ViewActions v);
+        Task<Boolean> SendAgreement(ViewActions v);
         Boolean SendAgreement_accept(int RequestID);
         Boolean SendAgreement_Reject(int RequestID, string Notes);
         Task<bool> ClearCase(int RequestID);
@@ -39,5 +39,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         bool EditEncounterDetails(ViewEncounter Data, string id);
         bool CaseFinalized(ViewEncounter model, string id);
         bool SubmitCreateRequest(ViewAdminCreateRequest model, string email);
+        Task<bool> SendEmailForRequestSupport(string notes, int AdminId);
     }
 }

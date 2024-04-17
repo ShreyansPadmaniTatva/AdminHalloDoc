@@ -42,7 +42,10 @@
 
 <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps-web.min.js"></script>
 <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/services/services-web.min.js"></script>
+@section Scripts
+    {
     <script>
+    $('.loader').fadeIn();
     const APIKey = "bmULYKyU2sYwUF1NFjiJ6Fdc3OrqHyWo";
 
     var Lagos = { lat: 20.5937, lng: 78.9629 };
@@ -101,6 +104,9 @@
             });
         });
 
+    $(document).ready(function () {
+        $('.loader').fadeOut();
+    });
     function populateModal(physicianData) {
         $('#physicianName').text(physicianData.name);
         $('#physcianAddress').text(physicianData.address);
@@ -154,3 +160,4 @@
     }
 
     </script>
+    }

@@ -34,6 +34,13 @@ namespace AdminHalloDoc.Controllers
             return View();
         }
 
+        [Route("PageNoteFound")]
+        [Route("ServerError")]
+        [Route("EmptyResponseError")]
+        public ActionResult Error404()
+        {
+            return View("404");
+        }
 
         #region _SendAgreement
         public async Task<IActionResult> _SendAgreement(int? requestid)
@@ -48,7 +55,16 @@ namespace AdminHalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _SendAgreementPost(ViewActions v)
         {
-            if (_viewActionRepository.SendAgreement(v))
+            if(CV.role() == "Admin")
+            {
+                v.AdminId = Convert.ToInt32(CV.UserID());
+            }
+            else
+            {
+                v.ProviderId = Convert.ToInt32(CV.UserID());
+            }
+
+            if (await _viewActionRepository.SendAgreement(v))
             {
                 TempData["Status"] = "Mail Send  Successfully..!";
             }
@@ -70,13 +86,13 @@ namespace AdminHalloDoc.Controllers
         public IActionResult accept(int RequestID)
         {
             _viewActionRepository.SendAgreement_accept(RequestID);
-            return RedirectToAction("Index", "AdminDashboard");
+            return Redirect("/Home");
         }
 
         public IActionResult Reject(int RequestID, string Notes)
         {
             _viewActionRepository.SendAgreement_Reject(RequestID, Notes);
-            return RedirectToAction("Index", "AdminDashboard");
+            return Redirect("/Home");
         }
     }
 }

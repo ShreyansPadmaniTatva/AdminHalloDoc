@@ -85,9 +85,15 @@ namespace AdminHalloDoc.Entities.ViewModel
             {
                 throw new ArgumentNullException(nameof(encodedUserId), "encodedUserId cannot be null or empty");
             }
-
-            byte[] userIdBytes = Convert.FromBase64String(encodedUserId);
-            return BitConverter.ToInt32(userIdBytes, 0);
+            try
+            {
+                byte[] userIdBytes = Convert.FromBase64String(encodedUserId);
+                return BitConverter.ToInt32(userIdBytes, 0);
+            }
+            catch (FormatException ex)
+            {
+                return null;
+            }
         }
 
     }

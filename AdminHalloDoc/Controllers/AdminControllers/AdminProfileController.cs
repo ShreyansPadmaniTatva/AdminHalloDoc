@@ -27,6 +27,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
+        #region Profile_User
         [AdminAuth("Admin,Provider")]
         [Route("Physician/Profile")]
         [Route("Admin/Profile")]
@@ -43,10 +44,11 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
             return  View("../AdminViews/Profile/Index",p);
         }
+        #endregion
 
         #region Update_Profile
-      
-        
+
+
         public async Task<IActionResult> SaveAdministrationinfo(ViewAdminProfile vm)
         {
 

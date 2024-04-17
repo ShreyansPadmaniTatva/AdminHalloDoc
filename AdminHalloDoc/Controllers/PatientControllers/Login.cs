@@ -211,58 +211,64 @@ namespace AdminHalloDoc.Controllers.PatientControllers
 
         public async Task<IActionResult> CreatNewAccont(string Email, string Password)
         {
-            Guid id = Guid.NewGuid();
-            var hasher = new PasswordHasher<string>();
-            Aspnetuser aspnetuser = new Aspnetuser
+            try
             {
-                Id = id.ToString(),
-                Email = Email,
-                Passwordhash = hasher.HashPassword(null, Password),
-                Username = Email
-            };
-            _context.Aspnetusers.Add(aspnetuser);
-            await _context.SaveChangesAsync();
-            var U = await _context.Requestclients.FirstOrDefaultAsync(m => m.Email == Email);
-            var User = new User
-            {
-                Aspnetuserid = aspnetuser.Id,
-                Firstname = U.Firstname,
-                Lastname = U.Lastname,
-                Mobile = U.Phonenumber,
-                Intdate = U.Intdate,
-                Intyear = U.Intyear,
-                Strmonth = U.Strmonth,
-                Email = Email,
-                Createdby = aspnetuser.Id,
-                Createddate = DateTime.Now,
-                Isrequestwithemail = new BitArray(1),
+                Guid id = Guid.NewGuid();
+                var hasher = new PasswordHasher<string>();
+                Aspnetuser aspnetuser = new Aspnetuser
+                {
+                    Id = id.ToString(),
+                    Email = Email,
+                    Passwordhash = hasher.HashPassword(null, Password),
+                    Username = Email,
+                    CreatedDate = DateTime.Now,
+                };
+                _context.Aspnetusers.Add(aspnetuser);
+                await _context.SaveChangesAsync();
+                var U = await _context.Requestclients.FirstOrDefaultAsync(m => m.Email == Email);
+                var User = new User
+                {
+                    Aspnetuserid = aspnetuser.Id,
+                    Firstname = U.Firstname,
+                    Lastname = U.Lastname,
+                    Mobile = U.Phonenumber,
+                    Intdate = U.Intdate,
+                    Intyear = U.Intyear,
+                    Strmonth = U.Strmonth,
+                    Email = Email,
+                    Createdby = aspnetuser.Id,
+                    Createddate = DateTime.Now,
+                    Isrequestwithemail = new BitArray(1),
+                };
+                _context.Users.Add(User);
+                await _context.SaveChangesAsync();
 
+                var aspnetuserroles = new Aspnetuserrole();
+                aspnetuserroles.Userid = User.Aspnetuserid;
+                aspnetuserroles.Roleid = "Patient";
+                _context.Aspnetuserroles.Add(aspnetuserroles);
+                _context.SaveChanges();
 
-            };
-            _context.Users.Add(User);
-            await _context.SaveChangesAsync();
+                var rc = _context.Requestclients.Where(e => e.Email == Email).ToList();
 
-            var aspnetuserroles = new Aspnetuserrole();
-            aspnetuserroles.Userid = User.Aspnetuserid;
-            aspnetuserroles.Roleid = "Patient";
-            _context.Aspnetuserroles.Add(aspnetuserroles);
-            _context.SaveChanges();
-
-            var rc = _context.Requestclients.Where(e => e.Email == Email).ToList();
-
-            foreach (var r in rc)
-            {
-                _context.Requests.Where(n => n.Requestid == r.Requestid)
-               .ExecuteUpdate(s => s.SetProperty(
-                   n => n.Userid,
-                   n => User.Userid));
+                foreach (var r in rc)
+                {
+                    _context.Requests.Where(n => n.Requestid == r.Requestid)
+                   .ExecuteUpdate(s => s.SetProperty(
+                       n => n.Userid,
+                       n => User.Userid));
+                }
+                if (rc.Count > 0)
+                {
+                    User.Intdate = rc[0].Intdate;
+                    User.Intyear = rc[0].Intyear;
+                    User.Strmonth = rc[0].Strmonth;
+                    _context.Users.Update(User);
+                }
             }
-            if(rc.Count > 0)
+            catch (Exception ex)
             {
-                User.Intdate = rc[0].Intdate;
-                User.Intyear = rc[0].Intyear;
-                User.Strmonth = rc[0].Strmonth;
-                _context.Users.Update(User);
+                return RedirectToAction("Index", "Dashboard");
             }
 
             return RedirectToAction("Index", "Dashboard");

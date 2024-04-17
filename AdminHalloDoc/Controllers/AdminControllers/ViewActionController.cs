@@ -344,7 +344,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        #region
+        #region UploadDocFromConculde_care
         [HttpPost]
         public async Task<IActionResult> UploadDocFromConculde(int? Requestid, IFormFile file)
         {
@@ -354,6 +354,19 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 TempData["Status"] = "Upload File Successfully..!";
             }
             return RedirectToAction("ConcludeCare", "SubmitForm", new { id = Requestid.Encode() });
+        }
+        #endregion
+
+        #region SendEmail_ForRequestSupport
+        [HttpPost]
+        public async Task<IActionResult> SendEmailForRequestSupport(string? Notes)
+        {
+            if (await _viewActionRepository.SendEmailForRequestSupport(Notes, Convert.ToInt32( CV.UserID())))
+            {
+
+                TempData["Status"] = "Msg Sent Successfully..!";
+            }
+            return RedirectToAction("Index", "AdminDashboard");
         }
         #endregion
     }

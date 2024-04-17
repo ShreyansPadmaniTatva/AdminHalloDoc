@@ -51,7 +51,7 @@
             <span asp-validation-for="City" class="text-danger"></span>
         </div>
         <div class="col-md-6 form-floating ">
-            <select class="form-select form-select-sm p-2 mt-3 mb-3 w-100 regionDashboard" asp-for="region" data-allow-clear="true" tabindex="-1" id="regionDashboard" asp-items="@(new SelectList(ViewBag.RegionComboBox, "RegionId", "RegionName"))" data-control="select" data-placeholder="Region">
+            <select class="form-select  p-2 mt-3 mb-3 w-100 regionDashboard" asp-for="region" data-allow-clear="true" tabindex="-1" id="regionDashboard" asp-items="@(new SelectList(ViewBag.RegionComboBox, "RegionId", "RegionName"))" data-control="select" data-placeholder="Region">
                 <option id="defaultregion" selected disabled value="">Select Regions</option>
             </select>
             <label for="floatingInput">State</label>

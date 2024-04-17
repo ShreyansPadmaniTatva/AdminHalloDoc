@@ -47,5 +47,6 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public string? RoomSite { get; set; }
         public string? UploadImage { get; set; }
         public IFormFile? UploadFile { get; set; }
+        public int? RegionId { get; set; }
     }
 }

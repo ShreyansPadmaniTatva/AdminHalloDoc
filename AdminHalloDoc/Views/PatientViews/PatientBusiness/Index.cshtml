@@ -32,7 +32,7 @@
             <span asp-validation-for="BUP_LastName" class="text-danger"></span>
         </div>
         <div class="col-md-6 form-floating  ">
-            <input asp-for="BUP_PhoneNumber" id="phone" type="number" name="BUP_PhoneNumber" class="form-control rounded" autocomplete=off>
+            <input asp-for="BUP_PhoneNumber" id="phone" type="text" name="BUP_PhoneNumber" class="form-control rounded" autocomplete=off>
             <span asp-validation-for="BUP_PhoneNumber" class="text-danger"></span>
         </div>
         <div class="col-md-6 form-floating  ">
@@ -96,7 +96,10 @@
             <span asp-validation-for="City" class="text-danger"></span>
         </div>
         <div class="col-md-6 form-floating ">
-            <input asp-for="State" class="form-control rounded" name="State" type="text" placeholder=Suchtext autocomplete=off>
+            <select class="form-select  p-2 mt-3 mb-3 w-100 regionDashboard" asp-for="RegionId" data-allow-clear="true" onchange="myFunction()" tabindex="-1" id="regionDashboard" asp-items="@(new SelectList(ViewBag.RegionComboBox, "RegionId", "RegionName"))" data-control="select" data-placeholder="Region">
+                <option id="defaultregion" value="">Select State</option>
+            </select>
+            <input asp-for="State" class="form-control rounded d-none" id="State" name="State" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">State</label>
             <span asp-validation-for="State" class="text-danger"></span>
         </div>
@@ -117,3 +120,16 @@
         </div>
     </form>
 </div>
+
+@section Scripts
+    {
+
+    <script type="text/javascript">
+        function myFunction() {
+            var val = $("#regionDashboard").val();
+            $("#State").val($('#regionDashboard').find('option[value="' + val + '"]').html())
+        }
+
+     
+        </script>
+        }

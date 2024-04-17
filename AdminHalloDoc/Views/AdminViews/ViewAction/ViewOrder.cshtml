@@ -1,4 +1,5 @@
-﻿@*
+﻿@using AdminHalloDoc.Models.CV;
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewOrder;
@@ -14,16 +15,17 @@
     <div class="card border-0 shadow p-4 mb-5  rounded">
         <form asp-action="SaveViewOrder" asp-controller="SubmitForm" class="row g-3 " enctype="multipart/form-data">
             <input asp-for="RequestId" type="hidden">
+            <input asp-for="UserId" value="@CV.ID()" type="hidden">
 
             <div class="col-md-6 form-floating  ">
-                <select class="form-select form-select-md mt-3 p-2 " required asp-for="VenderTypeId" asp-items="@(new SelectList(ViewBag.VenderTypeComboBox,"VenderTypeId","Name"))" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="VenderType" data-control="select2" data-placeholder="Select Level">
-                        <option>All Region</option>
+                <select class="form-select  mt-3 p-2 " required asp-for="VenderTypeId" asp-items="@(new SelectList(ViewBag.VenderTypeComboBox,"VenderTypeId","Name"))" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="VenderType" data-control="select2" data-placeholder="Select Level">
+                        <option>All VenderType</option>
                     </select>
             </div>
 
             <div class="col-md-6 form-floating  ">
-                <select class="form-select form-select-md mt-3 p-2" required asp-for="VenderTypeId" data-allow-clear="true" tabindex="-1" onchange="mySecondFunction()" id="vender" data-control="select2" data-placeholder="Select Level">
-                    <option>All Region</option>
+                <select class="form-select  mt-3 p-2" required asp-for="VenderId" data-allow-clear="true" tabindex="-1" onchange="mySecondFunction()" id="vender" data-control="select2" data-placeholder="Select Level">
+                    <option>All Vender</option>
                 </select>
             </div>
             <div class="col-md-6 form-floating">
@@ -54,7 +56,7 @@
 
 
             <div class="col-md-6 form-floating  ">
-                <select class="form-select form-select-sm mt-3 p-2" required asp-for="VenderTypeId" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" data-control="select2" data-placeholder="Number Of Refile">
+                <select class="form-select mt-3 p-2" required asp-for="Refills" data-allow-clear="true" tabindex="-1"  data-control="select2" data-placeholder="Number Of Refile">
                     <option>0</option>
                     <option>1</option>
                     <option>2</option>

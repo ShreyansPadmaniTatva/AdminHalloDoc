@@ -31,6 +31,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region CheckAccessLogin
+        /// <summary>
+        /// Check User With Role
+        /// </summary>
+        /// <param name="aspNetUser"></param>
+        /// <returns></returns>
         public async Task<UserInfo> CheckAccessLogin(Aspnetuser aspNetUser)
         {
             var user = await _context.Aspnetusers.FirstOrDefaultAsync(u => u.Username == aspNetUser.Username);
@@ -115,10 +120,17 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region SetMenu
+        /// <summary>
+        /// With Roleid Get Menu With Database = Static Menu 
+        /// </summary>
+        /// <param name="roleid"></param>
+        /// <returns></returns>
         public  List<MenuItem> SetMenu(int? roleid)
         {
             List<Menu> MenuItems = null;
             List<MenuItem> Staticmenu = new List<MenuItem>();
+            List<MenuItem> Staticmenudummy = new List<MenuItem>();
+            Staticmenudummy = staticmenu.Items;
             if (roleid != null)
             {
                 //Set By DataBase

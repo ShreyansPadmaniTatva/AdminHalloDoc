@@ -926,5 +926,18 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         #endregion
 
+        #region check_email_exist
+        /// <summary>
+        /// when new provider add  then check that mail is exit or not
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <returns></returns>
+        public int isEmailExist(string Email)
+        {
+            int data = _context.Physicians.Count(e => e.Email.ToLower().Equals(Email.ToLower()));
+            return data;
+        }
+        #endregion
+
     }
 }

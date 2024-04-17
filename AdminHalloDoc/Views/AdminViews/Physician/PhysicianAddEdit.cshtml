@@ -148,7 +148,9 @@
 
                 }
                 </div>
-            <div class="text-end edits">
+            @if (Model != null && Model.Physicianid != Convert.ToInt32(CV.UserID()))
+            {
+                <div class="text-end edits">
 
                     <a onclick="enable_disable_administration()" id="admin-input-edit" class="btn  btn-info text-white btn-submit ">
                         Edit
@@ -161,7 +163,8 @@
                     </a>
 
                 </div>
-                <script>
+            }
+            <script>
 
                  
                 </script>
@@ -195,9 +198,10 @@
                 <input asp-for="Altphone" id="phone1" type="tel" name="Altphone" class="form-control form-control-disable rounded mail-billing-imp" autocomplete=off>
                 <!-- <label for="floatingInput">Phone Number </label> -->
             </div>
-
-            <div class="text-end edits">
-                <a onclick="enable_disable_mailBilling()" id="edit-mail-billing" class="btn text-white  btn-info btn-submit ">
+            @if (Model != null && Model.Physicianid != Convert.ToInt32(CV.UserID()))
+            {
+                <div class="text-end edits">
+                    <a onclick="enable_disable_mailBilling()" id="edit-mail-billing" class="btn text-white  btn-info btn-submit ">
                     Edit
                 </a>
                 <button type="submit" id="save-mail-billing" asp-action="EditMailBilling" asp-controller="Physician" class="btn  btn-outline-info btn-submit mx-2 ">
@@ -207,6 +211,7 @@
                     cancel
                 </a>
             </div>
+            }
             <script>
 
             </script>
@@ -267,8 +272,10 @@
                 <textarea asp-for="Adminnotes" name="Adminnotes" class="form-control form-control-disable provider-prof" rows="10" cols="100"></textarea>
                 <label for="floatingInput">Adminnotes</label>
             </div>
-            <div class="text-end mt-2 edits">
-                <a id="edit-provider-prof" class="btn  btn-outline-info btn-submit ">
+            @if (Model != null && Model.Physicianid != Convert.ToInt32(CV.UserID()))
+            {
+                <div class="text-end mt-2 edits">
+                    <a id="edit-provider-prof" class="btn  btn-outline-info btn-submit ">
                     Edit
                 </a>
                 <button type="submit" asp-action="EditProviderProfile" asp-controller="Physician" id="save-provider-prof" class="btn  btn-outline-info btn-submit mx-2 ">
@@ -278,6 +285,7 @@
                     cancel
                 </div>
             </div>
+            }
             <script>
 
             </script>

@@ -5,7 +5,7 @@
 <div class="container">
     <div class="justify-content-between d-flex container-fluid position-relative ">
         <div class="">
-            <h1 class="fw-bolder" > Add Business </h1>
+            <h2 class="fw-bolder">  @ViewData["Vender"] Business </h2>
         </div>
         <div>
             <a href="javascript:void(0)" onclick="goBack()" class="btn btn-outline-info"> ❮  Back </a>
@@ -58,7 +58,7 @@
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
-                <select class="form-select form-control form-select-sm  p-2" required asp-for="Regionid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                <select class="form-select form-control   p-2" required asp-for="Regionid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                 </select>
                 <span asp-validation-for="Regionid" class="text-danger"></span>
             </div>

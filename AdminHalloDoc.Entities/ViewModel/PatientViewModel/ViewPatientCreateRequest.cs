@@ -37,7 +37,7 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         [RegularExpression(@"^(?=.*\S)[a-zA-Z\s.'-]+$", ErrorMessage = "Enter a valid city name")]
         public string City { get; set; }
         [Required]
-        public string State { get; set; }
+        public string? State { get; set; }
         [Required(ErrorMessage = "Zip Code is required")]
         [StringLength(10, ErrorMessage = "Enter valid Zip Code")]
         [RegularExpression(@"^\d{6}$", ErrorMessage = "Enter a valid 6-digit zip code")]
@@ -53,6 +53,7 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public string? Realtion { get; set; }
         public decimal? latitude { get; set; }
         public decimal? longitude { get; set; }
+        public int? RegionId { get; set; }
 
         // not mandatory
         public int? date { get; set; }

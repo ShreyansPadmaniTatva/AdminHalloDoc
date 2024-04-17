@@ -1,25 +1,82 @@
+var body = document.body;
+var currentTheme = localStorage.getItem("Theme");
+body.setAttribute('data-bs-theme', currentTheme);
+if (currentTheme == 'dark') {
+    document.getElementById('thm').style.display = 'block';
+    document.getElementById('thm2').style.display = 'none';
+}
+else {
+    document.getElementById('thm2').style.display = 'block';
+    document.getElementById('thm').style.display = 'none';
+}
 function mode() {
+
     var body = document.body;
-    var currentTheme = body.getAttribute('data-bs-theme');
+    // var currentTheme = body.getAttribute('data-bs-theme');
+    var currentTheme = localStorage.getItem("Theme");
 
+    // Toggle between 'light' and 'dark'
     var newTheme = currentTheme === 'light' ? 'dark' : 'light';
-
+    if (newTheme == 'dark') {
+        document.getElementById('thm').style.display = 'block';
+        document.getElementById('thm2').style.display = 'none';
+    }
+    else {
+        document.getElementById('thm2').style.display = 'block';
+        document.getElementById('thm').style.display = 'none';
+    }
+    // Update the data-bs-theme attribute
     body.setAttribute('data-bs-theme', newTheme);
+    localStorage.setItem("Theme", newTheme);
 
     console.log(body.getAttribute('data-bs-theme'));
 }
+//function goBack() {
+//    // Check if there is a previous unique URL
+//    var previousUrl = getPreviousUniqueUrl();
+//    if (previousUrl) {
+//        // If there is a previous URL, navigate to it
+//        window.location.href = previousUrl;
+//    } else {
+//        // If there is no previous URL, go back in history
+//        history.back();
+//    }
+//}
 function goBack() {
-    // Check if there is a previous unique URL
-    var previousUrl = getPreviousUniqueUrl();
-    if (previousUrl) {
-        // If there is a previous URL, navigate to it
-        window.location.href = previousUrl;
+    var uniqueURLs = [];
+    var historyLength = history.length;
+
+    // Iterate through the history from the current position to find unique URLs
+    for (var i = historyLength - 2; i >= 0; i--) {
+        var url = history[i];
+        if (uniqueURLs.indexOf(url) === -1) {
+            uniqueURLs.push(url);
+        }
+    }
+    debugger
+    console.log(uniqueURLs);
+    // Redirect to the last unique URL found
+    if (uniqueURLs.length > 0) {
+        var lastUniqueURL = uniqueURLs.pop();
+        window.location.href = lastUniqueURL;
     } else {
-        // If there is no previous URL, go back in history
-        history.back();
+        // If no unique URLs found, redirect to home page or any default URL
+        window.location.href = "default.html";
     }
 }
+let navLinks = document.querySelectorAll('.nav-link');
 
+// Loop through each 'nav-link' element
+navLinks.forEach(function (navLink) {
+    // Check if the 'nav-link' element has the class 'active'
+    if (navLink.classList.contains('active')) {
+        // If it has the class 'active', find its parent element with the class 'nav-item' and add a CSS class to it
+        let parentNavItem = navLink.closest('.nav-item');
+        if (parentNavItem) {
+            parentNavItem.classList.add('active-item');
+        }
+    }
+});
 // Function to get the previous unique URL
 function getPreviousUniqueUrl() {
     var currentUrl = window.location.href;
@@ -104,6 +161,11 @@ $(function () {
     // Add hover-triggered dropdown behavior
     $('.dropdown').hover(function () {
         var $dropdownMenu = $(this).find('.dropdown-menu');
+        if ($dropdownMenu.length === 0) {
+            console.log("Dropdown menu not found");
+            return;
+        }
+
         $dropdownMenu.addClass('show');
         // Adjust position if menu extends beyond viewport
         var dropdownMenuRect = $dropdownMenu[0].getBoundingClientRect();

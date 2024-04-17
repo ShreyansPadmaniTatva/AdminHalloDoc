@@ -14,9 +14,12 @@
 
         <div class="" id="navbarSupportedContent">
             <ul id="navlist" data-hidden="true" class="navlist navbar-nav me-auto mb-2 mb-lg-0 fw-bold">
-                <button class="nav-toggle toggle--close" aria-label="close menu">
+              @*  <button class="nav-toggle toggle--close" aria-label="close menu">
                     &#x2573;
-                </button>
+                </button>*@
+                <h5 class="text-dark align-bottom p-3 pb-1 mobile-name">
+                    Welcome <span class="fw-bolder"> @CV.UserName() </span>
+                </h5>
                 @foreach (var menuItem in Staticmenu)
                 {
                     if (menuItem.Submenu is null)

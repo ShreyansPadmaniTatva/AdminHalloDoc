@@ -21,5 +21,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<bool> SavePartner(Healthprofessional SavePartner);
         Task<Healthprofessional> GetPartnerById(int? venderId);
         Task<bool> DeletePartnerById(int? venderId);
+        List<Healthprofessional> isBusinessNameExist(string businessName);
+        List<Healthprofessional> isEmailExist(string Email);
     }
 }

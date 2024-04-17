@@ -46,7 +46,7 @@
 
     function asyncOnSuccess(element, data, contentType) {
         var mode;
-
+       
         if (contentType.indexOf("application/x-javascript") !== -1) {  // jQuery already executes JavaScript for us
             return;
         }
@@ -69,12 +69,13 @@
                     $(update).html(data);
                     break;
             }
+           
         });
     }
 
     function asyncRequest(element, options) {
         var confirm, loading, method, duration;
-
+        
         confirm = element.getAttribute("data-ajax-confirm");
         if (confirm && !window.confirm(confirm)) {
             return;
@@ -93,23 +94,27 @@
                 result = getFunction(element.getAttribute("data-ajax-begin"), ["xhr"]).apply(element, arguments);
                 if (result !== false) {
                     loading.show(duration);
+                    $('.loader').fadeIn();
                 }
                 return result;
             },
             complete: function () {
+                $('.loader').fadeOut();
                 loading.hide(duration);
                 getFunction(element.getAttribute("data-ajax-complete"), ["xhr", "status"]).apply(element, arguments);
             },
             success: function (data, status, xhr) {
+                
                 asyncOnSuccess(element, data, xhr.getResponseHeader("Content-Type") || "text/html");
                 getFunction(element.getAttribute("data-ajax-success"), ["data", "status", "xhr"]).apply(element, arguments);
+                
             },
             error: function () {
                 getFunction(element.getAttribute("data-ajax-failure"), ["xhr", "status", "error"]).apply(element, arguments);
             }
         });
 
-
+       
 
 
         //options.data.push({ name: "X-Requested-With", value: "XMLHttpRequest" });

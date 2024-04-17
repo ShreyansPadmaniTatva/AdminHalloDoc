@@ -67,9 +67,9 @@
                     <td scope="col" class="table-text">@item.AdminNote</td>
                     <td scope="col" class="table-text">@item.PatientNote</td>
                     <td scope="col" class="table-text">
-                        <button  class="btn btn-sm btn-outline-info  mx-2 ">
+                        <a  class="btn btn-sm btn-outline-info  mx-2 " onclick="confirmDelete('@item.RequestID')">
                             Delete
-                        </button>
+                        </a>
                     </td>
                 </tr>
 
@@ -140,6 +140,7 @@
         <input type="submit" class="d-none" id="foormsubmit" />
     </form>
 </div>
+
 <script>
     function SetColumValue(e) {
         var modeldata = @Html.Raw(Json.Serialize(Model));
@@ -183,4 +184,20 @@
             });
         });
     });
+</script>
+<script>
+    function confirmDelete(requestID) {
+        Swal.fire({
+            title: "Delete Request  ?",
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            denyButtonText: `Don't delete`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log('/Report/Delete?RequestId=' + requestID);
+                window.location.href = '/Reports/Delete?RequestId=' + requestID;
+            }
+        });
+    }
 </script>

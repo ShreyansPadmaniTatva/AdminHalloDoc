@@ -17,5 +17,6 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? FaxNumber { get; set; }
         public string? Prescription { get; set; }
         public int? Refills { get; set; }
+        public string? UserId { get; set; }
     }
 }

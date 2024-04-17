@@ -23,9 +23,10 @@ namespace AdminHalloDoc.Entities.ViewModel
         {
             try
             {
+                Body = "Mail to :"+ To+"<br/>"+Body;
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("", From));
-                message.To.Add(new MailboxAddress("", To));
+                message.To.Add(new MailboxAddress("", "petoco8642@iliken.com"));
                 message.Subject = Subject;
                 message.Body = new TextPart("html")
                 {

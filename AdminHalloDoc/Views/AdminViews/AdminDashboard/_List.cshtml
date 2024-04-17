@@ -1,4 +1,5 @@
-﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.PaginatedViewModel;
+﻿@using System.Globalization;
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.PaginatedViewModel;
 @using static AdminHalloDoc.Entities.ViewModel.Constant
 @using static AdminHalloDoc.Entities.ViewModel.CM
 @{
@@ -10,9 +11,9 @@
     List<string> tdHtmlValues = statusTdHtmlMap.ContainsKey(Status) ? statusTdHtmlMap[Status] : new List<string>();
 }   
 
-
 <div class="card border-0 shadow pb-2 mb-3">
     <div class="table-responsive" style="overflow-x: visible !important;">
+      
         <div class="accordion accordion-flush" id="accordionFlushExample">
             @foreach (var item in Model.DashboardList)
             {
@@ -30,11 +31,12 @@
                                     </div>
                                     <div>
                                         <div class="pb-2">
-                                            Patient  <div class="p-success">
+                                        @Enum.GetName(typeof(RequestType), item.RequestTypeID)  <div class="p-success">
                                             </div>
                                         </div>
                                         <div class="btn btn-outline-info rounded-4 p-1 fs-6 px-2">
-                                        <a href=""> map location </a>
+                                        <a href="https://www.google.com/maps/search/?api=1&query=@item.Address" class="text-info" target="_blank">Map Location</a>
+
                                     </div>
                                     </div>
                                 </div>
@@ -48,72 +50,183 @@
                                     </div>
                                     <div class="px-2 ">
                                         <span class="text-start text-light-emphasis"> Date Of birth:  </span>
-                                        <span class="text-end text-dark"> Jun 28, 1991(33)  </span>
+                                    <span class="text-end text-dark"> @item.Dob  </span>
                                     </div>
-                                    <div class="btn btn-light rounded-4 p-1 fs-6 px-3 my-2 position-absolute top-0  end-0">
+                                <a href="/Admin/Viewcase/@item.RequestClientid.Encode()" class="btn btn-light rounded-4 p-1 fs-6 px-3 my-2 position-absolute top-0  end-0">
                                         View Case
-                                    </div>
+                                    </a>
                                 </div>
+                               
+                            @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 5)
+                            {
                                 <div class="d-flex align-items-center py-0">
-                                    <div class="border border-1 border-info d-flex rounded-5 mb-1 ">
-                                        <i class="bi bi-envelope p-2 py-1 fa-sm"></i>
+                                    <div class="text-start d-grid">
+                                        @item.PatientName
                                     </div>
-                                    <div class="px-2 ">
-                                        <span class="text-start text-light-emphasis">Email :  </span>
-                                        <span class="text-end text-dark">shreyans Padmani  </span>
+                                    <div class="text-end verti border border-1 p-1 text-end rounded-1 py-0 btn text-white">
+                                        <a class="text-light" href="mailto: @item.Email">  <i class="bi bi-envelope"></i> </a>
                                     </div>
                                 </div>
+                            }
+
+                            @if (Status == 1 || Status == 2 || Status == 3)
+                            {
                                 <div class="d-flex align-items-center py-0">
                                     <div class="border border-1 border-info d-flex rounded-5  mb-1">
-                                        <i class="bi bi-telephone p-2 py-1  fa-sm"></i>
+                                        <i class="bi bi-telephone p-2 py-1 fa-sm"></i>
                                     </div>
-                                    <div class="px-2 ">
-                                        <span class="text-start text-light-emphasis"> patient:  </span>
-                                        <span class="text-end text-dark"> +1 3263 526 </span>
+                                    <div class="px-2">
+                                        <span class="text-start text-light-emphasis">Patient:</span>
+                                        <span class="text-end text-dark">@item.PhoneNumber</span>
                                     </div>
                                 </div>
+                            }
+
+                            @if (Status == 2 || Status == 3 || Status == 4 || Status == 5 || Status == 6)
+                            {
                                 <div class="d-flex align-items-center pb-1">
                                     <div class="border border-1 border-info d-flex rounded-5  mb-1">
-                                        <i class="bi bi-person p-2 py-1  fa-sm"></i>
+                                        <i class="bi bi-person p-2 py-1 fa-sm"></i>
                                     </div>
-                                    <div class="px-2 ">
-                                        <span class="text-start text-light-emphasis"> Requestor:  </span>
-                                        <span class="text-end text-dark"> shreyans padmani </span>
+                                    <div class="px-2">
+                                        <span class="text-start text-light-emphasis">Requestor:</span>
+                                        <span class="text-end text-dark">@item.Requestor</span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="btn btn-info rounded-4 p-1 fs-6 px-5 my-2">
-                                            Assign Case
-                                        </div>
+                            }
+
+                            <div class="d-flex align-items-center py-0">
+                                <div class="border border-1 border-info d-flex rounded-5  mb-1">
+                                    <i class="bi bi-calendar3 p-2 py-1 fa-sm"></i>
+                                </div>
+                                <div class="px-2">
+                                    <span class="text-start text-light-emphasis">Requested Date:</span>
+                                    <span class="text-end text-dark">@item.RequestedDate</span>
+                                </div>
+                            </div>
+
+                            @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 6)
+                            {
+                                <div class="d-flex align-items-center pb-1">
+                                    <div class="border border-1 border-info d-flex rounded-5  mb-1">
+                                        <i class="bi bi-telephone p-2 py-1 fa-sm"></i>
                                     </div>
-                                    <div class="col-6">
-                                        <div class="btn btn-danger rounded-4 p-1 fs-6  px-5 my-2">
-                                            cancel case
-                                        </div>
+                                    <div class="px-2">
+                                        <span class="text-start text-light-emphasis">Requestor Phone:</span>
+                                        <span class="text-end text-dark">@item.RequestorPhoneNumber</span>
                                     </div>
-                                    <div class="col-6">
-                                        <div class="btn btn-info rounded-4 p-1 fs-6  px-5 my-2">
-                                            view Notes
-                                        </div>
+                                </div>
+                            }
+
+                            <div class="d-flex align-items-center py-0">
+                                <div class="border border-1 border-info d-flex rounded-5  mb-1">
+                                    <i class="bi bi-geo-alt p-2 py-1 fa-sm"></i>
+                                </div>
+                                <div class="px-2">
+                                    <span class="text-start text-light-emphasis">Address:</span>
+                                    <span class="text-end text-dark">@item.Address</span>
+                                </div>
+                            </div>
+
+                            @if (Status == 1 || Status == 2 || Status == 3 || Status == 5)
+                            {
+                                <div class="d-flex align-items-center pb-1">
+                                    <div class="border border-1 border-info d-flex rounded-5  mb-1">
+                                        <i class="bi bi-file-earmark-text p-2 py-1 fa-sm"></i>
                                     </div>
-                                    <div class="col-6">
-                                        <div class="btn btn-danger rounded-4 p-1 fs-6 px-5  my-2">
-                                            block patient
-                                        </div>
+                                    <div class="px-2">
+                                        <span class="text-start text-light-emphasis">Notes:</span>
+                                        <span class="text-end text-dark">@item.Notes</span>
                                     </div>
-                                    <div class="col-6">
-                                        <div class="btn btn-success rounded-4 p-1 fs-6 px-5 my-2">
-                                            email
-                                        </div>
-                                    </div>
+                                </div>
+                            }
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <a class="btn btn-success text-white rounded-4 p-1 fs-6 px-5 my-2" asp-action="ViewNotes" asp-route-id="@item.Requestid.Encode()" asp-controller="AdminDashboard">
+                                    
+                                    View notes</a></div>
+                                    @if (Status == 1)
+                                        {
+                                            <div class="col-6">
+                                                 <a class="btn btn-info text-white rounded-4 p-1 fs-6 px-5 my-2  js-stkModal-btn"
+                                                   data-form-id="AssignPhysician"
+                                                data-url='@Url.Action("_AssignPhysician", "ViewAction", new {requestid = @item.Requestid})'
+                                                data-modal-size="lg">Assign Physician </a>
+                                            </div>
+
+                                             <div class="col-6">
+                                                <a class="btn btn-danger text-white rounded-4 p-1 fs-6  px-5 my-2  js-stkModal-btn"
+                                                data-form-id="formEdit_UMS"
+                                                data-url='@Url.Action("_Cancelcase", "ViewAction", new {requestid = @item.Requestid})'
+                                                data-modal-size="lg">Cancel case </a>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <a class="btn btn-danger text-white rounded-4 p-1 fs-6  px-5 my-2  js-stkModal-btn"
+                                                data-form-id="formEdit_UMS"
+                                                data-url='@Url.Action("_Blockcase", "ViewAction", new {requestid = @item.Requestid})'
+                                                data-modal-size="lg">Block Case  </a>
+                                            </div>
+                                        }
+                                        @if (Status == 2)
+                                        {
+                                            <div class="col-6">
+                                                <a class="btn btn-info text-white rounded-4 p-1 fs-6  px-5 my-2 btn  js-stkModal-btn"
+                                                data-form-id="formEdit_UMS"
+                                                data-url='@Url.Action("_TransferToProvider", "ViewAction", new {requestid = @item.Requestid})'
+                                                data-modal-size="lg">Trans to physician  </a>
+                                            </div>
+                                            <div class="col-6">
+                                            <a class="btn btn-warning text-white rounded-4 p-1 fs-6  px-5 my-2  js-stkModal-btn"
+                                                data-form-id="formEdit_UMS"
+                                                   data-url='@Url.Action("_SendAgreement", "SendAgreement", new {requestid = @item.Requestid})'
+                                                   data-modal-size="lg">Send Agrement  </a>
+                                               </div>
+                                        }
+                                        @if (Status == 2 || Status == 5)
+                                        {
+                                            <div class="col-6">
+                                                <div class="btn btn-warning text-white rounded-4 p-1 fs-6  px-5 my-2  ClearCase" data-bs-id="@item.Requestid">Clear Case
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (Status == 5)
+                                        {
+                                            <div class="col-6">
+                                                <a class="btn btn-danger text-white rounded-4 p-1 fs-6  px-5 my-2 " asp-action="CloseCase" asp-route-id="@item.Requestid.Encode()" asp-controller="SubmitForm">
+                                                  Close Case
+                                                    </a>
+                                            </div>
+                                        }
+                                        @if (Status == 3 || Status == 4 || Status == 5)
+                                        {
+                                            <div class="col-6">
+                                        <a class="btn btn-success text-white rounded-4 p-1 fs-6  px-5 my-2 " asp-action="ViewOrder" asp-route-id="@item.Requestid.Encode()" asp-controller="AdminDashboard">
+                                            
+                                                    Orders</a></div>
+                                            <div class="col-6">
+                                        <a class="btn btn-success text-white rounded-4 p-1 fs-6  px-5 my-2 " asp-route-id="@item.Requestid.Encode()" asp-action="Encounter" asp-controller="SubmitForm">
+                                           
+                                                    Encounter
+                                                    </a>
+                                             </div>
+                                        }
+                                        @if (Status > 1)
+                                        {
+                                             <div class="col-6">
+                                        <a class="btn btn-success text-white rounded-4 p-1 fs-6  px-5 my-2 " href="/Admin/ViewUpload/@item.Requestid.Encode()">
+                                           
+                                                    View Upload </a></div>
+                                        }
+
                                 </div>
                             </div>
                         </div>
                     </div>
             }
         </div>
-        <div id="a1a" >
+        <div id="a1a" class="table-responsive">
             <table class="table table-responsive" style="overflow-x: visible !important;" id="table">
                 <thead class="fw-lighter">
                     <tr>
@@ -131,7 +244,7 @@
                     }
                     @foreach (var item in Model.DashboardList)
                     {
-                        <tr class="bg-@item.RequestTypeID  filterDiv @item.RegionID">
+                        <tr class="bg-@item.RequestTypeID  filterDiv show-table @item.RegionID">
                             <td class="d-none"> @i @{
                                     i = i + 1;
                                 }  </td>
@@ -146,7 +259,7 @@
                             </td>
                             @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 5)
                             {
-                                <td scope="col">@item.Dob </td>
+                                <td scope="col">@item.Dob.ToString() </td>
                             }
                             @if (Status == 1 || Status == 2 || Status == 3)
                             {
@@ -161,7 +274,7 @@
 
                             @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 6)
                             {
-                                <td scope="col">
+                                <td scope="col" style="width: 12%;">
                                     <a class="text-light" href="tel:@item.PhoneNumber"> <div class="border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-telephone"></i> @item.PhoneNumber </div>  </a>
                                     <span>
                                         (Patient)
@@ -192,7 +305,11 @@
                                     </button>
                                  
                                     <ul class="dropdown-menu ">
-                                        <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid.Encode()" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/Admin/Viewcase/@item.RequestClientid.Encode()"><i class="bi bi-journal-minus px-2"></i>
+                        View Case
+                    </a>
+
+                        </li>
                                         <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewNotes" asp-route-id="@item.Requestid.Encode()" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-medical"></i>View notes</a></li>
                                         @if (Status == 1)
                                         {
@@ -246,7 +363,7 @@
                                         }
                                         @if (Status > 1)
                                         {
-                                            <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid.Encode()" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                            <li><a class="dropdown-item text-dark-emphasis" href="/Admin/ViewUpload/@item.Requestid.Encode()"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
                                         }
                                     </ul>
                                 </div>
@@ -323,7 +440,29 @@
     <input type="submit" id="dashbordsubmit" class="d-none" />
 </form>
 <script>
- 
+        var accordionItems = document.querySelectorAll('.accordion-item');
+        
+        accordionItems.forEach(function (item) {
+            item.addEventListener('click', function () {
+            var collapse = this.querySelector('.accordion-collapse');
+            var isOpen = collapse.classList.contains('show');
+            var button = this.querySelector('.accordion-button');
+
+            document.querySelectorAll('.accordion-collapse').forEach(function (otherCollapse) {
+                if (otherCollapse !== collapse) {
+                    otherCollapse.classList.remove('show');
+                }
+            });
+
+            if (!isOpen) {
+                collapse.classList.add('show');
+                button.classList.remove('collapsed');
+            } else {
+                collapse.classList.remove('show');
+                button.classList.add('collapsed');
+            }
+            });
+        });
     setInitialArrowState();
     function setInitialArrowState() {
         const headers = $('.dashborad-table.Name, .dashborad-table.Requestor, .dashborad-table.Requested, .dashborad-table.Physician ');
@@ -397,7 +536,10 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js">
 </script>
 <script>
+    
     $(function () {
+       
+
         $('.dropdown').hover(function () {
             var $dropdownMenu = $(this).find('.dropdown-menu');
             $dropdownMenu.addClass('show');
@@ -468,6 +610,7 @@
             });
         });
     });
+
     function myFunction() {
         var x = document.getElementById("Region").value;
         console.log(x);
@@ -509,10 +652,12 @@
         }
         element.className = arr1.join(" ");
     }
+    $(window).on("load", function () {
+        // Initially hide the loader when the window is fully loaded
+    });
   $(document)
         .ready(function () {
-            
-            
+           
             // On dropdown open
             $(document).on('shown.bs.dropdown', function (event) {
                 var dropdown = $(event.target);

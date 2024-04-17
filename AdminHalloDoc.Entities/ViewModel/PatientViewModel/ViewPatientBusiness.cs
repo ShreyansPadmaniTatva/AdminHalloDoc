@@ -37,6 +37,7 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         [StringLength(20, MinimumLength = 10, ErrorMessage = "Enter valid Mobile Number")]
         [Required(ErrorMessage = "PhoneNumber Is Required!")]
         public string PhoneNumber { get; set; }
+        public int? RegionId { get; set; }
         public string? Street { get; set; }
         [Required(ErrorMessage = "City is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Enter valid City")]

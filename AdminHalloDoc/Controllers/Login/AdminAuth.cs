@@ -78,7 +78,7 @@ namespace AdminHalloDoc.Controllers.Login
                 item.ContollerAction.Equals(Path, StringComparison.OrdinalIgnoreCase)
                 ||
                 (item.Submenu != null && item.Submenu.Any(submenu =>
-                    submenu.Url.Equals(Path, StringComparison.OrdinalIgnoreCase) 
+                    submenu.Url.Equals(Path, StringComparison.OrdinalIgnoreCase) || submenu.ContollerAction.Equals(Path, StringComparison.OrdinalIgnoreCase)
                     )));
 
 

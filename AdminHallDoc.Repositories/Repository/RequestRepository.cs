@@ -16,13 +16,19 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 {
     public class RequestRepository : IRequestRepository
 	{
-		private readonly ApplicationDbContext _context;
+        #region Constructor
+        private readonly ApplicationDbContext _context;
+        private readonly EmailConfiguration _emailConfig;
 
-		public RequestRepository(ApplicationDbContext context)
+
+        public RequestRepository(ApplicationDbContext context, EmailConfiguration emailConfig)
 		{
 			_context = context;
-		}
+            _emailConfig = emailConfig;
+        }
+        #endregion
 
+        #region UserRoleComboBox
         public async Task<List<UserRoleCombobox>> UserRoleComboBox()
         {
             return await _context.Roles.Select(req => new UserRoleCombobox()
@@ -32,6 +38,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             })
                 .ToListAsync();
         }
+        #endregion
+
+        #region UserRoleComboBox
         public async Task<List<UserRoleCombobox>> UserRoleComboBox(int accounttype)
         {
             return await _context.Roles.Where(r => r.Accounttype == accounttype).Select(req => new UserRoleCombobox()
@@ -41,7 +50,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             })
                 .ToListAsync();
         }
+        #endregion
 
+        #region VenderTypeComboBox
         public async Task<List<VenderTypeComboBox>> VenderTypeComboBox()
         {
             return await _context.Healthprofessionaltypes.Select(req => new VenderTypeComboBox()
@@ -51,7 +62,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             })
                 .ToListAsync();
         }
+        #endregion
 
+        #region RegionComboBox
         public async Task<List<RegionComboBox>> RegionComboBox()
         {
             return await _context.Regions.Select(req => new RegionComboBox()
@@ -61,6 +74,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 })
                 .ToListAsync();
         }
+        #endregion
+
+        #region RegionComboBox
         public async Task<List<RegionComboBox>> RegionComboBox(int UserId)
         {
             if(UserId < 0 || UserId == null)
@@ -94,6 +110,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             }
             
         }
+        #endregion
+
+        #region CaseReasonComboBox
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<CaseReasonComboBox>> CaseReasonComboBox()
         {
             return await _context.Casetags.Select(req => new CaseReasonComboBox()
@@ -103,7 +126,14 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             })
                 .ToListAsync();
         }
+        #endregion
 
+        #region Number_Of_Request_For_Provider
+        /// <summary>
+        /// Number_Of_Request_For_Provider
+        /// </summary>
+        /// <param name="ProviderId"></param>
+        /// <returns></returns>
         public PaginatedViewModel Indexdata(int ProviderId)
         {
             if(ProviderId < 0)
@@ -128,10 +158,18 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 UnpaidRequest = _context.Requests.Where(r => r.Status == 9 && r.Physicianid == ProviderId).Count()
             };
         }
+        #endregion
 
+        #region GetDashboard_Notes
+        /// <summary>
+        /// Get DashBorad Notes With Request
+        /// </summary>
+        /// <param name="requestid"></param>
+        /// <returns></returns>
         public string GetDashboardNotesName(int requestid)
         {
             Requeststatuslog requeststatuslog = _context.Requeststatuslogs.OrderByDescending(x => x.Createddate).Where(x => x.Requestid == requestid).FirstOrDefault();
+            Requestclient request = _context.Requestclients.Where(x => x.Requestid == requestid).FirstOrDefault();
             AdminHalloDoc.Entities.Models.Admin admin = new AdminHalloDoc.Entities.Models.Admin();
             Physician physician = new Physician();
             Physician transphysician = new Physician();
@@ -184,10 +222,16 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     }
                 }
             }
+            else
+            {
+                return request.Notes;
+            }
 
             return "";
         }
+        #endregion
 
+        #region GetContactAsync_For_Admin
         public async Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data)
         {
             List<int> statusdata = status.Split(',').Select(int.Parse).ToList();
@@ -220,15 +264,17 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         RequestTypeID = req.Requesttypeid,
                         Requestor = req.Firstname + " " + req.Lastname,
                         PatientName = rc.Firstname + " " + rc.Lastname,
-                        RequestedDate = req.Createddate,
+                        RequestedDate = req.Accepteddate == null ? req.Createddate : req.Accepteddate,
                         Dob = new DateTime((int)rc.Intyear,(int) Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
                         PhoneNumber = rc.Phonenumber,
-                        Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.Zipcode,
+                        Address = rc.Address ,
                         ProviderID = req.Physicianid,
                         RegionID = rc.Regionid,
-                        RequestorPhoneNumber = req.Phonenumber
-                    })
-                    .OrderByDescending(x => x.RequestedDate).ToListAsync();
+                        RequestorPhoneNumber = req.Phonenumber,
+                         ModifiedDate = req.Modifieddate,
+                         IsFinalize = _context.Encounterforms.Any(ef => ef.Requestid == req.Requestid && ef.Isfinalize),
+                     })
+                    .OrderByDescending(x => x.ModifiedDate == null?x.RequestedDate:x.ModifiedDate).ToListAsync();
 
             foreach (ViewDashboardList item in allData)
             {
@@ -281,7 +327,16 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         };
             return paginatedViewModel;
         }
+        #endregion
 
+        #region GetContactAsync_For_Provider
+        /// <summary>
+        /// Get All Request For Only Provider
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="data"></param>
+        /// <param name="ProviderId"></param>
+        /// <returns></returns>
         public async Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data, int ProviderId)
         {
             List<int> statusdata = status.Split(',').Select(int.Parse).ToList();
@@ -317,13 +372,14 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                          RequestedDate = req.Createddate,
                                                          Dob = new DateTime((int)rc.Intyear, (int)Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
                                                          PhoneNumber = rc.Phonenumber,
-                                                         Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.Zipcode,
+                                                         Address = rc.Address ,
                                                          Notes = rc.Notes,
                                                          ProviderID = req.Physicianid,
                                                          RegionID = rc.Regionid,
                                                          RequestorPhoneNumber = req.Phonenumber,
-                                                         IsFinalize = _context.Encounterforms.Any(ef => ef.Requestid == req.Requestid && ef.Isfinalize)
-                                                     }).ToListAsync();
+                                                         IsFinalize = _context.Encounterforms.Any(ef => ef.Requestid == req.Requestid && ef.Isfinalize),
+                                                         ModifiedDate = req.Modifieddate,
+                                                     }).OrderByDescending(x => x.ModifiedDate).ToListAsync();
 
             int totalItemCount = allData.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
@@ -341,6 +397,14 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             };
             return paginatedViewModel;
         }
+        #endregion
+
+        #region GetRequestDetails
+        /// <summary>
+        /// find request base on request client id for changes or updateding
+        /// </summary>
+        /// <param name="RequestClientid"></param>
+        /// <returns></returns>
         public async Task<Viewcase> GetRequestDetails(int? RequestClientid)
         {
 
@@ -371,7 +435,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             return requestDetails;
         }
+        #endregion
 
+        #region PutViewcase
         public async Task<Boolean> PutViewcase(Viewcase viewcase)
         {
             try
@@ -403,5 +469,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             }
             return true;
         }
+        #endregion
+
+        #region Email_Log
+        public async Task<bool> EmailLog(Emaillogdata elog)        {            try            {                Emaillog log = new Emaillog();                //log.Emaillogid = Guid.NewGuid().ToString();                log.Emailtemplate = elog.Emailtemplate;                log.Subjectname = elog.Subjectname;                log.Emailid = elog.Emailid;                log.Roleid = elog.Roleid;                log.Createdate = DateTime.Now;                log.Sentdate = DateTime.Now;                log.Adminid =elog.Adminid;                log.Requestid = elog.Requestid;                log.Physicianid = elog.Physicianid;                log.Action = elog.Action;                log.Recipient = elog.Recipient;                if (elog.Requestid != null)                {
+                    log.Confirmationnumber = _context.Requests.FirstOrDefault(r => r.Requestid == elog.Requestid).Confirmationnumber;                }                //if (await _emailConfig.SendMail(elog.Emailid, elog.Subjectname, elog.Emailtemplate))                //{                    log.Isemailsent = new BitArray(new[] { true }); ;                //}                //else                //{                //    log.Isemailsent = new BitArray(new[] { false }); ;                //}                log.Senttries = elog.Senttries;                _context.Emaillogs.Add(log);                _context.SaveChanges();                return true;            }            catch (Exception ex)            {                return false;            }        }
+        #endregion
+
     }
 }

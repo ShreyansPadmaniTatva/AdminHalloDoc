@@ -34,9 +34,7 @@
         <div class="card border-0 shadow py-4 mb-5 mx-3 mt-3 rounded">
             <div class="text-end mx-2 px-3">
                 <!-- Button trigger modal -->
-                <a asp-action="CreateRoleAccess" asp-controller="RoleAccess" type="button" class="btn btn-outline-info">
-                    Create Access
-                </a>
+              
             </div>
 
         <div class="table-responsive" style="overflow-x: visible !important;">
@@ -62,7 +60,7 @@
                                 <td scope="row"> @item.Confirmation</td>
                                 <td scope="row"> @item.Physician</td>
                                 <td scope="row"> @item.ConcludedDate</td>
-                                <td scope="row"> @item.Status</td>
+                            <td scope="row"> @Enum.GetName(typeof(Status), item.Status)</td>
                                 <td class="mobile-hide" data-label="Document">
                                 @if (FindStatus(item.Status) > 3 ){
                                     <a asp-action="generatePDF" asp-route-id="@item.Requestid.Encode()" asp-controller="SubmitForm" class="btn btn-outline-info btn-sm document-button">
@@ -83,8 +81,8 @@
                                     </button>
 
                                     <ul class="dropdown-menu ">
-                                        <li><a class="dropdown-item text-dark-emphasis" asp-action="Viewcase" asp-route-id="@item.RequestClientid.Encode()" asp-controller="AdminDashboard"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
-                                        <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid.Encode()" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/Admin/Viewcase/@item.RequestClientid.Encode()"><i class="bi bi-journal-minus px-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item text-dark-emphasis" href="/Admin/ViewUpload/@item.Requestid.Encode()"  ><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
                                     </ul>
                                 </div>
                                 </td>

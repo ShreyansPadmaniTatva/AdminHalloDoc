@@ -131,7 +131,7 @@
                     }
                     @foreach (var item in Model.DashboardList)
                     {
-                        <tr class="bg-@item.RequestTypeID  filterDiv @item.RegionID">
+                        <tr class="bg-@item.RequestTypeID  filterDiv show-table @item.RegionID">
                             <td class="d-none"> @i 
                                 @{
                                     i = i + 1;
@@ -222,7 +222,7 @@
                                             <li><a class="dropdown-item text-dark-emphasis" asp-action="ConcludeCare" asp-route-id="@item.Requestid.Encode()" asp-controller="SubmitForm"><i class="px-2 bi bi-journal"></i>Conclude Care</a></li>
                                         }
 
-                                        @if (Status == 4 || (@item.IsFinalize != null && @item.IsFinalize == true && Status == 3))
+                                        @if (Status == 4 &&  item.IsFinalize == true || (@item.IsFinalize != null && @item.IsFinalize == true && Status == 3))
                                         {
                                             <li>
                                                 <a class="dropdown-item text-dark-emphasis js-stkModal-btn "
@@ -232,7 +232,7 @@
                                             </li>
 
                                         }
-                                        else if (@item.Status == 4  && Status == 3)
+                                        else if (@item.Status == 4  && Status == 3 )
                                         {
 
                                         <li>
@@ -248,7 +248,7 @@
                                         }
                                         @if (Status > 1)
                                         {
-                                            <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid.Encode()" asp-action="ViewUpload" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
+                                            <li><a class="dropdown-item text-dark-emphasis" href="/Physician/ViewUpload/@item.Requestid.Encode()"><i class="px-2 bi bi-journal-plus"></i>View Upload </a></li>
                                         }
                                     </ul>
                                 </div>

@@ -1,6 +1,6 @@
 ﻿@model List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewVendorList>;
 <div class="table-responsive">
-    <table class="table table-responsive mt-3 p-3">
+    <table id="partnertable"  class="table table-responsive mt-3 p-3">
         <thead>
             <tr>
                 <th>Profession</th>
@@ -16,7 +16,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td class="table-text px-3 " align="center" scope="row" data-label="Created Date">
+                    <td class="table-text px-3 " scope="row" data-label="Created Date">
                     @item.Profession
                     </td>
                     <td scope="row" data-label="Created Date">@item.VendorName  </td>
@@ -46,6 +46,11 @@
     </table>
 </div>
 <script>
+    new DataTable('#partnertable', {
+        pagingType: 'simple_numbers',
+        lengthChange: false, // Disable table length dropdown
+        searching: false // Disable search feature
+    });
     var deleteButtons = document.querySelectorAll('.delete');
 
     deleteButtons.forEach(function (button) {

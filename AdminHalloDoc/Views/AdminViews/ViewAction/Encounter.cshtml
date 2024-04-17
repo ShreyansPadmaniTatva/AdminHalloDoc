@@ -1,8 +1,19 @@
-﻿@*
+﻿@using AdminHalloDoc.Models.CV;
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewEncounter;
 @{
+    var status = "null";
+    if (TempData["Status"] == null)
+    {
+        status = "null";
+    }
+    else
+    {
+        status = TempData["Status"].ToString();
+
+    }
 }
 <div class="container" >
     <div class="justify-content-between d-flex container-fluid mb-2 position-relative ">
@@ -188,8 +199,11 @@
 
             <div class="card-footer border-0 bg-transparent text-end">
                 <button type="submit" class="btn btn-info text-white">Save Changes</button>
-               
-                        <button type="submit" value="Finalize" asp-action="Finalize" asp-controller="SubmitForm" class="btn btn-danger btn-cancel ">Finalize</button>
+                @if (!(CV.role() == "Admin"))
+                {
+                <button type="submit" value="Finalize" asp-action="Finalize" asp-controller="SubmitForm" class="btn btn-danger btn-cancel ">Finalize</button>
+                    
+                }
                    
 
                 <a class="btn btn-outline-info btn-cancel " asp-action="Index" asp-controller="AdminDashboard">
@@ -199,3 +213,14 @@
         </form>
     </div>
 </div>
+<script type="text/javascript">
+
+    window.onload = function () {
+        console.log("@status  d");
+        if ("@status" != "null") {
+            savealt("@status")
+        }
+      
+
+    };
+    </script>

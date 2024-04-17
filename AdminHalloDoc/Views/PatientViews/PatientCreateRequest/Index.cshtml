@@ -51,12 +51,18 @@
         <input id="UserId" asp-for="UserId" class="form-control rounded " name="UserId" type="hidden" placeholder=Suchtext autocomplete=off>
             
         
-        <div id="password" class="col-md-6 form-floating  my-1" style="display:none">
-            <input  asp-for="PassWord" class="form-control rounded" name="PassWord" type="text" placeholder=Suchtext autocomplete=off>
+        <div  class="col-md-6 form-floating password my-1" style="display:none">
+            <input id="Password" asp-for="PassWord" class="form-control rounded" name="PassWord" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">PassWord </label>
             <span asp-validation-for="PassWord" class="text-danger"></span>
         </div>
+        <div  class="col-md-6 password-hide password form-floating my-1" style="display:none">
 
+            <input placeholder=" " id="ConfirmPassword" class="form-control input-outline w-100 inp" onkeyup="ppd();" type="text" id="ConfirmPassword">
+                <label class="inputs-lable">Confirm Password</label>
+            
+            <p id="error" style="display:none;color:red;">mis match password</p>
+        </div>
         <h4 class=" my-4">Patient Contact Information</h4>
         <div class="col-md-6 form-floating ">
             <input asp-for="Street" class="form-control rounded" name="Street" type="text" placeholder=Suchtext autocomplete=off>
@@ -69,7 +75,10 @@
             <span asp-validation-for="City" class="text-danger"></span>
         </div>
         <div class="col-md-6 form-floating ">
-            <input asp-for="State" class="form-control rounded" name="State" type="text" placeholder=Suchtext autocomplete=off>
+            <select class="form-select  p-2 mt-3 mb-3 w-100 regionDashboard" asp-for="RegionId" data-allow-clear="true" onchange="myFunction()" tabindex="-1" id="regionDashboard" asp-items="@(new SelectList(ViewBag.RegionComboBox, "RegionId", "RegionName"))" data-control="select" data-placeholder="Region">
+                <option id="defaultregion" value="">Select State</option>
+            </select>
+            <input asp-for="State" class="form-control rounded d-none" id="State" name="State" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">State</label>
             <span asp-validation-for="State" class="text-danger"></span>
         </div>
@@ -90,11 +99,10 @@
                 <input asp-for="UploadFile" type="file" class="file-upload-field" >
             </div>
             <span asp-validation-for="UploadFile" class="text-danger"></span>
-            <!-- <input class="form-control rounded" name="suche" type="file" placeholder=Suchtext autocomplete=off> -->
         </div>
 
         <div class="text-end my-4">
-            <input type="submit" class="btn btn-info text-white" value="Create"> 
+            <input type="submit" class="btn btn-info text-white" id="save" value="Create"> 
             <button class="btn btn-outline-info"> cancel </button>
         </div>
 
@@ -104,8 +112,26 @@
 
 @section Scripts
     {
+
     <script type="text/javascript">
-      
+        function myFunction() {
+            var val = $("#regionDashboard").val();
+            $("#State").val($('#regionDashboard').find('option[value="' + val + '"]').html())
+        }
+
+        function ppd() {
+            var password = $("#Password").val();
+            var confirm_password = $("#ConfirmPassword").val();
+            console.log($("#Password").val());
+            if (password != confirm_password) {
+                $("#ConfirmPassword").css('border-color', "red");
+                $("#error").show();
+            }
+            else {
+                $("#ConfirmPassword").css('border-color', "green");
+                $("#error").hide();
+            }
+        }
 
         $(function () {
            
@@ -121,9 +147,9 @@
                         console.log(response);
                         if (flag) {
                             // Show the username and password fields
-                            $("#password").show();
+                            $(".password").show();
                         } else {
-                            $("#password").hide();
+                            $(".password").hide();
                              // Check if userId is defined not for evey one
                                 document.getElementById("UserId").value =userId;
                                 console.log(document.getElementById("UserId").value);

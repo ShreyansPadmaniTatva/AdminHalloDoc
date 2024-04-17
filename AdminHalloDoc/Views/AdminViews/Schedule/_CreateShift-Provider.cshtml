@@ -8,33 +8,42 @@
 </div>
 
 <div class=" modal-body container-fluid">
-    <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post" class="row"
+    <form id="formAddEditSave_UMS" data-ajax="true" data-ajax-method="post" 
           data-ajax-success="OnSuccess(this.id,data, status, xhr);" data-ajax-failure="OnFailure(xhr, status, error);"
-          asp-action="_CreateShiftPost" asp-controller="Scheduling">
+          asp-action="_CreateShiftPost" asp-controller="Scheduling" class="row needs-validation" novalidate>
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="Shiftid" />
         <input type="hidden" asp-for="Physicianid" value="@Convert.ToInt32(CV.UserID())" />
 
         <div class="col-md-12 form-floating my-2">
             <select class="form-select " required asp-for="Regionid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
-                <option>All Region</option>
+                <option selected disabled value="">Choose Region</option>
             </select>
+            <div class="invalid-feedback">
+                Please select a valid region.
+            </div>
         </div>
        
         <div class="col-md-12 form-floating my-2">
-            <input id="StartDate" asp-for="Startdate" class="form-control rounded vcs" name="Startdate" type="date" placeholder=Suchtext autocomplete=off>
+            <input id="StartDate" required asp-for="Startdate" class="form-control rounded vcs" name="Startdate" type="date" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">Starting Date</label>
-            <span asp-validation-for="Startdate" class="text-danger"></span>
+            <div class="invalid-feedback">
+                Please select a valid Starting Date.
+            </div>
         </div>
         <div class="col-md-6 form-floating">
-            <input id="StartTime" asp-for="Starttime" class="form-control rounded vcs" name="Starttime" type="time" placeholder=Suchtext autocomplete=off>
+            <input id="StartTime" required asp-for="Starttime" class="form-control rounded vcs" name="Starttime" type="time" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">Start</label>
-            <span asp-validation-for="Starttime" class="text-danger"></span>
+            <div class="invalid-feedback">
+                Please select a valid Start Time.
+            </div>
         </div>
         <div class="col-md-6 form-floating">
-            <input id="EndTime" asp-for="Endtime" class="form-control rounded vcs" name="Endtime" type="time" placeholder=Suchtext autocomplete=off>
+            <input id="EndTime" required asp-for="Endtime" class="form-control rounded vcs" name="Endtime" type="time" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">End</label>
-            <span asp-validation-for="Endtime" class="text-danger"></span>
+            <div class="invalid-feedback">
+                Please select a valid End Time.
+            </div>
         </div>
         <div class="col-md-6 form- my-4">
             <label for="floatingInput" class="mx-2" >Repeat</label>
@@ -95,7 +104,7 @@
 
         </div>
         <div class="col-md-6 form-floating  my-2">
-            <select class="form-select form-select-sm mt-3 p-2" id="Refile" disabled asp-for="Repeatupto" data-allow-clear="true" tabindex="-1" data-control="select2" data-placeholder="Number Of Refile">
+            <select class="form-select  mt-3 p-2" id="Refile" disabled asp-for="Repeatupto" data-allow-clear="true" tabindex="-1" data-control="select2" data-placeholder="Number Of Refile">
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
@@ -116,13 +125,57 @@
 
         <div class="row">
             <div class="offset-md-4 col-md-8">
-                <input type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" />
+                <input type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" data-check-before-submit="validateForm()" />
                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
     </form>
 </div>
 <script>
+    function validateForm() {
+        // Implement your validation logic here
+        var formIsValid = true; // Assume form is valid by default
+
+        // Example: Validate form fields
+        var inputs = document.querySelectorAll('#formAddEditSave_UMS inputs');
+        inputs.forEach(function (input) {
+            if (!input.value) {
+                formIsValid = false;
+            }
+        });
+        var textarea = document.querySelectorAll('#formAddEditSave_UMS textarea');
+        textarea.forEach(function (input) {
+            if (!input.value) {
+                formIsValid = false;
+            }
+        });
+        var select = document.querySelectorAll('#formAddEditSave_UMS select');
+        select.forEach(function (input) {
+            if (!input.value) {
+                formIsValid = false;
+            }
+        });
+        // Return validation result
+        return formIsValid;
+    }
+
+
+    (function () {
+        'use strict'
+
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
     // Get the date from local storage
     var storedDate = localStorage.getItem("date");
 

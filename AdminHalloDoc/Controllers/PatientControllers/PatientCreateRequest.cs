@@ -3,6 +3,7 @@ using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Models;
+using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using AdminHalloDoc.Repositories.Patient.Repository.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,20 +17,23 @@ namespace AdminHalloDoc.Controllers.PatientControllers
     {
         #region Configuration
         private IPatientRequestRepository _patientRequestRepository;
+        private readonly IRequestRepository _requestRepository;
         public ApplicationDbContext _context;
 
-        public PatientCreateRequest(ApplicationDbContext context, IPatientRequestRepository patientRequestRepository)
+        public PatientCreateRequest(ApplicationDbContext context, IPatientRequestRepository patientRequestRepository, IRequestRepository requestRepository)
         {
 
             this._patientRequestRepository = patientRequestRepository;
+            _requestRepository = requestRepository;
             _context = context;
 
         }
         #endregion
 
         #region Index
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             return View("../PatientViews/PatientCreateRequest/Index");
         }
         #endregion
@@ -76,7 +80,8 @@ namespace AdminHalloDoc.Controllers.PatientControllers
             }
             else
             {
-                return View("../PatientCreateRequest/Index", viewpatientcreaterequest);
+                ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+                return View("../PatientViews/PatientCreateRequest/Index", viewpatientcreaterequest);
             }
                 return RedirectToAction("Index", "Dashboard");
             

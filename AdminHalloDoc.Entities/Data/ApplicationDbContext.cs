@@ -162,6 +162,8 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder.Entity<Emaillog>(entity =>
         {
             entity.HasKey(e => e.Emaillogid).HasName("emaillog_pkey");
+
+            entity.Property(e => e.Emaillogid).HasDefaultValueSql("nextval('emaillogid'::regclass)");
         });
 
         modelBuilder.Entity<Encounterform>(entity =>
@@ -415,6 +417,7 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasOne(d => d.Aspnetuser).WithMany(p => p.Users).HasConstraintName("User_aspnetuserid_fkey");
         });
+        modelBuilder.HasSequence("emaillogid");
 
         OnModelCreatingPartial(modelBuilder);
     }

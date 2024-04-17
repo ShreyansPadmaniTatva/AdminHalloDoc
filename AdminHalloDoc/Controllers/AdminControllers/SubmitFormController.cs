@@ -88,6 +88,13 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region Conclude_Care_Changge
         public async Task<IActionResult> ConcludeCareChangge(int id)
         {
+            ViewEncounter v = _viewActionRepository.GetEncounterDetailsByRequestID(id);
+            if (v.Isfinalize == false)
+            {
+                TempData["Status"] = "Encounter Form Is Not Finalize !";
+                return View("../AdminViews/ViewAction/ConcludeCare", v);
+            }
+
             if (await _viewActionRepository.CloseCase(id))
             {
 
@@ -104,26 +111,25 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [HttpPost]
         public async Task<IActionResult> ChangeNotes(int? RequestID, string? adminnotes, string? physiciannotes)
         {
-            if (adminnotes != null || physiciannotes != null)
+            ViewEncounter v = _viewActionRepository.GetEncounterDetailsByRequestID((int)RequestID);
+            if (v.Isfinalize == null || v.Isfinalize == false)
             {
+                TempData["Status"] = "Form Is Not Finalize";
+                return RedirectToAction("ConcludeCare", new { id = RequestID.Encode() });
+            }
                 bool result = _viewNotesRepository.PutNotes(adminnotes, physiciannotes, RequestID, CV.ID());
 
-                if (result && await _viewActionRepository.CancelCaseByProvider((int)RequestID))
+                if ( await _viewActionRepository.CancelCaseByProvider((int)RequestID))
                 {
                     TempData["Status"] = "Change Successfully..!";
                     return Redirect("~/Physician/DashBoard");
                 }
                 else
                 {
-                    TempData["Status"] = "Not Change In Note";
+                    TempData["Status"] = "Not Close State";
                     return RedirectToAction("ConcludeCare", new { id = RequestID.Encode() });
                 }
-            }
-            else
-            { 
-                TempData["Status"] = "Please Select one of the note!!";
-                return RedirectToAction("ConcludeCare", new { id = RequestID.Encode() });
-            }
+           
 
         }
 

@@ -25,19 +25,19 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
+        #region DashBoard_Index
         [AdminAuth("Admin,Provider")]
         [Route("Physician/DashBoard")]
         [Route("Admin/DashBoard")]
-        #region DashBoard_Index
         public async Task<IActionResult> Index()
         {
             TempData["Status"] = TempData["Status"];
             PaginatedViewModel sm = _requestRepository.Indexdata(-1);
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-            //ViewBag.RegionComboBox = await _requestRepository.RegionComboBox(Convert.ToInt32(CV.UserID()));
             ViewBag.CaseReasonComboBox = await _requestRepository.CaseReasonComboBox();
             if (CV.role() == "Provider")
             {
+            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox(Convert.ToInt32(CV.UserID()));
                  sm = _requestRepository.Indexdata(Convert.ToInt32(CV.UserID()));
 
             }
@@ -70,11 +70,21 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region View_Case
+        [Route("Physician/Viewcase/{id}")]
+        [Route("Admin/Viewcase/{id}")]
         public async Task<IActionResult> Viewcase(string id)
         {
             TempData["Status"] = TempData["Status"];
+            if (id.Decode() == null)
+            {
+                return Redirect("/PageNoteFound");
+            }
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             Viewcase v =  await _requestRepository.GetRequestDetails(id.Decode());
+            if (v == null)
+            {
+                return Redirect("/PageNoteFound");
+            }
             return View("../AdminViews/ViewAction/Viewcase",v);
         }
         #endregion
@@ -83,7 +93,15 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         public async Task<IActionResult> ViewNotes(string id)
         {
             TempData["Status"] = TempData["Status"];
+            if (id.Decode() == null)
+            {
+                return Redirect("/PageNoteFound");
+            }
             var n = await _viewNotesRepository.GetNotesByRequest((int)id.Decode());
+            if ( n == null)
+            {
+                return Redirect("/PageNoteFound");
+            }
             return View("../AdminViews/ViewAction/ViewNotes",n);
         }
         #endregion
@@ -118,9 +136,19 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region View_Upload
+        [Route("Physician/ViewUpload/{id}")]
+        [Route("Admin/ViewUpload/{id}")]
         public async Task<IActionResult> ViewUpload(string id)
         {
-           ViewDocuments v = await _viewActionRepository.GetDocumentByRequest(id.Decode());
+            if (id.Decode() == null)
+            {
+                return Redirect("PageNoteFound");
+            }
+            ViewDocuments v = await _viewActionRepository.GetDocumentByRequest(id.Decode());
+            if (v == null)
+            {
+                return Redirect("/PageNoteFound");
+            }
             return View("../AdminViews/ViewAction/ViewUpload", v);
         }
         #endregion
@@ -128,13 +156,16 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region ViewOrder
         public async Task<IActionResult> ViewOrder(string id)
         {
+            if (id.Decode() == null)
+            {
+                return Redirect("PageNoteFound");
+            }
             ViewBag.VenderTypeComboBox = await _requestRepository.VenderTypeComboBox();
             ViewOrder v = new ViewOrder();
             v.RequestId = (int)id.Decode();
             return View("../AdminViews/ViewAction/ViewOrder",v);
         }
         #endregion
-
         
         #region ProviderbyRegion
         public async Task<IActionResult> ProviderbyRegion(int? Regionid)

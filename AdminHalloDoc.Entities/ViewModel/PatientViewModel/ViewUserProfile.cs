@@ -23,13 +23,15 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public BitArray? Ismobile { get; set; }
 
         public string? Street { get; set; }
-
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Enter valid City")]
+        [RegularExpression(@"^(?=.*\S)[a-zA-Z\s.'-]+$", ErrorMessage = "Enter a valid city name")]
         public string? City { get; set; }
 
         public string? State { get; set; }
 
         public int? Regionid { get; set; }
-
+        [StringLength(10, ErrorMessage = "Enter valid Zip Code")]
+        [RegularExpression(@"^\d{6}$", ErrorMessage = "Enter a valid 6-digit zip code")]
         public string? Zipcode { get; set; }
 
         public string? Strmonth { get; set; }

@@ -147,7 +147,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                         Requestid = Requestid,
                         Filename = UploadDoc,
                         Createddate = DateTime.Now,
-                        Isdeleted = new BitArray(1),
+                        Isdeleted = new BitArray(new[] { false }),
                     };
                     _context.Requestwisefiles.Add(requestwisefile);
                     _context.SaveChanges();

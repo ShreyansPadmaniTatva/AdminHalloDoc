@@ -30,8 +30,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        [AdminAuth("Admin")]
         #region Physician_Location
+        [AdminAuth("Admin")]
         public async Task<IActionResult> PhysicianLocation()
         {
            ViewBag.Log = await _physicianRepository.FindPhysicianLocation();
@@ -72,7 +72,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region AddEdit_Profile
-        public async Task<IActionResult> PhysicianProfile(int? id)
+        public async Task<IActionResult> PhysicianProfile(string? id)
         {
             
             //TempData["Status"] = TempData["Status"];
@@ -86,7 +86,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             {
 
                 ViewData["PhysicianAccount"] = "Edit";
-                Physicians v = await _physicianRepository.GetPhysicianById((int)id);
+                Physicians v = await _physicianRepository.GetPhysicianById((int)id.Decode());
                 return View("../AdminViews/Physician/PhysicianAddEdit",v);
 
             }
@@ -118,7 +118,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region SendMessage
-        public async Task<IActionResult> SendMessage(string? id, string? email, int? way, string? msg)
+        public async Task<IActionResult> SendMessage(int? id, string? email, int? way, string? msg)
         {
             bool s;
             if (way == 1)
@@ -128,8 +128,18 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
             else if (way == 2)
             {
+                Emaillogdata elog = new Emaillogdata();
+                elog.Emailtemplate = "Heyy " + msg;
+                elog.Subjectname = "Agreement for your request";
+                elog.Emailid = email;
+                elog.Createdate = DateTime.Now;
+                elog.Sentdate = DateTime.Now;
+                elog.Adminid = Convert.ToInt32(CV.UserID());
+                 elog.Physicianid = id;
 
-                s = await _emailconfig.SendMail(email, "Check massage" ,"Heyy "+msg);
+                s = await _requestRepository.EmailLog(elog);
+
+                 //await _emailconfig.SendMail(email, "Check massage" ,"Heyy "+msg);
             }
             else
             {
@@ -163,15 +173,15 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 TempData["Status"] = "Imformation not Changed properly...";
             }
 
-            return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+            return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid.Encode() });
         }
 
-        public async Task<IActionResult> ResetPassAdmin(string password, int Physicianid)
+        public async Task<IActionResult> ResetPassAdmin(string password, int? Physicianid)
         {
 
 
 
-            bool data = await _physicianRepository.ChangePasswordAsync(password, Physicianid);
+            bool data = await _physicianRepository.ChangePasswordAsync(password, (int)Physicianid);
             if (data)
             {
                 TempData["Status"] = "Password changed Successfully...";
@@ -181,7 +191,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 TempData["Status"] = "Password not Changed...";
             }
 
-            return RedirectToAction("PhysicianProfile", new { id = Physicianid });
+            return RedirectToAction("PhysicianProfile", new { id = Physicianid.Encode() });
         }
 
         public async Task<IActionResult> EditAdminInfo(Physicians physicians)
@@ -190,12 +200,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             if (data)
             {
                 TempData["Status"] = "admin Info Updated Successfully...";
-                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid.Encode() });
             }
             else
             {
                 TempData["Status"] =  "some problem";
-                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid.Encode() });
             }
         }
 
@@ -205,12 +215,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             if (data)
             {
                 TempData["Status"] = "mail and billing Info Updated Successfully...";
-                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid.Encode() });
             }
             else
             {
                 TempData["Status"] = "some problem";
-                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid.Encode() });
             }
         }
 
@@ -220,12 +230,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             if (data)
             {
                 TempData["Status"] = "mail and billing Info Updated Successfully...";
-                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid.Encode() });
             }
             else
             {
                 TempData["Status"] = "some problem";
-                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid.Encode() });
             }
         }
 
@@ -235,12 +245,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             if (data)
             {
                 TempData["Status"] = "Files Updated Successfully...";
-                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid.Encode() });
             }
             else
             {
                 TempData["Status"] = "some problem";
-                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid });
+                return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid.Encode() });
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using AdminHalloDoc.Entities.Models;
+﻿using AdminHalloDoc.Controllers.Login;
+using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
@@ -31,8 +32,10 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region Physician_Schedule
+        [AdminAuth("Admin,Provider")]
         public async Task<IActionResult> Index()
         {
+            TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
           
             return View("../AdminViews/Schedule/MySchedule");
@@ -159,8 +162,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
         #endregion
 
-
-
         #region RequestedShift
         public async Task<IActionResult> RequestedShift(int? regionId)
         {
@@ -201,7 +202,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             return RedirectToAction("RequestedShift");
         }
         #endregion
-
 
         #region Provider_on_call
         public async Task<IActionResult> ProviderOnCall(int? regionId)

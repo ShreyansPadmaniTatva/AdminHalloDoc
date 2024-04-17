@@ -32,8 +32,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        [AdminAuth("Admin")]
         #region SerchRecords
+        [AdminAuth("Admin")]
         //Serch Records
         public async Task<IActionResult> Index()
         {
@@ -54,6 +54,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region PatientHistoryRecords
+        [AdminAuth("Admin")]
         public async Task<IActionResult> PatientHistory()
         {
             return View("../AdminViews/Records/PatientHistory/Index");
@@ -81,6 +82,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region EmailLogs
+        [AdminAuth("Admin")]
         //Serch Records
         public async Task<IActionResult> EmailLog()
         {
@@ -101,6 +103,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region SMSLogs
+        [AdminAuth("Admin")]
         //Serch Records
         public async Task<IActionResult> SMSLog()
         {
@@ -122,6 +125,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         #region BlockHistory
         //Serch Records
+        [AdminAuth("Admin")]
         public async Task<IActionResult> BlockHistory()
         {
             TempData["Status"] = TempData["Status"];
@@ -159,6 +163,28 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
 
             return RedirectToAction("BlockHistory");
+
+        }
+        #endregion
+
+        #region Delete_Record
+        public async Task<IActionResult> Delete(int RequestId)
+        {
+
+
+            bool UnBlock = _recordsRepository.Delete(RequestId, CV.ID());
+            if (UnBlock)
+            {
+                TempData["Status"] = " Request Deleted Successfully";
+
+            }
+            else
+            {
+                TempData["Status"] = "Request Not Deleted ";
+
+            }
+
+            return RedirectToAction("Index");
 
         }
         #endregion

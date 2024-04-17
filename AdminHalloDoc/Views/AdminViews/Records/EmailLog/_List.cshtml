@@ -1,15 +1,5 @@
 ﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.RecordsModel
 @using static AdminHalloDoc.Entities.ViewModel.Constant;
-@{
-    var enumData = from RequestType e in Enum.GetValues(typeof(RequestType))
-                   select new
-                   {
-                       ID = (int)e,
-                       Name = e.ToString()
-                   };
-    var i1 = Model.SortedColumn;
-    var J1 = Model.IsAscending;
-}
 
 <div class="table-responsive">
     <table class="table table-responsive mt-3 p-3 dataTable">

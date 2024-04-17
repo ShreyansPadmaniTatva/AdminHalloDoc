@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AdminHallDoc.Repositories\AdminHalloDoc.Repositories.Admin.csproj" />
     <ProjectReference Include="..\AdminHalloDoc.Entities\AdminHalloDoc.Entities.csproj" />
   </ItemGroup>
 
