@@ -1,4 +1,5 @@
-﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.RecordsModel
+﻿@using System.Globalization;
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.RecordsModel
 @using static AdminHalloDoc.Entities.ViewModel.Constant;
 @{
     var enumData = from RequestType e in Enum.GetValues(typeof(RequestType))
@@ -12,7 +13,7 @@
 }
 
 <div class="table-responsive">
-    <table class="table table-responsive mt-3 p-3 dataTable">
+    <table class="table table-responsive mt-3 p-3 dataTable" id="table">
 
         <thead class=" text-start tablehead">
             <tr>
@@ -56,6 +57,48 @@
             }
         </tbody>
     </table>
+    <div class="d-md-none" style="max-width: 100%;">
+        @{
+            var Count = 0;
+        }
+        @foreach (var item in Model.BlockRequestList)
+        {
+            <div class="bg-info-subtle border-4 border-top data-mobile-row" data-bs-toggle="collapse" data-bs-target="#collapseExample-@Count" aria-expanded="false"
+                 aria-controls="collapseExample">
+                <div class="d-flex flex-column gap-3">
+                    <div class="ms-3 py-1 mt-2">
+                        <span>@item.PatientName</span>
+                    </div>
+                    <div class="mb-2 py-1 ms-3">
+                        <span class="">@item.Email</span>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse border-2 border-top rounded-3 bg-info-subtle " id="collapseExample-@Count">
+                <div class="d-flex flex-column">
+                    <div class="ms-3 mt-2">
+                        <span class=""><i class="fas text-info fa-phone fs-6 border border-1 border-info rounded-5 fs-6 p-2 me-2"></i>Phone: @item.Phonenumber</span>
+                    </div>
+                    <div class="ms-3 mt-2">
+                        <span class=""><i class="fas text-info fa-calendar-days fs-6 border border-1 border-info rounded-5 fs-6 p-2 me-2"></i>Created Date: @item.Createddate.ToString("MMM dd, yyyy", CultureInfo.InvariantCulture)</span>
+                    </div>
+                    <div class="ms-3 mt-2">
+                        <span class=""><i class="fas text-info fa-note-sticky fs-6 border border-1 border-info rounded-5 fs-6 p-2 me-2"></i>Notes: @item.Reason</span>
+                    </div>
+                    <div class="ms-3 mt-2">
+                        <span class=""><i class="fas text-info fa-check fs-6 border border-1 border-info rounded-5 fs-6 p-2 me-2"></i>Is Active: @item.Isactive[0]</span>
+                    </div>
+
+                    <div class="d-flex justify-content-end mb-2 gap-2 mx-2">
+                        <a class="btn btn-sm btn-outline-info" asp-action="UnBlock" asp-controller="Reports" asp-route-RequestId="@item.Requestid">
+                            Unblock
+                        </a>
+                    </div>
+                </div>
+            </div>
+            Count++;
+        }
+    </div>
     <nav aria-label="Page navigation example">
         <ul class="pagination pagination-container d-flex justify-content-end mx-4">
 

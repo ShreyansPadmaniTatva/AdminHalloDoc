@@ -1,6 +1,6 @@
 ﻿@model List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewVendorList>;
 <div class="table-responsive">
-    <table id="partnertable"  class="table table-responsive mt-3 p-3">
+    <table id="table" class="table table-responsive mt-3 p-3">
         <thead>
             <tr>
                 <th>Profession</th>
@@ -44,9 +44,56 @@
             }
         </tbody>
     </table>
+    <div class="d-lg-none" style="max-width: 100%;">
+        @{
+            var Count = 0;
+        }
+        @foreach (var items in Model)
+        {
+            <div class="bg-info-subtle border-4 border-top data-mobile-row" data-bs-toggle="collapse" data-bs-target="#collapseExample-@Count" aria-expanded="false"
+                 aria-controls="collapseExample">
+                <div class="d-flex flex-column gap-3">
+                    <div class="form-check my-4">
+                        <span>@items.VendorName</span>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse border-2 border-top rounded-3 bg-info-subtle " id="collapseExample-@Count">
+                <div class="d-flex flex-column">
+                    <div class="ms-3 mt-2">
+                        <span class=""><i class="fas text-info fa-envelope fs-6 border border-1 border-info rounded-5 fs-6 p-2 me-2"></i>Email: @items.Email</span>
+                    </div>
+                    <div class="ms-3 mt-2">
+                        <span class=""><i class="fas text-info fa-phone fs-6 border border-1 border-info rounded-5 fs-6 p-2 me-2"></i>Fax: @items.FaxNumber</span>
+                    </div>
+                    <div class="ms-3 mt-2">
+                        <span class=""><i class="fas text-info fa-phone fs-6 border border-1 border-info rounded-5 fs-6 p-2 me-2"></i>Phone Number: @items.PhoneNumber</span>
+                    </div>
+                    <div class="ms-3 mt-2">
+                        <span class=""><i class="fas text-info fa-envelope fs-6 border border-1 border-info rounded-5 fs-6 p-2 me-2"></i>Business Contact: @items.BusinessContact</span>
+                    </div>
+
+                    <div class="d-flex justify-content-end mb-2 gap-2 mx-2">
+                        <a asp-action="PartnerAddEdit" asp-controller="Partner" asp-route-id="@items.VendorID" class="btn btn-outline-info btn-sm document-button mx-1">
+                            Edit
+
+                        </a>
+                        <form class="deleteform" asp-action="DeletePartner" asp-controller="Partner">
+                            <input type="hidden" name="venderId" value="@items.VendorID" />
+                            <div class="btn btn-outline-info btn-sm document-button mx-1 delete">
+                                Delete
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            Count++;
+        }
+    </div>
 </div>
 <script>
-    new DataTable('#partnertable', {
+    new DataTable('#table', {
         pagingType: 'simple_numbers',
         lengthChange: false, // Disable table length dropdown
         searching: false // Disable search feature

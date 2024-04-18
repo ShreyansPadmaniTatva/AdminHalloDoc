@@ -42,7 +42,7 @@
                </div>
           
         </div>
-        <div class="table-responsive">
+        <div id="table" class="table-responsive  d-md-block">
             <table class="table table-responsive mt-3 p-3">
                 <thead>
                     <tr>
@@ -91,7 +91,53 @@
                 </tbody>
             </table>
         </div>
+        <div class="d-md-none" id="accordionFlushExample" style="max-width: 100%;">
+            @{
+                var Count = 0;
+            }
+            @foreach (var item in Model)
+            {
+                <div class="bg-info-subtle border-4 border-top data-mobile-row" data-bs-toggle="collapse" data-bs-target="#collapseExample-@Count" aria-expanded="false"
+                     aria-controls="collapseExample">
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex px-3 align-items-center pt-2">
+                            @{
+                                var check = false;
+                                if (item.notification != null)
+                                {
+                                    check = item.notification[0];
+                                }
+                                <input class="form-check-input form-check-inputs" id="@item.Physicianid" type="checkbox" value="" @(check ? "checked" : "")>
+                            }
+                            <input class="RequestwisefilesId" type="hidden" value="@item.Physicianid">
+                            <div class="ms-2">@item.Firstname  @item.Lastname</div>
+                        </div>
+                        <div class="mb-2 ms-3">
+                            <span class="">On Call Status:</span><span class="ms-1">@(item.onCallStatus == 0 ? "false" : "True")</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="collapse border-2 border-top rounded-3 bg-info-subtle " id="collapseExample-@Count">
+                    <div class="d-flex flex-column">
+                        <div class="ms-3 mt-2">
+                            <span class=""><i class="fas text-info fa-phone fs-6 border border-1 border-info rounded-5 fs-6 p-2 me-2"></i>Role: @item.role</span>
+                        </div>
+                        <div class="ms-3 mt-2">
+                            <span class=""><i class="fas text-info fa-check fs-6 border border-1 border-info rounded-5 fs-6 p-2 me-2"></i>Status:  @Enum.GetName(typeof(AdminStatus), item.Status)</span>
+                        </div>
 
+                        <div class="d-flex justify-content-end mb-2 gap-2 mx-2">
+                            <button data-bs-toggle="modal" data-bs-id="@item.Physicianid" data-bs-email="@item.Email" data-bs-target="#myModal" class="text-decoration-none btn btn-outline-info fw-semibold px-3 m-1 py-2">
+                                Contact
+
+                            </button>
+                            <a role="button" asp-action="PhysicianProfile" asp-controller="Physician" asp-route-id="@item.Physicianid.Encode()" class="text-decoration-none btn btn-outline-info fw-semibold px-3 m-1 py-2">Edit</a>
+                        </div>
+                    </div>
+                </div>
+                Count++;
+            }
+        </div>
     </div>
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

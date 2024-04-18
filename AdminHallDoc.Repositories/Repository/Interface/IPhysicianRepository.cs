@@ -24,5 +24,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<bool> EditProviderProfile(Physicians vm, string AdminId);
         Task<bool> EditProviderOnbording(Physicians vm, string AdminId);
         Task<bool> GetLocation(int PhysicianId);
+        List<Physician> isProviderEmailExist(string Email);
+        List<AdminHalloDoc.Entities.Models.Admin> isAdminEmailExist(string Email);
     }
 }

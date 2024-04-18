@@ -29,6 +29,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region Partner_ViewPage
+        [Route("Admin/Partner")]
         public async Task<IActionResult> Index()
         {
             ViewBag.VenderTypeComboBox = await _requestRepository.VenderTypeComboBox();
@@ -79,7 +80,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                         ModelState.AddModelError("Vendorname", "Business name is Already Taken!! choose another one");
                         return View("../AdminViews/Partner/PartnerAddEdit", model);
                     }
-                    if (_viewNotesRepository.isEmailExist(model.Vendorname).Count > 0)
+                    if (_viewNotesRepository.isEmailExist(model.Email).Count > 0)
                     {
                         ModelState.AddModelError("Email", "Email is Already Taken!! choose another one");
                         return View("../AdminViews/Partner/PartnerAddEdit", model);
@@ -104,7 +105,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                         ModelState.AddModelError("Vendorname", "Business name is Already Taken!! choose another one");
                         return View("../AdminViews/Partner/PartnerAddEdit", model);
                     }
-                    if (_viewNotesRepository.isEmailExist(model.Vendorname).Count >= 1 && _viewNotesRepository.isEmailExist(model.Vendorname).Any(u => u.Vendorid != model.Vendorid))
+                    if (_viewNotesRepository.isEmailExist(model.Email).Count >= 1 && _viewNotesRepository.isEmailExist(model.Email).Any(u => u.Vendorid != model.Vendorid))
                     {
                         ModelState.AddModelError("Email", "Email is Already Taken!! choose another one");
                         return View("../AdminViews/Partner/PartnerAddEdit", model);

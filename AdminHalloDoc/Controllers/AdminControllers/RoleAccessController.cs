@@ -33,8 +33,9 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-       // [AdminAuth("Admin")]
         #region Role_Access
+        [AdminAuth("Admin")]
+        [Route("Admin/AccountAccess")]
         public async Task<IActionResult> Index()
         {
             
@@ -120,6 +121,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region User_Access
+        [AdminAuth("Admin")]
+        [Route("Admin/UserAccess")]
         public async Task<IActionResult> UserAccess(int? User)
         {
 
@@ -190,7 +193,11 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
             // bool b = physicians.Isagreementdoc[0];
-
+            if (_physicianRepository.isAdminEmailExist(vm.Email).Count > 0)
+            {
+                ModelState.AddModelError("Email", "Email is Already Taken!! choose another one");
+                return View("../AdminViews/RoleAccess/AdminAddEdit", vm);
+            }
             if (ModelState.IsValid)
             {
                 await _myProfileRepository.AdminPost(vm, CV.ID());

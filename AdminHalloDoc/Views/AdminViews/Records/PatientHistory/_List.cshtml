@@ -11,8 +11,8 @@
     var J1 = Model.IsAscending;
 }
 
-<div class="table-responsive">
-    <table class="table table-responsive mt-3 p-3 dataTable">
+<div class="table-responsive" >
+    <table class="table table-responsive mt-3 p-3 dataTable" id="table">
 
         <thead class=" text-start tablehead">
             <tr>
@@ -47,6 +47,44 @@
             }
         </tbody>
     </table>
+
+    <div class="d-md-none mt-3">
+        @{
+            var Count = 0;
+        }
+        @foreach (var item in Model.PatientHistorybList)
+        {
+            <div class="data-mobile-row bg-info-subtle" data-bs-toggle="collapse" data-bs-target="#collapseexample_@Count"
+                 aria-expanded="false" aria-controls="collapseexample">
+                <div class="d-flex flex-column gap-3  border-bottom border-2 pt-3 pb-5 px-3">
+                    <span class="fs-5">@item.Firstname @item.Lastname</span>
+                    <span class="fs-5">@item.Mobile</span>
+                </div>
+            </div>
+
+
+            <div class="collapse border-2 border-top rounded-3 bg-info-subtle " id="collapseexample_@Count">
+                <div class="d-flex flex-column gap-2 bg-info-subtle border-bottom border-2  py-3 px-3 ">
+                    <div class="d-flex align-items-center ">
+                        <i class="bi bi-telephone text-info border border-1 border-info rounded-5 px-2 py-1 me-2"></i>
+                        <span>Phone: <span>@item.Mobile</span></span>
+                    </div>
+                    <div class="d-flex align-items-center ">
+                        <i class="fa-regular fa-envelope text-info border border-1 border-info rounded-5 p-2 me-2 "></i>
+                        <span>Email: <span>@item.Email</span></span>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <a asp-action="PatientRecords" asp-controller="Reports" asp-route-UserId="@item.Userid" class="btn btn-sm btn-outline-info  mx-2 ">
+                            Explore
+                        </a>
+                     </div>
+
+                </div>
+            </div>
+            Count++;
+        }
+
+    </div>
     <div aria-label="Page my-2 navigation example">
         <ul class="pagination pagination-container d-flex justify-content-end mx-4">
 
@@ -95,6 +133,7 @@
     </div>
   
 </div>
+        </div>
 <script>
   
     var deleteButtons = document.querySelectorAll('.delete');

@@ -2,7 +2,7 @@
 @using static AdminHalloDoc.Entities.ViewModel.Constant;
 
 <div class="table-responsive">
-    <table class="table table-responsive mt-3 p-3 dataTable">
+    <table id="table" class="table table-responsive mt-3 p-3 dataTable">
 
         <thead class=" text-start tablehead">
             <tr>
@@ -38,6 +38,62 @@
             }
         </tbody>
     </table>
+    <div class="d-lg-none mt-3">
+        @{
+            var Count = 0;
+        }
+        @if (Model != null && Model.EmailLogList != null && Model.EmailLogList.Count > 0)
+        {
+            @foreach (var item in Model.EmailLogList)
+            {
+                <div class="bg-info-subtle " data-bs-toggle="collapse" data-bs-target="#collapseexample_@Count"
+                     aria-expanded="false" aria-controls="collapseexample">
+                    <div class="d-flex flex-column gap-3  border-bottom border-2 pt-3 pb-5 px-3">
+                        <h6 class="mb-3">@item.Recipient</h6>
+                        <span>Action Name: <span>@Enum.GetName(typeof(EmailAction), item.Action)</span></span>
+                        <span>Email: <span>@item.Emailid</span></span>
+                        
+                    </div>
+                </div>
+
+
+                <div class="collapse " id="collapseexample_@Count">
+                    <div class="d-flex flex-column gap-2 bg-info-subtle border-bottom border-2  py-3 px-3 ">
+                        <div class="d-flex align-items-center ">
+                            <i class="fa-regular fa-user  border border-1 text-info border-info rounded-5 p-2 me-2"></i>
+                            <span>
+                                Role Name:
+                                @Enum.GetName(typeof(AccountType), item.Roleid)
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center ">
+                            <i class="fa-solid fa-calendar-days text-info border border-1 border-info rounded-5 p-2 me-2 "></i>
+                            <span>Create Date: <span>@item.Createdate?.ToString("MMM dd, yyyy")</span></span>
+                        </div>
+                        <div class="d-flex align-items-center ">
+                            <i class="fa-solid fa-calendar-days text-info border border-1 border-info rounded-5 p-2 me-2  "></i>
+                            <span>Sent Date: <span>@item.Sentdate?.ToString("MMM dd, yyyy")</span></span>
+                        </div>
+                        <div class="d-flex align-items-center ">
+                            <i class="bi bi-check-lg text-info border border-1 border-info rounded-5 px-2 py-1 me-2 "></i>
+                            <span>Sent: <span>@(item.Isemailsent != null && item.Isemailsent[0] == true ? "Yes" : "No")</span></span>
+                        </div>
+                        <div class="d-flex align-items-center ">
+                            <i class="fa-regular fa-envelope text-info border border-1 border-info rounded-5 p-2 me-2 "></i>
+                            <span>Sent Tries: <span>@item.Senttries</span></span>
+                        </div>
+                        <div class="d-flex align-items-center ">
+                            <i class="bi bi-check-lg text-info border border-1 border-info rounded-5 px-2 py-1 me-2 "></i>
+                            <span>Confirmation Number: <span>@item.Confirmationnumber</span></span>
+                        </div>
+
+
+                    </div>
+                </div>
+                Count++;
+            }
+        }
+    </div>
     <nav aria-label="Page navigation example">
         <ul class="pagination pagination-container d-flex justify-content-end mx-4">
 

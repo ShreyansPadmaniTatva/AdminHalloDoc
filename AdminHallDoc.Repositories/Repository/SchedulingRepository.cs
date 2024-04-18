@@ -216,44 +216,48 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 _context.Shiftdetailregions.Add(sr);
                 _context.SaveChanges();
 
-                List<int> day = s.checkWeekday.Split(',').Select(int.Parse).ToList();
-
-                foreach (int d in day)
+                if (s.checkWeekday != null)
                 {
-                    DayOfWeek desiredDayOfWeek = (DayOfWeek)d;
-                    DateTime today = DateTime.Today.AddDays(1);
-                    DateTime nextOccurrence = new DateTime(s.Startdate.Year, s.Startdate.Month, s.Startdate.Day+1);
-                    int occurrencesFound = 0;
-                    while (occurrencesFound < s.Repeatupto)
+                    List<int> day = s.checkWeekday.Split(',').Select(int.Parse).ToList();
+
+                    foreach (int d in day)
                     {
-                        if (nextOccurrence.DayOfWeek == desiredDayOfWeek)
+                        DayOfWeek desiredDayOfWeek = (DayOfWeek)d;
+                        DateTime today = DateTime.Today.AddDays(1);
+                        DateTime nextOccurrence = new DateTime(s.Startdate.Year, s.Startdate.Month, s.Startdate.Day + 1);
+                        int occurrencesFound = 0;
+                        while (occurrencesFound < s.Repeatupto)
                         {
-                          
-                            Shiftdetail sdd = new Shiftdetail();
-                            sdd.Shiftid = shift.Shiftid;
-                            sdd.Shiftdate = nextOccurrence;
-                            sdd.Starttime = s.Starttime;
-                            sdd.Endtime = s.Endtime;
-                            sdd.Regionid = s.Regionid;
-                            sdd.Status = s.Status;
-                            sdd.Isdeleted = new BitArray(1);
-                            sdd.Isdeleted[0] = false;
-                            _context.Shiftdetails.Add(sdd);
-                            _context.SaveChanges();
+                            if (nextOccurrence.DayOfWeek == desiredDayOfWeek)
+                            {
 
-                            Shiftdetailregion srr = new Shiftdetailregion();
-                            srr.Shiftdetailid = sdd.Shiftdetailid;
-                            srr.Regionid = s.Regionid;
-                            srr.Isdeleted = new BitArray(1);
-                            srr.Isdeleted[0] = false;
-                            _context.Shiftdetailregions.Add(srr);
-                            _context.SaveChanges();
-                            occurrencesFound++;
+                                Shiftdetail sdd = new Shiftdetail();
+                                sdd.Shiftid = shift.Shiftid;
+                                sdd.Shiftdate = nextOccurrence;
+                                sdd.Starttime = s.Starttime;
+                                sdd.Endtime = s.Endtime;
+                                sdd.Regionid = s.Regionid;
+                                sdd.Status = s.Status;
+                                sdd.Isdeleted = new BitArray(1);
+                                sdd.Isdeleted[0] = false;
+                                _context.Shiftdetails.Add(sdd);
+                                _context.SaveChanges();
 
+                                Shiftdetailregion srr = new Shiftdetailregion();
+                                srr.Shiftdetailid = sdd.Shiftdetailid;
+                                srr.Regionid = s.Regionid;
+                                srr.Isdeleted = new BitArray(1);
+                                srr.Isdeleted[0] = false;
+                                _context.Shiftdetailregions.Add(srr);
+                                _context.SaveChanges();
+                                occurrencesFound++;
+
+                            }
+                            nextOccurrence = nextOccurrence.AddDays(1);
                         }
-                        nextOccurrence = nextOccurrence.AddDays(1);
                     }
                 }
+              
                 return true;
                 
             }

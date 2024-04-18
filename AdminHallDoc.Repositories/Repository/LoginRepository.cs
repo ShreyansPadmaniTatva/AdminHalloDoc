@@ -119,6 +119,171 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
+
+        public class MenuItem
+        {
+            public string DbName { get; set; }
+            public string Label { get; set; }
+            public string Url { get; set; }
+            public string ContollerAction { get; set; }
+            public List<string> UrlList { get; set; }
+            public List<MenuItem> Submenu { get; set; }
+        }
+        public  List<MenuItem> staticmenu = new List<MenuItem>
+        {
+            new MenuItem
+              {
+                  DbName ="AdminDashboard",
+                  Label = "Dashboard",
+                  Url = "/Admin/DashBoard",
+                  ContollerAction ="/AdminDashboard/Index",
+                  UrlList = new List<string> { "/Admin/DashBoard", "/ViewAction", "/SubmitForm","/Admin/DashBoard" },
+                   Submenu = null
+              },
+               new MenuItem
+              {
+                  DbName ="PhysicianDashbord",
+                  Label = "Dashboard",
+                  ContollerAction ="/AdminDashboard/Index",
+                  Url = "/Physician/DashBoard",
+                    UrlList = new List<string> { "/Physician/DashBoard", "/ViewAction", "/SubmitForm","/Admin/DashBoard" },
+                   Submenu = null
+
+              },
+              new MenuItem {
+                  DbName ="Provider Location",
+                  Label = "Provider Location",
+                  ContollerAction ="/Physician/PhysicianLocation",
+                  Url = "/Admin/PhysicianLocation",
+                  Submenu = null
+              },
+              new MenuItem {
+                  DbName ="MyProfile-Admin",
+                  Label = "My Profile",
+                  Url = "/Admin/Profile",
+                  ContollerAction ="/AdminProfile/Index",
+                  Submenu = null
+
+              },
+               new MenuItem {
+                  DbName ="MyProfile-Physician",
+                  Label = "My Profile",
+                  Url = "/Physician/Profile",
+                  ContollerAction ="/AdminProfile/Index",
+                  UrlList = new List<string> { "/Physician/Profile" },
+                  Submenu = null
+
+              },
+              new MenuItem {
+                  DbName ="MyShedule",
+                  Label = "My Schedule",
+                  ContollerAction ="/AdminDashboard/Index",
+                  Url = "/Physician/Scheduling",
+                   UrlList = new List<string> { "/Physician/Scheduling" },
+                  Submenu = null
+              },
+              new MenuItem {
+                  DbName = "Provider-Details",
+                  Label = "Provider",
+                  ContollerAction ="/AdminDashboard/Index",
+                  Url = "#",
+                   UrlList = new List<string> { "/Admin/PhysicianAll", "/Admin/Scheduling", "/Partner" },
+                  Submenu = new List < MenuItem > {
+                    new MenuItem {
+                        DbName = "Provider",
+                      Label = "Provider", Url = "/Admin/PhysicianAll",
+                       UrlList = new List<string> { "/Admin/PhysicianAll" },
+                        ContollerAction ="/Physician/PhysicianAll",
+                    },
+                    new MenuItem {
+                        DbName = "Scheduling",
+
+                      Label = "Scheduling",
+                        Url = "/Admin/Scheduling",
+                       UrlList = new List<string> { "/Admin/Scheduling" },
+                        ContollerAction = "/Scheduling/Index",
+
+                    },
+                    new MenuItem {
+                        DbName = "Invoicing",
+                      Label = "Invoicing",
+                        Url = "#",
+                       UrlList = new List<string> { "/Scheduling/Index" },
+                        ContollerAction ="/Reports",
+                    }
+                  }
+              },
+              new MenuItem {
+                  DbName ="Partner",
+                Label = "Partner",
+                  ContollerAction ="/Partner/Index",
+                  Url = "/Admin/Partner",
+                UrlList = new List<string> { "/Admin/Partner", "/Partner/PartnerAddEdit", "/Partner" },
+                Submenu = null
+              },
+              new MenuItem {
+                  DbName ="Access-Details",
+                Label = "Access",
+                 UrlList = new List<string> { "/RoleAccess/AdminAddEdit", "/RoleAccess/CreateRoleAccess", "/RoleAccess/CreateRoleAccess","/RoleAccess/PhysicianAddEdit" },
+                  ContollerAction ="/AdminDashboard/Index",
+                  Url = "#",
+                  Submenu = new List < MenuItem > {
+
+                    new MenuItem {
+                        DbName="Account Access",
+                      Label = "Account Access", Url = "/Admin/AccountAccess",
+                 UrlList = new List<string> { "/RoleAccess/AdminAddEdit", "/RoleAccess/CreateRoleAccess", "/RoleAccess/CreateRoleAccess","/RoleAccess/PhysicianAddEdit" },
+
+                       ContollerAction ="/RoleAccess/Index",
+                    },
+                    new MenuItem {
+                        DbName="User Access",
+                      Label = "User Access", Url = "/Admin/UserAccess",
+                 UrlList = new List<string> { "/RoleAccess/AdminAddEdit", "/RoleAccess/CreateRoleAccess", "/RoleAccess/CreateRoleAccess","/RoleAccess/PhysicianAddEdit" },
+
+                       ContollerAction ="/RoleAccess/UserAccess",
+                    }
+                  }
+              },
+              new MenuItem {
+                  DbName ="Records",
+                Label = "Records",
+                  ContollerAction ="/Reports/Index",
+                  Url = "/Reports/Index",
+                  Submenu = new List < MenuItem > {
+
+                    new MenuItem {
+                        DbName="Search Records",
+                      Label = "Search Records", Url = "/Reports/Index",
+                       ContollerAction ="/Reports",
+                    },
+                    new MenuItem {
+                        DbName="Email Log",
+                      Label = "Email Log", Url = "/Reports/EmailLog",
+                       ContollerAction ="/Reports",
+                    },
+                    new MenuItem {
+                        DbName="SMS Log",
+                      Label = "SMS Log", Url = "/Reports/SMSLog",
+                       ContollerAction ="/Reports",
+                    },
+                    new MenuItem {
+                        DbName="Patient Record",
+                      Label = "Patient Record", Url = "/Reports/PatientHistory",
+                       ContollerAction ="/Reports",
+                    },
+                    new MenuItem
+                    {
+                        DbName="Block History",
+                      Label = "Block History", Url = "/Reports/BlockHistory",
+                       ContollerAction ="/Reports",
+                    }
+                  }
+              }
+
+        };
+
+
         #region SetMenu
         /// <summary>
         /// With Roleid Get Menu With Database = Static Menu 
@@ -130,7 +295,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             List<Menu> MenuItems = null;
             List<MenuItem> Staticmenu = new List<MenuItem>();
             List<MenuItem> Staticmenudummy = new List<MenuItem>();
-            Staticmenudummy = staticmenu.Items;
+            Staticmenudummy = staticmenu;
             if (roleid != null)
             {
                 //Set By DataBase
@@ -146,7 +311,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 foreach (Menu menu in MenuItems)
                 {
                     MenuItem m = new MenuItem();
-                    m = staticmenu.Items.Where(item => item.DbName == menu.Name).FirstOrDefault();
+                    m = staticmenu.Where(item => item.DbName == menu.Name).FirstOrDefault();
                    
                     if (m != null)
                     {

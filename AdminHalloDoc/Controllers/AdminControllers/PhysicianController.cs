@@ -32,6 +32,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         #region Physician_Location
         [AdminAuth("Admin")]
+        [Route("Admin/PhysicianLocation")]
         public async Task<IActionResult> PhysicianLocation()
         {
            ViewBag.Log = await _physicianRepository.FindPhysicianLocation();
@@ -40,6 +41,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region PhysicianAll
+        [Route("Admin/PhysicianAll")]
         public async Task<IActionResult> PhysicianAll(int? region)
         {
             TempData["Status"] = TempData["Status"];
@@ -98,10 +100,17 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [HttpPost]
         public async Task<IActionResult> PhysicianAddEdit(Physicians physicians)
         {
+            ViewData["PhysicianAccount"] = "Add";
             //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
-           // bool b = physicians.Isagreementdoc[0];
+            // bool b = physicians.Isagreementdoc[0];
+
+            if (_physicianRepository.isProviderEmailExist(physicians.Email).Count > 0)
+            {
+                ModelState.AddModelError("Email", "Email is Already Taken!! choose another one");
+                return View("../AdminViews/Physician/PhysicianAddEdit", physicians);
+            }
 
           if(ModelState.IsValid)
             {
@@ -196,6 +205,14 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         public async Task<IActionResult> EditAdminInfo(Physicians physicians)
         {
+
+            if (_physicianRepository.isProviderEmailExist(physicians.Email).Count >= 1 && _physicianRepository.isProviderEmailExist(physicians.Email).Any(u => u.Physicianid != physicians.Physicianid))
+            {
+                ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+                ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox(3);
+                ModelState.AddModelError("Email", "Email is Already Taken!! choose another one");
+                return View("../AdminViews/Physician/PhysicianAddEdit", physicians);
+            }
             bool data = await _physicianRepository.EditAdminInfo(physicians);
             if (data)
             {

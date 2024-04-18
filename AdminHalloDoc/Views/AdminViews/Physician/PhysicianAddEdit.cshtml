@@ -127,7 +127,7 @@
                 @foreach (var cb in ViewBag.RegionComboBox)
                 {
 
-                    @if (Model != null && Model.Regionids.Count > 0 && Model.Regionids.Exists(id => id.regionid == cb.RegionId))
+                    @if (Model != null && Model.Regionids != null && Model.Regionids.Count > 0 && Model.Regionids.Exists(id => id.regionid == cb.RegionId))
                     {
                         <div class="form-check mx-2">
                             <input class="form-check-input regionbox admin-input" value="@cb.RegionId" type="checkbox" name="Region" id="flexCheckDefault" checked>

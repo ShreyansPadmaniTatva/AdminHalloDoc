@@ -33,6 +33,9 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         #region Physician_Schedule
         [AdminAuth("Admin,Provider")]
+        [Route("/Admin/Scheduling")]
+        [Route("/Physician/Scheduling")]
+
         public async Task<IActionResult> Index()
         {
             TempData["Status"] = TempData["Status"];

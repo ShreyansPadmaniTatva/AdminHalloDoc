@@ -39,10 +39,12 @@
                 <input  class="form-control bg-disabled rounded " disabled id="UserName"  type="text" placeholder="First Name" autocomplete=off>
                 <input   id="UserNameasp"  type="hidden" name="UserName" asp-for="Lastname">
                 <label class="" for="floatingInput">User Name </label>
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
                 <input class="form-control rounded" name="Password" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Password </label>
+
             </div>
 
             @if (Model != null)
@@ -69,14 +71,17 @@
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Firstname" class="form-control rounded admin-input" id="FirstName" name="Firstname" type="text" placeholder="First Name" autocomplete=off>
                 <label class="" for="floatingInput">First Name </label>
+                <span asp-validation-for="Firstname" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
                 <input asp-for="Lastname" class="form-control rounded admin-input" id="LastName" name="Lastname" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Last name </label>
+                <span asp-validation-for="Lastname" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Email" class="form-control  rounded admin-input" id="email" name="Email" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Email </label>
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Email" class="form-control  rounded admin-input" id="email" name="Email" type="text" placeholder=Suchtext autocomplete=off>
@@ -84,6 +89,7 @@
             </div>
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Mobile" id="phone" type="tel" name="Mobile" class="form-control rounded admin-input" autocomplete=off>
+                <span asp-validation-for="Mobile" class="text-danger"></span>
                 <!-- <label for="floatingInput">Phone Number </label> -->
             </div>
             <input asp-for="Regionsid" type="hidden" id="regionids" />
@@ -91,7 +97,7 @@
 
                 @foreach (var cb in ViewBag.RegionComboBox)
                 {
-                    @if (Model != null && Model.Regionids.Count > 0 && Model.Regionids.Exists(id => id.regionid == cb.RegionId))
+                    @if (Model != null && Model.Regionids != null && Model.Regionids.Count > 0 && Model.Regionids.Exists(id => id.regionid == cb.RegionId))
                     {
                         <div class="form-check mx-2">
                             <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region" id="flexCheckDefault" checked>
@@ -131,25 +137,31 @@
             <div class="col-md-6 form-floating ">
                 <input asp-for="Address1" class="form-control rounded mail-billing-imp" name="Address1" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Address1 </label>
+                <span asp-validation-for="Address1" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating ">
                 <input asp-for="Address2" class="form-control rounded mail-billing-imp" name="Address2" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Address2 </label>
+                <span asp-validation-for="Address2" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating ">
                 <input asp-for="City" class="form-control rounded mail-billing-imp" name="City" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">City</label>
+                <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating ">
                 <input asp-for="State" class="form-control rounded mail-billing-imp" name="State" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">State</label>
+                <span asp-validation-for="State" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating  ">
                 <input asp-for="Zipcode" class="form-control rounded mail-billing-imp" name="Zipcode" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Zip Code</label>
+                <span asp-validation-for="Zipcode" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating ">
                 <input asp-for="AltMobile" id="phone1" type="tel" name="AltMobile" class="form-control rounded mail-billing-imp" autocomplete=off>
+                <span asp-validation-for="AltMobile" class="text-danger"></span>
                 <!-- <label for="floatingInput">Phone Number </label> -->
             </div>
 
@@ -245,7 +257,7 @@
             $("#edit").css("display", "none");
         }
         $(document).ready(function () {
-            var modelIsNull = @((Model != null).ToString().ToLower());
+            var modelIsNull = @((Model != null && Model.AdminId != null).ToString().ToLower());
            var UserName = " @(Model != null ? "" + Model.UserName.ToString() + "" : "null")";
 
             if (modelIsNull) {

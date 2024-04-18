@@ -126,7 +126,7 @@
         <div class="row">
             <div class="offset-md-4 col-md-8">
                 <input type="submit" value="Save" class="btn btn-info text-white js-btn-modal-form-submit" data-check-before-submit="validateForm()" />
-                <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline-info " data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
     </form>
@@ -260,26 +260,6 @@
         document.querySelector('#checkWeekday').value = regionIds.join(',');
         console.log(document.querySelector('#checkWeekday').value);
     };
-    function myFunction() {
-        var email = $("#region2").val();
-        console.log(email);
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("ProviderbyRegion","AdminDashboard")?Regionid=' + email,
-            cache: false,
-            success: function (response) {
-
-                console.log(response);
-                var s = '<option value="-1">Please Select</option>';
-                for (var i = 0; i < response.length; i++) {
-                    s += '<option value="' + response[i].physicianid + '">' + response[i].firstname + ' ' + response[i].lastname + '</option>';
-                }
-                $("#provider").html(s);
-            },
-            error: function () {
-                alert("Error while checking email.");
-            }
-        });
-    }
+   
 
 </script>
