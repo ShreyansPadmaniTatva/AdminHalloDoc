@@ -35,9 +35,10 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             PaginatedViewModel sm = _requestRepository.Indexdata(-1);
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.CaseReasonComboBox = await _requestRepository.CaseReasonComboBox();
+            // Only for Provider
             if (CV.role() == "Provider")
             {
-            ViewBag.RegionComboBox = await _requestRepository.RegionComboBox(Convert.ToInt32(CV.UserID()));
+                ViewBag.RegionComboBox = await _requestRepository.RegionComboBox(Convert.ToInt32(CV.UserID()));
                  sm = _requestRepository.Indexdata(Convert.ToInt32(CV.UserID()));
 
             }
@@ -59,6 +60,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             {
                 status = "1";
             }
+            // Get ONly Provider And that Request
             if(CV.role() == "Provider")
             {
                 var pr = await _requestRepository.GetContactAsync(status, data,Convert.ToInt32(CV.UserID()));
@@ -72,7 +74,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region View_Case
         [Route("Physician/Viewcase/{id}")]
         [Route("Admin/Viewcase/{id}")]
-
+        // ViewCase For Admin or Physician
         public async Task<IActionResult> Viewcase(string id)
         {
             TempData["Status"] = TempData["Status"];

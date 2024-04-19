@@ -34,6 +34,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region GetProfile
+        /// <summary>
+        /// Get Only Admin Profile Here
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
         public async Task<ViewAdminProfile> GetProfileDetails(int UserId)
         {
 
@@ -83,6 +88,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Admin_Add
+        /// <summary>
+        /// Add Admin Details 
+        /// </summary>
+        /// <param name="admindata"></param>
+        /// <param name="AdminId"></param>
+        /// <returns></returns>
         public async Task<bool> AdminPost(ViewAdminProfile admindata, string AdminId)
         {
             try
@@ -163,6 +174,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Username_Availabl
+        /// <summary>
+        /// check for not crate dublicate Data or UserName
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public bool IsUsernameAvailable(string username)
         {
             try
@@ -179,6 +195,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Put_Profile
+        /// <summary>
+        /// Put Data in Admin Profile
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
 
         #region SavePhysicianInfo
         public async Task<bool> SaveAdminInfo(ViewAdminProfile  vm)

@@ -41,6 +41,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region PhysicianAll
+        [AdminAuth("Admin")]
         [Route("Admin/PhysicianAll")]
         public async Task<IActionResult> PhysicianAll(int? region)
         {

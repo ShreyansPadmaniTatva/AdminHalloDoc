@@ -32,6 +32,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region PhysicianAll
+        /// <summary>
+        ///  Get All Provider And With That Shift Detalis
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Schedule>> PhysicianAll()
         {
 
@@ -106,6 +110,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region PhysicianByRegion
+        /// <summary>
+        ///  Get All Provider And With That Shift Detalis BY Region
+        /// </summary>
+        /// <param name="region"></param>
+        /// <returns></returns>
         public async Task<List<Schedule>> PhysicianByRegion(int? region)
         {
             List<Schedule> ScheduleDetails = new List<Schedule>();
@@ -185,6 +194,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region CreateShift
+        /// <summary>
+        /// Create Shift And Send Mail With Assosiate Google
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="AdminID"></param>
+        /// <returns></returns>
         public async Task<bool> CreateShift(Schedule s,string AdminID)
         {
             try

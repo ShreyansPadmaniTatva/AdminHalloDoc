@@ -46,7 +46,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region Create_Role_Access-ADDEdit
-
+        [AdminAuth("Admin")]
         public async Task<IActionResult> CreateRoleAccess(int? id)
         {
             if (id != null)

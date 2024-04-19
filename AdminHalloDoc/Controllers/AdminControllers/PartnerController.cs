@@ -1,4 +1,5 @@
-﻿using AdminHalloDoc.Entities.Models;
+﻿using AdminHalloDoc.Controllers.Login;
+using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
@@ -30,6 +31,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         #region Partner_ViewPage
         [Route("Admin/Partner")]
+        [AdminAuth("Admin")]
         public async Task<IActionResult> Index()
         {
             ViewBag.VenderTypeComboBox = await _requestRepository.VenderTypeComboBox();

@@ -95,6 +95,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region SetSubMenu
+        /// <summary>
+        /// Check That SubMenu Define Or Not
+        /// </summary>
+        /// <param name="roleid"></param>
+        /// <param name="menusub"></param>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public List<MenuItem> SetSubMenu(int? roleid, int menusub, List<MenuItem> s)
         {
             List<MenuItem> StaticSubmenu = new List<MenuItem>();
@@ -119,7 +126,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
-
+        #region For_Dynamic_Menu
+        /// <summary>
+        /// This Class for Define Or Store all Static Menu
+        /// this class created here because This Class can not crate Static
+        /// </summary>
         public class MenuItem
         {
             public string DbName { get; set; }
@@ -129,6 +140,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             public List<string> UrlList { get; set; }
             public List<MenuItem> Submenu { get; set; }
         }
+
+        /// <summary>
+        /// List Out The All Static Menu
+        /// </summary>
         public  List<MenuItem> staticmenu = new List<MenuItem>
         {
             new MenuItem
@@ -282,7 +297,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
               }
 
         };
-
+        #endregion
 
         #region SetMenu
         /// <summary>
@@ -290,7 +305,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// </summary>
         /// <param name="roleid"></param>
         /// <returns></returns>
-        public  List<MenuItem> SetMenu(int? roleid)
+        public List<MenuItem> SetMenu(int? roleid)
         {
             List<Menu> MenuItems = null;
             List<MenuItem> Staticmenu = new List<MenuItem>();

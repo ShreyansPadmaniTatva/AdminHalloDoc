@@ -1,4 +1,5 @@
-﻿using AdminHalloDoc.Entities.Data;
+﻿using AdminHalloDoc.Controllers.Login;
+using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using ClosedXML.Excel;
@@ -23,8 +24,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion 
 
-
         #region Dashboerd_excel
+        [AdminAuth("Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DownloadExcel(PaginatedViewModel details, string status)
@@ -115,6 +116,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region SearchRecords_excel
+        [AdminAuth("Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DownloadExcelForSearchRecords(RecordsModel rm)

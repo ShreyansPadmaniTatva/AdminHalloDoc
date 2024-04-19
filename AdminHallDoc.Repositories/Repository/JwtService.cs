@@ -28,7 +28,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
-        public  string GenerateJWTAuthetication(UserInfo userinfo)
+        #region CreateJWTToken
+        /// <summary>
+        /// Create JWT Token With Key 
+        /// </summary>
+        /// <param name="userinfo"></param>
+        /// <returns></returns>
+        public string GenerateJWTAuthetication(UserInfo userinfo)
         {
             var claims = new List<Claim>
             {
@@ -66,7 +72,16 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
 
         }
-        public  bool ValidateToken(string token, out JwtSecurityToken jwtSecurityTokenHandler)
+        #endregion
+
+        #region CheckJWTToke
+        /// <summary>
+        /// vaidateToken IS Orignal or pass or not
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="jwtSecurityTokenHandler"></param>
+        /// <returns></returns>
+        public bool ValidateToken(string token, out JwtSecurityToken jwtSecurityTokenHandler)
         {
             jwtSecurityTokenHandler = null;
 
@@ -104,5 +119,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 return false;
             }
         }
+        #endregion
     }
 }

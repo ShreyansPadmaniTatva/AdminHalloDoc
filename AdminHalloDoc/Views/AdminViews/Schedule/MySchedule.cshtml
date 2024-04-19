@@ -704,6 +704,9 @@
                         image.classList.add("img-fluid");
                         image.classList.add("mx-2");
                         image.style.height = "50px";
+                        image.style.borderRadius = "48%";
+                        image.style.border = "2px solid var(--bs-cyan)";
+                        image.style.padding = "2px";
                         image.src = '/Upload/Physician/' + employee.id + '/' + employee.photo;
                         image.alt = employee.name;
                         employeeCell.appendChild(image);
@@ -951,6 +954,9 @@
                                         image.classList.add("img-fluid");
                                         image.classList.add("mx-2");
                                         image.style.height = "50px";
+                                        image.style.borderRadius = "48%";
+                                        image.style.border = "2px solid var(--bs-cyan)";
+                                        image.style.padding = "2px";
                                         image.src = '/Upload/Physician/' + providerList[i].id + '/' + providerList[i].photo; 
                                         image.alt = providerList[i].name; 
                                         cell.appendChild(image);

@@ -36,6 +36,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region SearchRecords
+        /// <summary>
+        /// For All Request Records 
+        /// </summary>
+        /// <param name="rm"></param>
+        /// <returns></returns>
         public async Task<RecordsModel> GetRequestsbyfilterForRecords(RecordsModel rm)
         {
             RecordsModel dm = new RecordsModel();
@@ -139,6 +144,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Patienthistory
+        /// <summary>
+        /// Only Data For All User Whos Create Request 
+        /// </summary>
+        /// <param name="rm"></param>
+        /// <returns></returns>
         public async Task<RecordsModel> Patienthistorybyfilter(RecordsModel rm)
         {
             RecordsModel dm = new RecordsModel();
@@ -239,6 +249,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region EmailLogs
+        /// <summary>
+        /// All Type Of Email Log 
+        /// </summary>
+        /// <param name="rm"></param>
+        /// <returns></returns>
         public async Task<RecordsModel> EmailLogs(RecordsModel rm)
         {
             RecordsModel dm = new RecordsModel();
@@ -277,6 +292,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region SMSLogs
+        /// <summary>
+        /// SMS Data For Sending To User OR Provider
+        /// </summary>
+        /// <param name="rm"></param>
+        /// <returns></returns>
         public async Task<RecordsModel> SMSLogs(RecordsModel rm)
         {
             RecordsModel dm = new RecordsModel();
@@ -312,6 +332,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region BlockHistory
+        /// <summary>
+        /// Block Request data
+        /// </summary>
+        /// <param name="rm"></param>
+        /// <returns></returns>
         public async Task<RecordsModel> BlockHistory(RecordsModel rm)
         {
             RecordsModel dm = new RecordsModel();
@@ -344,6 +369,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region UnBlock
+        /// <summary>
+        /// Here To block To unBlock Request Id
+        /// </summary>
+        /// <param name="RequestID"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<bool> UnBlock(int RequestID, string id)
         {
             try
@@ -386,6 +417,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region delete_request
+        /// <summary>
+        /// If Want To delete Request To delete That
+        /// </summary>
+        /// <param name="RequestID"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool Delete(int RequestID, string id)
         {
             try
