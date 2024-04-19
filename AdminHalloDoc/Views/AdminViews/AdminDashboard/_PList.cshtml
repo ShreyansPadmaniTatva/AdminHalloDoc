@@ -31,11 +31,11 @@
                                     </div>
                                     <div>
                                         <div class="pb-2">
-                                            Patient  <div class="p-success">
-                                            </div>
+                                        @Enum.GetName(typeof(RequestType), item.RequestTypeID)  <div class="p-success">
                                         </div>
+                                    </div>
                                         <div class="btn btn-outline-info rounded-4 p-1 fs-6 px-2">
-                                        <a href=""> map location </a>
+                                        <a href="https://www.google.com/maps/search/?api=1&query=@item.Address" class="text-info" target="_blank">Map Location</a>
                                     </div>
                                     </div>
                                 </div>
@@ -44,70 +44,128 @@
                     <div id="flush-@item.Requestid" class="accordion-collapse collapse" aria-labelledby="@item.Requestid" data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
                                 <div class="d-flex align-items-center py-0 position-relative">
-                                    <div class="border border-1 border-info d-flex rounded-5 ro">
-                                        <i class="bi bi-calendar3 p-2 py-1  fa-sm"></i>
-                                    </div>
-                                    <div class="px-2 ">
-                                        <span class="text-start text-light-emphasis"> Date Of birth:  </span>
-                                        <span class="text-end text-dark"> Jun 28, 1991(33)  </span>
-                                    </div>
-                                    <div class="btn btn-light rounded-4 p-1 fs-6 px-3 my-2 position-absolute top-0  end-0">
-                                        View Case
-                                    </div>
+                                    
+                                    
+                                <a href="/Physician/Viewcase/@item.RequestClientid.Encode()" class="btn btn-light rounded-4 p-1 fs-6 px-3 my-2 position-absolute top-0  end-0">
+                                    View Case
+                                    </a>
                                 </div>
-                                <div class="d-flex align-items-center py-0">
-                                    <div class="border border-1 border-info d-flex rounded-5 mb-1 ">
-                                        <i class="bi bi-envelope p-2 py-1 fa-sm"></i>
-                                    </div>
-                                    <div class="px-2 ">
-                                        <span class="text-start text-light-emphasis">Email :  </span>
-                                        <span class="text-end text-dark">shreyans Padmani  </span>
-                                    </div>
+                            @if (Status == 3)
+                            {
+                                <td scope="col">
+
+                                    @if (item.Status == 5)
+                                    {
+                                        <div data-requestid="@item.Requestid" class="change-state btn btn-info text-white my-3">
+                                            House Call
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div>
+                                            -
+                                        </div>
+                                    }
+                                </td>
+                            }
+                            <div class="d-flex align-items-center py-0">
+                                <div class="border border-1 border-info d-flex rounded-5  mb-1">
+                                    <i class="bi bi-telephone p-2 py-1 fa-sm"></i>
                                 </div>
-                                <div class="d-flex align-items-center py-0">
-                                    <div class="border border-1 border-info d-flex rounded-5  mb-1">
-                                        <i class="bi bi-telephone p-2 py-1  fa-sm"></i>
-                                    </div>
-                                    <div class="px-2 ">
-                                        <span class="text-start text-light-emphasis"> patient:  </span>
-                                        <span class="text-end text-dark"> +1 3263 526 </span>
-                                    </div>
+                                <div class="px-2">
+                                    <span class="text-start text-light-emphasis">Patient:</span>
+                                    <span class="text-end text-dark">@item.PhoneNumber</span>
                                 </div>
-                                <div class="d-flex align-items-center pb-1">
-                                    <div class="border border-1 border-info d-flex rounded-5  mb-1">
-                                        <i class="bi bi-person p-2 py-1  fa-sm"></i>
-                                    </div>
-                                    <div class="px-2 ">
-                                        <span class="text-start text-light-emphasis"> Requestor:  </span>
-                                        <span class="text-end text-dark"> shreyans padmani </span>
-                                    </div>
+                            </div>
+                            <div class="d-flex align-items-center py-0">
+                                <div class="border border-1 border-info d-flex rounded-5  mb-1">
+                                    <i class="bi bi-geo-alt p-2 py-1 fa-sm"></i>
                                 </div>
-                                <div class="row">
+                                <div class="px-2">
+                                    <span class="text-start text-light-emphasis">Address:</span>
+                                    <span class="text-end text-dark">@item.Address</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                @if (Status == 1)
+                                {
                                     <div class="col-6">
-                                        <div class="btn btn-info rounded-4 p-1 fs-6 px-5 my-2">
-                                            Assign Case
-                                        </div>
+                                        <a class="btn btn-info rounded-4 p-1 fs-6 px-5 my-2 js-stkModal-btn"
+                                           data-form-id="formEdit_UMS"
+                                           data-url='@Url.Action("_AcceptRequest", "ViewAction", new {requestid = @item.Requestid})'
+                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Accept </a>
+                                    </div>
+
+                                }
+                                <div class="col-6">
+                                    <a class="btn btn-info rounded-4 p-1 fs-6 px-5 my-2 " asp-action="ViewNotes" asp-route-id="@item.Requestid.Encode()" asp-controller="AdminDashboard">
+                                        <i class="px-2 bi bi-journal-medical"></i>View notes</a>
+
+                </div>
+
+                                @if (Status == 2)
+                                {
+                                    <div class="col-6">
+                                        <a class="btn btn-success rounded-4 p-1 fs-6 px-5 my-2 btn em  js-stkModal-btn"
+                                           data-form-id="formEdit_UMS"
+                                           data-url='@Url.Action("_TransfertoAdmin", "ViewAction", new {requestid = @item.Requestid})'
+                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Transfer  </a>
                                     </div>
                                     <div class="col-6">
-                                        <div class="btn btn-danger rounded-4 p-1 fs-6  px-5 my-2">
-                                            cancel case
-                                        </div>
+                                        <a class="btn btn-success rounded-4 p-1 fs-6 px-5 my-2  js-stkModal-btn"
+                                           data-form-id="formEdit_UMS"
+                                           data-url='@Url.Action("_SendAgreement", "SendAgreement", new {requestid = @item.Requestid})'
+                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Send Agrement  </a>
                                     </div>
+                                }
+                                @if (Status == 3)
+                                {
                                     <div class="col-6">
-                                        <div class="btn btn-info rounded-4 p-1 fs-6  px-5 my-2">
-                                            view Notes
-                                        </div>
+                                        <a class="btn btn-warning rounded-4 p-1 fs-6 px-5 my-2 dropdown-item text-dark-emphasis" asp-action="ViewOrder" asp-route-id="@item.Requestid.Encode()" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-album"></i>Orders</a>
                                     </div>
+                                }
+                                @if (Status == 4)
+                                {
                                     <div class="col-6">
-                                        <div class="btn btn-danger rounded-4 p-1 fs-6 px-5  my-2">
-                                            block patient
-                                        </div>
+                                        <a class="btn btn-danger rounded-4 p-1 fs-6 px-5 my-2 " asp-action="ConcludeCare" asp-route-id="@item.Requestid.Encode()" asp-controller="SubmitForm"><i class="px-2 bi bi-journal"></i>Conclude Care</a>
                                     </div>
+                                }
+
+                                @if ((Status == 4 && item.IsFinalize != null && item.IsFinalize == true) || (@item.IsFinalize != null && @item.IsFinalize == true && Status == 3))
+                                {
                                     <div class="col-6">
-                                        <div class="btn btn-success rounded-4 p-1 fs-6 px-5 my-2">
-                                            email
-                                        </div>
+                                        <a class="btn btn-info rounded-4 p-1 fs-6 px-5 my-2  js-stkModal-btn "
+                                           data-form-id="formEdit_UMS"
+                                           data-url='@Url.Action("_EncounterPdf", "ViewAction", new {requestid = @item.Requestid})'
+                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Encounter pdf </a>
                                     </div>
+
+                                }
+                                else if ((@item.IsFinalize != null && @item.IsFinalize == false && Status == 3 && item.Status != 5))
+                                {
+
+                                    <div class="col-6">
+                                        <a class="btn btn-success rounded-4 p-1 fs-6 px-5 my-2  js-stkModal-btn "
+                                           data-form-id="formEdit_UMS"
+                                           data-url='@Url.Action("_EncounterModel", "ViewAction", new {requestid = @item.Requestid})'
+                                           data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Encounter  model</a>
+                                    </div>
+
+                                }
+                                else if ((@item.IsFinalize == false && Status == 3) || (@item.IsFinalize == false && Status == 4))
+                                {
+
+                                    <div class="col-6">
+                                        <a class="btn btn-warning rounded-4 p-1 fs-6 px-5 my-2 " asp-route-id="@item.Requestid.Encode()" asp-action="Encounter" asp-controller="SubmitForm"><i class="px-2 bi bi-journals"></i>Encounter form</a>
+                                    </div>
+                                }
+                                @if (Status > 1)
+                                {
+                                    <div class="col-6">
+                                        <a class="btn btn-warning rounded-4 p-1 fs-6 px-5 my-2" href="/Physician/ViewUpload/@item.Requestid.Encode()"><i class="px-2 bi bi-journal-plus"></i>View Upload </a>
+                                    </div>
+                                }
+                                
                                 </div>
                             </div>
                         </div>
@@ -216,6 +274,10 @@
                                                 data-form-id="formEdit_UMS"
                                                    data-url='@Url.Action("_SendAgreement", "SendAgreement", new {requestid = @item.Requestid})'
                                                    data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Send Agrement  </a></li>
+                                        }
+                                        @if (Status == 3)
+                                        {
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-action="ViewOrder" asp-route-id="@item.Requestid.Encode()" asp-controller="AdminDashboard"><i class="px-2 bi bi-journal-album"></i>Orders</a></li>
                                         }
                                         @if (Status == 4)
                                         {

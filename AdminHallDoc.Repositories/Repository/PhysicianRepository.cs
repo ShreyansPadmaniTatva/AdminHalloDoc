@@ -46,6 +46,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Find_Location_Physician
+        /// <summary>
+        /// This For GEt Data Provider Live location
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<PhysicianLocation>> FindPhysicianLocation()
         {
 
@@ -78,6 +82,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region PhysicianAll
+        /// <summary>
+        /// get All Non Deleted Provider 
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Physicians>> PhysicianAll()
         {
 
@@ -125,6 +133,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region PhysicianByRegion
+        /// <summary>
+        /// get All Provider By Specific Region
+        /// </summary>
+        /// <param name="region"></param>
+        /// <returns></returns>
         public async Task<List<Physicians>> PhysicianByRegion(int? region)
         {
 
@@ -173,7 +186,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Change_Notification_Physician
-
+        /// <summary>
+        /// only For Notification To Provider
+        /// </summary>
+        /// <param name="changedValuesDict"></param>
+        /// <returns></returns>
         public async Task<bool> ChangeNotificationPhysician(Dictionary<int, bool> changedValuesDict)
         {
             try
@@ -219,6 +236,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Physician_Add
+        /// <summary>
+        /// Add Provider Details
+        /// </summary>
+        /// <param name="physiciandata"></param>
+        /// <param name="AdminId"></param>
+        /// <returns></returns>
         public async Task<bool> PhysicianAddEdit(Physicians physiciandata,string AdminId)
         {
             try
@@ -328,6 +351,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region GetPhysicianById
+        /// <summary>
+        /// GEt Only One Provider Detalis By That Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<Physicians> GetPhysicianById(int id)
         {
 
@@ -398,6 +426,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Put_Profile_Physician
+        /// <summary>
+        /// Edit Physician Data Or Profile
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
 
         #region SavePhysicianInfo
         public async Task<bool> SavePhysicianInfo(Physicians vm)
@@ -772,7 +805,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region PostLocation
-
+        /// <summary>
+        /// Add Provider Live Location When Provider Login Account
+        /// </summary>
+        /// <param name="PhysicianId"></param>
+        /// <returns></returns>
         public async Task<bool> GetLocation(int PhysicianId)
         {
             try

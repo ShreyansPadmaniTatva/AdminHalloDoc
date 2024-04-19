@@ -46,7 +46,8 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? Address1 { get; set; }
         public string? Address2 { get; set; }
         public string? Street { get; set; }
-
+        [Display(Name = "City ")]
+        [Required(ErrorMessage = "Enter City!")]
         public string? City { get; set; }
 
         public string? State { get; set; }
@@ -54,7 +55,9 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public int? Regionid { get; set; }
         public string? Regionsid { get; set; }
         public List<Regions>? Regionids { get; set; }
-
+        [Display(Name = "zip")]
+        [RegularExpression(@"^\d{6}$",
+                  ErrorMessage = "Entered Valid Zip Code.")]
         public string? Zipcode { get; set; }
 
 

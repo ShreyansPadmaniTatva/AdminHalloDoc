@@ -51,6 +51,10 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             {
                 TempData["Status"] = "Request Orderd save Successfully..!";
             }
+            if(CV.role() == "Provider")
+            {
+                return Redirect("/Physician/DashBoard");
+            }
             return RedirectToAction("Index", "AdminDashboard");
         }
         #endregion

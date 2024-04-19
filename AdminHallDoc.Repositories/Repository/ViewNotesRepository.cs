@@ -49,7 +49,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                            from p in pGroup.DefaultIfEmpty()
                            join a in _context.Admins on rs.Adminid equals a.Adminid into aGroup
                            from a in aGroup.DefaultIfEmpty()
-                           where rs.Requestid == id
+                           where rs.Requestid == id && (rs.Transtoadmin != null || rs.Transtophysicianid != null || rs.Status == 2)
                            select new TransfernotesModel
                            {
                                TransPhysician = p.Firstname,

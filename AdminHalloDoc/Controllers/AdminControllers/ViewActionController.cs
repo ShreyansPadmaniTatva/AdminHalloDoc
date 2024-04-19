@@ -18,11 +18,13 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region Constructor
         private readonly IRequestRepository _requestRepository;
         private readonly IViewActionRepository _viewActionRepository;
-        public ViewActionController(IRequestRepository requestRepository, IViewActionRepository viewActionRepository)
+        private readonly IRoleAccessRepository _roleAccessRepository;
+        public ViewActionController(IRequestRepository requestRepository, IViewActionRepository viewActionRepository, IRoleAccessRepository roleAccessRepository)
         {
 
             _requestRepository = requestRepository;
             _viewActionRepository = viewActionRepository;
+            _roleAccessRepository = roleAccessRepository;
         }
         #endregion
 
@@ -388,24 +390,29 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region SendEmail_Provider_To_Admin
         public async Task<IActionResult> EditPhysicianMyProfilerequestAsync(int Physicianid, string notes, string Email, string Firstname)
         {
+            List<ViewUserAcces> v = await _roleAccessRepository.GetAllUserDetails(2);
+            foreach (ViewUserAcces item in v)
+            {
+                var Subject = "Edit Profile";
+                var Body = "<html><body> " + notes + " </body></html>"; ;
+                var to = "tatva.dotnet.niyatikaneriya@outlook.com";
+
+                Emaillogdata elog = new Emaillogdata();
+                elog.Emailtemplate = Body;
+                elog.Subjectname = " for your request";
+                elog.Emailid = item.Email;
+                elog.Createdate = DateTime.Now;
+                elog.Sentdate = DateTime.Now;
+                elog.Physicianid = Physicianid;
+                elog.Action = 11;
+                elog.Recipient = Firstname;
+                elog.Roleid = 3;
+                elog.Senttries = 1;
+
+                await _requestRepository.EmailLog(elog);
+            }
             // _providersRepository.EditPhysicianMyProfile(model, CV.AspNetUserID());
-            var Subject = "Edit Profile";
-            var Body = "<html><body> " + notes + " </body></html>"; ;
-            var to = "tatva.dotnet.niyatikaneriya@outlook.com";
-
-            Emaillogdata elog = new Emaillogdata();
-            elog.Emailtemplate = Body;
-            elog.Subjectname = " for your request";
-            elog.Emailid = Email;
-            elog.Createdate = DateTime.Now;
-            elog.Sentdate = DateTime.Now;
-            elog.Physicianid = Physicianid;
-            elog.Action = 11;
-            elog.Recipient = Firstname;
-            elog.Roleid = 3;
-            elog.Senttries = 1;
-
-            await _requestRepository.EmailLog(elog);
+           
 
             return Redirect("~/Physician/Profile");
         }
