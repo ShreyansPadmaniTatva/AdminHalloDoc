@@ -15,5 +15,6 @@ namespace AdminHalloDoc.Repositories.Patient.Repository.Interface
         Task<bool> PatientBusiness(ViewPatientBusiness viewdata);
         Task<bool> PatientForMe(ViewPatientCreateRequest viewpatientcreaterequest,int UserId);
         Task<bool> PatientForSomeoneElse(ViewPatientCreateRequest viewpatientcreaterequest);
+        bool IsEmailBlock(String Email);
     }
 }

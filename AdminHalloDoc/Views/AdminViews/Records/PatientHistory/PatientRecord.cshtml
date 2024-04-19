@@ -8,6 +8,7 @@
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.PaginatedViewModel;
 @using static AdminHalloDoc.Entities.ViewModel.CM
 @{
+    ViewData["Title"] = "Patient Record";
 
     var status = "null";
     if (TempData["Status"] == null)

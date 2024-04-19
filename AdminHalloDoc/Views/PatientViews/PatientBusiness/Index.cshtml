@@ -3,6 +3,7 @@
 *@
 @{
     ViewData["Title"] = "Create  Business request";
+    ViewData["NavCall"] = "No";
 }
 @model AdminHalloDoc.Entities.ViewModel.PatientViewModel.ViewPatientBusiness
 
@@ -41,12 +42,12 @@
             <span asp-validation-for="BUP_Email" class="text-danger"></span>
         </div>
         <div class="col-md-6 form-floating  ">
-            <input asp-for="BUP_PropertyName" class="form-control rounded" name="BUP_PropertyName" type="email" placeholder=Suchtext autocomplete=off>
+            <input asp-for="BUP_PropertyName" class="form-control rounded" name="BUP_PropertyName" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">Business / Propety Name</label>
             <span asp-validation-for="BUP_PropertyName" class="text-danger"></span>
         </div>
         <div class="col-md-6 form-floating  ">
-            <input asp-for="BUP_CaseNumber" class="form-control rounded" name="BUP_CaseNumber" type="email" placeholder=Suchtext autocomplete=off>
+            <input asp-for="BUP_CaseNumber" class="form-control rounded" name="BUP_CaseNumber" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">Case Number ( Optional ) </label>
             <span asp-validation-for="BUP_CaseNumber" class="text-danger"></span>
         </div>

@@ -170,14 +170,14 @@
     </div>
     <input type="submit" id="submit" class="d-none" />
 </form>
-<form id="exportonlly" asp-action="DownloadExcel" asp-controller="Report" data-ajax="true" data-ajax-method="post">
+<form id="exportonlly" asp-action="DownloadExcel" asp-controller="Report" data-ajax-method="post">
     <input type="hidden" asp-for="status" name="status"  class=" exerequeststatus form-control">
     <input type="hidden" asp-for="RegionId" name="RegionId" id="exerequestRegionId" class="form-control">
     <input type="hidden" asp-for="RequestType" name="RequestType" id="exerequesttypebtn" class="form-control">
     <input type="hidden" asp-for="SearchInput" name="SearchInput" id="exeSearchInput" class="form-control">
     <input type="submit" class="form-control d-none">
 </form>
-<form id="exportall" asp-action="DownloadExcel" asp-controller="Report" data-ajax="true" data-ajax-method="post">
+<form id="exportall" asp-action="DownloadExcel" asp-controller="Report" data-ajax-method="post">
     <input type="hidden" asp-for="status" name="status" class="exerequeststatus form-control">
     <input type="submit"  class="form-control d-none">
 </form>

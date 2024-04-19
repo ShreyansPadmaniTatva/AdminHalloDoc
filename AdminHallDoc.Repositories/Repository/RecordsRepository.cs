@@ -261,7 +261,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                            Senttries = req.Senttries,
                                            Subjectname = req.Subjectname,
                                            Action = req.Action
-                                       }).ToList();
+                                       })
+                                       .OrderByDescending(x=>x.Createdate).ToList();
 
 
 
@@ -283,11 +284,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                       where (rm.AccountType == 0 || req.Roleid == rm.AccountType) &&
                                             (!rm.Startdate.HasValue || req.Createdate.Date == rm.Startdate.Value.Date) &&
                                             (!rm.Enddate.HasValue || req.Sentdate.Value.Date == rm.Enddate.Value.Date) &&
-                                            (rm.ReciverName.IsNullOrEmpty() || _context.Aspnetusers.FirstOrDefault(e => e.Phonenumber == req.Mobilenumber).Username.ToLower().Contains(rm.ReciverName.ToLower()) ) &&
+                                            (rm.ReciverName.IsNullOrEmpty() || req.Recipient.ToLower().Contains(rm.ReciverName.ToLower()) ) &&
                                             (rm.Phonenumber.IsNullOrEmpty() || req.Mobilenumber.ToLower().Contains(rm.Phonenumber.ToLower()))
                                       select new SMSLogsData
                                       {
-                                          Recipient = _context.Aspnetusers.FirstOrDefault(e => e.Phonenumber == req.Mobilenumber).Username,
                                           Confirmationnumber = req.Confirmationnumber,
                                           Createdate = req.Createdate,
                                           Smstemplate = req.Smstemplate,
@@ -295,8 +295,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                           Roleid = req.Roleid,
                                           Mobilenumber = req.Mobilenumber,
                                           Senttries = req.Senttries,
-                                          Action = req.Action
-                                      }).ToList();
+                                          Action = req.Action,
+                                          Recipient = req.Recipient
+                                      }).OrderByDescending(x => x.Createdate).ToList();
 
 
 
@@ -328,7 +329,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                Requestid = Convert.ToInt32(req.Requestid),
                                                Phonenumber = req.Phonenumber,
                                                Reason = req.Reason ?? "-"
-                                           }).ToList();
+                                           }).OrderByDescending(x=>x.Createddate).ToList();
 
 
 

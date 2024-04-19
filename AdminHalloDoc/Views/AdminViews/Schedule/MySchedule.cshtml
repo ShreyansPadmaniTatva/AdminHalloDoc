@@ -3,6 +3,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewData["Title"] = "Schedule Details";
 
     var status = "null";
     if (TempData["Status"] == null)
@@ -784,11 +785,11 @@
                             timeSlot.colSpan = colspan;
 
                             if (hoursArray[i] === 1) {
-                                timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn fs-5 Status-1 text-center">${regionArray[i]}</a>`;
+                                timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn fs-5 Status-1 text-center w-100">${regionArray[i]}</a>`;
                                 timeSlot.classList.add('p-0');
                                 i = endTime;
                             } else if (hoursArray[i] === 0.5) {
-                                timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn fs-5 Status-0 text-center">${regionArray[i]}</a>`;
+                                timeSlot.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${shiftidArray[i]}" class="mt-1 d-block text-dark js-stkModal-btn fs-5 Status-0 text-center w-100">${regionArray[i]}</a>`;
                                 timeSlot.classList.add('p-0');
                                 i = endTime;
                                 }

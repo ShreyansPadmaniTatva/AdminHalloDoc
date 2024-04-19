@@ -39,7 +39,13 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         #region Post
         public async Task<IActionResult> Post(ViewPatientConcierge viewdata)
         {
-            if (ModelState.IsValid)
+            if (_patientRequestRepository.IsEmailBlock(viewdata.Email))
+            {
+                ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+                ModelState.AddModelError("Email","This Email Id Is Block Try Another One");
+                return View("../PatientViews/PatientConcierge/Index", viewdata);
+            }
+            if (ModelState.IsValid )
             {
                 bool v = await _patientRequestRepository.PatientConcierge(viewdata);
             }

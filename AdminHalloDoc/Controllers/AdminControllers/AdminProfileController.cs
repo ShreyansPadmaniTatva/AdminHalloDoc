@@ -33,7 +33,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [Route("Admin/Profile")]
         public async Task<IActionResult> Index(int? id)
         {
-            ViewAdminProfile p = await _myProfileRepository.GetProfileDetails( (id !=null ? (int) id: Convert.ToInt32(CV.UserID())) );
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox();
             if (CV.role() == "Provider")
@@ -42,7 +41,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 Physicians v = await _physicianRepository.GetPhysicianById(Convert.ToInt32(CV.UserID()));
                 return View("../AdminViews/Physician/PhysicianAddEdit", v);
             }
+            else
+            {
+            ViewAdminProfile p = await _myProfileRepository.GetProfileDetails( (id !=null ? (int) id: Convert.ToInt32(CV.UserID())) );
+
             return  View("../AdminViews/Profile/Index",p);
+            }
         }
         #endregion
 

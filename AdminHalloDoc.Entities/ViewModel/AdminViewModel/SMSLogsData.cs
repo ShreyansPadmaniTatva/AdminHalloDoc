@@ -12,7 +12,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 
         public int Smslogid { get; set; }
 
-        public string Recipient { get; set; }
+        public string? Recipient { get; set; }
         public string? Smstemplate { get; set; }
 
         public string Mobilenumber { get; set; } = null!;

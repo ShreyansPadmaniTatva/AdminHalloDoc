@@ -222,7 +222,7 @@
                                             <li><a class="dropdown-item text-dark-emphasis" asp-action="ConcludeCare" asp-route-id="@item.Requestid.Encode()" asp-controller="SubmitForm"><i class="px-2 bi bi-journal"></i>Conclude Care</a></li>
                                         }
 
-                                        @if (Status == 4 &&  item.IsFinalize == true || (@item.IsFinalize != null && @item.IsFinalize == true && Status == 3))
+                                        @if ((Status == 4 && item.IsFinalize != null && item.IsFinalize == true ) || (@item.IsFinalize != null && @item.IsFinalize == true && Status == 3))
                                         {
                                             <li>
                                                 <a class="dropdown-item text-dark-emphasis js-stkModal-btn "
@@ -232,7 +232,7 @@
                                             </li>
 
                                         }
-                                        else if (@item.Status == 4  && Status == 3 )
+                                        else if ((@item.IsFinalize != null && @item.IsFinalize == false && Status == 3 && item.Status != 5))
                                         {
 
                                         <li>
@@ -242,7 +242,9 @@
                                                data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Encounter  model</a>
                                             </li>
 
-                                        }else{
+                                        }
+                                        else if ((@item.IsFinalize == false && Status == 3) || (@item.IsFinalize == false && Status == 4))
+                                        {
 
                                             <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid.Encode()" asp-action="Encounter" asp-controller="SubmitForm"><i class="px-2 bi bi-journals"></i>Encounter form</a></li>
                                         }

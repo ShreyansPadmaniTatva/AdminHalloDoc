@@ -61,7 +61,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-// using static System.Net.Mime.MediaTypeNames;
+
 app.UseStatusCodePages(context => {
     var request = context.HttpContext.Request;
     var response = context.HttpContext.Response;
@@ -70,16 +70,7 @@ app.UseStatusCodePages(context => {
     {
         response.Redirect("/PageNoteFound");
     }
-    else if (response.StatusCode >= 500 && response.StatusCode <= 599)
-    {
-        // Handle server-side errors by redirecting to a custom error page
-        response.Redirect("/ServerError");
-    }
-    else if (response.StatusCode == 0)
-    {
-        // Handle ERR_EMPTY_RESPONSE by redirecting to a custom error page
-        response.Redirect("/EmptyResponseError");
-    }
+   
     return Task.CompletedTask;
 });
 

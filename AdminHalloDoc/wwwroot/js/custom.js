@@ -31,39 +31,18 @@ function mode() {
 
     console.log(body.getAttribute('data-bs-theme'));
 }
-//function goBack() {
-//    // Check if there is a previous unique URL
-//    var previousUrl = getPreviousUniqueUrl();
-//    if (previousUrl) {
-//        // If there is a previous URL, navigate to it
-//        window.location.href = previousUrl;
-//    } else {
-//        // If there is no previous URL, go back in history
-//        history.back();
-//    }
-//}
 function goBack() {
-    var uniqueURLs = [];
-    var historyLength = history.length;
-
-    // Iterate through the history from the current position to find unique URLs
-    for (var i = historyLength - 2; i >= 0; i--) {
-        var url = history[i];
-        if (uniqueURLs.indexOf(url) === -1) {
-            uniqueURLs.push(url);
-        }
-    }
-    debugger
-    console.log(uniqueURLs);
-    // Redirect to the last unique URL found
-    if (uniqueURLs.length > 0) {
-        var lastUniqueURL = uniqueURLs.pop();
-        window.location.href = lastUniqueURL;
+    // Check if there is a previous unique URL
+    var previousUrl = getPreviousUniqueUrl();
+    if (previousUrl) {
+        // If there is a previous URL, navigate to it
+        window.location.href = previousUrl;
     } else {
-        // If no unique URLs found, redirect to home page or any default URL
-        window.location.href = "default.html";
+        // If there is no previous URL, go back in history
+        history.back();
     }
 }
+
 let navLinks = document.querySelectorAll('.nav-link');
 
 // Loop through each 'nav-link' element
@@ -90,7 +69,9 @@ function getPreviousUniqueUrl() {
     localStorage.setItem('uniqueUrls', JSON.stringify(uniqueUrls));
     return previousUrl;
 }
-
+function emptyuniqueurl() {
+    localStorage.setItem('uniqueUrls', null);
+}
 // Store the current URL when the page loads
 var currentUrl = window.location.href;
 var uniqueUrls = JSON.parse(localStorage.getItem('uniqueUrls')) || [];

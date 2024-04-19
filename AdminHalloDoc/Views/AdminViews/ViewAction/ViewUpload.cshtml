@@ -4,6 +4,8 @@
 
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDocuments
 @{
+    ViewData["Title"] = "View Doc List";
+
     var status = "null";
     if (TempData["Status"] == null)
     {
@@ -100,7 +102,7 @@
                                         </div>
                                     </td>
                                     <td class="table-text  px-3 flnamae"> <span> @item2.Filename </span></td>
-                                    <td class="table-text  px-3">@item2.Status </td>
+                                    <td class="table-text  px-3">@item2.Uploader </td>
                                     <td class="table-text  px-3">@item2.Createddate</td>
 
                                     <td class="table-text text-center ">

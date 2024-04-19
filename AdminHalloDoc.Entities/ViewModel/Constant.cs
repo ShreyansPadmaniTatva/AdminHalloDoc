@@ -15,9 +15,13 @@ namespace AdminHalloDoc.Entities.ViewModel
             Request, 
             SendLink, 
             SendAgreement, 
-            Forgot, 
+            ResetPassLink, 
             NewRegistration, 
-            contact
+            ProviderContactEmail,
+            ProviderContactBoth,
+            ProviderContactSMS,
+            CreateShift,
+            ProviderRequestToAdmin
 
         }
         public string Name { get; set; }

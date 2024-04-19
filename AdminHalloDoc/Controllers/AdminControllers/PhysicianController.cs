@@ -130,9 +130,22 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         public async Task<IActionResult> SendMessage(int? id, string? email, int? way, string? msg)
         {
             bool s;
+            Physicians v = await _physicianRepository.GetPhysicianById((int)id);
             if (way == 1)
             {
-                 s = await _emailconfig.SendMail(email, "Check massage" ,"Heyy "+msg);
+                SMSLogsData elog = new SMSLogsData();
+                elog.Smstemplate = "Heyy " + msg;
+                elog.Mobilenumber = v.Mobile;
+                elog.Createdate = DateTime.Now;
+                elog.Sentdate = DateTime.Now;
+                elog.Adminid = Convert.ToInt32(CV.UserID());
+                elog.Action = 9;
+                elog.Roleid = 3;
+                elog.Recipient = v.Firstname + " "+v.Lastname;
+                elog.Senttries = 1;
+                elog.Physicianid = id;
+
+                s = await _requestRepository.SMSLog(elog);
 
             }
             else if (way == 2)
@@ -144,7 +157,11 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 elog.Createdate = DateTime.Now;
                 elog.Sentdate = DateTime.Now;
                 elog.Adminid = Convert.ToInt32(CV.UserID());
-                 elog.Physicianid = id;
+                elog.Action = 7;
+                elog.Roleid = 3;
+                elog.Recipient = v.Firstname + " " + v.Lastname;
+                elog.Senttries = 1;
+                elog.Physicianid = id;
 
                 s = await _requestRepository.EmailLog(elog);
 
@@ -152,7 +169,34 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
             else
             {
-              s = await  _emailconfig.SendMail(email, "Check massage", "Heyy " + msg);
+                Emaillogdata elog = new Emaillogdata();
+                elog.Emailtemplate = "Heyy " + msg;
+                elog.Subjectname = "Agreement for your request";
+                elog.Emailid = email;
+                elog.Createdate = DateTime.Now;
+                elog.Sentdate = DateTime.Now;
+                elog.Adminid = Convert.ToInt32(CV.UserID());
+                elog.Action = 8;
+                elog.Roleid = 3;
+                elog.Recipient = v.Firstname + " " + v.Lastname;
+                elog.Senttries = 1;
+                elog.Physicianid = id;
+
+                s = await _requestRepository.EmailLog(elog);
+
+                SMSLogsData selog = new SMSLogsData();
+                selog.Smstemplate = "Heyy " + msg;
+                selog.Mobilenumber = v.Mobile;
+                selog.Createdate = DateTime.Now;
+                selog.Sentdate = DateTime.Now;
+                selog.Adminid = Convert.ToInt32(CV.UserID());
+                selog.Action = 9;
+                selog.Roleid = 3;
+                selog.Recipient = v.Firstname + " " + v.Lastname;
+                selog.Senttries = 1;
+                selog.Physicianid = id;
+
+                s = await _requestRepository.SMSLog(selog);
 
             }
             if (s)

@@ -23,6 +23,9 @@ using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities;
 using AdminHalloDoc.Entities.ViewModel;
+using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+using Microsoft.AspNetCore.Http;
 
 namespace AdminHalloDoc.Controllers.PatientControllers
 {
@@ -30,11 +33,15 @@ namespace AdminHalloDoc.Controllers.PatientControllers
     {
         #region Configuration
         private readonly EmailConfiguration _emailConfig;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ApplicationDbContext _context;
-        public Login(ApplicationDbContext context, EmailConfiguration emailConfig)
+        private readonly IRequestRepository _requestRepository;
+        public Login(ApplicationDbContext context, EmailConfiguration emailConfig,IRequestRepository requestRepository, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _emailConfig = emailConfig;
+            _requestRepository = requestRepository;
+            this.httpContextAccessor = httpContextAccessor;
         }
         #endregion
 
@@ -90,12 +97,29 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         {
             if (await CheckregisterdAsync(Email))
             {
-                var Subject = "Change PassWord";
-                var Body = "<html><body> your reset pas link is http://localhost:42161/Login/ResetPassWord?Datetime=" + _emailConfig.Encode(DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt")) + "&email=" + _emailConfig.Encode(Email) + " </body></html>"; ;
+                var hostName = httpContextAccessor.HttpContext.Request.Host.Host;
+                var port = httpContextAccessor.HttpContext.Request.Host.Port;
+                var resetPasswordUrl = $"http://{hostName}:{port}/Login/ResetPassword?Datetime={_emailConfig.Encode(DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt"))}&email={_emailConfig.Encode(Email)}";
+                var Subject = "Change Password";
+                var Body = $" <html><body> <h2>Welcome to Our Healthcare Platform!</h2>     " +
+                    $"                           <p>Dear Patient ,</p>" +
+                    $"                             <ol>" +
+                    $"                            <li>Click the following link to Agreement:</li>" +
+                    $" <li>your reset password link is <a href='{resetPasswordUrl}'>Click here</a></li>" +
+                    $"</ol>" +
+                    $"</body></html>";
 
+                Emaillogdata elog = new Emaillogdata();
+                elog.Emailtemplate = Body;
+                elog.Subjectname = Subject;
+                elog.Emailid = Email;
+                elog.Createdate = DateTime.Now;
+                elog.Sentdate = DateTime.Now;
+                elog.Action = 5;
+                elog.Recipient = Email;
+                elog.Roleid = 4;
+                await _requestRepository.EmailLog(elog);
                 _emailConfig.SendMail(Email, Subject, Body);
-
-
 
                 ViewData["EmailCheck"] = "Your ID Pass Send In Your Mail";
             }
@@ -152,6 +176,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
 
         #region Reset_Password
         #region ResetPassWord
+
         public async Task<IActionResult> ResetPassWord(string? Datetime, string? email)
         {
             string Decodee = _emailConfig.Decode(email);

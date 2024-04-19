@@ -72,6 +72,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region View_Case
         [Route("Physician/Viewcase/{id}")]
         [Route("Admin/Viewcase/{id}")]
+
         public async Task<IActionResult> Viewcase(string id)
         {
             TempData["Status"] = TempData["Status"];

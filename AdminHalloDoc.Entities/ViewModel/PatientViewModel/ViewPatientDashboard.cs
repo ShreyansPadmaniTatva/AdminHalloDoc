@@ -9,6 +9,7 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public DateTime? Createddate { get; set; }
         public int? FileCount { get; set; }
         public string? Filename { get; set; }
+        public string? Uploader { get; set; }
 
     }
 }

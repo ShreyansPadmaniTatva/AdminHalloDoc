@@ -211,6 +211,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             bool data = _viewActionRepository.EditEncounterDetails(model, CV.ID());
             if (data)
             {
+                
                 bool final = _viewActionRepository.CaseFinalized(model, CV.ID());
                 if (final)
                 {

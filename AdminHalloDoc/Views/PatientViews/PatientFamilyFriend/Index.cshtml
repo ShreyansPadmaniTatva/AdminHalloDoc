@@ -3,6 +3,7 @@
 *@
 @{
     ViewData["Title"] = "Create Family / friend request";
+    ViewData["NavCall"] = "No";
 }
 @model AdminHalloDoc.Entities.ViewModel.PatientViewModel.ViewPatientFamilyFriend
 <partial name="../../Shared/PatientPanel/_Partial/_PartialConformationModel.cshtml" />
@@ -40,7 +41,7 @@
             <span asp-validation-for="FF_Email" class="text-danger"></span>
         </div>
         <div class="col-md-6 form-floating  ">
-            <input asp-for="FF_RelationWithPatient" class="form-control rounded" name="FF_RelationWithPatient" type="email" placeholder=Suchtext autocomplete=off>
+            <input asp-for="FF_RelationWithPatient" class="form-control rounded" name="FF_RelationWithPatient" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">Relation with Patient</label>
             <span asp-validation-for="FF_RelationWithPatient" class="text-danger"></span>
         </div>

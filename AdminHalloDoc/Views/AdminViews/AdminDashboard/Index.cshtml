@@ -3,6 +3,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewData["Title"] = "Request List";
     var status = "null";
     if (TempData["Status"] == null)
     {
@@ -25,6 +26,7 @@
 <script type="text/javascript">
     
     window.onload = function () {
+        emptyuniqueurl()
         console.log("@status  d");
         if ("@status" != "null") {
             savealt("@status")

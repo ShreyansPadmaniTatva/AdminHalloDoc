@@ -41,9 +41,10 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region Send_Link
-        public IActionResult SendLink(string firstname,string lastname, string email, string phonenumber)
+        public async Task<IActionResult> SendLink(string firstname,string lastname, string email, string phonenumber)
         {
-            if (_viewActionRepository.SendLink( firstname,  lastname,  email,  phonenumber))
+
+            if (await _viewActionRepository.SendLink( firstname,  lastname,  email,  phonenumber))
             {
                 
                 TempData["Status"] = "Link Send In mail Successfully..!";
@@ -134,7 +135,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 TempData["Status"] = "Accept Request Successfully..!";
             }
 
-            return Redirect("~/Physician/DashBoard");
+            return Redirect("~/Physician/DashBoaswsrd");
         }
         #endregion
 
@@ -336,11 +337,24 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region ViewAdminCreateRequest_Post
         public async Task<IActionResult> ViewAdminCreateRequestPost(ViewAdminCreateRequest vr)
         {
-            if (  _viewActionRepository.SubmitCreateRequest(vr, CV.ID()) )
+            if (CV.role() == "Admin")
             {
-                TempData["Status"] = "Add  Request  Successfully..!";
+                if (_viewActionRepository.SubmitCreateRequest(vr, CV.ID(),null))
+                {
+                    TempData["Status"] = "Add  Request  Successfully..!";
+                }
+                return RedirectToAction("Index", "AdminDashboard");
             }
-            return RedirectToAction("Index", "AdminDashboard");
+            else
+            {
+                if (_viewActionRepository.SubmitCreateRequest(vr, CV.ID(),Convert.ToInt32(CV.UserID())))
+                {
+                    TempData["Status"] = "Add  Request  Successfully..!";
+                }
+                return Redirect("/Physician/DashBoard");
+            }
+           
+            
         }
         #endregion
 
@@ -367,6 +381,33 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 TempData["Status"] = "Msg Sent Successfully..!";
             }
             return RedirectToAction("Index", "AdminDashboard");
+        }
+        #endregion
+
+
+        #region SendEmail_Provider_To_Admin
+        public async Task<IActionResult> EditPhysicianMyProfilerequestAsync(int Physicianid, string notes, string Email, string Firstname)
+        {
+            // _providersRepository.EditPhysicianMyProfile(model, CV.AspNetUserID());
+            var Subject = "Edit Profile";
+            var Body = "<html><body> " + notes + " </body></html>"; ;
+            var to = "tatva.dotnet.niyatikaneriya@outlook.com";
+
+            Emaillogdata elog = new Emaillogdata();
+            elog.Emailtemplate = Body;
+            elog.Subjectname = " for your request";
+            elog.Emailid = Email;
+            elog.Createdate = DateTime.Now;
+            elog.Sentdate = DateTime.Now;
+            elog.Physicianid = Physicianid;
+            elog.Action = 11;
+            elog.Recipient = Firstname;
+            elog.Roleid = 3;
+            elog.Senttries = 1;
+
+            await _requestRepository.EmailLog(elog);
+
+            return Redirect("~/Physician/Profile");
         }
         #endregion
     }

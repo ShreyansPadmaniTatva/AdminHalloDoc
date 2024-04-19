@@ -19,6 +19,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? PhysicianPhoto { get; set; }
         public int Regionid { get; set; }
         public string? RegionName { get; set; }
+        public string? Email { get; set; }
 
         public DateOnly Startdate { get; set; }
         public DateTime? Shiftdate { get; set; }

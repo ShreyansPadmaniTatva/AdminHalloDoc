@@ -20,10 +20,14 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #region Constructor
         private readonly EmailConfiguration _emailConfig;
         private readonly ApplicationDbContext _context;
-        public SchedulingRepository(ApplicationDbContext context, EmailConfiguration emailConfig)
+        private readonly IRequestRepository _requestrepository;
+        private readonly IPhysicianRepository _physicianrepository;
+        public SchedulingRepository(ApplicationDbContext context, EmailConfiguration emailConfig, IRequestRepository requestrepository, IPhysicianRepository physicianrepository)
         {
             _context = context;
             _emailConfig = emailConfig;
+            _requestrepository = requestrepository;
+            _physicianrepository = physicianrepository;
         }
         #endregion
 
@@ -215,7 +219,20 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 sr.Isdeleted[0] = false;
                 _context.Shiftdetailregions.Add(sr);
                 _context.SaveChanges();
-
+                if (s.Status == 1)
+                {
+                    Emaillogdata elog = new Emaillogdata();
+                    elog.Emailtemplate = "Your Shift  Add To Calendar";
+                    elog.Subjectname = "Your Appr Shift Details";
+                    elog.Emailid = (await _physicianrepository.GetPhysicianById(s.Physicianid)).Email;
+                    elog.Createdate = DateTime.Now;
+                    elog.Sentdate = DateTime.Now;
+                    elog.Action = 10;
+                    elog.Recipient = (await _physicianrepository.GetPhysicianById(s.Physicianid)).Firstname ;
+                    elog.Roleid = 3;
+                    elog.Senttries = 1;
+                    await _requestrepository.EmailLogForShift(elog, sd.Shiftdate.Date + s.Starttime.ToTimeSpan(), sd.Shiftdate.Date + s.Endtime.ToTimeSpan());
+                }
                 if (s.checkWeekday != null)
                 {
                     List<int> day = s.checkWeekday.Split(',').Select(int.Parse).ToList();
@@ -251,6 +268,20 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                 _context.Shiftdetailregions.Add(srr);
                                 _context.SaveChanges();
                                 occurrencesFound++;
+                                if (s.Status == 1)
+                                {
+                                    Emaillogdata elog = new Emaillogdata();
+                                    elog.Emailtemplate = "Your Shift  Add To Calendar";
+                                    elog.Subjectname = " Shift Details";
+                                    elog.Emailid = (await _physicianrepository.GetPhysicianById(s.Physicianid)).Email;
+                                    elog.Createdate = DateTime.Now;
+                                    elog.Sentdate = DateTime.Now;
+                                    elog.Action = 10;
+                                    elog.Recipient = (await _physicianrepository.GetPhysicianById(s.Physicianid)).Firstname;
+                                    elog.Roleid = 3;
+                                    elog.Senttries = 1;
+                                   await _requestrepository.EmailLogForShift(elog, sd.Shiftdate.Date + s.Starttime.ToTimeSpan(), sd.Shiftdate.Date + s.Endtime.ToTimeSpan());
+                                }
 
                             }
                             nextOccurrence = nextOccurrence.AddDays(1);

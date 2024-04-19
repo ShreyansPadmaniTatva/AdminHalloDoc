@@ -3,6 +3,7 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using System.Net.Mail;
 using System.Net;
+using System.Text;
 //using System.Net.Mail;
 //using System.Net;
 //using Microsoft.AspNetCore.Http;
@@ -49,6 +50,78 @@ namespace AdminHalloDoc.Entities.ViewModel
         }
         #endregion
 
+        #region SendMail
+        public async Task<bool> SendMailWithShift(String To, String Subject, String Body,DateTime StartDate  , DateTime EndDate)
+        {
+            try
+            {
+                Body = "Mail to: " + To + "<br/>" + Body;
+
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("", From));
+                message.To.Add(new MailboxAddress("", "shreyanspadmani.me@gmail.com"));
+                message.Subject = Subject;
+
+                var builder = new BodyBuilder();
+                builder.HtmlBody = Body;
+
+                StringBuilder str = new StringBuilder();
+                str.AppendLine("BEGIN:VCALENDAR");
+                str.AppendLine("PRODID:-//GeO");
+                str.AppendLine("VERSION:2.0");
+                str.AppendLine("METHOD:REQUEST");
+                str.AppendLine("BEGIN:VEVENT");
+                str.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", StartDate));
+                str.AppendLine(string.Format("DTSTAMP:{0:yyyyMMddTHHmmssZ}", DateTime.UtcNow));
+                str.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", EndDate));
+                str.AppendLine(string.Format("UID:{0}", Guid.NewGuid()));
+                str.AppendLine(string.Format("DESCRIPTION;ENCODING=QUOTED-PRINTABLE:{0}", Body));
+                str.AppendLine(string.Format("X-ALT-DESC;FMTTYPE=text/html:{0}", Body));
+                str.AppendLine(string.Format("SUMMARY;ENCODING=QUOTED-PRINTABLE:{0}", Subject));
+                str.AppendLine("BEGIN:VALARM");
+                str.AppendLine("TRIGGER:-PT15M");
+                str.AppendLine("ACTION:DISPLAY");
+                str.AppendLine("DESCRIPTION;ENCODING=QUOTED-PRINTABLE:Reminder");
+                str.AppendLine("END:VALARM");
+                str.AppendLine("END:VEVENT");
+                str.AppendLine("END:VCALENDAR");
+
+                System.Net.Mime.ContentType type = new System.Net.Mime.ContentType("text/calendar");
+                type.Parameters.Add("method", "REQUEST");
+                type.Parameters.Add("name", "shift.ics");
+
+                var calendarAttachment = new MimePart()
+                {
+
+                    Content = new MimeContent(new MemoryStream(Encoding.UTF8.GetBytes(str.ToString()))),
+                    ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
+                    ContentTransferEncoding = ContentEncoding.Base64,
+                    FileName = "shift.ics"
+                };
+                var contentType = new ContentType(type.MediaType,type.MediaType);
+                contentType.Parameters.Add("name", "shift.ics");
+                builder.Attachments.Add(calendarAttachment);
+                message.Body = builder.ToMessageBody();
+
+                // Send message using MailKit
+                using (var client = new MailKit.Net.Smtp.SmtpClient())
+                {
+                    await client.ConnectAsync(SmtpServer, Port, false);
+                    await client.AuthenticateAsync(UserName, Password);
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        #endregion
 
         //#region SendMail
         //public Boolean SendMail(String To, String Subject, String Body)

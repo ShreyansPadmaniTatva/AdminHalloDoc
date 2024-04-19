@@ -2,6 +2,7 @@
 @using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians;
 @{
+    ViewData["Title"] = "Physician";
     var enumData = from AdminStatus e in Enum.GetValues(typeof(AdminStatus))
                    select new
                    {
@@ -19,15 +20,13 @@
         status = TempData["Status"].ToString();
 
     }
-
-   
 }
 @{
     string disable = Model == null ? "disabled" : "";
 }
 
 <div class="container">
-    <div class="justify-content-between d-flex container-fluid mb-5 position-relative ">
+    <div class="justify-content-between d-flex container-fluid mb-3 position-relative ">
         <div class="">
             <h1>
                 @ViewData["PhysicianAccount"] Physician Account
@@ -41,14 +40,29 @@
         <form id="addedit" class="row g-3" asp-action="PhysicianAddEdit" asp-controller="Physician" enctype="multipart/form-data" >
 
             <input id="123" type="hidden"  asp-for="Physicianid" />
-            <h4 class=" my-4">Account Information</h4>
+            <div class="justify-content-between d-flex container-fluid mb-5 position-relative ">
+                <div>
+                <h4 class=" my-4">Account Information</h4>
+
+                </div>
+                <div>
+                    @if (Model != null && Model.Physicianid == Convert.ToInt32(CV.UserID()))
+                    {
+
+                        <a class="btn  btn-info text-white btn-submit my-4" onclick="blackshow()" data-bs-toggle="modal" data-bs-target="#reqToAdminmodal">
+                                Request To Admin
+                            </a>
+                           
+                    }
+                </div>
+            </div>
             <div class="col-md-6 form-floating  ">
                 <input asp-for="UserName" class="form-control form-control-disable rounded asp" name="UserName" type="text">
                 <label class="" for="floatingInput">User Name </label>
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
-                <input class="form-control rounded asp" asp-for="PassWord" name="Password" type="text" placeholder=Suchtext autocomplete=off>
+                <input class="form-control rounded asp" asp-for="PassWord" name="Password" type="password" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Password </label>
                 <span asp-validation-for="PassWord" class="text-danger"></span>
 
@@ -485,6 +499,41 @@
 
             </div>
         </form>
+    </div>
+</div>
+<div class="modal fade" id="reqToAdminmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h1 class="modal-title text-light  fs-5" id="exampleModalLabel">Request To Administration</h1>
+                <button type="button" class="btn-close btn-light" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="need-validation was-validated" novalidate method="post" asp-controller="ViewAction" asp-action="EditPhysicianMyProfilerequest">
+
+                    <input  type="hidden" asp-for="Physicianid" />
+                    <input  type="hidden" asp-for="Firstname" />
+                    <input  type="hidden" asp-for="Email" />
+                    <input name="Email" hidden />
+                    <div class="mb-3">
+                        Need to send message to edit.
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Description</label>
+                        <textarea required="" name="notes" class="form-control" id="message-textT" style="height: 100px"></textarea>
+                        <div class="invalid-feedback">please fill this.</div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-info text-light" value="Submit">
+                        <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
     </div>
 </div>
 @section Scripts

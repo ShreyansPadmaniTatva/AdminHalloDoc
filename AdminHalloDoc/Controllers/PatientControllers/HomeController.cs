@@ -33,6 +33,15 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            // Log the error
+            var errorId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            _logger.LogError($"Error occurred with ID: {errorId}");
+
+            // You can customize the view model or directly pass the error message to the view
+            var errorViewModel = new ErrorViewModel { RequestId = errorId, ErrorMessage = "An unexpected error occurred." };
+
+            // You can return a specific view based on the error type
+            return View("../PatientViews/Home/CustomErrorView", errorViewModel);
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         #endregion

@@ -3,6 +3,7 @@
 *@
 @{
     ViewData["Title"] = "Create Concierge  request";
+    ViewData["NavCall"] = "No";
 }
 @model AdminHalloDoc.Entities.ViewModel.PatientViewModel.ViewPatientConcierge
 <partial name="../../Shared/PatientPanel/_Partial/_PartialConformationModel.cshtml" />
@@ -39,7 +40,7 @@
             <span asp-validation-for="CON_Email" class="text-danger"></span>
         </div>
         <div class="col-md-6 form-floating  ">
-            <input asp-for="CON_PropertyName" class="form-control rounded" name="CON_PropertyName" type="email" placeholder=Suchtext autocomplete=off>
+            <input asp-for="CON_PropertyName" class="form-control rounded" name="CON_PropertyName" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">Hotel / Propety Name</label>
             <span asp-validation-for="CON_PropertyName" class="text-danger"></span>
         </div>

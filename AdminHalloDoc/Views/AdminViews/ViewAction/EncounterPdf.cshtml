@@ -2,12 +2,67 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    Layout = "../Shared/_Layout";
+    Layout = "../Shared/_Login_Layout";
+    ViewData["Title"] = "Encounter PDF";
+
 }
 
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewEncounter;
-
 <style>
+    * {
+        font-family: 'Arial', sans-serif;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .encounterFormDetails {
+        margin: 20px;
+        padding: 20px;
+        max-width: 800px;
+        margin: auto;
+    }
+
+    h1 {
+        color: #60cef3;
+        font-size: 30px;
+        margin-bottom: 25px;
+        font-family: poppins;
+    }
+
+    .Branding {
+        color: #60cef3;
+        font-size: 45px;
+        margin-bottom: 25px;
+        font-family: poppins;
+    }
+
+    .PatientDetails {
+        padding: 15px;
+        background-color: #fff;
+        border: 2px solid;
+        border-radius: 25px;
+    }
+
+    .PatientData {
+        border: 2px solid;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #f0f0f0;
+        margin-bottom: 15px;
+        border: 1px solid #c0c0c0;
+    }
+
+        .PatientData span {
+            font-weight: bolder;
+            color: black;
+        }
+
+    .followup {
+        color: #60cef3;
+    }
     body {
         height: 100vh !important;
     }
@@ -42,41 +97,136 @@
         height: 50px;
     }
 </style>
-<div class="encounterForm h-100 mt-3">
-    <div class="text-center text-info w-100 fw-semibold fs-5">
-        <h2 class="fs-4">Encounter Form Details</h2>
+<div class="encounterFormDetails justify-content-center  gap-4">
+    <div class="d-flex justify-content-center">
+        <h1 class="Branding h1">Namste From HalloDoc</h1>
     </div>
-    <div class="details p-3">
-        <div class="data-row"><span class="fw-bold">First Name: </span> @Model.FirstName </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Last Name: </span> @Model.LastName </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Location: </span> @Model.Location </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Date of Birth: </span> @Model.DOB </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Date of Request: </span> @Model.Date </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Phone: </span> @Model.PhoneNumber </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Email: </span> @Model.Email </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">History of Present Illness or Injury: </span> @Model.HistoryOfP </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Medical History: </span> @Model.HistoryOfMedical </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Medications: </span> @Model.Medications </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Allergies: </span> @Model.Allergies </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Temp: </span> @Model.Temp </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">HR: </span> @Model.Hr </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">RR: </span> @Model.Rr </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Blood Pressure Diastolic: </span> @Model.BloodPressureS </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Blood Pressure Systolic: </span> @Model.BloodPressureD </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">O2: </span> @Model.O2 </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Heent: </span> @Model.Heent </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Pain: </span> @Model.Pain </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">CV: </span> @Model.CV </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Chest: </span> @Model.Chest </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">ABD: </span> @Model.ABD </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Extremities: </span> @Model.Extr </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Skin: </span> @Model.Skin </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Neuro: </span> @Model.Neuro </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Other: </span> @Model.Other </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Diagnosis: </span> @Model.Diagnosis </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Treatment Plan: </span> @Model.Treatment </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Medical Dispensed: </span> @Model.MedicationsDispensed </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">Procedures: </span> @Model.Procedures </div><hr class="m-0 mb-1">
-        <div class="data-row"><span class="fw-bold">FollowUp: </span> @Model.Followup </div>
+
+    <h1>Personal Details</h1>
+    <div class="PatientDetails">
+        <div class="PatientData">
+            <span>First Name: </span> @Model.FirstName
+        </div>
+
+        <div class="PatientData">
+            <span>Last Name: </span> @Model.LastName
+        </div>
+
+        <div class="PatientData">
+            <span>Location: </span> @Model.Location
+        </div>
+
+        <div class="PatientData">
+            <span>Date of Birth: </span> @Model.DOB
+        </div>
+
+        @*     <div class="PatientData">
+        <span>Date of Request: </span>
+        </div> *@
+
+        <div class="PatientData">
+            <span>Email: </span> @Model.Email
+        </div>
+
+
+    </div>
+
+    <h1 class="mt-3">Encounter Form Details</h1>
+    <div class="PatientDetails mt-3">
+        <div class="PatientData">
+            <span>History of Present Illness or Injury: </span> @Model.HistoryOfP
+        </div>
+
+        <div class="PatientData">
+            <span>Medical History: </span> @Model.HistoryOfMedical
+        </div>
+
+        <div class="PatientData">
+            <span>Medications: </span> @Model.Medications
+        </div>
+
+        <div class="PatientData">
+            <span>Allergies: </span> @Model.Allergies
+        </div>
+
+        <div class="PatientData">
+            <span>Temp: </span> @Model.Temp
+        </div>
+
+        <div class="PatientData">
+            <span>HR: </span> @Model.Hr
+        </div>
+
+        <div class="PatientData">
+            <span>RR: </span> @Model.Rr
+        </div>
+
+        <div class="PatientData">
+            <span>Blood Pressure (Diastolic): </span> @Model.BloodPressureD
+        </div>
+
+        <div class="PatientData">
+            <span>Blood Pressure (Systolic): </span> @Model.BloodPressureS
+        </div>
+
+        <div class="PatientData">
+            <span>O2: </span> @Model.O2
+        </div>
+
+        <div class="PatientData">
+            <span>HEENT: </span> @Model.Heent
+        </div>
+
+        <div class="PatientData">
+            <span>Pain: </span> @Model.Pain
+        </div>
+
+        <div class="PatientData">
+            <span>CV: </span> @Model.CV
+        </div>
+
+        <div class="PatientData">
+            <span>Chest: </span> @Model.Chest
+        </div>
+
+        <div class="PatientData">
+            <span>Abdomen: </span> @Model.ABD
+        </div>
+
+        <div class="PatientData">
+            <span>Extremities: </span> @Model.Extr
+        </div>
+
+        <div class="PatientData">
+            <span>Skin: </span> @Model.Skin
+        </div>
+
+        <div class="PatientData">
+            <span>Neuro: </span> @Model.Neuro
+        </div>
+
+        <div class="PatientData">
+            <span>Other: </span> @Model.Other
+        </div>
+
+        <div class="PatientData">
+            <span>Diagnosis: </span> @Model.Diagnosis
+        </div>
+
+        <div class="PatientData">
+            <span>Treatment Plan: </span> @Model.Treatment
+        </div>
+
+        <div class="PatientData">
+            <span>Medications Dispensed: </span> @Model.MedicationsDispensed
+        </div>
+
+        <div class="PatientData">
+            <span>Procedures: </span> @Model.Procedures
+        </div>
+
+        <div class="PatientData followup">
+            <span>Follow Up Frequency: </span> @Model.Followup
+        </div>
     </div>
 </div>

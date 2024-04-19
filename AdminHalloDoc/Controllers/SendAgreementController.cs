@@ -29,6 +29,10 @@ namespace AdminHalloDoc.Controllers
         public IActionResult Index(string RequestID)
         {
             var request = _context.Requests.Find(RequestID.Decode());
+            if (request == null)
+            {
+                return Redirect("PageNotFound");
+            }
             TempData["RequestID"] = RequestID.Decode();
             TempData["PatientName"] = request.Firstname + " " + request.Lastname;
             return View();

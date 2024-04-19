@@ -4,6 +4,8 @@
 @using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewRoleByMenu;
 @{
+    ViewData["Title"] = "Access Role Add Edit";
+
     var enumData = from AccountType e in Enum.GetValues(typeof(AccountType))
                    select new
                    {

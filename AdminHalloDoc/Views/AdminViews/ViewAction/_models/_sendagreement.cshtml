@@ -1,4 +1,5 @@
-﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewActions
+﻿@using AdminHalloDoc.Entities.ViewModel;
+@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewActions
 <div class="modal-header  bg-info text-white">
     <h1 class="modal-title fs-5" id="exampleModalLabel">Send Agreement</h1>
     <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
@@ -22,7 +23,7 @@
             <input asp-for="Email" class="form-control rounded" aria-describedby="inputGroupPrepend" required type="email" placeholder=" " autocomplete=off>
             <label class="" for="floatingInput">Email</label>
         </div>
-
+        <p>https://localhost:7170/SendAgreement?RequestID=@Model.RequestID.Encode()</p>
         <hr class="form-button-divider" />
         <div class="row">
             <div class="offset-md-4 col-md-8">

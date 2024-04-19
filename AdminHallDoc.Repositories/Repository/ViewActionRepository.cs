@@ -107,20 +107,22 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
                                        }).FirstAsync();
 
-            List<Documents> doclist = _context.Requestwisefiles
-                        .Where(r => r.Requestid == id )
-                        .ToList()
-                        .Where(r => r.Isdeleted.Get(0) == false)
-                        .OrderByDescending(x => x.Createddate)
-                        .Select(r => new Documents
-                        {
-                            isDeleted = r.Isdeleted.ToString(),
-                            RequestwisefilesId = r.Requestwisefileid,
-                            Status = r.Doctype,
-                            Createddate = r.Createddate,
-                            Filename = r.Filename
-
-                        }).ToList();
+            List<Documents> doclist = (from requestWiseFile in _context.Requestwisefiles
+                                       join request in _context.Requests on requestWiseFile.Requestid equals request.Requestid
+                                       join physician in _context.Physicians on request.Physicianid equals physician.Physicianid into physicianGroup
+                                       from phys in physicianGroup.DefaultIfEmpty()
+                                       join admin in _context.Admins on requestWiseFile.Adminid equals admin.Adminid into adminGroup
+                                       from adm in adminGroup.DefaultIfEmpty()
+                                       where request.Requestid == id && requestWiseFile.Isdeleted == new BitArray(1)
+                                       select new Documents
+                                       {
+                                           Uploader = requestWiseFile.Physicianid != null ? phys.Firstname : (requestWiseFile.Adminid != null ? adm.Firstname : request.Firstname),
+                                           isDeleted = requestWiseFile.Isdeleted.ToString(),
+                                           RequestwisefilesId = requestWiseFile.Requestwisefileid,
+                                           Status = requestWiseFile.Doctype,
+                                           Createddate = requestWiseFile.Createddate,
+                                           Filename = requestWiseFile.Filename
+                                       }).ToList();
             doc.documentslist = doclist;
             return doc;
             
@@ -225,12 +227,51 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Send_Link
-        public Boolean SendLink(string firstname, string lastname, string email, string phonenumber)
+        public async Task<Boolean> SendLink(string firstname, string lastname, string email, string phonenumber)
         {
             var baseUrl = httpContextAccessor.HttpContext?.Request.Host;
 
-            _emailConfig.SendMail(email, "Add New Request", firstname +" "+ lastname +" "+ phonenumber+"  " +baseUrl+ "/SubmitRequest");
+            var d = httpContextAccessor.HttpContext.Request.Host;
+            //var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == v.RequestID);
+            string emailContent = @"
+                                <!DOCTYPE html>
+                                <html lang=""en"">
+                                <head>
+                                 <meta charset=""UTF-8"">
+                                 <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                                 <title>Patient For New Request</title>
+                                </head>
+                                <body>
+                                 <div style=""background-color: #f5f5f5; padding: 20px;"">
+                                 <h2>Welcome to Our Healthcare Platform!</h2>
+                                <p>Dear New Patient ,</p>
+                                <ol>
+                                    <li>Click the following link to Request for Patient:</li>
+                                     <p><a target='_blank' href=""https://" + d + @"/SubmitRequest"">New Request Here Patient </a></p>
+                                    <li>Follow the on-screen instructions to complete the registration process.</li>
+                                </ol>
+                                <p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>
+                                <p>Thank you,</p>
+                                <p>The Healthcare Team</p>
+                                </div>
+                                </body>
+                                </html>
+                                ";
+            Emaillogdata elog = new Emaillogdata();
+            elog.Emailtemplate = emailContent;
+            elog.Subjectname = "Add New Request";
+            elog.Emailid = email;
+            elog.Createdate = DateTime.Now;
+            elog.Sentdate = DateTime.Now;
+            elog.Action = 4;
+            elog.Recipient = firstname + " " + lastname;
+            elog.Roleid = 4;
+            elog.Senttries = 1;
 
+            await _requestRepository.EmailLog(elog);
+
+            //_emailConfig.SendMail(email, "Add New Request", firstname +" "+ lastname +" "+ phonenumber+"  " +baseUrl+ "/SubmitRequest");
+            //_emailConfig.SendMail(v.Email, "Agreement for your request", emailContent);
             return true;
         }
         #endregion
@@ -498,7 +539,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             Requeststatuslog rsl = new Requeststatuslog();
             rsl.Requestid = (int)v.RequestID;
             rsl.Notes = v.Notes;
-            rsl.Adminid = v.AdminId;
+            rsl.Physicianid = v.AdminId;
 
             rsl.Createddate = DateTime.Now;
             rsl.Status = 2;
@@ -578,6 +619,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
            elog.Action = 4;
             elog.Recipient = v.PatientName;
             elog.Roleid = 4;
+            elog.Senttries = 1;
+
             await _requestRepository.EmailLog(elog);
             //_emailConfig.SendMail(v.Email, "Agreement for your request", emailContent);
                 return true;
@@ -933,33 +976,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
             try
             {
-                var data = _context.Encounterforms.FirstOrDefault(e => e.Encounterformid == model.EncounterID);
+                var data = _context.Encounterforms.FirstOrDefault(e => e.Requestid == model.Requesid);
                 data.ModifiedDate = DateTime.Now;
                 data.Isfinalize = true;
                 _context.Encounterforms.Update(data);
                 _context.SaveChanges();
-
-
-                //var final = _context.Requests.FirstOrDefault(e => e.Requestid == model.Requesid);
-                //final.Modifieddate = DateTime.Now;
-                //final.Status = 6;
-                //_context.Requests.Update(final);
-                //_context.SaveChanges();
-
-                //var admindata = _context.Admins.FirstOrDefault(e => e.Aspnetuserid == id);
-                //var phydata = _context.Physicians.FirstOrDefault(e => e.Aspnetuserid == id);
-                //Requeststatuslog rs = new Requeststatuslog
-                //{
-                //    Requestid = final.Requestid,
-                //    Status = 6,
-                //    Createddate = DateTime.Now,
-                //    Adminid = admindata == null ? null : admindata.Adminid,
-                //    Physicianid = phydata == null ? null : phydata.Physicianid,
-
-
-                //};
-                //_context.Requeststatuslogs.Add(rs);
-                //_context.SaveChanges();
 
                 return true;
             }
@@ -974,9 +995,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region SubmitCreateRequest_Admin
-        public bool SubmitCreateRequest(ViewAdminCreateRequest model, string Id)
+        public bool SubmitCreateRequest(ViewAdminCreateRequest model, string Id,int? UserId)
         {
-            var admin = _context.Admins.FirstOrDefault(x => x.Aspnetuserid == Id);
+            
             var region = _context.Regions.FirstOrDefault(x => x.Regionid == model.region);
             var confirmation = "";
             string month = model.DateOfBirth.ToString("MMMM", CultureInfo.InvariantCulture);
@@ -989,15 +1010,17 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 Entities.Models.Request request = new Entities.Models.Request
                 {
                     Requesttypeid = 2,
-                    Userid = admin.Adminid, 
+                    Userid = UserId == null ? _context.Admins.FirstOrDefault(x => x.Aspnetuserid == Id).Adminid : UserId,
                     Firstname = model.FirstName,
                     Lastname = model.LastName,
                     Email = model.Email,
                     Phonenumber = model.PhoneNumber,
-                    Status = 1,
+                    Status = UserId == null ?(short) 1 :(short) 2,
+                    Physicianid = UserId == null ? null : (short)UserId,
                     Isurgentemailsent = new BitArray(1),
                     Createddate = DateTime.Now,
-                    Confirmationnumber = confirmation
+                    Confirmationnumber = confirmation,
+                    Isdeleted = new BitArray(new[] { false })
 
                 };
                 _context.Requests.Add(request);
@@ -1028,30 +1051,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 {
                     Requestid = request.Requestid,
                     Createddate = DateTime.Now,
-                    Createdby = admin.Aspnetuserid,
-                    Adminnotes = model.AdminNotes
+                    Createdby = Id,
+                    Adminnotes = UserId == null ? model.AdminNotes : null ,
+                    Physiciannotes = UserId == null ? null: model.AdminNotes,
                 };
                 _context.Requestnotes.Add(requestnote);
                 _context.SaveChanges();
-
-                var user = _context.Users.FirstOrDefault(x => x.Email == model.Email);
-                if (user == null)
-                {
-                    //string encryptedEmail =  _encryptdecryptrepo.EncryptStringToBase64_Aes(model.Email, key, iv);
-                    //string encryptedRequestId = _encryptdecryptrepo.EncryptStringToBase64_Aes(request.Requestid.ToString(), key, iv);
-                    //string encodedRequestId = HttpUtility.UrlEncode(encryptedRequestId);
-                    //string encodedEmail = HttpUtility.UrlEncode(encryptedEmail);
-                    //string body = "https://localhost:7128/Login/CreateAccount?requestid=" + encodedRequestId + "&email=" + encodedEmail;
-                    //string subject = "Create Account";
-                    //string To = model.Email;
-                    //_sendmailrepo.SendMail(subject, body, To);
-                }
-                else
-                {
-                    //var requestregistered = _requestrepo.registeredUser(requestclient.Requestid);
-                    //requestregistered.UserId = user.Userid;
-                    //_requestrepo.updateRequest(requestregistered);
-                }
 
                 return true;
             }

@@ -50,8 +50,8 @@
                                     </div>
                                     <div class="px-2 ">
                                         <span class="text-start text-light-emphasis"> Date Of birth:  </span>
-                                    <span class="text-end text-dark"> @item.Dob  </span>
-                                    </div>
+                                    <span class="text-end text-dark"> @item.Dob?.ToString("MMM dd, yyyy")  </span>
+                                </div>
                                 <a href="/Admin/Viewcase/@item.RequestClientid.Encode()" class="btn btn-light rounded-4 p-1 fs-6 px-3 my-2 position-absolute top-0  end-0">
                                         View Case
                                     </a>
@@ -101,7 +101,7 @@
                                 </div>
                                 <div class="px-2">
                                     <span class="text-start text-light-emphasis">Requested Date:</span>
-                                    <span class="text-end text-dark">@item.RequestedDate</span>
+                                    <span class="text-end text-dark">@item.RequestedDate?.ToString("MMM dd, yyyy")</span>
                                 </div>
                             </div>
 
@@ -259,7 +259,7 @@
                             </td>
                             @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 5)
                             {
-                                <td scope="col">@item.Dob.ToString() </td>
+                                <td scope="col">@item.Dob?.ToString("MMM dd, yyyy") </td>
                             }
                             @if (Status == 1 || Status == 2 || Status == 3)
                             {
@@ -270,7 +270,7 @@
                                 <td>@item.Physician</td>
                             }
 
-                            <td>@item.RequestedDate</td>
+                            <td>@item.RequestedDate?.ToString("MMM dd, yyyy")</td>
 
                             @if (Status == 1 || Status == 2 || Status == 3 || Status == 4 || Status == 6)
                             {

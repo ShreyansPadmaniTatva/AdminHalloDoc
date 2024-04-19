@@ -5,7 +5,8 @@
 @using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model List<AdminHalloDoc.Entities.Models.Role>;
 @{
-   
+    ViewData["Title"] = "Account Access";
+
     var status = "null";
     if (TempData["Status"] == null)
     {

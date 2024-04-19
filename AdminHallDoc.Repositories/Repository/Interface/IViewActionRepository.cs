@@ -14,7 +14,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
     public interface IViewActionRepository
     {
         public bool Conculde(int Requesid, int id);
-        public Boolean SendLink(string firstname, string lastname, string email, string phonenumber);
+         Task<Boolean> SendLink(string firstname, string lastname, string email, string phonenumber);
         public Task<ViewDocuments> GetDocumentByRequest(int? id);
         public Boolean SaveDoc(int Requestid, IFormFile file);
         public Task<List<Physician>> ProviderbyRegion(int? regionid);
@@ -38,7 +38,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         ViewEncounter GetEncounterDetailsByRequestID(int RequestID);
         bool EditEncounterDetails(ViewEncounter Data, string id);
         bool CaseFinalized(ViewEncounter model, string id);
-        bool SubmitCreateRequest(ViewAdminCreateRequest model, string email);
+        bool SubmitCreateRequest(ViewAdminCreateRequest model, string Id, int? UserId);
         Task<bool> SendEmailForRequestSupport(string notes, int AdminId);
     }
 }

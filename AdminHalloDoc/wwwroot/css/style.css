@@ -1110,7 +1110,7 @@ a{
 }
 .request-type-btn.active {
     border: 2px solid #a9a9a9;
-    color: black;
+    color: var(--bs-body-color);
 }
 .request-type-btn {
     /*height: 36px;*/

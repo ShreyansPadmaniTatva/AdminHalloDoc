@@ -675,5 +675,13 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
             }
         }
         #endregion
+
+        #region Check_Request_BlockOrNot
+        public bool IsEmailBlock(String Email)
+        {
+            return _context.Blockrequests.Any(e => e.Email == Email && e.Isactive == new BitArray(new[] { true }));
+        }
+
+        #endregion
     }
 }

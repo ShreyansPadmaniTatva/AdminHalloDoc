@@ -40,7 +40,13 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         [HttpPost]
         public async Task<IActionResult> Post(ViewPatientFamilyFriend viewdata)
         {
-             if (ModelState.IsValid)
+            if (_patientRequestRepository.IsEmailBlock(viewdata.Email))
+            {
+                ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
+                ModelState.AddModelError("Email", "This Email Id Is Block Try Another One");
+                return View("../PatientViews/PatientFamilyFriend/Index", viewdata);
+            }
+            if (ModelState.IsValid)
             {
                 bool v = await _patientRequestRepository.PatientFamilyFriend(viewdata);
             }

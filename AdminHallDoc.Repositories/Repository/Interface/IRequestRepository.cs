@@ -18,5 +18,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<Viewcase> GetRequestDetails(int? Requestid);
         Task<Boolean> PutViewcase(Viewcase viewcase);
         Task<bool> EmailLog(Emaillogdata elog);
+        Task<bool> SMSLog(SMSLogsData elog);
+        Task<bool> EmailLogForShift(Emaillogdata elog, DateTime EndDate, DateTime StartDate);
     }
 }

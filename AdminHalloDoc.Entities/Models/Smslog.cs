@@ -52,4 +52,7 @@ public partial class Smslog
 
     [Column("action")]
     public int? Action { get; set; }
+
+    [StringLength(1000)]
+    public string? Recipient { get; set; }
 }

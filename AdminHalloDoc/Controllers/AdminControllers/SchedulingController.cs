@@ -3,6 +3,7 @@ using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
+using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -90,6 +91,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         {
             if (await _schedulingRepository.CreateShift(v,CV.ID()))
             {
+               
                 TempData["Status"] = "Create Shift Successfully..!";
             }
 

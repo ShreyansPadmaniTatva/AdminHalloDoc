@@ -7,8 +7,9 @@
 }
 <div class="text-center ">
     <div class="my-3 top-0 end-0 mt-3 mx-5 position-absolute border border-1 text-info border-info rounded-3">
-        <button class="btn btn-outline-info" onclick="mode()">
-            <i class="bi bi-moon"></i>
+        <button class=" btn-outline-info btn btn-sm " onclick="mode()">
+            <span id="thm"> <i class="fa-solid fa-sun p-2"></i></span>
+            <span id="thm2"> <i class="fa-solid fa-moon p-2"></i></span>
         </button>
     </div>
 </div>
@@ -28,7 +29,7 @@
                             ❮ &nbsp; Back
                         </a>
                     </div>
-                    <form asp-action="CheckAccessLogin" asp-controller="Login">
+                    <form asp-action="CheckAccessLogin" asp-controller="AdminLogin">
                         <h1 class="login fs-1 fw-bolder">Login To Your Account</h1>
                         <div class="form-floating input-group with-icon mb-3">
                             <input class="form-control rounded" value="shreyans.s@gmail.com" asp-for="Username" type="text" placeholder=Suchtext

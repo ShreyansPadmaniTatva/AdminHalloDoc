@@ -11,6 +11,7 @@ using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Ocsp;
+using Twilio.TwiML.Messaging;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -19,8 +20,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #region Constructor
         private readonly ApplicationDbContext _context;
         private readonly EmailConfiguration _emailConfig;
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="emailConfig"></param>
         public RequestRepository(ApplicationDbContext context, EmailConfiguration emailConfig)
 		{
 			_context = context;
@@ -28,7 +32,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
+        #region ComboBox
+
         #region UserRoleComboBox
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<UserRoleCombobox>> UserRoleComboBox()
         {
             return await _context.Roles.Select(req => new UserRoleCombobox()
@@ -41,6 +51,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region UserRoleComboBox
+        /// <summary>
+        /// UserRoles Combobox by account typr
+        /// </summary>
+        /// <param name="accounttype"></param>
+        /// <returns></returns>
         public async Task<List<UserRoleCombobox>> UserRoleComboBox(int accounttype)
         {
             return await _context.Roles.Where(r => r.Accounttype == accounttype).Select(req => new UserRoleCombobox()
@@ -53,6 +68,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region VenderTypeComboBox
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<VenderTypeComboBox>> VenderTypeComboBox()
         {
             return await _context.Healthprofessionaltypes.Select(req => new VenderTypeComboBox()
@@ -65,21 +84,30 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region RegionComboBox
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<RegionComboBox>> RegionComboBox()
         {
             return await _context.Regions.Select(req => new RegionComboBox()
-                {
-                   RegionId =req.Regionid,
-                   RegionName =req.Name
-                })
+            {
+                RegionId = req.Regionid,
+                RegionName = req.Name
+            })
                 .ToListAsync();
         }
         #endregion
 
         #region RegionComboBox
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
         public async Task<List<RegionComboBox>> RegionComboBox(int UserId)
         {
-            if(UserId < 0 || UserId == null)
+            if (UserId < 0 || UserId == null)
             {
                 return await _context.Regions.Select(req => new RegionComboBox()
                 {
@@ -87,7 +115,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     RegionName = req.Name
                 })
                .ToListAsync();
-               
+
             }
             else
             {
@@ -108,7 +136,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 })
                     .ToListAsync();
             }
-            
+
         }
         #endregion
 
@@ -126,6 +154,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             })
                 .ToListAsync();
         }
+        #endregion
+
         #endregion
 
         #region Number_Of_Request_For_Provider
@@ -232,6 +262,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region GetContactAsync_For_Admin
+        /// <summary>
+        /// ONly Admin DashBord Request List
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public async Task<PaginatedViewModel> GetContactAsync(string status, PaginatedViewModel data)
         {
             List<int> statusdata = status.Split(',').Select(int.Parse).ToList();
@@ -379,7 +415,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                          RequestorPhoneNumber = req.Phonenumber,
                                                          IsFinalize = _context.Encounterforms.Any(ef => ef.Requestid == req.Requestid && ef.Isfinalize),
                                                          ModifiedDate = req.Modifieddate,
-                                                     }).OrderByDescending(x => x.ModifiedDate).ToListAsync();
+                                                     }).OrderByDescending(x => x.ModifiedDate == null ? x.RequestedDate : x.ModifiedDate).ToListAsync();
 
             int totalItemCount = allData.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
@@ -438,6 +474,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region PutViewcase
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewcase"></param>
+        /// <returns></returns>
         public async Task<Boolean> PutViewcase(Viewcase viewcase)
         {
             try
@@ -472,9 +513,61 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Email_Log
+        /// <summary>
+        /// Send Email And Add Log in Log Table
+        /// </summary>
+        /// <param name="elog"></param>
+        /// <returns></returns>
         public async Task<bool> EmailLog(Emaillogdata elog)        {            try            {                Emaillog log = new Emaillog();                //log.Emaillogid = Guid.NewGuid().ToString();                log.Emailtemplate = elog.Emailtemplate;                log.Subjectname = elog.Subjectname;                log.Emailid = elog.Emailid;                log.Roleid = elog.Roleid;                log.Createdate = DateTime.Now;                log.Sentdate = DateTime.Now;                log.Adminid =elog.Adminid;                log.Requestid = elog.Requestid;                log.Physicianid = elog.Physicianid;                log.Action = elog.Action;                log.Recipient = elog.Recipient;                if (elog.Requestid != null)                {
-                    log.Confirmationnumber = _context.Requests.FirstOrDefault(r => r.Requestid == elog.Requestid).Confirmationnumber;                }                //if (await _emailConfig.SendMail(elog.Emailid, elog.Subjectname, elog.Emailtemplate))                //{                    log.Isemailsent = new BitArray(new[] { true }); ;                //}                //else                //{                //    log.Isemailsent = new BitArray(new[] { false }); ;                //}                log.Senttries = elog.Senttries;                _context.Emaillogs.Add(log);                _context.SaveChanges();                return true;            }            catch (Exception ex)            {                return false;            }        }
+                    log.Confirmationnumber = _context.Requests.FirstOrDefault(r => r.Requestid == elog.Requestid).Confirmationnumber;                }                //if (await _emailConfig.SendMail(elog.Emailid, elog.Subjectname, elog.Emailtemplate))                //{                    log.Isemailsent = new BitArray(new[] { true }); ;
+                //}
+                //else
+                //{
+                //    log.Isemailsent = new BitArray(new[] { false }); ;
+                //}
+                //_emailConfig.SendMailWithShift("ed", "Appoiment", "Body :- Appoiment");                log.Senttries = elog.Senttries;                _context.Emaillogs.Add(log);                _context.SaveChanges();                return true;            }            catch (Exception ex)            {                return false;            }        }
         #endregion
 
+        #region SMS_Log
+        /// <summary>
+        /// Send Email And Add Log in Log Table
+        /// </summary>
+        /// <param name="elog"></param>
+        /// <returns></returns>
+        public async Task<bool> SMSLog(SMSLogsData elog)        {            try            {                Smslog log = new Smslog();
+                //log.Emaillogid = Guid.NewGuid().ToString();
+                log.Smstemplate = elog.Smstemplate;                log.Mobilenumber = elog.Mobilenumber;                log.Roleid = elog.Roleid;                log.Createdate = DateTime.Now;                log.Sentdate = DateTime.Now;                log.Adminid = elog.Adminid;                log.Requestid = elog.Requestid;                log.Physicianid = elog.Physicianid;                log.Action = elog.Action;                log.Recipient = elog.Recipient;                if (elog.Requestid != null)                {
+                    log.Confirmationnumber = _context.Requests.FirstOrDefault(r => r.Requestid == elog.Requestid).Confirmationnumber;                }
+                //if (await _emailConfig.SendMail(elog.Emailid, elog.Subjectname, elog.Emailtemplate))
+                //{
+                log.Issmssent = new BitArray(new[] { true }); ;
+                //}
+                //else
+                //{
+                //    log.Isemailsent = new BitArray(new[] { false }); ;
+                //}
+                log.Senttries = elog.Senttries;                _context.Smslogs.Add(log);                _context.SaveChanges();                return true;            }            catch (Exception ex)            {                return false;            }        }
+        #endregion
+
+        #region Email_Log_ForOnly_Shift
+        /// <summary>
+        /// Send Email With Google shift 
+        /// </summary>
+        /// <param name="elog"></param>
+        /// <returns></returns>
+        public async Task<bool> EmailLogForShift(Emaillogdata elog, DateTime StartDate , DateTime EndDate)        {            try            {                Emaillog log = new Emaillog();
+                //log.Emaillogid = Guid.NewGuid().ToString();
+                log.Emailtemplate = elog.Emailtemplate;                log.Subjectname = elog.Subjectname;                log.Emailid = elog.Emailid;                log.Roleid = elog.Roleid;                log.Createdate = DateTime.Now;                log.Sentdate = DateTime.Now;                log.Adminid = elog.Adminid;                log.Requestid = elog.Requestid;                log.Physicianid = elog.Physicianid;                log.Action = elog.Action;                log.Recipient = elog.Recipient;                if (elog.Requestid != null)                {
+                    log.Confirmationnumber = _context.Requests.FirstOrDefault(r => r.Requestid == elog.Requestid).Confirmationnumber;                }
+                if (await _emailConfig.SendMailWithShift(elog.Emailid ,elog.Subjectname, elog.Emailtemplate, StartDate,EndDate))
+                {
+                    log.Isemailsent = new BitArray(new[] { true }); ;
+                }
+                else
+                {
+                    log.Isemailsent = new BitArray(new[] { false }); ;
+                }
+                log.Senttries = elog.Senttries;                _context.Emaillogs.Add(log);                _context.SaveChanges();                return true;            }            catch (Exception ex)            {                return false;            }        }
+        #endregion
     }
 }

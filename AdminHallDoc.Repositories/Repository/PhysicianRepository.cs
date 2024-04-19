@@ -372,7 +372,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                             Npinumber = r.Npinumber,
                                             Syncemailaddress = r.Syncemailaddress,
                                             Zipcode = r.Zip,
-                                            Regionid = r.Regionid
+                                            Regionid = r.Regionid,
+                                            Mobile = r.Mobile
 
                                         })
                                         .FirstOrDefaultAsync();

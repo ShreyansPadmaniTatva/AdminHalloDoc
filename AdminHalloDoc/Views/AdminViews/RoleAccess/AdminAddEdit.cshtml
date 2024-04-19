@@ -1,6 +1,8 @@
 ﻿@using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewAdminProfile
 @{
+    ViewData["Title"] = "Admin Account Add Edit";
+
     var enumData = from AdminStatus e in Enum.GetValues(typeof(AdminStatus))
                    select new
                    {
