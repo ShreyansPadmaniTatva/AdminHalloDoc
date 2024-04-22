@@ -43,10 +43,14 @@
                 <label class="" for="floatingInput">User Name </label>
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
-            <div class="col-md-6 form-floating">
-                <input class="form-control rounded" name="Password" type="text" placeholder=Suchtext autocomplete=off>
+            <div class="col-md-6 form-floating password">
+                <input class="form-control rounded password-input" onkeyup="CheckPassword(this);" name="Password" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Password </label>
-
+                <div class="pswd">
+                    <i class="showImg bi bi-eye" onclick="passtoggle(this)"></i>
+                    <i class="showImg bi bi-eye-slash" style="display:none;" onclick="passtoggle(this)"></i>
+                </div>
+                <p id="perror" style="display:none;color:red;">Password must be 8-15 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.</p>
             </div>
 
             @if (Model != null)
@@ -64,7 +68,7 @@
             <div class="text-end edits">
                 <button type="submit" asp-action="SaveAdminInfo" asp-controller="RoleAccess" class="btn-info btn" id="saveasp" style="display:none">Save</button>
                 <div class="btn btn-info text-white" id="editasp">edit</div>
-                <button type="submit" asp-action="ResetPassAdmin" asp-controller="RoleAccess" class="text-end btn btn-outline-info " id="submitresetpass">Reset Password</button>
+                <button type="submit" asp-action="ResetPassAdmin" asp-controller="RoleAccess" class="text-end btn btn-outline-info reset" id="submitresetpass">Reset Password</button>
             </div>
 
         <h4 class=" my-4"> Administrator Information</h4>
@@ -191,6 +195,24 @@
     {
 
     <script type="text/javascript">
+        function CheckPasswordinform(inputtxt) {
+            var decimal = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+            var submitButton = $(".reset");
+            if (inputtxt.value == '') {
+                return true;
+            }
+            if (!inputtxt.value.match(decimal)) {
+                $("#perror").show();
+                submitButton.prop('disabled', true); // Disable the submit button
+                return true;
+            }
+            else {
+                $("#perror").hide();
+                submitButton.prop('disabled', false); // Disable the submit button
+                return false;
+            }
+        }
+
           function updateUsername() {
         var firstName = $('#FirstName').val().trim();
         var lastName = $('#LastName').val().trim();

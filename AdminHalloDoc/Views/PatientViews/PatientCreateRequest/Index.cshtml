@@ -2,7 +2,9 @@
 @{
     ViewData["Title"] = "Create Patient request";
     ViewData["NavCall"] = "No";
+
 }
+
 <div class="justify-content-between d-flex container-fluid my-5 position-relative ">
     <div class="">
         <h1>  Create Patient request </h1>
@@ -26,7 +28,7 @@
         <div class="col-md-6 form-floating  ">
             <input asp-for="FirstName" class="form-control rounded" name="FirstName" type="text" placeholder="First Name" autocomplete=off>
             <label class="" for="floatingInput">First Name </label>
-            <span asp-validation-for="FirstName" class="text-danger"></span>
+            <span asp-validation-for="FirstName"  class="text-danger"></span>
         </div>
         <div class="col-md-6 form-floating">
             <input asp-for="LastName" class="form-control rounded" name="LastName" type="text" placeholder=Suchtext autocomplete=off>
@@ -50,18 +52,27 @@
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
         <input id="UserId" asp-for="UserId" class="form-control rounded " name="UserId" type="hidden" placeholder=Suchtext autocomplete=off>
-            
-        
+       
+       <style>
+           
+       </style> 
         <div  class="col-md-6 form-floating password my-1" style="display:none">
-            <input id="Password" asp-for="PassWord" class="form-control rounded" name="PassWord" type="text" placeholder=Suchtext autocomplete=off>
+            <input id="Password" asp-for="PassWord" class="form-control rounded password-input" name="PassWord" onkeyup="CheckPassword(this);" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">PassWord </label>
-            <span asp-validation-for="PassWord" class="text-danger"></span>
+            <div class="pswd"  >
+                <i class="showImg bi bi-eye" onclick="passtoggle(this)"></i>
+                <i class="showImg bi bi-eye-slash" style="display:none;" onclick="passtoggle(this)"></i>
+            </div>
+            <p id="perror" style="display:none;color:red;">Password must be 8-15 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.</p>
         </div>
-        <div  class="col-md-6 password-hide password form-floating my-1" style="display:none">
 
-            <input placeholder=" " id="ConfirmPassword" class="form-control input-outline w-100 inp" onkeyup="ppd();" type="text" id="ConfirmPassword">
-                <label class="inputs-lable">Confirm Password</label>
-            
+        <div  class="col-md-6 password-hide password form-floating my-1" style="display:none">
+            <input placeholder=" " id="ConfirmPassword" class="form-control input-outline w-100 inp password-input" onkeyup="ppd();" type="text" id="ConfirmPassword">
+            <label class="inputs-lable">Confirm Password</label>
+            <div class="pswd">
+                <i class="showImg bi bi-eye" onclick="passtoggle(this)"></i>
+                <i class="showImg bi bi-eye-slash" style="display:none;" onclick="passtoggle(this)"></i>
+            </div>
             <p id="error" style="display:none;color:red;">mis match password</p>
         </div>
         <h4 class=" my-4">Patient Contact Information</h4>
@@ -103,7 +114,7 @@
         </div>
 
         <div class="text-end my-4">
-            <input type="submit" class="btn btn-info text-white" id="save" value="Create"> 
+            <input type="submit" class="btn btn-info text-white"  value="Create"> 
             <button class="btn btn-outline-info"> cancel </button>
         </div>
 
@@ -115,11 +126,11 @@
     {
 
     <script type="text/javascript">
+        
         function myFunction() {
             var val = $("#regionDashboard").val();
             $("#State").val($('#regionDashboard').find('option[value="' + val + '"]').html())
         }
-
         function ppd() {
             var password = $("#Password").val();
             var confirm_password = $("#ConfirmPassword").val();

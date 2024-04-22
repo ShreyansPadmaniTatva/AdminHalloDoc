@@ -181,8 +181,8 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         {
             string Decodee = _emailConfig.Decode(email);
             DateTime s = DateTime.ParseExact(_emailConfig.Decode(Datetime), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-            TimeSpan dif = s - DateTime.Now;
-            if (dif.Hours < 24)
+            TimeSpan dif =  DateTime.Now - s;
+            if (dif.Days == 0 && dif.Hours < 24)
             {
                 ViewBag.email = Decodee;
                 return View();
@@ -190,9 +190,9 @@ namespace AdminHalloDoc.Controllers.PatientControllers
             }
             else
             {
-                ViewBag.TotalStudents = "Url is expaier";
+                ViewBag.URl = "Url is expaier";
             }
-            return View();
+            return View("../SendAgreement/404");
         }
         #endregion
 

@@ -202,7 +202,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                   Label = "Provider",
                   ContollerAction ="/AdminDashboard/Index",
                   Url = "#",
-                   UrlList = new List<string> { "/Admin/PhysicianAll", "/Admin/Scheduling", "/Partner" },
+                   UrlList = new List<string> { "/Admin/PhysicianAll", "/Admin/Scheduling" },
                   Submenu = new List < MenuItem > {
                     new MenuItem {
                         DbName = "Provider",

@@ -568,7 +568,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             rsl.Adminid = v.AdminId;
             rsl.Notes = v.Notes;
             rsl.Createddate = DateTime.Now;
-            //rsl.Status = 2;
+            rsl.Status = 1;
             _context.Requeststatuslogs.Update(rsl);
             _context.SaveChanges();
 
@@ -609,7 +609,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                 ";
             Emaillogdata elog = new Emaillogdata();
            elog.Emailtemplate = emailContent;
-           elog.Subjectname = " for your request";
+           elog.Subjectname = "Request Agreement";
            elog.Emailid = v.Email;
            elog.Createdate = DateTime.Now;
            elog.Sentdate = DateTime.Now;

@@ -365,3 +365,35 @@ const phoneInput11 = window.intlTelInput(phoneInputField11, {
     utilsScript:
         "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
 });
+
+function CheckPassword(inputtxt) {
+    var decimal = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+    var submitButton = inputtxt.closest('form').querySelector('input[type="submit"]');
+    if (!inputtxt.value.match(decimal)) {
+        $("#perror").show();
+        submitButton.disabled = true;
+        return true;
+    }
+    else {
+        $("#perror").hide();
+        submitButton.disabled = false;
+        return false;
+    }
+} 
+
+function passtoggle(x) {
+    var parentDiv = x.closest('.password-hide, .password');
+    var passwordInput = parentDiv.querySelector('.password-input');
+    var showEyes = parentDiv.querySelectorAll('.bi-eye');
+    var hideEyes = parentDiv.querySelectorAll('.bi-eye-slash');
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        showEyes.forEach(i => i.style.display = "none");
+        hideEyes.forEach(i => i.style.display = "block");
+    } else {
+        passwordInput.type = "password";
+        hideEyes.forEach(i => i.style.display = "none");
+        showEyes.forEach(i => i.style.display = "block");
+    }
+}

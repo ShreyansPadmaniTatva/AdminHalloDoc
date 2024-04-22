@@ -78,13 +78,13 @@
                             <td class="mobile-hide" data-label="Document">
                                 @if(item.isAdmin){
                                     <a asp-action="AdminAddEdit" asp-controller="RoleAccess" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">
-                                        Edit a
+                                        Edit 
                                     </a>
                                 }
                                 else
                                 {
                                     <a asp-action="PhysicianAddEdit" asp-controller="RoleAccess" asp-route-id="@item.UserID" class="btn btn-outline-info btn-sm document-button mx-1">
-                                        Edit p
+                                        Edit 
                                     </a>
                                 }
                                 
@@ -150,9 +150,9 @@
 
                         var actionButtonsCell = $('<td class="d-flex" data-label="Document">');
                         if (item.isAdmin) {
-                            actionButtonsCell.append('<a href="/RoleAccess/AdminAddEdit/' + item.userID + '" class="btn btn-outline-info btn-sm document-button mx-1">Edit a</a>');
+                            actionButtonsCell.append('<a href="/RoleAccess/AdminAddEdit/' + item.userID + '" class="btn btn-outline-info btn-sm document-button mx-1">Edit </a>');
                         } else {
-                            actionButtonsCell.append('<a href="/RoleAccess/PhysicianAddEdit/' + item.userID + '" class="btn btn-outline-info btn-sm document-button mx-1">Edit p</a>');
+                            actionButtonsCell.append('<a href="/RoleAccess/PhysicianAddEdit/' + item.userID + '" class="btn btn-outline-info btn-sm document-button mx-1">Edit </a>');
                         } newRow.append(actionButtonsCell);
                         
                         // Append the new row to the table

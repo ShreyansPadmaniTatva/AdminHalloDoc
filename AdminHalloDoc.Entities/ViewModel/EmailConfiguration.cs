@@ -218,46 +218,6 @@ namespace AdminHalloDoc.Entities.ViewModel
 
         #endregion
 
-        //public async Task<bool> SendMailAsync(String To, String Subject, String Body, List<string> Attachments)
-        //{
-        //    MimeMessage message = new MimeMessage();
-        //    message.From.Add(new MailboxAddress("", From));
-        //    message.To.Add(new MailboxAddress("", To));
-        //    message.Subject = Subject;
-        //    message.Body = new TextPart("html")
-        //    {
-        //        Text = Body
-        //    };
-
-
-
-        //    if (Attachments != null)
-        //    {
-        //        foreach (string attachment in Attachments)
-        //        {
-        //            if (attachment != null)
-        //            {
-        //                if (File.Exists(attachment))
-        //                {
-        //                    // If file found, Send  it
-        //                    message.Attachments.Add(new Attachment(attachment));
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    message.Body = Body;
-
-        //    using (var client = new MailKit.Net.Smtp.SmtpClient())
-        //    {
-        //        await client.ConnectAsync(SmtpServer, Port, false);
-        //        await client.AuthenticateAsync(UserName, Password);
-        //        await client.SendAsync(message);
-        //        await client.DisconnectAsync(true);
-        //    }
-
-        //    return true;
-        //}
 
         #region Encode_Decode
         public string Encode(string encodeMe)

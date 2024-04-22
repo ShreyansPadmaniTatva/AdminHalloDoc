@@ -221,7 +221,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
                 if (requeststatuslog.Adminid != null)
                 {
-                    if (requeststatuslog.Status == 2 && requeststatuslog.Transtophysicianid != null)
+                    if (requeststatuslog.Status == 2 )
                     {
                         return "Admin " + admin.Firstname + " " + admin.Lastname + " transferred to Physician " + transphysician.Firstname + " " + transphysician.Lastname + " on " + requeststatuslog.Createddate.ToString();
                     }
@@ -231,13 +231,14 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     }
                 }
 
-                if (requeststatuslog.Physicianid != null)
-                {
+              
                     if (requeststatuslog.Status == 3)
                     {
                         return "Physician " + physician.Firstname + " " + physician.Lastname + " cancelled on " + requeststatuslog.Createddate.ToString();
                     }
-                    return "";
+                if (requeststatuslog.Status == 8)
+                {
+                    return "Physician " + physician.Firstname + " " + physician.Lastname + " cancelled on " + requeststatuslog.Createddate.ToString();
                 }
 
                 if (requeststatuslog.Adminid == null && requeststatuslog.Physicianid == null)
@@ -251,13 +252,24 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         return "Patient rejected agreement on " + requeststatuslog.Createddate.ToString();
                     }
                 }
+                if (requeststatuslog.Physicianid != null)
+                {
+                    if (requeststatuslog.Status == 1)
+                    {
+                        return "Physician " + physician.Firstname + " " + physician.Lastname + " Assign on " + requeststatuslog.Createddate.ToString();
+                    }
+                    if (requeststatuslog.Status == 2)
+                    {
+                        return "Physician " + physician.Firstname + " " + physician.Lastname + " Assign on " + requeststatuslog.Createddate.ToString();
+                    }
+                }
             }
             else
             {
                 return request.Notes;
             }
 
-            return "";
+            return requeststatuslog.Status.ToString();
         }
         #endregion
 
@@ -519,13 +531,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <param name="elog"></param>
         /// <returns></returns>
         public async Task<bool> EmailLog(Emaillogdata elog)        {            try            {                Emaillog log = new Emaillog();                //log.Emaillogid = Guid.NewGuid().ToString();                log.Emailtemplate = elog.Emailtemplate;                log.Subjectname = elog.Subjectname;                log.Emailid = elog.Emailid;                log.Roleid = elog.Roleid;                log.Createdate = DateTime.Now;                log.Sentdate = DateTime.Now;                log.Adminid =elog.Adminid;                log.Requestid = elog.Requestid;                log.Physicianid = elog.Physicianid;                log.Action = elog.Action;                log.Recipient = elog.Recipient;                if (elog.Requestid != null)                {
-                    log.Confirmationnumber = _context.Requests.FirstOrDefault(r => r.Requestid == elog.Requestid).Confirmationnumber;                }                //if (await _emailConfig.SendMail(elog.Emailid, elog.Subjectname, elog.Emailtemplate))                //{                    log.Isemailsent = new BitArray(new[] { true }); ;
-                //}
-                //else
-                //{
-                //    log.Isemailsent = new BitArray(new[] { false }); ;
-                //}
-                //_emailConfig.SendMailWithShift("ed", "Appoiment", "Body :- Appoiment");                log.Senttries = elog.Senttries;                _context.Emaillogs.Add(log);                _context.SaveChanges();                return true;            }            catch (Exception ex)            {                return false;            }        }
+                    log.Confirmationnumber = _context.Requests.FirstOrDefault(r => r.Requestid == elog.Requestid).Confirmationnumber;                }                if (await _emailConfig.SendMail(elog.Emailid, elog.Subjectname, elog.Emailtemplate))                {                  log.Isemailsent = new BitArray(new[] { true }); ;
+                }
+                else
+                {
+                    log.Isemailsent = new BitArray(new[] { false }); ;
+                }
+                log.Senttries = elog.Senttries;                _context.Emaillogs.Add(log);                _context.SaveChanges();                return true;            }            catch (Exception ex)            {                return false;            }        }
         #endregion
 
         #region SMS_Log

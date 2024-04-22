@@ -1652,3 +1652,16 @@ div.dt-scroll-body > table.dataTable > thead > tr > td {
         transform: rotate(360deg);
     }
 }
+.pswd {
+    display: flex;
+    justify-content: end;
+}
+
+    .pswd i {
+        position: relative;
+        bottom: 45px;
+        right: 15px;
+        font-size: 20px;
+        width: fit-content;
+        cursor: pointer;
+    }

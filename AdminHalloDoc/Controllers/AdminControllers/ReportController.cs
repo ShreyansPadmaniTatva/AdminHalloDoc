@@ -25,7 +25,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion 
 
         #region Dashboerd_excel
-        [AdminAuth("Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DownloadExcel(PaginatedViewModel details, string status)
@@ -116,7 +115,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region SearchRecords_excel
-        [AdminAuth("Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DownloadExcelForSearchRecords(RecordsModel rm)

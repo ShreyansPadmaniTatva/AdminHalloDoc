@@ -85,7 +85,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                         PhysicianNote = nt != null ? nt.Physiciannotes ?? "-" : "-",
                                                         PatientNote = rc.Notes ?? "-",
                                                         Zip = rc.Zipcode ?? "-"
-                                                    }).ToList();
+                                                    }).OrderBy(x => x.Modifieddate == null ? x.DateOfService : x.Modifieddate).ToList();
 
 
             if (rm.IsAscending == true)
@@ -101,7 +101,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 allData = rm.SortedColumn switch
                 {
                     "CloseCaseDate" => allData.OrderByDescending(x => x.Modifieddate).ToList(),
-                    _ => allData.OrderBy(x => x.DateOfService).ToList()
+                    _ => allData.OrderByDescending(x => x.DateOfService).ToList()
                 };
             }
 

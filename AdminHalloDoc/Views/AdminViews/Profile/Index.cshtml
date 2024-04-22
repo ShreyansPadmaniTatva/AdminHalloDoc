@@ -41,12 +41,18 @@
                 <input asp-for="UserName" disabled class="form-control rounded" name="UserName" type="text" placeholder="First Name" autocomplete=off>
                 <label class="" for="floatingInput">User Name </label>
             </div>
-            <div class="col-md-6 form-floating">
-                <input class="form-control rounded" name="Password" id="passwordInput" type="text" placeholder=Suchtext autocomplete=off>
+            <div class="col-md-6 form-floating password">
+                <input class="form-control rounded password-input" name="Password" id="passwordInput" type="text" placeholder=Suchtext onkeyup="CheckPasswordinform(this);" autocomplete=off>
                 <label for="floatingInput">Password </label>
                 <div class="invalid-feedback invalid-feedback-pass">
                     Please  Add PassWord
                 </div>
+                <div class="pswd">
+                    <i class="showImg bi bi-eye" onclick="passtoggle(this)"></i>
+                    <i class="showImg bi bi-eye-slash" style="display:none;" onclick="passtoggle(this)"></i>
+                </div>
+                <p id="perror" style="display:none;color:red;">Password must be 8-15 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.</p>
+
             </div>
 
             <div class="col-md-6 form-floating">
@@ -58,7 +64,7 @@
                 </select>
             </div>
             <div class="text-end edits">
-                <div class="text-end btn btn-outline-info " id="submitresetpass">Reset Password</div>
+                <div class="text-end btn btn-outline-info reset"  id="submitresetpass">Reset Password</div>
             </div>
         </form>
 
@@ -201,6 +207,23 @@
     {
 
     <script type="text/javascript">
+        function CheckPasswordinform(inputtxt) {
+            var decimal = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+            var submitButton = $(".reset");
+            if (inputtxt.value == '') { 
+                return true;
+            }
+            if (!inputtxt.value.match(decimal)) {
+                $("#perror").show();
+                submitButton.prop('disabled', true); // Disable the submit button
+                return true;
+            }
+            else {
+                $("#perror").hide();
+                submitButton.prop('disabled', false); // Disable the submit button
+                return false;
+            }
+        }
         function enable_disable_mailBilling() {
             $(".mail-billing-imp").prop("disabled", false);
 
@@ -351,9 +374,18 @@
                 }
             });
         }
+
         document.getElementById('submitresetpass').addEventListener('click', function () {
             // Get the value of the password input field
             var password = document.getElementById('passwordInput').value;
+            var passwordInput = $("#passwordInput").val(); // Assuming your password input has the id "passwordInput"
+
+            // Check if the password is null or doesn't meet the criteria
+            if ( !passwordInput.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/)) {
+                alert("Please enter a valid password.");
+                return;
+            }
+
             // Check if password is empty
             if (!password) {
                 // Display alert if password is empty

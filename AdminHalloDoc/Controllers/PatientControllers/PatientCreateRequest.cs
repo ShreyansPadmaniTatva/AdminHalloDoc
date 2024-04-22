@@ -69,8 +69,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         #endregion
 
         #region Post
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+       
         public async Task<IActionResult> Post(ViewPatientCreateRequest viewpatientcreaterequest)
         {
             if (_patientRequestRepository.IsEmailBlock(viewpatientcreaterequest.Email))

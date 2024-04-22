@@ -61,10 +61,15 @@
                 <label class="" for="floatingInput">User Name </label>
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
-            <div class="col-md-6 form-floating">
-                <input class="form-control rounded asp" asp-for="PassWord" name="Password" type="password" placeholder=Suchtext autocomplete=off>
+            <div class="col-md-6 form-floating password">
+                <input class="form-control rounded asp password-input" onkeyup="CheckPasswordinform(this);" asp-for="PassWord" name="Password" type="password" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Password </label>
                 <span asp-validation-for="PassWord" class="text-danger"></span>
+                <div class="pswd">
+                    <i class="showImg bi bi-eye" onclick="passtoggle(this)"></i>
+                    <i class="showImg bi bi-eye-slash" style="display:none;" onclick="passtoggle(this)"></i>
+                </div>
+                <p id="perror" style="display:none;color:red;">Password must be 8-15 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.</p>
 
             </div>
             @{
@@ -80,7 +85,7 @@
                 <div class="text-end editable edits" style="display:none">
                     <button type="submit" asp-action="SavePhysicianInfo" asp-controller="Physician" class="btn-info btn" id="saveasp" style="display:none">Save</button>
                     <div class="btn btn-info" id="editasp">edit</div>
-                    <button class="text-end btn btn-outline-info " asp-action="ResetPassAdmin" asp-controller="Physician" id="submitresetpass">Reset Password</button>
+                    <button class="text-end btn btn-outline-info reset" disabled asp-action="ResetPassAdmin" asp-controller="Physician" id="submitresetpass">Reset Password</button>
                 </div>
             }
              else if(Model == null ){
@@ -92,7 +97,7 @@
             else
             {
                 <div class="text-end editable edits" style="display:none">
-                    <button class="text-end btn btn-outline-info " asp-action="ResetPassAdmin" asp-controller="Physician" id="submitresetpass">Reset Password</button>
+                        <button class="text-end btn btn-outline-info reset" disabled asp-action="ResetPassAdmin" asp-controller="Physician" id="submitresetpass">Reset Password</button>
                 </div>
             }
             }
@@ -540,12 +545,41 @@
     {
 
     <script type="text/javascript">
+        function CheckPasswordinform(inputtxt) {
+            var decimal = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+            var submitButton = $(".reset");
+            if (inputtxt.value == '') {
+                return true;
+            }
+            if (!inputtxt.value.match(decimal)) {
+                $("#perror").show();
+                        submitButton.prop('disabled', true); // Disable the submit button
+                return true;
+            }
+            else {
+                $("#perror").hide();
+                        submitButton.prop('disabled', false); // Disable the submit button
+                return false;
+            }
+        }
+
         var loginId = @CV.UserID();
         var providerId = @(Model != null ? Model.Physicianid : -1);
         if(loginId == providerId){
             $('.not-show').hide();
         }
         $(function () {
+
+            $(".reset").click(function () {
+                var passwordInput = $("#PassWord").val(); // Assuming your password input has the id "passwordInput"
+                var submitButton = $("#submitresetpass");
+                // Check if password is null
+                // Check if the submit button is disabled
+                if (submitButton.prop('disabled')) {
+                    alert("Please enter a valid password before resetting.");
+                    return false; // Prevent form submission
+                }
+            });
             $('#edit-mail-billing').on('click', function (e) {
                 $('.mail-billing-imp').prop('disabled', false);
                 $('#save-mail-billing').show();
