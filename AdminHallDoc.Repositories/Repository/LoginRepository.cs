@@ -229,7 +229,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                   }
               },
               new MenuItem {
-                        DbName = "Invoicing",
+                        DbName = "P-Invoicing",
                       Label = "Invoicing",
                         Url = "#",
                        UrlList = new List<string> { "/Scheduling/Index" },
