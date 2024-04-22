@@ -129,7 +129,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #region For_Dynamic_Menu
         /// <summary>
         /// This Class for Define Or Store all Static Menu
-        /// this class created here because This Class can not crate Static
+        /// this class created here because This Class can not in Constant With  Static KeyWord !imp
         /// </summary>
         public class MenuItem
         {
@@ -228,6 +228,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     }
                   }
               },
+              new MenuItem {
+                        DbName = "Invoicing",
+                      Label = "Invoicing",
+                        Url = "#",
+                       UrlList = new List<string> { "/Scheduling/Index" },
+                        ContollerAction ="/Reports",
+                    },
               new MenuItem {
                   DbName ="Partner",
                 Label = "Partner",

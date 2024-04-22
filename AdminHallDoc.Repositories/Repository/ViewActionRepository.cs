@@ -540,7 +540,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             rsl.Requestid = (int)v.RequestID;
             rsl.Notes = v.Notes;
             rsl.Physicianid = v.AdminId;
-
             rsl.Createddate = DateTime.Now;
             rsl.Status = 2;
             _context.Requeststatuslogs.Update(rsl);

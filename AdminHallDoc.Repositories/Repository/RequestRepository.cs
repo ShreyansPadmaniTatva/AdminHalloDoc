@@ -238,7 +238,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     }
                 if (requeststatuslog.Status == 8)
                 {
-                    return "Physician " + physician.Firstname + " " + physician.Lastname + " cancelled on " + requeststatuslog.Createddate.ToString();
+                    return "Patient  " + physician.Firstname + " " + physician.Lastname + " cancelled on " + requeststatuslog.Createddate.ToString();
                 }
 
                 if (requeststatuslog.Adminid == null && requeststatuslog.Physicianid == null)
@@ -392,10 +392,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             List<ViewDashboardList> allData = await (from req in _context.Requests
                                                      join reqClient in _context.Requestclients
+
                                                      on req.Requestid equals reqClient.Requestid into reqClientGroup
                                                      from rc in reqClientGroup.DefaultIfEmpty()
+
                                                      join phys in _context.Physicians
                                                      on req.Physicianid equals phys.Physicianid into physGroup
+
                                                      from p in physGroup.DefaultIfEmpty()
                                                      join reg in _context.Regions
                                                      on rc.Regionid equals reg.Regionid into RegGroup
