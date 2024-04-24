@@ -1,0 +1,100 @@
+:root, [data-theme="light"] {
+    --primary-color: #326c9b;
+    --nav-active: #34b9bb;
+    --body-color: #FAFAFA;
+    --white-color: #FFFFFF;
+    --secondary-color: #b6bad8;
+}
+body {
+    font-family: sans-serif;
+}
+
+.btn-theme{
+    color:var(--white-color);
+    background-color:var(--primary-color) !important;
+}
+.bg-theme {
+    background-color: var(--primary-color) !important;
+}
+/* form */
+.form-s-control {
+    position: relative;
+}
+
+.form-s-label {
+    position: absolute;
+    font-size: 1rem;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    color: var(--primary-color);
+    padding: 0 0.3rem;
+    margin: 0 0.5rem;
+    transition: .1s ease-out;
+    transform-origin: left top;
+    pointer-events: none;
+}
+
+.form-s-outline {
+    font-size: 1rem;
+    outline: none;
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    padding: 1rem 0.7rem;
+    color: black;
+    transition: 0.1s ease-out;
+}
+
+    .form-s-outline:focus {
+        border-color: var(--primary-color);
+    }
+
+        .form-s-outline:focus + .form-s-label {
+            color: var(--secondary-color);
+            top: 0;
+            transform: translateY(-50%) scale(.9);
+        }
+
+    .form-s-outline:not(:placeholder-shown) + .form-s-label {
+        top: 0;
+        transform: translateY(-50%) scale(.9);
+    }
+.autocomplete {
+    position: relative;
+    display: inline-block;
+}
+
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+
+    .autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
+    }
+
+        /*when hovering an item:*/
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+}
+.theme-nav{
+    background-color:var(--primary-color);
+}

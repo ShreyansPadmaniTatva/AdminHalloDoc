@@ -1,0 +1,150 @@
+﻿@using System.Globalization;
+@using static LibraryManagement.Entities.ViewModel.Constant;
+@model LibraryManagement.Entities.ViewModel.BookModel;
+
+<div class="table-responsive">
+    <table class="table table-responsive mt-3 p-3 dataTable" id="table">
+
+        <thead class=" text-start text-secondary tablehead">
+            <tr>
+                <th class="dashborad-table " scope="col">BookID</th>
+                <th class="dashborad-table " scope="col">Book Name</th>
+                <th class="dashborad-table " scope="col">Author</th>
+                <th class="dashborad-table " scope="col">Brrower Name</th>
+                <th class="dashborad-table " scope="col">Date Of Issue</th>
+                <th class="dashborad-table " scope="col">City</th>
+                <th class="dashborad-table " scope="col">Genere </th>
+                <th class="dashborad-table " scope="col">Action </th>
+
+            </tr>
+        </thead>
+        <tbody class="table-group-divider mx-5">
+            @{
+                int i = 0;
+            }
+           @foreach (var item in Model.BookList)
+            {
+
+                <tr>
+                    <td scope="col">@(i = i+1) </td>
+                    <td scope="col">@item.Bookname Name</td>
+                    <td scope="col">@item.Author</td>
+                    <td scope="col">@item.BorrowerName</td>
+                    <td scope="col">@item.Dateofissue</td>
+                    <td scope="col">@item.City</td>
+                    <td scope="col">@Enum.GetName(typeof(Genere), item.Genere) </td>
+                    <td class=" d-flex" scope="col">
+                        <a data-form-id="formEdit_UMS"
+                           data-url='@Url.Action("_AddBook", "Home")?BookId=@item.Bookid'
+                           class="js-stkModal-btn text-white btn-theme btn btn-outline-light btn-sm ">
+                            Edit
+                        </a>
+                        <form class="deleteform" asp-action="BookDelete" asp-controller="Home">
+                            <input type="hidden" name="BookId" value="@item.Bookid" />
+                            <div class="btn btn-dark  btn-sm document-button mx-1 delete">
+                                Delete
+                            </div>
+                        </form>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div aria-label="Page navigation example" class="d-flex justify-content-between">
+        <div>
+            <form id="filterFormlistp" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                  asp-action="_SearchResultBook" asp-controller="Home" novalidate="novalidate">
+
+                <input type="hidden" asp-for="CurrentPage"  />
+                <input type="hidden" asp-for="SearchInput" />
+                <input type="hidden" asp-for="Borrowerid" />
+                <input type="submit" class="d-none" id="filterFormlistpbtn" />
+                <span>Item Per Page :</span>
+                <select class="form-select Paging" asp-for="PageSize" onchange="page()" type="submit" data-allow-clear="true" tabindex="-1" id="Paging" data-control="select" data-placeholder="Borrower">
+                    <option value="10" >10</option>
+                    <option value="15">15</option>
+                    <option value="5">5</option>
+                </select>
+            </form>
+        </div>
+
+        <ul class="pagination pagination-container text-secondary d-flex justify-content-end">
+            <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                  asp-action="_SearchResultBook" asp-controller="Home" novalidate="novalidate">
+
+                <input type="hidden" asp-for="CurrentPage" value="@(Model.CurrentPage-1)" />
+                <input type="hidden" asp-for="PageSize" />
+                <input type="hidden" asp-for="SearchInput" />
+
+            <li class="page-item mx-1 rounded"><button type="submit" class="@(Model.CurrentPage > 1 ? "" : "disabled") dt-paging-button previous page-link" @(Model.CurrentPage > 1 ? "" : "disabled")>‹</button></li>
+
+            </form>
+            @{
+                int start;
+                //<li class="page-item"><a class="page-link">&lt;</a></li>
+                @for (start = 1; start <= @Model.TotalPages; start++)
+                {
+                    <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                          asp-action="_SearchResultBook" asp-controller="Home" novalidate="novalidate">
+                        <input type="hidden" asp-for="PageSize" />
+                        <input type="hidden" asp-for="SearchInput" />
+                        <input type="hidden" asp-for="CurrentPage" value="@start" />
+                    <li class="page-item mx-1 rounded text-secondary"><button type="submit" class="@(start == @Model.CurrentPage ? "active" : "") rounded page-link" onclick="pagination(@start)">@start</button></li>
+                    </form>
+
+                }
+                //<li class="page-item"><a class="page-link">&gt;</a></li>
+            }
+            <form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+                  asp-action="_SearchResultBook" asp-controller="Home" novalidate="novalidate">
+
+                <input type="hidden" asp-for="CurrentPage" value="@(Model.CurrentPage+1)" />
+                <input type="hidden" asp-for="PageSize" />
+                <input type="hidden" asp-for="SearchInput" />
+                <input type="hidden" asp-for="IsAscending" />
+                <input type="hidden" asp-for="SortedColumn" />
+            <li class="page-item mx-1 rounded"><button type="submit" class="@(Model.CurrentPage < Model.TotalPages ? "" : "disabled") dt-paging-button previous page-link" @(Model.CurrentPage < Model.TotalPages ? "" : "disabled")>›</button></li>
+
+            </form>
+        </ul>
+    </div>
+   
+</div>
+<form id="filterFormlist" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+      asp-action="_SearchResultBook" asp-controller="Home" novalidate="novalidate">
+
+    <input type="hidden" asp-for="CurrentPage" />
+    <input type="hidden" asp-for="SearchInput" />
+    <input type="hidden" asp-for="PageSize" />
+    <input type="hidden" id="isAsc" asp-for="IsAscending" />
+    <input type="hidden" id="sortedcol" asp-for="SortedColumn" />
+    <input type="submit" id="dashbordsubmit" class="d-none" />
+</form>
+<script>
+   
+    var deleteButtons = document.querySelectorAll('.delete');
+
+    deleteButtons.forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            var form = button.closest('.deleteform');
+            var vendorIdInput = form.querySelector('input[name="BookId"]');
+            var vendorId = vendorIdInput.value;
+
+            Swal.fire({
+                title: "Do you want to delete this Book?",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: "No"
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>

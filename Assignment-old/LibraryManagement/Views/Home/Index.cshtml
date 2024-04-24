@@ -1,0 +1,106 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    var status = "null";
+    if (TempData["Status"] == null)
+    {
+        status = "null";
+    }
+    else
+    {
+        status = TempData["Status"].ToString();
+
+    }
+}
+
+@model LibraryManagement.Entities.ViewModel.BookModel
+<div class="container-fluid my-5">
+    <div class="d-flex justify-content-between" >
+        <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+          asp-action="_SearchResultBook" asp-controller="Home" novalidate="novalidate">
+            @Html.AntiForgeryToken()
+
+            <div class="row col-xl-12">
+                <div class="col-sm-6">
+                    <input id="getSearchInput" asp-for="SearchInput" class="form-control  w-100" type="text"
+                           placeholder='Search Patients'>
+                </div>
+                <div class="col-sm-6">
+                    <div class="">
+
+                        <select class="form-select  w-100 BorrowerCmbo" asp-for="Borrowerid" data-allow-clear="true" tabindex="-1" id="BorrowerCmbo" asp-items="@(new SelectList(ViewBag.ComboBoxBorrower, "BrrowerId", "BrrowerName"))" data-control="select" data-placeholder="Borrower">
+                            <option id="defaultregion" value="">All Borrower</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" class="d-none" id="submit" value="save" />
+        </form>
+
+        <div class="d-flex justify-content-end" >
+            <a class="storeToLocalStorage btn btn-success btn-theme text-dark js-stkModal-btn mx-2 p-2 fw-bold"
+               data-date=""
+               data-form-id="formEdit_UMS"
+               data-url='@Url.Action("_AddBook", "Home")'
+               data-modal-size="lg">Add  Book  </a>
+        </div>
+
+    </div>
+    
+
+    <div id="SearchResult">
+    </div>
+</div>
+
+<script>
+      window.onload = function () {
+        $("#submit").click();
+        console.log("@status  d");
+        if ("@status" != "null") {
+            savealt("@status")
+        }
+        
+
+    };
+    function initDataTable(tableSelector) {
+        $(tableSelector).DataTable({
+            "scrollY": "300px",
+            "scrollCollapse": true,
+            "paging": false,
+            "order": [],
+            //"scroller": true,
+            //"stateSave": true,
+            "scrollX": true
+        });
+    }
+
+
+
+
+
+    function OnSuccess(formID) {
+
+
+        if (formID === "formAdd_UMS") {
+        }
+
+
+        if (formID === "formEdit_UMS") {
+        }
+
+        if (formID === "formAddEditSave_UMS") {
+         
+            $("#filterForm").submit();
+            toastr.success("Record saved successfully..!");
+        }
+
+        if (formID === "formAddEditMultiSave_UMS") {
+            $("#filterForm").submit();
+            toastr.success("Record saved successfully..!");
+        }
+
+        if (formID === "formDelete_UMS") {
+            $("#filterForm").submit();
+            toastr.success("Record deleted successfully..!");
+        }
+    }
+</script>
