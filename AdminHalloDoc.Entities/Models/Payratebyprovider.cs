@@ -19,10 +19,6 @@ public partial class Payratebyprovider
     [Column("physicianid")]
     public int Physicianid { get; set; }
 
-    [Column("payrate")]
-    [StringLength(128)]
-    public string Payrate { get; set; } = null!;
-
     [Column("createdby")]
     [StringLength(128)]
     public string Createdby { get; set; } = null!;
@@ -36,6 +32,10 @@ public partial class Payratebyprovider
 
     [Column("modifieddate", TypeName = "timestamp without time zone")]
     public DateTime? Modifieddate { get; set; }
+
+    [Column("payrate")]
+    [Precision(8, 3)]
+    public decimal Payrate { get; set; }
 
     [ForeignKey("Createdby")]
     [InverseProperty("PayratebyproviderCreatedbyNavigations")]

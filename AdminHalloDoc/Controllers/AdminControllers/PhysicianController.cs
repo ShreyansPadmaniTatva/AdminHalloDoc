@@ -6,6 +6,7 @@ using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -332,6 +333,29 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
 
         #endregion
+
+        #region Edit_Payrate
+        public async Task<IActionResult> PhysicianPayrate(string? physicianid)
+        {
+            var v = await _physicianRepository.PhysicianPayrate((int)physicianid.Decode());
+             return View("../AdminViews/Physician/Payrate", v);
+
+        }
+        #endregion
+        #region Save_Payrate
+        public async Task<IActionResult> SavePayrate(int PayrateId,decimal? Payrate,int? physicianid)
+        {
+            if (await _physicianRepository.SavePayrate(PayrateId, Payrate,CV.ID()))
+            {
+
+                TempData["Status"] = "Update Data Successfully..!";
+            }
+
+            return RedirectToAction("PhysicianPayrate",new { physicianid= physicianid.Encode() });
+
+        }
+        #endregion
+
 
     }
 }

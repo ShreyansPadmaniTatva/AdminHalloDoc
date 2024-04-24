@@ -1,0 +1,116 @@
+﻿@using AdminHalloDoc.Entities.ViewModel;
+@using AdminHalloDoc.Models.CV;
+@using static AdminHalloDoc.Entities.ViewModel.Constant;
+@model List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.PhysicianPayrate>
+@{
+    ViewData["Title"] = "Physician";
+    var enumData = from AdminStatus e in Enum.GetValues(typeof(AdminStatus))
+                   select new
+                   {
+                       ID = (int)e,
+                       Name = e.ToString()
+                   };
+
+    var status = "null";
+    if (TempData["Status"] == null)
+    {
+        status = "null";
+    }
+    else
+    {
+        status = TempData["Status"].ToString();
+
+    }
+}
+@{
+    string disable = Model == null ? "disabled" : "";
+}
+
+<div class="container">
+    <div class="justify-content-between d-flex container-fluid mb-3 position-relative ">
+        <div class="">
+            <h1>
+                Payrate
+            </h1>
+        </div>
+        <div>
+            <a href="javascript:void(0)" onclick="goBack()" class="btn btn-outline-info"> ❮  Back </a>
+        </div>
+    </div>
+    <div class="card border-0 shadow p-4 mb-5  rounded">
+        <div id="table" class="table-responsive  d-md-block">
+            <table class="table table-responsive mt-3 p-3 text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">Category </th>
+                        <th scope="col">Payrate </th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider mx-5">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="edit-form">
+
+                                <td scope="row" data-label="Created Date">@item.Category</td>
+                                <td scope="row" class="upper-tab" data-label="Created Date">
+                                    <div class=" form-floating ">
+                                        <input  value="@item.Payrate" name="Payrate" class="pay-in form-control form-control-disable rounded mail-billing-imp" type="text" placeholder=Suchtext autocomplete=off disabled>
+                                        <label for="floatingInput">Payrate </label>
+                                    </div>
+                                    </td>
+                                <td class="" data-label="Document">
+                                <form asp-action="SavePayrate" asp-controller="Physician" >
+                                    <input name="PayrateId" value="@item.PayrateId" type="hidden" />
+                                    <input name="Payrate" class="payrate" type="hidden" />
+                                    <input name="physicianid" value="@item.PhysicianId" type="hidden" />
+                                    <div class="btn btn-outline-info edit-btn">Edit</div>
+                                    <input type="submit" value="Submit" class="btn btn-outline-info submit-btn" style="display: none;" />
+                             </form>
+                                </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+  
+</script>
+
+@section Scripts
+    {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".edit-btn").click(function () {
+                // Get the form associated with this button
+                var form = $(this).closest(".edit-form");
+                console.log(form.closest(".upper-tab"));
+                // Enable the input field and show the submit button
+                form.find(".pay-in").prop("disabled", false);
+                form.find(".submit-btn").show();
+                $(this).hide(); // Hide the edit button
+            });
+           
+            $(".pay-in").on("input", function () {
+                // Get the updated value
+                var newValue = $(this).val();
+                // Update the value of the hidden input field
+                $(this).closest("tr").find(".payrate").val(newValue);
+            });
+        });
+
+
+        window.onload = function () {
+            console.log("@status  d");
+            if ("@status" != "null") {
+                savealt("@status")
+            }
+
+        };
+        </script>
+        }

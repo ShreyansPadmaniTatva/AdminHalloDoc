@@ -7,6 +7,7 @@ using AdminHalloDoc.Repositories.Patient.Repository;
 using AdminHalloDoc.Repositories.Patient.Repository.Interface;
 using Rotativa.AspNetCore;
 using System.Net;
+using System.Text.Json.Serialization;
 using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,7 +36,7 @@ var smsConfig = builder.Configuration
 
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddSingleton(smsConfig);
-
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 //Admin Repository
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IViewActionRepository, ViewActionRepository>();
@@ -47,6 +48,7 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IRoleAccessRepository, RoleAccessRepository>();
 builder.Services.AddScoped<ISchedulingRepository, SchedulingRepository>();
 builder.Services.AddScoped<IRecordsRepository, RecordsRepository>();
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 
 //Patient Repository
 builder.Services.AddScoped<IPatientDashboardRepository, PatientDashboardRepository>();

@@ -34,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\AdminViews\Invoice\" />
     <Folder Include="wwwroot\Rotativa\" />
     <Folder Include="wwwroot\Upload\59\" />
   </ItemGroup>

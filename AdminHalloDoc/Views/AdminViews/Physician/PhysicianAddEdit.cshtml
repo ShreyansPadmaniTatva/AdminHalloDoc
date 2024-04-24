@@ -1,4 +1,5 @@
-﻿@using AdminHalloDoc.Models.CV;
+﻿@using AdminHalloDoc.Entities.ViewModel;
+@using AdminHalloDoc.Models.CV;
 @using static AdminHalloDoc.Entities.ViewModel.Constant;
 @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians;
 @{
@@ -170,7 +171,9 @@
             @if (Model != null && Model.Physicianid != Convert.ToInt32(CV.UserID()))
             {
                 <div class="text-end edits">
-
+                    <a asp-action="PhysicianPayrate" asp-controller="Physician" asp-route-physicianid="@(Model != null ? Model.Physicianid.Encode() : null)" class="btn  btn-info text-white btn-submit ">
+                       Enter Payrate
+                    </a>
                     <a onclick="enable_disable_administration()" id="admin-input-edit" class="btn  btn-info text-white btn-submit ">
                         Edit
                     </a>

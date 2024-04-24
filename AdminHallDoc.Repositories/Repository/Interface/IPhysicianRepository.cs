@@ -26,5 +26,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<bool> GetLocation(int PhysicianId);
         List<Physician> isProviderEmailExist(string Email);
         List<AdminHalloDoc.Entities.Models.Admin> isAdminEmailExist(string Email);
+        Task<List<PhysicianPayrate>> PhysicianPayrate(int PhysicianId);
+        Task<bool> SavePayrate(int PayrateId, decimal? Payrate, string AdminId);
     }
 }

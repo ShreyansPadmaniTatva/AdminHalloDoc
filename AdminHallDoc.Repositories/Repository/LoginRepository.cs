@@ -222,8 +222,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     new MenuItem {
                         DbName = "Invoicing",
                       Label = "Invoicing",
-                        Url = "#",
-                       UrlList = new List<string> { "/Scheduling/Index" },
+                        Url = "/Invoice/Index",
+                       UrlList = new List<string> { "/Invoice/Index" },
                         ContollerAction ="/Reports",
                     }
                   }
@@ -231,8 +231,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
               new MenuItem {
                         DbName = "P-Invoicing",
                       Label = "Invoicing",
-                        Url = "#",
-                       UrlList = new List<string> { "/Scheduling/Index" },
+                        Url = "/Invoice/Index",
+                       UrlList = new List<string> { "/Invoice/Index" },
                         ContollerAction ="/Reports",
                     },
               new MenuItem {

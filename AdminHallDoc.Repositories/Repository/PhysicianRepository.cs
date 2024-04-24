@@ -313,6 +313,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     _context.Physicians.Add(Physician);
                      _context.SaveChanges();
 
+                    // Add All Doc File
                     CM.UploadProviderDoc(physiciandata.Agreementdoc, Physician.Physicianid, "Agreementdoc.pdf");
                     CM.UploadProviderDoc(physiciandata.BackGrounddoc, Physician.Physicianid, "BackGrounddoc.pdf");
                     CM.UploadProviderDoc(physiciandata.NonDisclosuredoc, Physician.Physicianid, "NonDisclosuredoc.pdf");
@@ -320,12 +321,17 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     CM.UploadProviderDoc(physiciandata.Trainingdoc, Physician.Physicianid, "Trainingdoc.pdf");
 
                     CM.UploadProviderDoc(physiciandata.SignatureFile, Physician.Physicianid, Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Signature.png");
+                    if (physiciandata.PhotoFile != null)
+                    {
                     CM.UploadProviderDoc(physiciandata.PhotoFile, Physician.Physicianid, Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Photo."+ Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.'));
+
+                    }
 
                     // Physician_region
                     List<int> priceList = physiciandata.Regionsid.Split(',').Select(int.Parse).ToList();
                     foreach (var item in priceList)
-                    {
+                    {       
+                            // Add Region
                             Physicianregion ar = new Physicianregion();
                             ar.Regionid = item;
                             ar.Physicianid = (int)Physician.Physicianid;
@@ -334,11 +340,25 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         
                     }
 
-                    
-                }
+                    // Payrate
+                    List<Payratecategory> df = _context.Payratecategories.ToList();
+                    foreach (var item in df)
+                    {
+                    var Payratebyprovider = new Payratebyprovider();
+                        Payratebyprovider.Payratecategory = item;
+                        Payratebyprovider.Physicianid = Physician.Physicianid;
+                        Payratebyprovider.Createddate = DateTime.Now;
+                        Payratebyprovider.Createdby = AdminId;
+                        Payratebyprovider.Payrate = 0;
+                        _context.Payratebyproviders.Add(Payratebyprovider);
+                        _context.SaveChanges();
+                    }
+                    return true;
+
+                    }
                 else
                 {
-
+                    return false;
                 }
                 return true;
             }
@@ -989,6 +1009,72 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
             List<AdminHalloDoc.Entities.Models.Admin> data = _context.Admins.Where(e => e.Email.ToLower().Equals(Email.ToLower())).ToList();
             return data;
+        }
+        #endregion
+
+        #region Payrate_Physician_Data
+        /// <summary>
+        ///  get paticuler non deleted Physician Payrate Data 
+        /// </summary>
+        /// <param name="PhysicianId"></param>
+        /// <returns></returns>
+        public async Task<List<PhysicianPayrate>> PhysicianPayrate(int PhysicianId)
+        {
+
+
+            List<PhysicianPayrate> pl = await _context.Payratebyproviders
+                                 .Join(
+                                     _context.Physicians,
+                                     pl => pl.Physicianid,
+                                     r => r.Physicianid,
+                                     (pl, r) => new { Payratebyproviders = pl, Physician = r }
+                                 ).Where(r => r.Payratebyproviders.Physicianid == PhysicianId && r.Physician.Isdeleted == new BitArray(new[] {false}))
+                                 .OrderBy(x => x.Payratebyproviders.Payratecategoryid)
+                                 .Select(result => new PhysicianPayrate
+                                 {
+                                     PayrateId = result.Payratebyproviders.Payrateid,
+                                     Category = result.Payratebyproviders.Payratecategory.Categoryname,
+                                     Payrate = result.Payratebyproviders.Payrate,
+                                     PhysicianId = PhysicianId
+
+                                 })
+                                 .ToListAsync();
+
+            return pl;
+
+        }
+        #endregion
+
+        #region Payrate_Physician_Save
+        /// <summary>
+        /// This For GEt Data Provider Live location
+        /// </summary>
+        /// <param name="PayrateId"></param>
+        /// <param name="Payrate"></param>
+        /// <param name="AdminId"></param>
+        /// <returns></returns>
+        public async Task<bool> SavePayrate(int PayrateId, decimal? Payrate,string AdminId)
+        {
+            try
+            {
+                var Payratebyprovider = _context.Payratebyproviders.Where(r => r.Payrateid == PayrateId).FirstOrDefault();
+                if (Payratebyprovider == null)
+                {
+                    return false;
+                }
+                Payratebyprovider.Modifieddate = DateTime.Now;
+                Payratebyprovider.Modifiedby = AdminId;
+                Payratebyprovider.Payrate = (decimal)Payrate;
+                _context.Payratebyproviders.Update(Payratebyprovider);
+                _context.SaveChanges();
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+           
         }
         #endregion
 
