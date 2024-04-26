@@ -152,7 +152,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
 
                 //Request Client
                 Requestclient.Requestid = Request.Requestid;
-                Requestclient.Location = viewpatientcreaterequest.Symptoms;
+                Requestclient.Location = viewpatientcreaterequest.City + "," + viewpatientcreaterequest.State;
                 Requestclient.Firstname = viewpatientcreaterequest.FirstName;
                 Requestclient.Address = viewpatientcreaterequest.Street;
                 Requestclient.Lastname = viewpatientcreaterequest.LastName;
@@ -222,7 +222,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                     await _context.SaveChangesAsync();
 
                     Requestclient.Requestid = Request.Requestid;
-                Requestclient.Location = viewpatientcreaterequest.Symptoms;
+                Requestclient.Location = viewpatientcreaterequest.City + "," + viewpatientcreaterequest.State;
                 Requestclient.Firstname = viewpatientcreaterequest.FirstName;
                     Requestclient.Street = viewpatientcreaterequest.Street;
                     Requestclient.City = viewpatientcreaterequest.City;
@@ -306,7 +306,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 int id2 = Request.Requestid;
 
                 Requestclient.Requestid = Request.Requestid;
-                Requestclient.Location = viewdata.Symptoms;
+                Requestclient.Location = viewdata.CON_City + "," + viewdata.CON_State;
                 Requestclient.Firstname = viewdata.FirstName;
                 Requestclient.Lastname = viewdata.LastName;
                 Requestclient.Notes = viewdata.Symptoms;
@@ -421,7 +421,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 Requestclient.Firstname = viewdata.FirstName;
                 Requestclient.Lastname = viewdata.LastName;
                 Requestclient.Email = viewdata.Email;
-                Requestclient.Location = viewdata.Symptoms;
+                Requestclient.Location = viewdata.City + "," + viewdata.State;
                 Requestclient.Phonenumber = viewdata.PhoneNumber;
                 Requestclient.Regionid = viewdata.RegionId;
                 Requestclient.Notes = viewdata.Symptoms;
@@ -523,7 +523,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 Requestclient.Address = viewpatientcreaterequest.Street;
                 Requestclient.Lastname = viewpatientcreaterequest.LastName;
                 Requestclient.Email = viewpatientcreaterequest.Email;
-                Requestclient.Location = viewpatientcreaterequest.Symptoms;
+                Requestclient.Location = viewpatientcreaterequest.City + "," + viewpatientcreaterequest.State;
                 Requestclient.Phonenumber = viewpatientcreaterequest.PhoneNumber;
                 Requestclient.Latitude = viewpatientcreaterequest.latitude;
                 Requestclient.Regionid = viewpatientcreaterequest.RegionId;
@@ -599,7 +599,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 Requestclient.Phonenumber = viewpatientcreaterequest.PhoneNumber;
                 Requestclient.Street = viewpatientcreaterequest.Street;
                 Requestclient.City = viewpatientcreaterequest.City;
-                Requestclient.Location = viewpatientcreaterequest.Symptoms;
+                Requestclient.Location = viewpatientcreaterequest.City + "," + viewpatientcreaterequest.State;
                 Requestclient.Regionid = viewpatientcreaterequest.RegionId;
                 Requestclient.Zipcode = viewpatientcreaterequest.ZipCode;
                 Requestclient.State = viewpatientcreaterequest.State;

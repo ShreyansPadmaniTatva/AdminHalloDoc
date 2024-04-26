@@ -47,10 +47,12 @@
             <div class="col-md-6 form-floating  ">
                 <input  asp-for="Name" class="form-control rounded" name="Name" type="text" placeholder="First Name" autocomplete=off>
                 <label class="" for="floatingInput">Role Name </label>
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
                 <select class="form-select form-select-md p-2" required name="Accounttype" asp-for="Accounttype" data-allow-clear="true" tabindex="-1" onchange="accounttype()" id="Accounttype" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
                 </select>
+                <span asp-validation-for="Accounttype" class="text-danger"></span>
             </div>
             <input name="Menusid" type="hidden" id="menusid" />
             <input asp-for="Roleid" type="hidden" id="roleid" />

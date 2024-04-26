@@ -46,11 +46,11 @@ else
                 </select>
             </div>
             <div class="my-1 col-md-3 form-floating">
-                <input class="form-control rounded" name="Startdate" asp-for="Startdate" placeholder="Patient Name" type="date" autocomplete=off>
+                <input class="form-control rounded" id="StartTime" name="Startdate" asp-for="Startdate" placeholder="Patient Name" type="date" autocomplete=off>
                 <label class="" for="floatingInput">Start Date </label>
             </div>
             <div class="my-1 col-md-3 form-floating">
-                <input class="form-control rounded" name="Enddate" asp-for="Enddate" placeholder="Patient Name" type="date" autocomplete=off>
+                <input class="form-control rounded" id="EndTime" name="Enddate" asp-for="Enddate" placeholder="Patient Name" type="date" autocomplete=off>
                 <label class="" for="floatingInput">End Date </label>
             </div>
             <div class="my-1 col-md-3 form-floating">
@@ -92,6 +92,46 @@ else
 
 </form>
     <script>
+        document.getElementById('StartTime').addEventListener('change', function () {
+        // Get the selected Start Time
+        var startTime = this.value;
+
+        // Set the min attribute of the End Time input to the selected Start Time
+        document.getElementById('EndTime').min = startTime;
+
+        // If the current End Time value is less than the selected Start Time, reset it
+        if (document.getElementById('EndTime').value < startTime) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Wrong End time...",
+                    text: "End time cannot be earlier than start time!"
+                });
+            startTime.value = ''; // Clear the end time input
+            document.getElementById('StartTime').value = '';
+        }
+
+    });
+    document.getElementById('EndTime').addEventListener('change', function () {
+        const startTimeInput = document.getElementById('StartTime');
+        const endTimeInput = document.getElementById('EndTime');
+        const startTime = startTimeInput.value; // Get the value of start time
+        const endTime = endTimeInput.value; // Get the value of end time
+
+        // Convert start and end time strings to Date objects for comparison
+        const startDate = new Date('2000-01-01T' + startTime + ':00');
+        const endDate = new Date('2000-01-01T' + endTime + ':00');
+
+        // Check if end time is earlier than start time
+        if (endDate < startDate) {
+            Swal.fire({
+                icon: "error",
+                title: "Wrong End time...",
+                text: "End time cannot be earlier than start time!"
+            });
+            endTimeInput.value = ''; // Clear the end time input
+        }
+    });
+
     function exdown() {
         console.log(485);
         $('#download-excel').submit();

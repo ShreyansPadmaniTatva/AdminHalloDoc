@@ -1,5 +1,4 @@
-﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal;
-@*
+﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
@@ -13,7 +12,7 @@
         </h1>
     </div>
     <div>
-        <a href="Patient_submit_request.html" class="btn btn-outline-info"> ❮  Back </a>
+      
     </div>
 </div>
 <div class="card border-0 shadow p-4 mb-5  rounded">
@@ -25,6 +24,7 @@
        <div class="col-md-6 form-floating  ">
             <input asp-for="Firstname" class="form-control rounded" name="Firstname" type="text" placeholder="First Name" autocomplete=off>
             <label class="" for="floatingInput">First Name </label>
+            <span asp-validation-for="Firstname" class="text-danger" />
         </div>
         <div class="col-md-6 form-floating">
             <input asp-for="Lastname" class="form-control rounded" name="Lastname" type="text" placeholder=Suchtext autocomplete=off>
@@ -48,23 +48,23 @@
 
         <h4 class=" my-4">Location Information</h4>
         <div class="col-md-6 form-floating ">
-            <input asp-for="Street" class="form-control rounded" name="Street" type="text" placeholder=Suchtext autocomplete=off>
+            <input asp-for="Street" class="form-control rounded" id="Street" name="Street" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">Street </label>
         </div>
         <div class="col-md-6 form-floating ">
-            <input asp-for="City" class="form-control rounded" name="City" type="text" placeholder=Suchtext autocomplete=off>
+            <input asp-for="City" class="form-control rounded" id="City" name="City" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">City</label>
         </div>
         <div class="col-md-6 form-floating ">
-            <input asp-for="State" class="form-control rounded" name="State" type="text" placeholder=Suchtext autocomplete=off>
+            <input asp-for="State" class="form-control rounded" id="State" name="State" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">State</label>
         </div>
         <div class="col-md-4 form-floating  ">
-            <input asp-for="Zipcode" class="form-control rounded" name="Zipcode" type="text" placeholder=Suchtext autocomplete=off>
+            <input asp-for="Zipcode" class="form-control rounded" id="Zipcode" name="Zipcode" type="text" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">Zip Code</label>
         </div> 
         <div class="col-md-2 form-floating  ">
-            <button type="button" class="btn btn-outline-info" onclick="getLocation()">
+            <button type="button" class="btn btn-outline-info" id="map">
                 <i class="bi bi-geo-alt"></i> Map
             </button>
             <p id="demo"></p>
@@ -85,6 +85,32 @@
 @section Scripts
     {
     <script>
+        document.getElementById("map").addEventListener("click", function (e) {
+            var street = document.getElementById("Street").value;
+            var City = document.getElementById("City").value;
+            var State = document.getElementById("State").value;
+            var Zipcode = document.getElementById("Zipcode").value;
+
+
+            var mapurl = "https://www.google.com/maps/search/?api=1&query=";
+
+            if (street != null) {
+                mapurl = mapurl + street.replace(" ", "") + "," + "+";
+            }
+            if (City != null) {
+                mapurl = mapurl + City.replace(" ", "") + "," + "+";
+            }
+            if (State != null) {
+                mapurl = mapurl + State.replace(" ", "") + "," + "+";
+            }
+            if (Zipcode != null) {
+                mapurl = mapurl + Zipcode.replace(" ", "") + "," + "+";
+            }
+
+            window.open(mapurl, '_blank');
+
+            e.preventDefault();
+        })
         function toggleFormElements(bDisabled) {
             var inputs = document.getElementsByTagName("input");
             var submit = document.getElementById("submit");

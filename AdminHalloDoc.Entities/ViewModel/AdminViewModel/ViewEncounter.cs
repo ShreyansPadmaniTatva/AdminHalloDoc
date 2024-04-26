@@ -23,8 +23,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? HistoryOfP { get; set; }
         public string? HistoryOfMedical { get; set; }
         public string? Medications { get; set; }
-        [Required(ErrorMessage = "Allergies is required")]
-        public string Allergies { get; set; }
+        public string? Allergies { get; set; }
         public string? Temp { get; set; }
         public string? Hr { get; set; }
         public string? Rr { get; set; }
@@ -40,6 +39,8 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? Skin { get; set; }
         public string? Neuro { get; set; }
         public string? Other { get; set; }
+        [Required(ErrorMessage = "Diagnosis is required")]
+
         public string? Diagnosis { get; set; }
         [Required(ErrorMessage = "Treatment is required")]
 

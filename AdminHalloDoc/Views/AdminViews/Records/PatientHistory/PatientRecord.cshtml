@@ -53,6 +53,12 @@
                         </tr>
                     </thead>
                     <tbody class="table-group-divider mx-5">
+                    @if (Model.DashboardList.Count < 1)
+                    {
+
+                        <h1 class="text-center mt-3 text-secondary" >No data Found</h1>
+
+                    }
                         @foreach (var item in Model.DashboardList)
                         {
                             <tr>

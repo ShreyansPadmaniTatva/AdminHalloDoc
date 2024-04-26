@@ -3,6 +3,8 @@ using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Utilities;
 using System;
@@ -193,6 +195,26 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
+       
+        #region CheckExistingShifts
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public bool HasExistingShifts(Schedule s)
+        {
+            bool hasShift = _context.Shiftdetails
+                .Any(sd => sd.Shift.Physicianid == s.Physicianid &&
+                           sd.Shiftdate == new DateTime(s.Startdate.Year, s.Startdate.Month, s.Startdate.Day)  && (sd.Isdeleted == new BitArray(new[] { false })) &&
+                           ((sd.Starttime >= s.Starttime && sd.Starttime < s.Endtime) ||
+                           (sd.Endtime > s.Starttime && sd.Endtime <= s.Endtime) ||
+                           (sd.Starttime <= s.Starttime && sd.Endtime >= s.Endtime)));
+
+            return hasShift;
+        }
+        #endregion
+
         #region CreateShift
         /// <summary>
         /// Create Shift And Send Mail With Assosiate Google
@@ -204,107 +226,112 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
             try
             {
-                Shift shift = new Shift();
-                shift.Physicianid = s.Physicianid;
-                shift.Repeatupto = s.Repeatupto;
-                shift.Startdate = s.Startdate;
-                shift.Createdby = AdminID; 
-                shift.Createddate = DateTime.Now;
-                shift.Isrepeat =new BitArray(1);
-                shift.Isrepeat[0] = s.Isrepeat;
-                _context.Shifts.Add(shift);
-                _context.SaveChanges();
-
-                Shiftdetail sd = new Shiftdetail();
-                sd.Shiftid = shift.Shiftid;
-                sd.Shiftdate = new DateTime(s.Startdate.Year,s.Startdate.Month,s.Startdate.Day);
-                sd.Starttime = s.Starttime;
-                sd.Endtime = s.Endtime;
-                sd.Regionid = s.Regionid;
-                sd.Status = s.Status;
-                sd.Isdeleted = new BitArray(1);
-                sd.Isdeleted[0] = false;
-                _context.Shiftdetails.Add(sd);
-                _context.SaveChanges();
-
-                Shiftdetailregion sr = new Shiftdetailregion();
-                sr.Shiftdetailid = sd.Shiftdetailid;
-                sr.Regionid = s.Regionid;
-                sr.Isdeleted = new BitArray(1);
-                sr.Isdeleted[0] = false;
-                _context.Shiftdetailregions.Add(sr);
-                _context.SaveChanges();
-                if (s.Status == 1)
+                    Shift shift = new Shift();
+                if (!HasExistingShifts(s))
                 {
-                    Emaillogdata elog = new Emaillogdata();
-                    elog.Emailtemplate = "Your Shift  Add To Calendar";
-                    elog.Subjectname = "Your Appr Shift Details";
-                    elog.Emailid = (await _physicianrepository.GetPhysicianById(s.Physicianid)).Email;
-                    elog.Createdate = DateTime.Now;
-                    elog.Sentdate = DateTime.Now;
-                    elog.Action = 10;
-                    elog.Recipient = (await _physicianrepository.GetPhysicianById(s.Physicianid)).Firstname ;
-                    elog.Roleid = 3;
-                    elog.Senttries = 1;
-                    await _requestrepository.EmailLogForShift(elog, sd.Shiftdate.Date + s.Starttime.ToTimeSpan(), sd.Shiftdate.Date + s.Endtime.ToTimeSpan());
-                }
-                if (s.checkWeekday != null)
-                {
-                    List<int> day = s.checkWeekday.Split(',').Select(int.Parse).ToList();
+                    shift.Physicianid = s.Physicianid;
+                    shift.Repeatupto = s.Repeatupto;
+                    shift.Startdate = s.Startdate;
+                    shift.Createdby = AdminID;
+                    shift.Createddate = DateTime.Now;
+                    shift.Isrepeat = new BitArray(1);
+                    shift.Isrepeat[0] = s.Isrepeat;
+                    _context.Shifts.Add(shift);
+                    _context.SaveChanges();
 
-                    foreach (int d in day)
+                    Shiftdetail sd = new Shiftdetail();
+                    sd.Shiftid = shift.Shiftid;
+                    sd.Shiftdate = new DateTime(s.Startdate.Year, s.Startdate.Month, s.Startdate.Day);
+                    sd.Starttime = s.Starttime;
+                    sd.Endtime = s.Endtime;
+                    sd.Regionid = s.Regionid;
+                    sd.Status = s.Status;
+                    sd.Isdeleted = new BitArray(1);
+                    sd.Isdeleted[0] = false;
+                    _context.Shiftdetails.Add(sd);
+                    _context.SaveChanges();
+
+                    Shiftdetailregion sr = new Shiftdetailregion();
+                    sr.Shiftdetailid = sd.Shiftdetailid;
+                    sr.Regionid = s.Regionid;
+                    sr.Isdeleted = new BitArray(1);
+                    sr.Isdeleted[0] = false;
+                    _context.Shiftdetailregions.Add(sr);
+                    _context.SaveChanges();
+                    if (s.Status == 1)
                     {
-                        DayOfWeek desiredDayOfWeek = (DayOfWeek)d;
-                        DateTime today = DateTime.Today.AddDays(1);
-                        DateTime nextOccurrence = new DateTime(s.Startdate.Year, s.Startdate.Month, s.Startdate.Day + 1);
-                        int occurrencesFound = 0;
-                        while (occurrencesFound < s.Repeatupto)
+                        Emaillogdata elog = new Emaillogdata();
+                        elog.Emailtemplate = "Your Shift  Add To Calendar";
+                        elog.Subjectname = "Your Appr Shift Details";
+                        elog.Emailid = (await _physicianrepository.GetPhysicianById(s.Physicianid)).Email;
+                        elog.Createdate = DateTime.Now;
+                        elog.Sentdate = DateTime.Now;
+                        elog.Action = 10;
+                        elog.Recipient = (await _physicianrepository.GetPhysicianById(s.Physicianid)).Firstname;
+                        elog.Roleid = 3;
+                        elog.Senttries = 1;
+                        await _requestrepository.EmailLogForShift(elog, sd.Shiftdate.Date + s.Starttime.ToTimeSpan(), sd.Shiftdate.Date + s.Endtime.ToTimeSpan());
+                    }
+                
+                
+                    if (s.checkWeekday != null)
+                    {
+                        List<int> day = s.checkWeekday.Split(',').Select(int.Parse).ToList();
+
+                        foreach (int d in day)
                         {
-                            if (nextOccurrence.DayOfWeek == desiredDayOfWeek)
+                            DayOfWeek desiredDayOfWeek = (DayOfWeek)d;
+                            DateTime today = DateTime.Today.AddDays(1);
+                            DateTime nextOccurrence = new DateTime(s.Startdate.Year, s.Startdate.Month, s.Startdate.Day + 1);
+                            int occurrencesFound = 0;
+                            while (occurrencesFound < s.Repeatupto)
                             {
-
-                                Shiftdetail sdd = new Shiftdetail();
-                                sdd.Shiftid = shift.Shiftid;
-                                sdd.Shiftdate = nextOccurrence;
-                                sdd.Starttime = s.Starttime;
-                                sdd.Endtime = s.Endtime;
-                                sdd.Regionid = s.Regionid;
-                                sdd.Status = s.Status;
-                                sdd.Isdeleted = new BitArray(1);
-                                sdd.Isdeleted[0] = false;
-                                _context.Shiftdetails.Add(sdd);
-                                _context.SaveChanges();
-
-                                Shiftdetailregion srr = new Shiftdetailregion();
-                                srr.Shiftdetailid = sdd.Shiftdetailid;
-                                srr.Regionid = s.Regionid;
-                                srr.Isdeleted = new BitArray(1);
-                                srr.Isdeleted[0] = false;
-                                _context.Shiftdetailregions.Add(srr);
-                                _context.SaveChanges();
-                                occurrencesFound++;
-                                if (s.Status == 1)
+                                if (nextOccurrence.DayOfWeek == desiredDayOfWeek)
                                 {
-                                    Emaillogdata elog = new Emaillogdata();
-                                    elog.Emailtemplate = "Your Shift  Add To Calendar";
-                                    elog.Subjectname = " Shift Details";
-                                    elog.Emailid = (await _physicianrepository.GetPhysicianById(s.Physicianid)).Email;
-                                    elog.Createdate = DateTime.Now;
-                                    elog.Sentdate = DateTime.Now;
-                                    elog.Action = 10;
-                                    elog.Recipient = (await _physicianrepository.GetPhysicianById(s.Physicianid)).Firstname;
-                                    elog.Roleid = 3;
-                                    elog.Senttries = 1;
-                                   await _requestrepository.EmailLogForShift(elog, sd.Shiftdate.Date + s.Starttime.ToTimeSpan(), sd.Shiftdate.Date + s.Endtime.ToTimeSpan());
-                                }
 
+                                    Shiftdetail sdd = new Shiftdetail();
+                                    sdd.Shiftid = shift.Shiftid;
+                                    sdd.Shiftdate = nextOccurrence;
+                                    sdd.Starttime = s.Starttime;
+                                    sdd.Endtime = s.Endtime;
+                                    sdd.Regionid = s.Regionid;
+                                    sdd.Status = s.Status;
+                                    sdd.Isdeleted = new BitArray(1);
+                                    sdd.Isdeleted[0] = false;
+                                    _context.Shiftdetails.Add(sdd);
+                                    _context.SaveChanges();
+
+                                    Shiftdetailregion srr = new Shiftdetailregion();
+                                    srr.Shiftdetailid = sdd.Shiftdetailid;
+                                    srr.Regionid = s.Regionid;
+                                    srr.Isdeleted = new BitArray(1);
+                                    srr.Isdeleted[0] = false;
+                                    _context.Shiftdetailregions.Add(srr);
+                                    _context.SaveChanges();
+                                    occurrencesFound++;
+                                    if (s.Status == 1)
+                                    {
+                                        Emaillogdata elog = new Emaillogdata();
+                                        elog.Emailtemplate = "Your Shift  Add To Calendar";
+                                        elog.Subjectname = " Shift Details";
+                                        elog.Emailid = (await _physicianrepository.GetPhysicianById(s.Physicianid)).Email;
+                                        elog.Createdate = DateTime.Now;
+                                        elog.Sentdate = DateTime.Now;
+                                        elog.Action = 10;
+                                        elog.Recipient = (await _physicianrepository.GetPhysicianById(s.Physicianid)).Firstname;
+                                        elog.Roleid = 3;
+                                        elog.Senttries = 1;
+                                       await _requestrepository.EmailLogForShift(elog, sd.Shiftdate.Date + s.Starttime.ToTimeSpan(), sd.Shiftdate.Date + s.Endtime.ToTimeSpan());
+                                    }
+
+                                }
+                                nextOccurrence = nextOccurrence.AddDays(1);
                             }
-                            nextOccurrence = nextOccurrence.AddDays(1);
                         }
                     }
+                    return true;
                 }
-              
-                return true;
+                return false;
                 
             }
             catch (Exception ex)
@@ -357,7 +384,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             try
             {
                 Shiftdetail sd =  _context.Shiftdetails.FirstOrDefault(sd => sd.Shiftdetailid == s.Shiftid);
-                if (sd != null)
+                s.Startdate = DateOnly.FromDateTime((DateTime)s.Shiftdate);
+                if (sd != null && !HasExistingShifts(s))
                 {
                     sd.Shiftdate = (DateTime)s.Shiftdate;
                     sd.Starttime = s.Starttime;
@@ -366,6 +394,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     sd.Modifieddate = DateTime.Now;
                     _context.Shiftdetails.Update(sd);
                     _context.SaveChanges();
+                    
                 }
                 else
                 {

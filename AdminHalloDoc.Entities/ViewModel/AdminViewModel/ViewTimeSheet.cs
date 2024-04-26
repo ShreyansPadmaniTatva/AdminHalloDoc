@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
@@ -14,6 +15,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
     {
         public List<Timesheetdetails> Timesheetdetails { get; set; }
         public List<Timesheetdetailreimbursements> Timesheetdetailreimbursements { get; set; }
+        public List<Payratebyprovider> PayrateWithProvider { get; set; }
         public int Timesheeid { get; set; }
         public int PhysicianId { get; set; }
     }
@@ -40,15 +42,17 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
     }
     public class Timesheetdetailreimbursements
     {
-        public int Timesheetdetailreimbursementid { get; set; }
+        public int? Timesheetdetailreimbursementid { get; set; } = null!;
 
         public int Timesheetdetailid { get; set; }
+        public int Timesheetid { get; set; }
 
         public string Itemname { get; set; } = null!;
 
-        public int Amount { get; set; }
-
+        public int? Amount { get; set; } = null!;
+        public DateOnly Timesheetdate { get; set; }
         public string Bill { get; set; } = null!;
+        public IFormFile Billfile { get; set; }
 
         public bool? Isdeleted { get; set; }
 

@@ -42,8 +42,10 @@
                     </td>
                 </tr>
             }
+           
         </tbody>
     </table>
+
     <div class="d-lg-none" style="max-width: 100%;">
         @{
             var Count = 0;
@@ -89,6 +91,12 @@
                 </div>
             </div>
             Count++;
+        }
+        @if (Model.Count < 1)
+        {
+
+            <h1 class="text-center mt-3 text-secondary" >No data Found</h1>
+
         }
     </div>
 </div>

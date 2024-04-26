@@ -1094,7 +1094,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                  <h2>Welcome to Our Healthcare Platform!</h2>
                                 <p>Dear Provider " + note.UserName + @" ,</p>
                                 <p>We Want to Your Support " + notes + @"</p>
-                                
                                 <p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>
                                 <p>Thank you,</p>
                                 <p>The Healthcare Team</p>

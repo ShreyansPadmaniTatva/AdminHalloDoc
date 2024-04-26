@@ -19,8 +19,8 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public int? Physicianid { get; set; }
 
         public string? Aspnetuserid { get; set; }
-        public string? UserName { get; set; }
-        public string? PassWord { get; set; }
+        public string UserName { get; set; }
+        public string? PassWord { get; set; } = null!;
         public string? Regionsid { get; set; }
 
         public string Firstname { get; set; } = null!;

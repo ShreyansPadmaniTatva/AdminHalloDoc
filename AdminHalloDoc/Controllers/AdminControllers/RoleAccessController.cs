@@ -15,18 +15,14 @@ namespace AdminHalloDoc.Controllers.AdminControllers
     {
         #region Constoter
         private readonly IRequestRepository _requestRepository;
-        private readonly IViewActionRepository _viewActionRepository;
         private readonly IViewNotesRepository _viewNotesRepository;
         private readonly IMyProfileRepository _myProfileRepository;
         private readonly IPhysicianRepository _physicianRepository;
-        private readonly EmailConfiguration _emailconfig;
         private readonly IRoleAccessRepository _roleAccessRepository;
-        public RoleAccessController(IMyProfileRepository myProfileRepository, IPhysicianRepository physicianRepository, IViewActionRepository viewActionRepository,EmailConfiguration emailConfiguration,IRoleAccessRepository roleAccessRepository, IRequestRepository requestRepository)
+        public RoleAccessController(IMyProfileRepository myProfileRepository, IPhysicianRepository physicianRepository,IRoleAccessRepository roleAccessRepository, IRequestRepository requestRepository)
         {
 
-            _viewActionRepository = viewActionRepository;
             _physicianRepository = physicianRepository;
-            _emailconfig = emailConfiguration;
             _roleAccessRepository = roleAccessRepository;
             _requestRepository = requestRepository;
             _myProfileRepository = myProfileRepository;
@@ -100,21 +96,28 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             if (role.Roleid == 0)
             {
                 data = await _roleAccessRepository.PostRoleMenu(role, Menusid , CV.ID());
-
+                if (data)
+                {
+                    TempData["Status"] = "Role Add Successfully...";
+                }
+                else
+                {
+                    TempData["Status"] = "Role not Add...";
+                }
             }
             else
             {
                 data = await _roleAccessRepository.PutRoleMenu(role, Menusid, CV.ID());
+                if (data)
+                {
+                    TempData["Status"] = "Role Change Successfully...";
+                }
+                else
+                {
+                    TempData["Status"] = "Role not Change...";
+                }
             }
 
-            if (data)
-            {
-                TempData["Status"] = "Role Add Successfully...";
-            }
-            else
-            {
-                TempData["Status"] = "Role not Add...";
-            }
             return RedirectToAction("Index");
         }
         #endregion

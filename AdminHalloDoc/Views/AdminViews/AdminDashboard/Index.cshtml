@@ -72,35 +72,31 @@
         });
     }
 
+    function OnSuccess(formID) {
+       
 
-
-      
-
-        function OnSuccess(formID) {
-           
-
-            if (formID === "formAdd_UMS") {
-            }
-
-
-            if (formID === "formEdit_UMS") {
-            }
-
-            if (formID === "formAddEditSave_UMS") {
-            location.reload();
-                $("#filterForm").submit();
-                toastr.success("Record saved successfully..!");
-            }
-
-            if (formID === "formAddEditMultiSave_UMS") {
-                $("#filterForm").submit();
-                toastr.success("Record saved successfully..!");
-            }
-
-            if (formID === "formDelete_UMS") {
-                $("#filterForm").submit();
-                toastr.success("Record deleted successfully..!");
-            }
+        if (formID === "formAdd_UMS") {
         }
+
+
+        if (formID === "formEdit_UMS") {
+        }
+
+        if (formID === "formAddEditSave_UMS") {
+        location.reload();
+            $("#filterForm").submit();
+            toastr.success("Record saved successfully..!");
+        }
+
+        if (formID === "formAddEditMultiSave_UMS") {
+            $("#filterForm").submit();
+            toastr.success("Record saved successfully..!");
+        }
+
+        if (formID === "formDelete_UMS") {
+            $("#filterForm").submit();
+            toastr.success("Record deleted successfully..!");
+        }
+    }
     </script>
  

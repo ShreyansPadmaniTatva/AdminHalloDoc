@@ -28,6 +28,7 @@
             </tr>
         </thead>
         <tbody class="table-group-divider mx-5">
+            
             @foreach (var item in Model.BlockRequestList)
             {
                 <tr>
@@ -57,6 +58,12 @@
             }
         </tbody>
     </table>
+    @if (Model.BlockRequestList.Count < 1)
+    {
+
+        <h1 class="text-center mt-3 text-secondary">No data Found</h1>
+
+    }
     <div class="d-md-none" style="max-width: 100%;">
         @{
             var Count = 0;
@@ -97,6 +104,12 @@
                 </div>
             </div>
             Count++;
+        }
+        @if (Model.BlockRequestList.Count < 1)
+        {
+
+            <h1 class="text-center mt-3 text-secondary" >No data Found</h1>
+
         }
     </div>
     <nav aria-label="Page navigation example">

@@ -70,6 +70,12 @@
                                 </td>
                         </tr>
                     }
+                    @if (Model.Count < 1)
+                    {
+
+                        <h1 class="text-center mt-3 text-secondary" >No data Found</h1>
+
+                    }
                 </tbody>
             </table>
         </div>

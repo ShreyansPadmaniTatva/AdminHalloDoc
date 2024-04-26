@@ -95,7 +95,7 @@
                     <span asp-validation-for="DOB" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 form-floating  d-flex align-items-center">
-                    <input asp-for="PhoneNumber" id="phone" type="tel" name="PhoneNumber" class="form-control rounded" autocomplete=off>
+                    <input asp-for="PhoneNumber" required id="phone" type="tel" name="PhoneNumber" class="form-control rounded" autocomplete=off>
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     <div>
                         <a class=" btn btn-outline-info text-center rounded fs-4 mx-2" href="tel:@Model.PhoneNumber"><i class="bi bi-telephone"></i></a>
@@ -103,7 +103,7 @@
                 </div>
                
                 <div class="col-md-6 form-floating ">
-                    <input id="email" asp-for="Email" id="email" class="form-control rounded" name="Email" type="text" placeholder=Suchtext autocomplete=off>
+                    <input id="email" asp-for="Email" required id="email" class="form-control rounded" name="Email" type="text" placeholder=Suchtext autocomplete=off>
                     <label for="floatingInput">Email </label>
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>

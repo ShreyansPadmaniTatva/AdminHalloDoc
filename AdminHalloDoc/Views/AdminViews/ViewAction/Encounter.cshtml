@@ -23,7 +23,7 @@
             <h3> Encounter Form <span class="badge badge-success p-2">Success</span> </h3>
         </div>
         <div>
-            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-outline-info"> ❮  Back </a>
+            <a onclick="history.back()" href="javascript:void(0)" class="btn btn-outline-info"> ❮  Back </a>
         </div>
     </div>
     <div class="card border-0 shadow p-4 mb-5  rounded">
@@ -37,36 +37,36 @@
            
 
             <div class="col-md-6 form-floating  ">
-                <input asp-for="FirstName" class="form-control rounded" name="FirstName" type="text" placeholder="First Name" autocomplete=off>
+                <input asp-for="FirstName" disabled class="form-control rounded" name="FirstName" type="text" placeholder="First Name" autocomplete=off>
                 <label class="" for="floatingInput">First Name </label>
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
-                <input asp-for="LastName" class="form-control rounded" name="LastName" type="text" placeholder=Suchtext autocomplete=off>
+                <input asp-for="LastName" disabled class="form-control rounded" name="LastName" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Last Name </label>
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="col-md-12 form-floating  ">
-                <textarea asp-for="Location" class="form-control rounded" name="Location" type="text" rows="4" cols="50" placeholder=Suchtext autocomplete=off></textarea>
+                <textarea asp-for="Location" disabled class="form-control rounded" name="Location" type="text" rows="4" cols="50" placeholder=Suchtext autocomplete=off></textarea>
                 <label asp-for="Location" for="Symptoms"> Location </label>
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
-                <input asp-for="DOB" class="form-control rounded" name="BirthDate" type="date" placeholder=Suchtext autocomplete=off>
+                <input asp-for="DOB" disabled class="form-control rounded" name="BirthDate" type="date" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Birth Date </label>
                 <span asp-validation-for="DOB" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
-                <input asp-for="Date" class="form-control rounded" name="Date" type="date" placeholder=Suchtext autocomplete=off>
-                <label for="floatingInput">Birth Date </label>
+                <input asp-for="Date" disabled class="form-control rounded" name="Date" type="date" placeholder=Suchtext autocomplete=off>
+                <label for="floatingInput">Date Of Service</label>
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating ">
-                <input asp-for="PhoneNumber" id="phone" type="tel" name="PhoneNumber" class="form-control rounded" autocomplete=off>
+                <input asp-for="PhoneNumber" disabled id="phone" type="tel" name="PhoneNumber" class="form-control rounded" autocomplete=off>
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating ">
-                <input id="email" asp-for="Email" class="form-control rounded" name="Email" type="text" placeholder=Suchtext autocomplete=off>
+                <input id="email" disabled asp-for="Email" class="form-control rounded" name="Email" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Email </label>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
@@ -174,7 +174,7 @@
                 <span asp-validation-for="Other" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating  ">
-                <input asp-for="Diagnosis" class="form-control rounded" name="Diagnosis" type="text" placeholder="First Name" autocomplete=off>
+                <input asp-for="Diagnosis" class="form-control rounded" name="Diagnosis" required type="text" placeholder="First Name" autocomplete=off>
                 <label class="" for="floatingInput">Diagnosis </label>
                 <span asp-validation-for="Diagnosis" class="text-danger"></span>
             </div>
@@ -203,12 +203,9 @@
                 <button type="submit" class="btn btn-info text-white">Save Changes</button>
                 @if (!(CV.role() == "Admin"))
                 {
-                <button type="submit" value="Finalize" asp-action="Finalize" asp-controller="SubmitForm" class="btn btn-danger btn-cancel ">Finalize</button>
-                    
+                    <button type="submit" value="Finalize" asp-action="Finalize" asp-controller="SubmitForm" class="btn btn-danger btn-cancel ">Finalize</button>
                 }
-                   
-
-                <a class="btn btn-outline-info btn-cancel " asp-action="Index" asp-controller="AdminDashboard">
+                <a class="btn btn-outline-info btn-cancel " onclick="goBack()">
                     cancel
                 </a>
             </div>

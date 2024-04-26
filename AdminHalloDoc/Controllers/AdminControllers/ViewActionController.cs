@@ -386,7 +386,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-
         #region SendEmail_Provider_To_Admin
         public async Task<IActionResult> EditPhysicianMyProfilerequestAsync(int Physicianid, string notes, string Email, string Firstname)
         {

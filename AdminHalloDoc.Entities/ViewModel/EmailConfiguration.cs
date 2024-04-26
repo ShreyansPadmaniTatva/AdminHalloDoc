@@ -22,12 +22,13 @@ namespace AdminHalloDoc.Entities.ViewModel
         #region SendMail
         public async Task<bool> SendMail(String To, String Subject, String Body)
         {
+            //return true;
             try
             {
                 Body = "Mail to :"+ To+"<br/>"+Body;
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("", From));
-                message.To.Add(new MailboxAddress("", "petoco8642@iliken.com"));
+                message.To.Add(new MailboxAddress("", "dasete8625@haislot.com"));
                 message.Subject = Subject;
                 message.Body = new TextPart("html")
                 {
@@ -53,6 +54,7 @@ namespace AdminHalloDoc.Entities.ViewModel
         #region SendMail
         public async Task<bool> SendMailWithShift(String To, String Subject, String Body,DateTime StartDate  , DateTime EndDate)
         {
+            return true;
             try
             {
                 Body = "Mail to: " + To + "<br/>" + Body;
@@ -166,6 +168,7 @@ namespace AdminHalloDoc.Entities.ViewModel
         #region SendMail
         public async Task<bool> SendMailAsync(string To, string Subject, string Body, List<string> Attachments)
         {
+            return true;
             MimeMessage message = new MimeMessage();
             message.From.Add(new MailboxAddress("", From));
             message.To.Add(new MailboxAddress("", "pehek11482@fashlend.com"));

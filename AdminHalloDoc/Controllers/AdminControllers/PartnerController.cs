@@ -12,20 +12,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
     {
         #region Constoter
         private readonly IRequestRepository _requestRepository;
-        private readonly IViewActionRepository _viewActionRepository;
         private readonly IViewNotesRepository _viewNotesRepository;
-        private readonly IMyProfileRepository _myProfileRepository;
-        private readonly IPhysicianRepository _physicianRepository;
-        private readonly EmailConfiguration _emailconfig;
-        public PartnerController(IPhysicianRepository physicianRepository, IMyProfileRepository myProfileRepository, IRequestRepository requestRepository, IViewActionRepository viewActionRepository, IViewNotesRepository viewNotesRepository, EmailConfiguration emailConfiguration)
+        public PartnerController( IRequestRepository requestRepository, IViewNotesRepository viewNotesRepository)
         {
 
             _requestRepository = requestRepository;
-            _viewActionRepository = viewActionRepository;
             _viewNotesRepository = viewNotesRepository;
-            _myProfileRepository = myProfileRepository;
-            _physicianRepository = physicianRepository;
-            _emailconfig = emailConfiguration;
         }
         #endregion
 
@@ -77,16 +69,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             {
                 if (model.Vendorid == null)
                 {
-                    if (_viewNotesRepository.isBusinessNameExist(model.Vendorname).Count > 0)
-                    {
-                        ModelState.AddModelError("Vendorname", "Business name is Already Taken!! choose another one");
-                        return View("../AdminViews/Partner/PartnerAddEdit", model);
-                    }
-                    if (_viewNotesRepository.isEmailExist(model.Email).Count > 0)
-                    {
-                        ModelState.AddModelError("Email", "Email is Already Taken!! choose another one");
-                        return View("../AdminViews/Partner/PartnerAddEdit", model);
-                    }
+                    
 
                     bool data = await _viewNotesRepository.SavePartner(model);
                     if (data)
@@ -102,16 +85,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 }
                 else
                 {
-                    if (_viewNotesRepository.isBusinessNameExist(model.Vendorname).Count >= 1 && _viewNotesRepository.isBusinessNameExist(model.Vendorname).Any(u => u.Vendorid != model.Vendorid))
-                    {
-                        ModelState.AddModelError("Vendorname", "Business name is Already Taken!! choose another one");
-                        return View("../AdminViews/Partner/PartnerAddEdit", model);
-                    }
-                    if (_viewNotesRepository.isEmailExist(model.Email).Count >= 1 && _viewNotesRepository.isEmailExist(model.Email).Any(u => u.Vendorid != model.Vendorid))
-                    {
-                        ModelState.AddModelError("Email", "Email is Already Taken!! choose another one");
-                        return View("../AdminViews/Partner/PartnerAddEdit", model);
-                    }
+                    
                     bool data = await _viewNotesRepository.SavePartner(model);
                     if (data)
                     {

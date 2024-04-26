@@ -13,7 +13,7 @@
             <h1>  Send Order </h1>
         </div>
         <div>
-            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-outline-info"> ❮  Back </a>
+            <a onclick="history.back()" class="btn btn-outline-info"> ❮  Back </a>
         </div>
     </div>
     <div class="card border-0 shadow p-4 mb-5  rounded">
@@ -23,34 +23,35 @@
 
             <div class="col-md-6 form-floating  ">
                 <select class="form-select  mt-3 p-2 " required asp-for="VenderTypeId" asp-items="@(new SelectList(ViewBag.VenderTypeComboBox,"VenderTypeId","Name"))" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="VenderType" data-control="select2" data-placeholder="Select Level">
-                        <option>All VenderType</option>
+                        <option value="">Select VenderType</option>
                     </select>
+                <span asp-validation-for="VenderTypeId" class="text-danger"></span>
             </div>
 
             <div class="col-md-6 form-floating  ">
                 <select class="form-select  mt-3 p-2" required asp-for="VenderId" data-allow-clear="true" tabindex="-1" onchange="mySecondFunction()" id="vender" data-control="select2" data-placeholder="Select Level">
-                    <option>All Vender</option>
+                    <option value="">Select Vender</option>
                 </select>
             </div>
             <div class="col-md-6 form-floating">
-                <input asp-for="BusinessContact" class="form-control rounded" id="BusinessContact" type="text" placeholder=Suchtext autocomplete=off>
+                <input asp-for="BusinessContact" required class="form-control rounded" id="BusinessContact" type="text" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Business Contact </label>
                 <span asp-validation-for="BusinessContact" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating">
-                <input asp-for="Email" class="form-control rounded" type="text" id="Email" placeholder=Suchtext autocomplete=off>
+                <input asp-for="Email" required class="form-control rounded" type="text" id="Email" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Email </label>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-floating ">
-                <input asp-for="FaxNumber" type="text" class="form-control rounded" id="FaxNumber" autocomplete=off>
+                <input asp-for="FaxNumber" required type="text" class="form-control rounded" id="FaxNumber" autocomplete=off>
                 <label for="floatingInput">Fax Number </label>
 
                 <span asp-validation-for="FaxNumber" class="text-danger"></span>
             </div>
 
             <div class="col-md-12 form-floating ">
-                <textarea class="form-control rounded" asp-for="Prescription" cols="500" type="text" rows="50" placeholder=Symptoms autocomplete=off></textarea>
+                <textarea class="form-control rounded" required asp-for="Prescription" cols="500" type="text" rows="50" placeholder=Symptoms autocomplete=off></textarea>
                 <label for="floatingInput">
                     Prescription or
                     Order Details
@@ -61,15 +62,14 @@
 
             <div class="col-md-6 form-floating  ">
                 <select class="form-select mt-3 p-2" required asp-for="Refills" data-allow-clear="true" tabindex="-1"  data-control="select2" data-placeholder="Number Of Refile">
-                    <option>0</option>
-                    <option>1</option>
+                    <option  >1</option>
                     <option>2</option>
                     <option>3</option>
                 </select>
             </div>
             <div class="text-end my-4">
-            <input type="submit" value="save" class="btn btn-outline-info" />
-            <a asp-action="Index" asp-controller="AdminDashboard" class="btn btn-dager"> Cancel </a>
+            <input type="submit" value="save" class="btn btn-success" />
+            <a onclick="history.back()" class="btn btn-danger"> Cancel </a>
             </div>
         </form>
     </div>

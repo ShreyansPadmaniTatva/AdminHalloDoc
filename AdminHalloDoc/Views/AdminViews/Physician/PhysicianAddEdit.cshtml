@@ -38,12 +38,12 @@
         </div>
     </div>
     <div class="card border-0 shadow p-4 mb-5  rounded">
-        <form id="addedit" class="row g-3" asp-action="PhysicianAddEdit" asp-controller="Physician" enctype="multipart/form-data" >
+        <form id="addedit" class="row g-3" asp-action="PhysicianAddEdit" asp-controller="Physician" enctype="multipart/form-data">
 
-            <input id="123" type="hidden"  asp-for="Physicianid" />
+            <input id="123" type="hidden" asp-for="Physicianid" />
             <div class="justify-content-between d-flex container-fluid mb-5 position-relative ">
                 <div>
-                <h4 class=" my-4">Account Information</h4>
+                    <h4 class=" my-4">Account Information</h4>
 
                 </div>
                 <div>
@@ -51,9 +51,9 @@
                     {
 
                         <a class="btn  btn-info text-white btn-submit my-4" onclick="blackshow()" data-bs-toggle="modal" data-bs-target="#reqToAdminmodal">
-                                Request To Admin
-                            </a>
-                           
+                            Request To Admin
+                        </a>
+
                     }
                 </div>
             </div>
@@ -74,39 +74,41 @@
 
             </div>
             @{
-            if(Model != null && Model.Physicianid != Convert.ToInt32(CV.UserID()) ){
-                <div class="col-md-6 form-floating">
-                    <select class="form-select form-select-md form-control-disable p-2 asp" required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
-                    </select>
-                </div>
-                <div class="col-md-6 form-floating">
-                    <select class="form-select form-select-md  form-control-disable p-2 asp" required name="Roleid" asp-for="Roleid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
-                    </select>
-                </div>
-                <div class="text-end editable edits" style="display:none">
-                    <button type="submit" asp-action="SavePhysicianInfo" asp-controller="Physician" class="btn-info btn" id="saveasp" style="display:none">Save</button>
-                    <div class="btn btn-info" id="editasp">edit</div>
-                    <button class="text-end btn btn-outline-info reset" disabled asp-action="ResetPassAdmin" asp-controller="Physician" id="submitresetpass">Reset Password</button>
-                </div>
-            }
-             else if(Model == null ){
-                  <div class="col-md-6 form-floating">
-                    <select class="form-select form-select-md  form-control-disable p-2 asp" required name="Roleid" asp-for="Roleid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
-                    </select>
-                </div>
-            }
-            else
-            {
-                <div class="text-end editable edits" style="display:none">
+                if (Model != null && Model.Physicianid != Convert.ToInt32(CV.UserID()))
+                {
+                    <div class="col-md-6 form-floating">
+                        <select class="form-select form-select-md form-control-disable p-2 asp" required name="Status" asp-for="Status" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region2" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
+                        </select>
+                    </div>
+                    <div class="col-md-6 form-floating">
+                        <select class="form-select form-select-md  form-control-disable p-2 asp" required name="Roleid" asp-for="Roleid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
+                        </select>
+                    </div>
+                    <div class="text-end editable edits" style="display:none">
+                        <button type="submit" asp-action="SavePhysicianInfo" asp-controller="Physician" class="btn-info btn" id="saveasp" style="display:none">Save</button>
+                        <div class="btn btn-info text-white" id="editasp">Edit</div>
                         <button class="text-end btn btn-outline-info reset" disabled asp-action="ResetPassAdmin" asp-controller="Physician" id="submitresetpass">Reset Password</button>
-                </div>
-            }
+                    </div>
+                }
+                else if (Model == null)
+                {
+                    <div class="col-md-6 form-floating">
+                        <select class="form-select form-select-md  form-control-disable p-2 asp" required name="Roleid" asp-for="Roleid" data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="roles" asp-items="@(new SelectList(ViewBag.userrolecombobox,"RoleId","RoleName"))" data-control="select2" data-placeholder="Select Level">
+                        </select>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-end editable edits" style="display:none">
+                        <button class="text-end btn btn-outline-info reset" disabled asp-action="ResetPassAdmin" asp-controller="Physician" id="submitresetpass">Reset Password</button>
+                    </div>
+                }
             }
 
-           
-        
 
-        <h4 class=" my-4"> Physician Information</h4>
+
+
+            <h4 class=" my-4"> Physician Information</h4>
 
             <input type="hidden" asp-for="Physicianid" />
             <div class="col-md-6 form-floating  ">
@@ -167,12 +169,12 @@
                     }
 
                 }
-                </div>
+            </div>
             @if (Model != null && Model.Physicianid != Convert.ToInt32(CV.UserID()))
             {
                 <div class="text-end edits">
                     <a asp-action="PhysicianPayrate" asp-controller="Physician" asp-route-physicianid="@(Model != null ? Model.Physicianid.Encode() : null)" class="btn  btn-info text-white btn-submit ">
-                       Enter Payrate
+                        Enter Payrate
                     </a>
                     <a onclick="enable_disable_administration()" id="admin-input-edit" class="btn  btn-info text-white btn-submit ">
                         Edit
@@ -188,12 +190,12 @@
             }
             <script>
 
-                 
-                </script>
-            
-        <h4 class=" my-4">Mailing & Billing  Information</h4>
 
-       
+            </script>
+
+            <h4 class=" my-4">Mailing & Billing  Information</h4>
+
+
             <input type="hidden" asp-for="Physicianid" />
             <div class="col-md-6 form-floating ">
                 <input asp-for="Address1" class="form-control form-control-disable rounded mail-billing-imp" name="Address1" type="text" placeholder=Suchtext autocomplete=off>
@@ -224,22 +226,22 @@
             {
                 <div class="text-end edits">
                     <a onclick="enable_disable_mailBilling()" id="edit-mail-billing" class="btn text-white  btn-info btn-submit ">
-                    Edit
-                </a>
-                <button type="submit" id="save-mail-billing" asp-action="EditMailBilling" asp-controller="Physician" class="btn  btn-outline-info btn-submit mx-2 ">
-                    save
-                </button>
-                <a id="cancel-mail-billing" class="btn  btn-outline-danger ">
-                    cancel
-                </a>
-            </div>
+                        Edit
+                    </a>
+                    <button type="submit" id="save-mail-billing" asp-action="EditMailBilling" asp-controller="Physician" class="btn  btn-outline-info btn-submit mx-2 ">
+                        save
+                    </button>
+                    <a id="cancel-mail-billing" class="btn  btn-outline-danger ">
+                        cancel
+                    </a>
+                </div>
             }
             <script>
 
             </script>
-       
 
-        <h4 class=" my-4">Provider Profile</h4>
+
+            <h4 class=" my-4">Provider Profile</h4>
 
             <input type="hidden" asp-for="Physicianid" />
             <div class="col-md-6 form-floating ">
@@ -255,19 +257,20 @@
 
             </div>
             <div class="col-md-6 form-floating ">
-                <input asp-for="PhotoFile"  class="form-control form-control-disable rounded provider-prof file-upload-wrapper-1" name="PhotoFile" type="file" placeholder=Suchtext autocomplete=off>
+                <input asp-for="PhotoFile" class="form-control form-control-disable rounded provider-prof file-upload-wrapper-1" name="PhotoFile" type="file" placeholder=Suchtext autocomplete=off>
                 <label for="floatingInput">Photo</label>
             </div>
             <div class="col-md-6 form-floating d-flex">
                 <input asp-for="SignatureFile" id="signature-file" class="form-control form-control-disable rounded provider-prof file-upload-wrapper-1" name="SignatureFile" type="file" placeholder=Suchtext autocomplete=off>
                 <button class="btn btn-info mx-1 text-white" type="button" id="create-signature-button">Create</button>
                 <label for="floatingInput">Signature</label>
-              
+
             </div>
-            <div class="col-md-6" >
-                @if(Model != null && Model.Photo != null){
+            <div class="col-md-6">
+                @if (Model != null && Model.Photo != null)
+                {
                     <span> Photo  </span>
-                        <img class="img-fluid border border-1 mx-2" style="height:150px;" src="~/Upload/Physician/@Model.Physicianid/@Model.Photo" alt="Photo" />
+                    <img class="img-fluid border border-1 mx-2" style="height:150px;" src="~/Upload/Physician/@Model.Physicianid/@Model.Photo" alt="Photo" />
                 }
             </div>
             <div class="col-md-6">
@@ -277,18 +280,18 @@
                         <span> Signature  </span>
                         <img class="img-fluid border border-1 mx-2" src="~/Upload/Physician/@Model.Physicianid/@Model.Signature" alt="Signature" />
                     }
-                        <input type="hidden" id="signature-data" name="signatureData">
+                    <input type="hidden" id="signature-data" name="signatureData">
                 </div>
                 <div class=" d-flex">
                     <img id="saved" alt="Signature" class="border border-1 border-success-subtle mx-3" style="display:none;" />
                     <canvas id="signature-pad" width="300" height="200" style="display:none;"></canvas>
-                    
+
                 </div>
-                <div class="text-end mt-2" >
+                <div class="text-end mt-2">
                     <div id="clear-button" class="btn btn-danger mt-0" style="display:none;">Clear</div>
                     <div id="save-button" class="btn btn-success" style="display:none;" disabled>Save</div>
                 </div>
-                
+
             </div>
             <div class="col-md-12 form-floating ">
                 <textarea asp-for="Adminnotes" name="Adminnotes" class="form-control form-control-disable provider-prof" rows="10" cols="100"></textarea>
@@ -298,22 +301,22 @@
             {
                 <div class="text-end mt-2 edits">
                     <a id="edit-provider-prof" class="btn  btn-outline-info btn-submit ">
-                    Edit
-                </a>
-                <button type="submit" asp-action="EditProviderProfile" asp-controller="Physician" id="save-provider-prof" class="btn  btn-outline-info btn-submit mx-2 ">
-                    save
-                </button>
-                <div id="cancel-provider-prof" class="btn  btn-outline-danger ">
-                    cancel
+                        Edit
+                    </a>
+                    <button type="submit" asp-action="EditProviderProfile" asp-controller="Physician" id="save-provider-prof" class="btn  btn-outline-info btn-submit mx-2 ">
+                        save
+                    </button>
+                    <div id="cancel-provider-prof" class="btn  btn-outline-danger ">
+                        cancel
+                    </div>
                 </div>
-            </div>
             }
             <script>
 
             </script>
 
-        
-        <hr />
+
+            <hr />
             <h4 class=" my-2">Onbording </h4>
 
 
@@ -330,16 +333,16 @@
                     <div class="col-md-4 d-flex">
                         <div class="inputWrapper not-show">
                             @{
-                                bool isChecked = Model!=null ? Model.Isagreementdoc :false;
+                                bool isChecked = Model != null ? Model.Isagreementdoc : false;
                             }
-                            <input @(isChecked  ? "" : "disabled") class="fileInput btn btn-info"  asp-for="Agreementdoc" type="file" name="Agreementdoc" />
+                            <input @(isChecked ? "" : "disabled") class="fileInput btn btn-info" asp-for="Agreementdoc" type="file" name="Agreementdoc" />
                             <span class="btn btn-info text-white upload-button">Upload</span>
                         </div>
                         @{
-                            if ( Model!=null && Model.Isagreementdoc)
+                            if (Model != null && Model.Isagreementdoc)
                             {
-                                 <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn btn-info mx-2 text-white ">View</a>
-                                
+                                <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn btn-info mx-2 text-white ">View</a>
+
                             }
                         }
                         <a class="btn btn-info mx-2 text-white view-button" style="display:none;">View</a>
@@ -354,7 +357,7 @@
 
 
             <div class="col-md-12 ">
-                <div class="row" > 
+                <div class="row">
                     <div class="col-md-3">
                         <div class="form-check mx-2">
                             <input class="form-check-input agreement-checkbox not-show" asp-for="Isbackgrounddoc" type="checkbox" id="Isbackgrounddoc">
@@ -366,9 +369,9 @@
                     <div class="col-md-4 d-flex">
                         <div class="inputWrapper not-show">
                             @{
-                                 isChecked = Model != null ? Model.Isbackgrounddoc : false;
+                                isChecked = Model != null ? Model.Isbackgrounddoc : false;
                             }
-                            <input @(isChecked  ? "" : "disabled") class="fileInput btn btn-info" asp-for="BackGrounddoc" type="file" name="BackGrounddoc" />
+                            <input @(isChecked ? "" : "disabled") class="fileInput btn btn-info" asp-for="BackGrounddoc" type="file" name="BackGrounddoc" />
                             <span class="btn btn-info text-white upload-button">Upload</span>
                         </div>
                         @{
@@ -387,7 +390,7 @@
             </div>
 
             <div class="col-md-12 ">
-                <div class="row" > 
+                <div class="row">
                     <div class="col-md-3">
                         <div class="form-check mx-2">
                             <input class="form-check-input agreement-checkbox not-show" asp-for="Istrainingdoc" type="checkbox" id="flexCheckDefault">
@@ -401,7 +404,7 @@
                             @{
                                 isChecked = Model != null ? Model.Istrainingdoc : false;
                             }
-                            <input @(isChecked  ? "" : "disabled") class="fileInput btn btn-info" asp-for="Trainingdoc" type="file" name="Trainingdoc" />
+                            <input @(isChecked ? "" : "disabled") class="fileInput btn btn-info" asp-for="Trainingdoc" type="file" name="Trainingdoc" />
                             <span class="btn btn-info text-white upload-button">Upload </span>
                         </div>
                         @{
@@ -487,11 +490,11 @@
             </div>
 
 
-       <hr/> 
-            <div class="text-end mt-2 edits" >
+            <hr />
+            <div class="text-end mt-2 edits">
 
-               
-                @if (Model != null &&  Model.Physicianid != Convert.ToInt32(CV.UserID()))
+
+                @if (Model != null && Model.Physicianid != Convert.ToInt32(CV.UserID()))
                 {
                     <button type="submit" asp-action="EditProviderOnbording" asp-controller="Physician" id="save1" class="btn text-white btn-info btn-submit mx-2 ">
                         save
@@ -500,10 +503,10 @@
                         Delete Account
                     </a>
                 }
-                
+
             </div>
-            <div class="text-end" >
-            <input type="submit" class="btn btn-success" id="add" value="Create Account" />
+            <div class="text-end">
+                <input type="submit" class="btn btn-success" id="add" value="Create Account" />
 
             </div>
         </form>
@@ -519,9 +522,9 @@
             <div class="modal-body">
                 <form class="need-validation was-validated" novalidate method="post" asp-controller="ViewAction" asp-action="EditPhysicianMyProfilerequest">
 
-                    <input  type="hidden" asp-for="Physicianid" />
-                    <input  type="hidden" asp-for="Firstname" />
-                    <input  type="hidden" asp-for="Email" />
+                    <input type="hidden" asp-for="Physicianid" />
+                    <input type="hidden" asp-for="Firstname" />
+                    <input type="hidden" asp-for="Email" />
                     <input name="Email" hidden />
                     <div class="mb-3">
                         Need to send message to edit.
@@ -556,19 +559,19 @@
             }
             if (!inputtxt.value.match(decimal)) {
                 $("#perror").show();
-                        submitButton.prop('disabled', true); // Disable the submit button
+                submitButton.prop('disabled', true); // Disable the submit button
                 return true;
             }
             else {
                 $("#perror").hide();
-                        submitButton.prop('disabled', false); // Disable the submit button
+                submitButton.prop('disabled', false); // Disable the submit button
                 return false;
             }
         }
 
         var loginId = @CV.UserID();
         var providerId = @(Model != null ? Model.Physicianid : -1);
-        if(loginId == providerId){
+        if (loginId == providerId) {
             $('.not-show').hide();
         }
         $(function () {
@@ -595,20 +598,20 @@
                 $('#cancel-mail-billing').hide();
                 $('#edit-mail-billing').show();
             });
-                            $('#edit-provider-prof').on('click', function (e) {
-                    $('.provider-prof').prop('disabled', false);
-                    $('#save-provider-prof').show();
-                    $('#cancel-provider-prof').show();
-                    $('#edit-provider-prof').hide();
-                    $('#create-signature-button').prop('disabled', false);
-                });
+            $('#edit-provider-prof').on('click', function (e) {
+                $('.provider-prof').prop('disabled', false);
+                $('#save-provider-prof').show();
+                $('#cancel-provider-prof').show();
+                $('#edit-provider-prof').hide();
+                $('#create-signature-button').prop('disabled', false);
+            });
             $('#cancel-provider-prof').on('click', function (e) {
-                    $('.provider-prof').prop('disabled', true);
-                    $('#save-provider-prof').hide();
-                    $('#cancel-provider-prof').hide();
-                    $('#edit-provider-prof').show();
-                    $('#create-signature-button').prop('disabled', true);
-                });
+                $('.provider-prof').prop('disabled', true);
+                $('#save-provider-prof').hide();
+                $('#cancel-provider-prof').hide();
+                $('#edit-provider-prof').show();
+                $('#create-signature-button').prop('disabled', true);
+            });
 
             $('#admin-input-edit').on('click', function (e) {
                 $('.admin-input').prop('disabled', false);
@@ -641,8 +644,8 @@
                 $('#cancelasp').hide();
                 $('#add').hide();
                 $('.editable').show();
-                 $('.form-control-disable').prop('disabled', true);
-            }else{
+                $('.form-control-disable').prop('disabled', true);
+            } else {
                 $('.edits').hide();
 
             }
@@ -752,7 +755,7 @@
                 $('#clear-button').show();
                 $('#undo-button').show();
                 $('#save-button').show();
-                
+
                 canvas.style.display = 'block';
             });
 
@@ -788,7 +791,7 @@
                 scaleUp(canvas, 1);
                 var dataURL = canvas.toDataURL("image/png");
                 $('#signature-data').val(dataURL); // Set the value of the hidden input field
-               // $('#save-form').submit(); // Submit the form
+                // $('#save-form').submit(); // Submit the form
             });
 
             function updateSignatureFileInput() {

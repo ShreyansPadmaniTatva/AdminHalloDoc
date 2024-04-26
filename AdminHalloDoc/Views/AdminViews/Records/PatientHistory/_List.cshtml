@@ -26,6 +26,7 @@
             </tr>
         </thead>
         <tbody class="table-group-divider mx-5">
+           
             @foreach (var item in Model.PatientHistorybList)
             {
                 <tr>
@@ -47,6 +48,12 @@
             }
         </tbody>
     </table>
+    @if (Model.PatientHistorybList.Count < 1)
+    {
+
+        <h1 class="text-center mt-3 text-secondary">No data Found</h1>
+
+    }
 
     <div class="d-md-none mt-3">
         @{
@@ -82,6 +89,12 @@
                 </div>
             </div>
             Count++;
+        }
+        @if (Model.PatientHistorybList.Count < 1)
+        {
+
+            <h1 class="text-center mt-3 text-secondary" >No data Found</h1>
+
         }
 
     </div>

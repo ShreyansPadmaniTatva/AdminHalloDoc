@@ -73,28 +73,6 @@
     @*<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.1.js"></script>*@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    @*<script>
-
-
-        $(window).on('ready', function () {
-            $('.loader').fadeIn();
-        });
-
-        $(window).on('load', function () {
-            $('.loader').fadeOut();
-        });
-
-        $(document).ready(function () {
-            // Show loader on Ajax start
-            $(document).ajaxStart(function () {
-                $('.loader').fadeIn();
-            });
-
-            // Hide loader on Ajax stop (completion)
-            $(document).ajaxStop(function () {
-                $('.loader').fadeOut();
-            });
-        });
-    </script>*@
+  
 </body>
 </html>

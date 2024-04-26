@@ -36,12 +36,14 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ApplicationDbContext _context;
         private readonly IRequestRepository _requestRepository;
-        public Login(ApplicationDbContext context, EmailConfiguration emailConfig,IRequestRepository requestRepository, IHttpContextAccessor httpContextAccessor)
+        private readonly ILoginRepository _loginRepository;
+        public Login(ApplicationDbContext context, EmailConfiguration emailConfig,IRequestRepository requestRepository, IHttpContextAccessor httpContextAccessor, ILoginRepository loginRepository)
         {
             _context = context;
             _emailConfig = emailConfig;
             _requestRepository = requestRepository;
             this.httpContextAccessor = httpContextAccessor;
+            _loginRepository = loginRepository;
         }
         #endregion
 
@@ -99,12 +101,12 @@ namespace AdminHalloDoc.Controllers.PatientControllers
             {
                 var hostName = httpContextAccessor.HttpContext.Request.Host.Host;
                 var port = httpContextAccessor.HttpContext.Request.Host.Port;
-                var resetPasswordUrl = $"http://{hostName}:{port}/Login/ResetPassword?Datetime={_emailConfig.Encode(DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt"))}&email={_emailConfig.Encode(Email)}";
+                var resetPasswordUrl = $"https://{hostName}:{port}/Login/ResetPassword?Datetime={_emailConfig.Encode(DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt"))}&email={_emailConfig.Encode(Email)}";
                 var Subject = "Change Password";
                 var Body = $" <html><body> <h2>Welcome to Our Healthcare Platform!</h2>     " +
                     $"                           <p>Dear Patient ,</p>" +
                     $"                             <ol>" +
-                    $"                            <li>Click the following link to Agreement:</li>" +
+                    $"                            <li>Click the following link to Reset Pass:</li>" +
                     $" <li>your reset password link is <a href='{resetPasswordUrl}'>Click here</a></li>" +
                     $"</ol>" +
                     $"</body></html>";
@@ -119,9 +121,9 @@ namespace AdminHalloDoc.Controllers.PatientControllers
                 elog.Recipient = Email;
                 elog.Roleid = 4;
                 await _requestRepository.EmailLog(elog);
-                _emailConfig.SendMail(Email, Subject, Body);
+                //_emailConfig.SendMail(Email, Subject, Body);
 
-                ViewData["EmailCheck"] = "Your ID Pass Send In Your Mail";
+                ViewData["EmailCheck"] = "Your Reset Link Send In Your Mail";
             }
             else
             {
@@ -182,8 +184,14 @@ namespace AdminHalloDoc.Controllers.PatientControllers
             string Decodee = _emailConfig.Decode(email);
             DateTime s = DateTime.ParseExact(_emailConfig.Decode(Datetime), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
             TimeSpan dif =  DateTime.Now - s;
-            if (dif.Days == 0 && dif.Hours < 24)
+            if (!_loginRepository.IsPasswordModify(Decodee))
             {
+                ViewBag.URl = "Pass Is Change Only Ones.";
+                return View("../SendAgreement/404");
+            }
+                if (dif.Days == 0 && dif.Hours < 24)
+            {
+
                 ViewBag.email = Decodee;
                 return View();
 
@@ -211,6 +219,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
                     Aspnetuser U = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == Email);
                     var hasher = new PasswordHasher<string>();
                     U.Passwordhash = hasher.HashPassword(null, Password); 
+                    U.Modifieddate = DateTime.Now;
                     _context.Update(U);
                     await _context.SaveChangesAsync();
                     ViewData["error"] = "Pass is Upadated";

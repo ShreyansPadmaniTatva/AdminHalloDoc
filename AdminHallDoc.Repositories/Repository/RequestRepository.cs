@@ -99,6 +99,22 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
+        #region ProviderComboBox
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<Physicians>> ProviderComboBox()
+        {
+            return await _context.Physicians.Where(r => r.Isdeleted == new BitArray(new[] { false})).Select(req => new Physicians()
+            {
+                Physicianid = req.Physicianid,
+                Firstname = req.Firstname + ' '+req.Lastname
+            })
+                .ToListAsync();
+        }
+        #endregion
+
         #region RegionComboBox
         /// <summary>
         /// 

@@ -14,20 +14,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region Constoter
         private readonly IRequestRepository _requestRepository;
         private readonly IViewActionRepository _viewActionRepository;
-        private readonly IViewNotesRepository _viewNotesRepository;
-        private readonly IMyProfileRepository _myProfileRepository;
-        private readonly IPhysicianRepository _physicianRepository;
-        private readonly EmailConfiguration _emailconfig;
         private readonly ISchedulingRepository _schedulingRepository;
-        public SchedulingController(IPhysicianRepository physicianRepository, IMyProfileRepository myProfileRepository, IRequestRepository requestRepository, IViewActionRepository viewActionRepository, IViewNotesRepository viewNotesRepository, EmailConfiguration emailConfiguration, ISchedulingRepository schedulingRepository)
+        public SchedulingController(IRequestRepository requestRepository, IViewActionRepository viewActionRepository, ISchedulingRepository schedulingRepository)
         {
 
             _requestRepository = requestRepository;
             _viewActionRepository = viewActionRepository;
-            _viewNotesRepository = viewNotesRepository;
-            _myProfileRepository = myProfileRepository;
-            _physicianRepository = physicianRepository;
-            _emailconfig = emailConfiguration;
             _schedulingRepository = schedulingRepository;
         }
         #endregion

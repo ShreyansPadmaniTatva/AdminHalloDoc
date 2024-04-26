@@ -222,8 +222,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     new MenuItem {
                         DbName = "Invoicing",
                       Label = "Invoicing",
-                        Url = "/Invoice/Index",
-                       UrlList = new List<string> { "/Invoice/Index" },
+                        Url = "/Invoice/AdminIndex",
+                       UrlList = new List<string> { "/Invoice/Index","/Invoice/TimeSheetAddEdit" },
                         ContollerAction ="/Reports",
                     }
                   }
@@ -356,5 +356,25 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         #endregion
 
+        #region
+        public bool IsPasswordModify(string? email)
+        {
+            if (email != null)
+            {
+                DateTime? modifiedDate = _context.Aspnetusers.Where(r => r.Email == email).FirstOrDefault().Modifieddate;
+
+                if (modifiedDate == null)
+                {
+                    return true;
+                }
+
+                if (modifiedDate != null && DateTime.UtcNow.Subtract(modifiedDate.Value).TotalHours <= 24)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        #endregion
     }
 }

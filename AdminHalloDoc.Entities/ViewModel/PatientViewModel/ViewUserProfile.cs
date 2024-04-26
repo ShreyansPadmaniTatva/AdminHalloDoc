@@ -11,7 +11,6 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         [Required(ErrorMessage = "First Name is required")]
         [StringLength(100)]
         [RegularExpression(@"^(?!\s+$).+", ErrorMessage = "Enter a valid Name")]
-
         public string Firstname { get; set; } = null!;
 
         public string? Lastname { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,13 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public string? ConfirmationNumber { get; set; }
         public int? RequestID { get; set; }
         public int RequesClientid { get; set; }
+        [StringLength(50)]
+        [Required(ErrorMessage = "Please Enter your Email Address")]
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|gov\.in)$", ErrorMessage = "Enter a valid email address with valid domain")]
         public string? Email { get; set; }
+        [StringLength(20, MinimumLength = 10, ErrorMessage = "Enter valid Mobile Number")]
+        [RegularExpression(@"^\+(\d[\d-. ]+)?(\([\d-. ]+\))?[\d-. ]+\d$", ErrorMessage = "Please enter valid phone number")]
+        [Required(ErrorMessage = "Plese enter your Phone Number")]
         public string? PhoneNumber { get; set; }
         public DateTime? DOB { get; set; }
         public class Documents

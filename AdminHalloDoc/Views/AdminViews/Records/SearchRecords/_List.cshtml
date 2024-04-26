@@ -34,6 +34,7 @@
             </tr>
         </thead>
         <tbody class="table-group-divider mx-5">
+            
             @foreach (var item in Model.SearchRecordList)
             {
                 <tr>
@@ -74,8 +75,15 @@
                 </tr>
 
             }
+           
         </tbody>
     </table>
+    @if (Model.SearchRecordList.Count < 1)
+    {
+
+        <h1 class="text-center mt-3 text-secondary">No data Found</h1>
+
+    }
     <div class="d-lg-none mt-2">
         @foreach (var item in Model.SearchRecordList)
         {
@@ -140,6 +148,9 @@
 
                 </div>
             </div>
+        }
+        else{
+        <h1 class="text-center mt-3 text-secondary" >No data Found</h1>
         }
     </div>
     <nav aria-label="Page navigation example">

@@ -157,7 +157,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                          on r.Roleid equals role.Roleid into roleGroup
                                          from roles in roleGroup.DefaultIfEmpty()
 
-                                         where pr.Regionid == region
+                                         where pr.Regionid == region && r.Isdeleted == new BitArray(new[] {false})
                                          select new Physicians
                                          {
                                              Createddate = r.Createddate,

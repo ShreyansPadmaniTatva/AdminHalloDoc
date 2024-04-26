@@ -975,6 +975,7 @@
                                             if (matchingDates.length <= 2) {
                                                 matchingDates.forEach((item, index) => {
                                                     cell.classList.add('p-0');
+                                                    cell.classList.add('d-flex');
                                                     cell.innerHTML += `<a data-form-id="formEdit_UMS" data-url="@Url.Action("_EditShift", "Scheduling")?id=${item.shiftid}" class="mt-1 d-block text-dark js-stkModal-btn w-Status-${item.status}">${item.regionname} ${item.starttime} - ${item.endtime}</a>`;
                                                 });
                                             } else {

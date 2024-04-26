@@ -29,6 +29,7 @@
             </tr>
         </thead>
         <tbody class="table-group-divider mx-5">
+       
             @foreach (var item in Model.SMSLogList)
             {
                 <tr>
@@ -46,12 +47,19 @@
             }
         </tbody>
     </table>
+    @if (Model.SMSLogList.Count < 1)
+    {
+
+        <h1 class="text-center mt-3 text-secondary">No data Found</h1>
+
+    }
     <div class="d-lg-none mt-3">
         @{
             var Count = 0;
         }
-        @if (Model != null && Model.EmailLogList != null && Model.EmailLogList.Count > 0)
+        @if (Model != null && Model.SMSLogList != null && Model.SMSLogList.Count > 0)
         {
+            
             @foreach (var item in Model.SMSLogList)
             {
                 <div class="bg-info-subtle " data-bs-toggle="collapse" data-bs-target="#collapseexample_@Count"
@@ -100,6 +108,9 @@
                 </div>
                 Count++;
             }
+        }
+        else{
+            <h1 class="text-center mt-3 text-secondary" >No data Found</h1>
         }
     </div>
     <nav aria-label="Page navigation example">

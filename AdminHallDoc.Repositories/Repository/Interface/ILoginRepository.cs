@@ -15,5 +15,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<UserInfo> CheckAccessLogin(Aspnetuser aspNetUser);
         List<MenuItem> SetSubMenu(int? roleid, int menusub, List<MenuItem> s);
         List<MenuItem> SetMenu(int? roleid);
+        bool IsPasswordModify(string? email);
     }
 }

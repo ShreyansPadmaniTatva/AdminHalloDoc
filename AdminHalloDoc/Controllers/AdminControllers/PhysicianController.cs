@@ -14,18 +14,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
     {
         #region Constoter
         private readonly IRequestRepository _requestRepository;
-        private readonly IViewActionRepository _viewActionRepository;
-        private readonly IViewNotesRepository _viewNotesRepository;
-        private readonly IMyProfileRepository _myProfileRepository;
         private readonly IPhysicianRepository _physicianRepository;
         private readonly EmailConfiguration _emailconfig;
-        public PhysicianController(IPhysicianRepository physicianRepository,IMyProfileRepository myProfileRepository, IRequestRepository requestRepository, IViewActionRepository viewActionRepository, IViewNotesRepository viewNotesRepository, EmailConfiguration emailConfiguration)
+        public PhysicianController(IPhysicianRepository physicianRepository, IRequestRepository requestRepository, EmailConfiguration emailConfiguration)
         {
 
             _requestRepository = requestRepository;
-            _viewActionRepository = viewActionRepository;
-            _viewNotesRepository = viewNotesRepository;
-            _myProfileRepository = myProfileRepository;
             _physicianRepository = physicianRepository;
             _emailconfig = emailConfiguration;
         }
@@ -342,6 +336,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         }
         #endregion
+
         #region Save_Payrate
         public async Task<IActionResult> SavePayrate(int PayrateId,decimal? Payrate,int? physicianid)
         {

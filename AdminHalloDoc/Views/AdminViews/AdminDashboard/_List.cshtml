@@ -15,6 +15,12 @@
     <div class="table-responsive" style="overflow-x: visible !important;">
       
         <div class="accordion accordion-flush" id="accordionFlushExample">
+            @if (Model.DashboardList.Count < 1)
+            {
+
+                <h1 class="text-center mt-3 text-secondary" >No data Found</h1>
+
+            }
             @foreach (var item in Model.DashboardList)
             {
                     <div class="accordion-item">
@@ -241,6 +247,12 @@
                 <tbody>
                     @{
                         int i = 1;
+                    }
+                    @if (Model.DashboardList.Count < 1)
+                    {
+
+                        <h1 class="text-center mt-3 text-secondary" >No data Found</h1>
+
                     }
                     @foreach (var item in Model.DashboardList)
                     {

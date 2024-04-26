@@ -1,0 +1,164 @@
+// DataAnnotations
+Scaffold-DbContext "User ID = postgres;Password=Tatva@123;Server=localhost;Port=5432;Database=EFCoreTestDB1;Integrated Security=true;Pooling=true;" Npgsql.EntityFrameworkCore.PostgreSQL -OutputDir "DataModels" –context "ApplicationDbContext" –contextDir "DataContext" -f -DataAnnotations;
+
+
+ string hostName = Dns.GetHostName();
+
+            // Get the IP addresses associated with the host
+            IPAddress[] ipAddresses = Dns.GetHostAddresses(hostName);
+
+            // Filter out the IPv4 addresses
+            IPAddress localIPAddress = ipAddresses.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
+using System;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        try
+        {
+            // Get all network interfaces on the system
+            NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+            // Iterate through each network interface
+            foreach (NetworkInterface networkInterface in networkInterfaces)
+            {
+                // Filter out loopback and virtual interfaces
+                if (networkInterface.NetworkInterfaceType != NetworkInterfaceType.Loopback &&
+                    networkInterface.NetworkInterfaceType != NetworkInterfaceType.Tunnel &&
+                    networkInterface.OperationalStatus == OperationalStatus.Up)
+                {
+                    // Get the IP properties of the current network interface
+                    IPInterfaceProperties ipProperties = networkInterface.GetIPProperties();
+
+                    // Iterate through each unicast address assigned to the interface
+                    foreach (UnicastIPAddressInformation unicastAddress in ipProperties.UnicastAddresses)
+                    {
+                        // Check if it's an IPv6 address
+                        if (unicastAddress.Address.AddressFamily == AddressFamily.InterNetworkV6)
+                        {
+                            // Print the IPv6 address
+                            Console.WriteLine($"Interface: {networkInterface.Name}, IPv6 Address: {unicastAddress.Address}");
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
+    }
+}
+
+using System;
+using System.Net;
+using System.Net.Sockets;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string ipv6Address = "fe80::1bf3:e9cb:9e9f:1772%10";
+
+        try
+        {
+            IPAddress ipAddress = IPAddress.Parse(ipv6Address);
+
+            if (ipAddress.AddressFamily == AddressFamily.InterNetworkV6)
+            {
+                // Attempt to get the IPv4 address from the IPv6 link-local address
+                IPAddress ipv4Address = GetIPv4AddressFromIPv6LinkLocal(ipAddress);
+
+                if (ipv4Address != null)
+                {
+                    Console.WriteLine(ipv4Address.ToString()); // Output: IPv4 address
+                }
+                else
+                {
+                    Console.WriteLine("Unable to convert IPv6 address to IPv4.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("The provided IP address is not an IPv6 address.");
+            }
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Invalid IP address format.");
+        }
+    }
+
+    static IPAddress GetIPv4AddressFromIPv6LinkLocal(IPAddress ipv6Address)
+    {
+        IPAddress ipv4Address = null;
+
+        try
+        {
+            // Convert the IPv6 address to an IPv4-mapped IPv6 address
+            ipv4Address = ipv6Address.MapToIPv4();
+        }
+        catch (Exception)
+        {
+            // Unable to convert the address
+            ipv4Address = null;
+        }
+
+        return ipv4Address;
+    }
+}
+
+Table Name	PayrateByProvider			
+Field Name	Data Type	Length	Nullable	Comments
+PayrateId	int		No	Its Primary Key.
+PayrateCategoryId	int		No	Its Foreign key of PayrateCategory Table.
+PhysicianId	int		No	Its Foreign key of  Provider Table.
+Payrate	decimal	8,3	No	
+				
+CreatedBy	nvarchar	128	No	Its Foreign key of AspNetUsers Table.
+CreatedDate	datetime		No	
+ModifiedBy	nvarchar	128	Yes	Its Foreign key of AspNetUsers Table.
+ModifiedDate	datetime		Yes	
+
+CREATE TABLE PayrateByProvider (
+    PayrateId SERIAL PRIMARY KEY,
+    PayrateCategoryId INT NOT NULL REFERENCES PayrateCategory(PayrateCategoryId),
+    PhysicianId INT NOT NULL REFERENCES Provider(PhysicianId),
+    Payrate DECIMAL(8,3) NOT NULL,
+    CreatedBy VARCHAR(128) NOT NULL REFERENCES AspNetUsers(Id),
+    CreatedDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ModifiedBy VARCHAR(128) REFERENCES AspNetUsers(Id),
+    ModifiedDate TIMESTAMP
+);
+using System;
+using System.Net;
+using System.Net.Sockets;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string ipv6Address = "fe80::1bf3:e9cb:9e9f:1772%10";
+        IPAddress ipAddress = IPAddress.Parse(ipv6Address);
+        
+        // Check if the IP address is an IPv6 address
+        if (ipAddress.AddressFamily == AddressFamily.InterNetworkV6)
+        {
+            // Convert the IPv6 address to an IPv4-mapped IPv6 address
+            IPAddress ipv4MappedAddress = ipAddress.MapToIPv4();
+            
+            // Get the IPv4 address string
+            string ipv4Address = ipv4MappedAddress.ToString();
+            
+            Console.WriteLine(ipv4Address); // Output: 51.81.153.188
+        }
+        else
+        {
+            Console.WriteLine("The provided IP address is not an IPv6 address.");
+        }
+    }
+}

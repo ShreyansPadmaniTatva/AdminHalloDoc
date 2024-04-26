@@ -14,19 +14,22 @@
         status = TempData["Status"].ToString();
 
     }
+    decimal TotalHours = 0;
+    int TotalWeekend = 0;
+    decimal TotalHousecalls = 0;
+    decimal TotalPhone = 0;
 }
 
-<div class="container" >
+<div class="container">
     <div class="justify-content-between d-flex container-fluid  position-relative ">
         <div class="">
-           
         </div>
         <div class="">
-            <a href="javascript:void(0)" onclick="goBack()" class="btn btn-outline-info"> ❮  Back </a>
+            <a href="/Invoice/Index" class="btn btn-outline-info"> ❮  Back </a>
         </div>
     </div>
-    <div class="card border-0 shadow py-4 mb-5 mx-3 mt-3 rounded">
-       
+    <div class="card border-0 shadow py-4 mb-3 mx-3 mt-3 rounded">
+
 
         <div id="table" class="table-responsive  d-md-block">
             @using (Html.BeginForm("TimeSheetDetailsEdit", "Invoice", FormMethod.Post))
@@ -41,11 +44,20 @@
                             <th scope="col" style="width: 10%;" class="text-center">Weekend / Holiday</th>
                             <th scope="col" style="width: 16%;">Number of Housecalls</th>
                             <th scope="col" style="width: 17%;">Number of Phone Consults</th>
+                            @if(CV.role() == "Admin")
+                            {
+                                <th>Total</th>
+                            }
                         </tr>
                     </thead>
-                    <tbody class="table-group-divider mx-5">
+                    <tbody class="table-group-divider mx-5" id="detailstbody">
                         @for (int i = 0; i < Model.Timesheetdetails.Count; i++)
                         {
+
+                            TotalHours = TotalHours + (decimal)Model.Timesheetdetails[i].Totalhours;
+                            TotalWeekend = TotalWeekend + (Model.Timesheetdetails[i].Isweekend == true ? 1 : 0);
+                            TotalHousecalls = TotalHousecalls + (decimal)Model.Timesheetdetails[i].Numberofhousecall;
+                            TotalPhone = TotalPhone + (decimal)Model.Timesheetdetails[i].Numberofphonecall;
                             <tr>
                                 <td scope="col">
                                     @Html.HiddenFor(m => m.Timesheetdetails[i].Timesheetdetailid)
@@ -57,65 +69,213 @@
                                 </td>
                                 <td scope="col">
                                     <div class="">
-                                        @Html.TextBoxFor(m => m.Timesheetdetails[i].Totalhours, new { @class = "pay-in form-control form-control-disable rounded mail-billing-imp", autocomplete = "off" })
+                                        @Html.TextBoxFor(m => m.Timesheetdetails[i].Totalhours, new { @class = "pay-in form-control form-control-disable rounded numeric-input", autocomplete = "off" })
+                                        <span class="validation-message" style="color: red; display: none;">Please enter a valid number.</span>
                                     </div>
                                 </td>
                                 <td scope="col" class="text-center">
                                     <div class="form-floating">
-                                      @{
-                                            bool isWeekend = (bool)Model.Timesheetdetails[i].Isweekend ;
-                                    }
-                                        @*@Html.CheckBoxFor(m => (bool)m.Timesheetdetails[i].Isweekend, new { @class = "form-check-input form-check-inputs" })*@
+                                        @{
+                                            bool isWeekend = (bool)Model.Timesheetdetails[i].Isweekend;
+                                        }
                                         @Html.CheckBoxFor(m => Model.Timesheetdetails[i].Isweekend, new { @class = "form-check-input form-check-inputs", id = $"Isweekend_{i}" })
-                                        @*@Html.CheckBoxFor(m =>isWeekend, new { @class = "form-check-input form-check-inputs"})*@
-                                        @*@Html.HiddenFor(m => m.Timesheetdetails[i].Isweekend)*@
-                                        @*<input type="checkbox" asp-for="@Model.Timesheetdetails[i].Isweekend" value="@Model.Timesheetdetails[i].Isweekend" class="form-check-input form-check-inputs">*@
-               
                                     </div>
                                 </td>
                                 <td scope="col">
                                     <div class="">
-                                        @Html.TextBoxFor(m => m.Timesheetdetails[i].Numberofhousecall, new { @class = "pay-in form-control form-control-disable rounded mail-billing-imp", autocomplete = "off" })
+                                        @Html.TextBoxFor(m => m.Timesheetdetails[i].Numberofhousecall, new { @class = "pay-in form-control form-control-disable rounded numeric-input", autocomplete = "off" })
+                                        <span class="validation-message" style="color: red; display: none;">Please enter a valid number.</span>
                                     </div>
                                 </td>
                                 <td scope="col">
                                     <div class="">
-                                        @Html.TextBoxFor(m => m.Timesheetdetails[i].Numberofphonecall, new { @class = "pay-in form-control form-control-disable rounded mail-billing-imp", autocomplete = "off" })
+                                        @Html.TextBoxFor(m => m.Timesheetdetails[i].Numberofphonecall, new { @class = "pay-in form-control form-control-disable rounded numeric-input", autocomplete = "off" })
+                                        <span class="validation-message" style="color: red; display: none;">Please enter a valid number.</span>
                                     </div>
                                 </td>
+                                @if (CV.role() == "Admin")
+                                {
+                                <td></td>    
+                                }
                             </tr>
+                        }
+                        @if (CV.role() == "Admin")
+                        {
+                            <tr>
+                                <td> Payrate </td>
+                                <td>  </td>
+                                <td> @Model.PayrateWithProvider[1].Payrate </td>
+                                <td> @Model.PayrateWithProvider[0].Payrate </td>
+                                <td> @Model.PayrateWithProvider[6].Payrate </td>
+                                <td> @Model.PayrateWithProvider[3].Payrate </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td> Invoice Total </td>
+                                <td>  </td>
+                                <td> @(TotalHours * Model.PayrateWithProvider[1].Payrate) </td>
+                                <td> @(TotalWeekend * Model.PayrateWithProvider[0].Payrate)</td>
+                                <td> @(TotalHousecalls * Model.PayrateWithProvider[6].Payrate) </td>
+                                <td> @(TotalPhone * Model.PayrateWithProvider[3].Payrate) </td>
+                                <td>@(TotalHours * Model.PayrateWithProvider[1].Payrate + TotalWeekend * Model.PayrateWithProvider[0].Payrate)</td>
+
+                            </tr>
+                            
                         }
                     </tbody>
                 </table>
 
-                <div class="text-end" >
-                      <button type="submit" class="btn btn-info text-white">Submit</button>
+                <div class="text-end mx-3">
+                    <button type="submit" class="btn btn-info text-white">Submit</button>
                 </div>
             }
         </div>
-        
+
     </div>
-    <div class="card border-0 shadow py-4 mb-5 mx-3 mt-3 rounded">
-        <div class="text-end mx-2 px-3 d-flex justify-content-between">
-            <div class="dropdown ">
+    <div class="text-start mx-3 my-3">
+        <div class="btn btn-info text-white show-bill">Add  Receipts</div>
+    </div>
+    <div id="billsection" style="display:none" class="card border-0 shadow py-4 mb-5 mx-3 mt-3 rounded">
 
-                <h4 class="fw-bolder"> Timesheets Reimbursement</h4>
-            </div>
-            <div class="d-flex">
-                <form asp-action="ChangeNotificationPhysician" class="mx-2" id="saveChangesForm" asp-controller="Physician">
-                    <input type="hidden" id="changedValuesInput" name="changedValues">
-                    <button class="btn btn-outline-info " style="display:none;" type="submit" id="saveChangesButton"> Save Changes </button>
-                </form>
-                <!-- Button trigger modal -->
-               
-            </div>
 
-        </div>
         <div id="table" class="table-responsive  d-md-block">
-            
+
+            <input type="hidden" name="PhysicianId" value="@Model.PhysicianId" />
+            <table class="table table-responsive mt-3 p-3">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 10%;">Date</th>
+                        <th scope="col" style="width: 9%;">Item</th>
+                        <th scope="col" style="width: 17%;">Amount</th>
+                        <th scope="col" style="width: 10%;" class="text-center">Bill</th>
+                        <th scope="col" style="width: 16%;">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider mx-5">
+                    @for (int i = 0; i < Model.Timesheetdetails.Count; i++)
+                    {
+
+                        <tr>
+                            <td scope="col">
+                                @Html.DisplayFor(m => m.Timesheetdetails[i].Timesheetdate)
+                            </td>
+                            <td scope="col">
+                                @if (i < Model.Timesheetdetailreimbursements.Count)
+                                {
+                                    <div class="pay-item-div">@Model.Timesheetdetailreimbursements[i].Itemname</div>
+                                    <input type="hidden" class="pay-item form-control form-control-disable rounded" value="@Model.Timesheetdetailreimbursements[i].Itemname" />
+                                }
+                                else
+                                {
+                                    <input class="pay-item form-control form-control-disable rounded" type="text" />
+                                }
+                            </td>
+                            <td scope="col">
+                                <div class="">
+                                    @if (i < Model.Timesheetdetailreimbursements.Count)
+                                    {
+                                        <div class="pay-amount-div">@Model.Timesheetdetailreimbursements[i].Amount</div>
+                                        <input type="hidden" class="pay-amount form-control form-control-disable rounded numeric-input" value="@Model.Timesheetdetailreimbursements[i].Amount" />
+                                    }
+                                    else
+                                    {
+                                        <input class="pay-amount form-control form-control-disable rounded" type="text" />
+                                    }
+                                </div>
+                            </td>
+                            <td scope="col" class="text-center">
+                                @if (i < Model.Timesheetdetailreimbursements.Count)
+                                {
+                                    @Html.DisplayFor(m => m.Timesheetdetailreimbursements[i].Bill, new { @class = "form-control form-control-disable rounded", autocomplete = "off" })
+                                    @Html.HiddenFor(m => m.Timesheetdetailreimbursements[i].Itemname, new { @class = "pay-item-hidden"})
+                                    @Html.HiddenFor(m => m.Timesheetdetailreimbursements[i].Amount, new { @class = "pay-amount-hidden"})
+                                }
+                                else
+                                {
+                                    <form method="post" class="myform" asp-action="TimeSheetBillAddEdit" asp-controller="Invoice" enctype="multipart/form-data">
+
+                                        <input type="hidden" class="pay-item-hidden" name="Item" />
+                                        <input type="hidden" class="pay-amount-hidden" name="Amount" />
+                                        <input type="hidden" name="PhysicianId" value="@Model.PhysicianId" />
+                                        <input type="hidden" name="StartDate" value="@Model.Timesheetdetails[0].Timesheetdate" />
+                                        <input type="hidden" value="@Model.Timesheetdetails[i].Timesheetdetailid" name="Timesheetdetailid" />
+
+                                        <div class="form-floating">
+                                            <div class="col-md-12 form-floating d-flex file-parent">
+                                                <div class="file-upload-timesheet border border-1" data-text="Select file">
+                                                    <input name="file" type="file" class="file-upload-field" id="file" value="">
+
+                                                </div>
+                                                <div class="btn text-light btn-info rounded-0 d-flex align-items-lg-center fileupload" id="">Upload</div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                }
+
+                            </td>
+                            <td scope="col">
+                                <div class="d-flex" >
+                                    @if (i < Model.Timesheetdetailreimbursements.Count)
+                                    {
+                                        <div>
+                                            <form method="post" class="myform" asp-action="TimeSheetBillAddEdit" asp-controller="Invoice" enctype="multipart/form-data">
+
+                                                <input type="hidden" class="pay-item-hidden" name="Item" value="@Model.Timesheetdetailreimbursements[i].Itemname" />
+                                                <input type="hidden" class="pay-amount-hidden" name="Amount" value="@Model.Timesheetdetailreimbursements[i].Amount" />
+                                                <input type="hidden" name="PhysicianId" value="@Model.PhysicianId" />
+                                                <input type="hidden" name="StartDate" value="@Model.Timesheetdetails[0].Timesheetdate" />
+                                                <input type="hidden" value="@Model.Timesheetdetails[i].Timesheetdetailid" name="Timesheetdetailid" />
+                                                <input type="hidden" value="@Model.Timesheetdetailreimbursements[i].Timesheetdetailreimbursementid" name="Trid" />
+
+                                                <button type="submit" class="btn btn-sm btn-outline-info save-btn d-none">
+                                                    save
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="btn btn-sm btn-outline-info cancel-btn d-none">
+                                            cancel
+                                        </div>
+                                        <div class="btn btn-sm btn-outline-info edit-btn">
+                                            edit
+                                        </div>
+                                        <form method="post" class="myform" asp-action="TimeSheetBillRemove" asp-controller="Invoice" enctype="multipart/form-data">
+                                            <button type="submit" class="btn btn-sm btn-outline-info delete-btn">
+                                                <input type="hidden" name="PhysicianId" value="@Model.PhysicianId" />
+                                                <input type="hidden" value="@Model.Timesheetdetailreimbursements[i].Timesheetdetailreimbursementid" name="Trid" />
+
+                                                <input type="hidden" name="StartDate" value="@Model.Timesheetdetails[0].Timesheetdate" />
+                                                delete
+                                            </button>
+                                        </form>
+                                        <a target="_blank" href="/Upload/TimeSheet/@Model.Timesheeid/@Model.Timesheetdetailreimbursements[i].Bill" class="btn btn-sm btn-outline-info view-btn">
+                                            view
+                                        </a>
+                                    }
+                                </div>
+                            </td>
+
+                        </tr>
+
+                    }
+                   
+                </tbody>
+            </table>
         </div>
 
     </div>
+    @if(CV.role() == "Admin")
+    {
+        <div class="text-end mx-3 mb-3">
+            <a asp-action="SetToApprove" asp-controller="Invoice" asp-route-timesheetid="@Model.Timesheeid" type="submit" class="btn btn-info text-white">Approve</a>
+        </div>
+    }
+    else
+    {
+        <div class="text-end mx-3 mb-3">
+            <a asp-action="SetToFinalize" asp-controller="Invoice" asp-route-timesheetid="@Model.Timesheeid" type="submit" class="btn btn-info text-white">Finalize</a>
+        </div>
+    }
+   
 </div>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -123,9 +283,67 @@
 
 @section Scripts
     {
-<script>
+    <script>
+        $(document).ready(function () {
+
+             $('.numeric-input').on('keypress', function (event) {
+            var keyCode = event.which;
+            // Allow only numbers and some special keys like backspace, delete, arrow keys
+            if (keyCode < 48 || keyCode > 57) {
+                event.preventDefault();
+            }
+        });
+
+        // Validation for empty input on form submit
+        $('#timesheetform').submit(function () {
+            var valid = true;
+            $('.numeric-input').each(function () {
+                if ($(this).val() === "") {
+                    $(this).siblings('.validation-message').show();
+                    valid = false;
+                } else {
+                    $(this).siblings('.validation-message').hide();
+                }
+            });
+            return valid;
+        });
+
+            $(document).on('click', '.show-bill', function () {
+                $('#billsection').show();
+                $(this).addClass('hide-bill').removeClass('show-bill');
+            });
+
+            $(document).on('click', '.hide-bill', function () {
+                $('#billsection').hide();
+                $(this).removeClass('hide-bill').addClass('show-bill');
+            });
+
+            $('.edit-btn').click(function () {
+                var row = $(this).closest('tr');
+                row.find('.pay-item').attr('type', 'text');
+                row.find('.pay-amount').attr('type', 'text');
+                row.find('.pay-item-div').addClass('d-none');
+                row.find('.pay-amount-div').addClass('d-none');
+                row.find('.edit-btn').addClass('d-none');
+                row.find('.save-btn').removeClass('d-none');
+                row.find('.cancel-btn').removeClass('d-none');
+                row.find('.form-control-disable').prop('disabled', false);
+            });
+
+            $('.cancel-btn').click(function () {
+                var row = $(this).closest('tr');
+                row.find('.pay-item').attr('type', 'hidden');
+                row.find('.pay-amount').attr('type', 'hidden');
+                row.find('.pay-item-div').removeClass('d-none');
+                row.find('.pay-amount-div').removeClass('d-none');
+                row.find('.edit-btn').removeClass('d-none');
+                row.find('.save-btn').addClass('d-none');
+                row.find('.cancel-btn').addClass('d-none');
+                row.find('.form-control-disable').prop('disabled', true);
+            });
+        });
         var loginId = @CV.UserID();
-       
+
         function generateOptions() {
             var options = [];
 
@@ -139,12 +357,12 @@
                 var date = new Date(currentYear, currentMonth + i, 1); // Set the date to the 1st of the month
 
                 var year = date.getFullYear();
-                var month = date.getMonth() ; // Months are zero-based, so add 1
+                var month = date.getMonth(); // Months are zero-based, so add 1
                 var daysInMonth = new Date(year, month, 0).getDate();
 
                 // Add options for the first and second halves of the month
-                var firstHalfText = year + "/" + month + "/" + date.getDate() + " - "+ year + "/" + month + "/ 14" ;
-                var secondHalfText = year + "/" + month + "/15 - "+ year + "/" + month + "/ " + daysInMonth ;
+                var firstHalfText = year + "/" + month + "/" + date.getDate() + " - " + year + "/" + month + "/ 14";
+                var secondHalfText = year + "/" + month + "/15 - " + year + "/" + month + "/ " + daysInMonth;
 
                 options.push({ id: year + "-" + month + "-1", text: firstHalfText });
                 options.push({ id: year + "-" + month + "-15", text: secondHalfText });
@@ -158,6 +376,41 @@
             return { options, defaultSelection };
         }
         $(document).ready(function () {
+            $('.pay-item-hidden').attr('name', 'Item');
+            $('.pay-amount-hidden').attr('name', 'Amount');
+            $(".pay-item").on("input", function () {
+                // Get the updated value
+                var newValue = $(this).val();
+                // Update the value of the hidden input field
+                $(this).closest("tr").find(".pay-item-hidden").val(newValue);
+            });
+            $(".pay-amount").on("input", function () {
+                // Get the updated value
+                var newValue = $(this).val();
+                // Update the value of the hidden input field
+                $(this).closest("tr").find(".pay-amount-hidden").val(newValue);
+            });
+
+            $(".fileupload").click(function (e) {
+                e.preventDefault();
+                console.log($(this).closest('.file-parent').find('#file')[0].files[0]);
+                console.log($(this).closest('form'));
+                if ($(this).closest('.file-parent').find('#file')[0].files[0] == undefined) {
+                    swal.fire({
+                        title: "Oops..",
+                        text: "Oops!☹️ Please Select One File ",
+                        icon: "error",
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelButtonText: "Okay",
+                        cancelButtonColor: "#01BBE7",
+                    })
+                    return;
+                } else {
+                    $(this).closest('form').submit();
+                }
+            });
+
             $('.form-check-input').change(function () {
                 var index = $(this).attr('id').split('_')[1];
                 var isChecked = $(this).is(':checked');
@@ -172,7 +425,7 @@
                 $.ajax({
                     url: '@Url.Action("TimeSheetDetailsEdit", "Invoice")',
                     type: 'POST',
-                    data:  formData ,
+                    data: formData,
                     success: function (response) {
                         // Handle success response
                     },
@@ -195,24 +448,26 @@
 
                 var date = dateObj.getDate();
                 var month = dateObj.getMonth() + 1; // Months are zero-based
-                if(date == 1){
+                if (date == 1) {
                     $("#AfterDays").val(14);
-                }else{
+                } else {
                     var daysInMonth = new Date(2024, month, 0).getDate();
                     $("#AfterDays").val(daysInMonth - 14);
                 }
+
+
                 console.log($("#AfterDays").val());
             });
             // Get options and default selection
             var { options, defaultSelection } = generateOptions();
 
-                //$('.js-example-basic-single').select2();
+            //$('.js-example-basic-single').select2();
             // Initialize Select2
             $("#timesheets").select2({
                 placeholder: "Select Period",
-                
+
                 data: options
-              
+
             });
 
             // Set default selection
@@ -228,27 +483,33 @@
 
         };
 
-       function myFunction(loginId, selectedValue) {
-        
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("IsFinalizeSheet","Invoice")',
-                data: { PhysicianId: loginId, StartDate: selectedValue },
-            cache: false,
-            success: function (response) {
+        function myFunction(loginId, selectedValue) {
 
-                console.log(response);
-                if(response.x == true){
-                            $(".Finalize").hide();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("IsFinalizeSheet","Invoice")',
+                data: { PhysicianId: loginId, StartDate: selectedValue },
+                cache: false,
+                success: function (response) {
+
+                    console.log(response);
+                    if (response.x == true) {
+                        $(".Finalize").hide();
+                    }
+                    else {
+                        $(".Finalize").show();
+                    }
+                },
+                error: function () {
+                    alert("Error while checking email.");
                 }
-                else{
-                            $(".Finalize").show();
-                }
-            },
-            error: function () {
-                alert("Error while checking email.");
-            }
-        });
-    }
-</script>
+            });
+        }
+        @if(CV.role() == "Admin")
+        {
+            <text>
+                $('.file-parent').replaceWith('<input type="text" class="rounded" disabled  />');
+            </text>
+        }
+    </script>
 }

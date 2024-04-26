@@ -22,6 +22,7 @@
             <select class="form-select form-select-md p-2" disabled asp-for="Physicianid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.ProviderComboBox,"Physicianid","Firstname"))" data-control="select2" data-placeholder="Select Level">
             </select>
         </div>
+        <input type="hidden" asp-for="Physicianid" />
         <div class="col-md-12 form-floating my-2">
             <input id="StartDate" asp-for="Shiftdate" disabled class="form-control rounded vcs" name="Shiftdate" type="date" placeholder=Suchtext autocomplete=off>
             <label for="floatingInput">Starting Date</label>

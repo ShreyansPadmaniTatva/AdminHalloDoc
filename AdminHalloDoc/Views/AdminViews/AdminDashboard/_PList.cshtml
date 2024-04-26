@@ -15,6 +15,12 @@
 <div class="card border-0 shadow pb-2 mb-3">
     <div class="table-responsive" style="overflow-x: visible !important;">
         <div class="accordion accordion-flush" id="accordionFlushExample">
+            @if (Model.DashboardList.Count < 1)
+            {
+
+                <h1 class="text-center mt-3 text-secondary" >No data Found</h1>
+
+            }
             @foreach (var item in Model.DashboardList)
             {
                     <div class="accordion-item">
@@ -187,6 +193,12 @@
                     @{
                         int i = 1;
                     }
+                    @if (Model.DashboardList.Count < 1)
+                    {
+
+                        <h1 class="text-center mt-3 text-secondary" >No data Found</h1>
+
+                    }
                     @foreach (var item in Model.DashboardList)
                     {
                         <tr class="bg-@item.RequestTypeID  filterDiv show-table @item.RegionID">
@@ -290,7 +302,7 @@
                                                 <a class="dropdown-item text-dark-emphasis js-stkModal-btn "
                                                    data-form-id="formEdit_UMS"
                                                    data-url='@Url.Action("_EncounterPdf", "ViewAction", new {requestid = @item.Requestid})'
-                                                   data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Encounter pdf </a>
+                                                   data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Encounter  </a>
                                             </li>
 
                                         }
@@ -301,14 +313,14 @@
                                             <a class="dropdown-item text-dark-emphasis js-stkModal-btn "
                                                data-form-id="formEdit_UMS"
                                                data-url='@Url.Action("_EncounterModel", "ViewAction", new {requestid = @item.Requestid})'
-                                               data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Encounter  model</a>
+                                               data-modal-size="lg"><i class="px-2 bi bi-journal-plus"></i>Encounter  </a>
                                             </li>
 
                                         }
                                         else if ((@item.IsFinalize == false && Status == 3) || (@item.IsFinalize == false && Status == 4))
                                         {
 
-                                            <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid.Encode()" asp-action="Encounter" asp-controller="SubmitForm"><i class="px-2 bi bi-journals"></i>Encounter form</a></li>
+                                            <li><a class="dropdown-item text-dark-emphasis" asp-route-id="@item.Requestid.Encode()" asp-action="Encounter" asp-controller="SubmitForm"><i class="px-2 bi bi-journals"></i>Encounter </a></li>
                                         }
                                         @if (Status > 1)
                                         {

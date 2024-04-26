@@ -213,7 +213,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     accounttype = admin != null ? 2 : (physician != null ? 3 : null),
                     status = admin != null ? admin.Status : (physician != null ? physician.Status : null),
                     Mobile = admin != null ? admin.Mobile : (physician != null ? physician.Mobile : null) ?? "-",
-                    OpenRequest = physician != null ? _context.Requests.Count(r => r.Physicianid == physician.Physicianid) : 0,
+                    OpenRequest = admin != null ? _context.Requests.Count() :  (physician != null ? _context.Requests.Count(r => r.Physicianid == physician.Physicianid) : 0),
                     Email = admin != null ? admin.Email : null
                 };
 

@@ -20,5 +20,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<bool> EmailLog(Emaillogdata elog);
         Task<bool> SMSLog(SMSLogsData elog);
         Task<bool> EmailLogForShift(Emaillogdata elog, DateTime EndDate, DateTime StartDate);
+        Task<List<Physicians>> ProviderComboBox();
     }
 }
