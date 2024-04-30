@@ -19,18 +19,25 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
     {
         #region Constructor
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IRequestRepository _requestRepository;
         private readonly EmailConfiguration _emailConfig;
         private readonly ApplicationDbContext _context;
-        public InvoiceRepository(ApplicationDbContext context, EmailConfiguration emailConfig, IHttpContextAccessor httpContextAccessor)
+        public InvoiceRepository(ApplicationDbContext context, EmailConfiguration emailConfig, IHttpContextAccessor httpContextAccessor, IRequestRepository requestRepository)
         {
             _context = context;
             _emailConfig = emailConfig;
             this.httpContextAccessor = httpContextAccessor;
+            _requestRepository = requestRepository;
         }
         #endregion
 
         #region Timesheet_Approved_Or_Not
-
+        /// <summary>
+        /// Check TimeSheet Is Approved Or Not
+        /// </summary>
+        /// <param name="PhysicianId"></param>
+        /// <param name="StartDate"></param>
+        /// <returns></returns>
         public bool isApprovedTimesheet(int PhysicianId, DateOnly StartDate)
         {
             var data = _context.Timesheets.Where(e => e.Physicianid == PhysicianId && e.Startdate == StartDate).FirstOrDefault();
@@ -43,9 +50,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
-
         #region Timesheet_Finalize_Or_Not
-
+        /// <summary>
+        /// Check TimeSheet Is Finalize Or Not
+        /// </summary>
+        /// <param name="PhysicianId"></param>
+        /// <param name="StartDate"></param>
+        /// <returns></returns>
         public bool isFinalizeTimesheet(int PhysicianId,DateOnly StartDate)
         {
             var data = _context.Timesheets.Where(e => e.Physicianid == PhysicianId && e.Startdate == StartDate).FirstOrDefault();
@@ -62,7 +73,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Set_To_Sheet_Finalize
-
+        /// <summary>
+        /// Provider Set TimeSheet To Finalize
+        /// </summary>
+        /// <param name="timesheetid"></param>
+        /// <param name="AdminId"></param>
+        /// <returns></returns>
         public bool SetToFinalize(int timesheetid, string AdminId)
         {
             try
@@ -86,20 +102,63 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Set_To_Sheet_Approve
-
-        public bool SetToApprove(int timesheetid, string AdminId)
+        /// <summary>
+        /// Admin Approve provider Timesheet
+        /// </summary>
+        /// <param name="vts"></param>
+        /// <param name="AdminId"></param>
+        /// <returns></returns>
+        public async  Task<bool> SetToApprove(ViewTimeSheet vts, string AdminId)
         {
             try
             {
-                var data = _context.Timesheets.Where(e => e.Timesheetid == timesheetid).FirstOrDefault();
+                var data = _context.Timesheets.Where(e => e.Timesheetid == vts.Timesheeid).FirstOrDefault();
                 if (data != null)
                 {
                     data.Isapproved = true;
+                    data.Bonusamount = vts.Bonus;
+                    data.Adminnotes = vts.AdminNotes;
                     _context.Timesheets.Update(data);
                     _context.SaveChanges();
-                    return true;
                 }
+                var d = httpContextAccessor.HttpContext.Request.Host;
+                //var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == v.RequestID);
+                string emailContent = @"
+                                <!DOCTYPE html>
+                                <html lang=""en"">
+                                <head>
+                                 <meta charset=""UTF-8"">
+                                 <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                                 <title>Provider</title>
+                                </head>
+                                <body>
+                                 <div style=""background-color: #f5f5f5; padding: 20px;"">
+                                 <h2>Welcome to Our Healthcare Platform!</h2>
+                                <p>Dear Provider ,</p>
+                                <ol>
+                                    <li>Your TimeSheet Startwith" + data.Startdate + @""" and End With " + data.Enddate + @""" Is Approve</li>
+                                </ol>
+                                <p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>
+                                <p>Thank you,</p>
+                                <p>The Healthcare Team</p>
+                                </div>
+                                </body>
+                                </html>
+                                ";
+                Emaillogdata elog = new Emaillogdata();
+                elog.Emailtemplate = emailContent;
+                elog.Subjectname = "Request Agreement";
+                elog.Emailid = "dasete8625@haislot.com";
+                elog.Createdate = DateTime.Now;
+                elog.Sentdate = DateTime.Now;
+                elog.Physicianid = data.Physicianid;
+                elog.Action = 12;
+                elog.Recipient = data.Physician.Firstname;
+                elog.Roleid = 3;
+                elog.Senttries = 1;
 
+                await _requestRepository.EmailLog(elog);
+                return true;
             }
             catch (Exception ex)
             {
@@ -109,7 +168,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         }
         #endregion
 
-        #region Timesheet_Add_Return_ListOfTimeSheetDetails
+        #region Timesheet_Add
         /// <summary>
         /// Add Or Edit TimeSheet Details 
         /// </summary>
@@ -139,6 +198,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     var Timesheetdetail = new Timesheetdetail();
                     Timesheetdetail.Timesheetid = Timesheet.Timesheetid;
                     Timesheetdetail.Timesheetdate = i;
+                    Timesheetdetail.Numberofhousecall = 0;
+                    Timesheetdetail.Numberofphonecall = 0;
+                    Timesheetdetail.Totalhours = 0;
                     _context.Timesheetdetails.Add(Timesheetdetail);
                     _context.SaveChanges();
                 }
@@ -159,7 +221,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Timesheet_Edit
-
+        /// <summary>
+        /// Edit TimeSheetDetails By Admin Or Provider 
+        /// </summary>
+        /// <param name="tds"></param>
+        /// <param name="AdminId"></param>
+        /// <returns></returns>
         public bool PutTimesheetDetails(List<Timesheetdetails> tds, string AdminId)
         {
             try
@@ -185,10 +252,17 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
            
             
         }
+
         #endregion
 
         #region Timesheet_Get
-
+        /// <summary>
+        /// Get Full Of information That Particuler time Sheet
+        /// </summary>
+        /// <param name="td"></param>
+        /// <param name="tr"></param>
+        /// <param name="PhysicianId"></param>
+        /// <returns></returns>
         public ViewTimeSheet GetTimesheetDetails(List<Timesheetdetail> td, List<Timesheetdetailreimbursement> tr,int PhysicianId)
         {
             try
@@ -241,6 +315,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region FindOnCallProvider
+        /// <summary>
+        /// Find Provider Shift By date
+        /// </summary>
+        /// <param name="PhysicianId"></param>
+        /// <param name="Timesheetdate"></param>
+        /// <returns></returns>
         public int FindOnCallProvider( int PhysicianId,DateOnly Timesheetdate)
         {
             int i = 0;
@@ -254,7 +334,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region Timesheet_Bill_Get
-
+        /// <summary>
+        /// Get Bill Of TimeSheet
+        /// </summary>
+        /// <param name="TimeSheetDetails"></param>
+        /// <returns>List Of TimeSheetBill</returns>
         public async Task<List<Timesheetdetailreimbursement>> GetTimesheetBills( List<Timesheetdetail> TimeSheetDetails)
         {
             try
@@ -276,7 +360,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region TimeSheet_Bill_AddEdit
-
+        /// <summary>
+        /// add Bill Or Edit ONli Item Or Amount Of The Bill
+        /// </summary>
+        /// <param name="trb"></param>
+        /// <param name="AdminId"></param>
+        /// <returns> true Or false If Add Or Upadted </returns>
         public bool TimeSheetBillAddEdit(Timesheetdetailreimbursements trb,string AdminId)
         {
             Timesheetdetail data = _context.Timesheetdetails.Where(e => e.Timesheetdetailid == trb.Timesheetdetailid).FirstOrDefault();
@@ -317,7 +406,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region TimeSheetBill_Delete
-
+        /// <summary>
+        /// Deleted Bill OF TimeSheet By Provider
+        /// </summary>
+        /// <param name="trb"></param>
+        /// <param name="AdminId"></param>
+        /// <returns></returns>
         public bool TimeSheetBillRemove(Timesheetdetailreimbursements trb, string AdminId)
         {
             Timesheetdetailreimbursement data = _context.Timesheetdetailreimbursements.Where(e => e.Timesheetdetailreimbursementid == trb.Timesheetdetailreimbursementid).FirstOrDefault();

@@ -58,7 +58,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var expires =
-                DateTime.UtcNow.AddHours(5);
+                DateTime.UtcNow.AddMinutes(15);
 
             var token = new JwtSecurityToken(
                 Configuration["Jwt:Issuer"],

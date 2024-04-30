@@ -46,8 +46,12 @@ $(document).on("click", ".js-stkModal-btn", function () {
             funCreateBlankModal(modalId, modalSize, xhr.responseText);
             OnSuccess(formId, xhr.responseText);
         },
-        error: function (xhr, status, error) {
+        error: function (jqXHR, xhr, status, error) {
+            console.log("21");
             OnFailure(xhr, status, error);
+            if (jqXHR.responseJSON.status == 401) {
+                window.location.href = '/Login';
+            }
         }
     });
 });

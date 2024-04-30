@@ -100,7 +100,7 @@ else
         document.getElementById('EndTime').min = startTime;
 
         // If the current End Time value is less than the selected Start Time, reset it
-        if (document.getElementById('EndTime').value < startTime) {
+        if (document.getElementById('EndTime').value < startTime && document.getElementById('EndTime').value != '') {
                 Swal.fire({
                     icon: "error",
                     title: "Wrong End time...",

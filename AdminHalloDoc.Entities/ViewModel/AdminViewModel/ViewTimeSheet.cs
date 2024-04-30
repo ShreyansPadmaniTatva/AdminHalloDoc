@@ -17,6 +17,8 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public List<Timesheetdetailreimbursements> Timesheetdetailreimbursements { get; set; }
         public List<Payratebyprovider> PayrateWithProvider { get; set; }
         public int Timesheeid { get; set; }
+        public string? Bonus { get; set; }
+        public string? AdminNotes { get; set; }
         public int PhysicianId { get; set; }
     }
     public class Timesheetdetails

@@ -21,7 +21,8 @@ namespace AdminHalloDoc.Entities.ViewModel
             ProviderContactBoth,
             ProviderContactSMS,
             CreateShift,
-            ProviderRequestToAdmin
+            ProviderRequestToAdmin,
+            ProviderTimeSheetApprove
 
         }
         public string Name { get; set; }

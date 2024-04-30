@@ -26,10 +26,10 @@
     </div>
     <div class="card border-0 shadow py-4 mb-5 mx-3 mt-3 rounded">
         <div class="text-end mx-2 px-3 d-flex justify-content-between">
-            <div class="d-flex" >
-                    <select class="form-select w-100 mx-3" id="physicianDropdown" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.ProviderComboBox, "Physicianid", "Firstname"))" data-control="select" data-placeholder="Region">
-                        <option id="defaultregion" value="">Select Physician</option>
-                    </select>
+            <div class="d-flex">
+                <select class="form-select w-100 mx-3" id="physicianDropdown" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.ProviderComboBox, "Physicianid", "Firstname"))" data-control="select" data-placeholder="Region">
+                    <option id="defaultregion" value="">Select Physician</option>
+                </select>
                 <div class="dropdown ">
                     <select class="form-select form-select-md" id="timesheets" data-placeholder="Select Period" style="width: 400px;">
                         <option></option>
@@ -44,14 +44,14 @@
             </div>
 
         </div>
-        <div class="my-3 mx-3" >
-            <div id="notfinalize">
-            </div>
+        <div >
+            <h4 class="m-5 container" id="notfinalize">
+            </h4>
         </div>
-       
-        <div id="pendinglist" class="table-responsive  d-md-block">
+
+        <div id="pendinglist" class="table-responsive  ">
         </div>
-        <div id="table" class="table-responsive  " style="display:none">
+        <div id="table" class="table-responsive  " >
             <table class="table table-responsive mt-3 p-3">
                 <thead>
                     <tr>
@@ -77,7 +77,7 @@
             </div>
 
         </div>
-        <div id="tableReimbursement" class="table-responsive  d-md-block">
+        <div id="tableReimbursement" class="table-responsive  ">
         </div>
 
     </div>
@@ -89,7 +89,7 @@
 @section Scripts
     {
     <script>
-        var loginId ;
+        var loginId;
         var selectedValue;
 
 
@@ -127,43 +127,25 @@
 
         $(document).ready(function () {
 
-            function changedata(loginId, selectedValue) {
-                myFunction(loginId, selectedValue);
-                myFunctionfortimesheetData(loginId, selectedValue);
-                $("#Startdate").val(selectedValue);
-                $("#PhysicianId").val(loginId);
+            
 
-                var dateObj = new Date(selectedValue);
-
-                var date = dateObj.getDate();
-                var month = dateObj.getMonth() + 1; // Months are zero-based
-                if (date == 1) {
-                    $("#AfterDays").val(14);
-                    var url = '@Url.Action("TimeSheetAddEdit", "Invoice")' + '?PhysicianId=' + loginId + '&StartDate=' + selectedValue;
-                } else {
-                    var daysInMonth = new Date(2024, month, 0).getDate();
-                    $("#AfterDays").val(daysInMonth - 14);
-                    var url = '@Url.Action("TimeSheetAddEdit", "Invoice")' + '?PhysicianId=' + loginId + '&StartDate=' + selectedValue;
-                }
-
-                $('#finalizeLink').attr('href', url).show();
-
-                console.log($("#AfterDays").val());
-            }
-
-           
-                    $('#physicianDropdown').change(function () {
-                        // Update loginId with the selected value
-                        loginId = $(this).val();
+            $('#physicianDropdown').change(function () {
+                // Update loginId with the selected value
+                loginId = $(this).val();
                 checkisfinalize(loginId, selectedValue);
-                    });
-               
+            });
+
             $("#timesheets").change(function () {
                 // Get the selected value
-                 selectedValue = $(this).val();
+                selectedValue = $(this).val();
                 checkisfinalize(loginId, selectedValue);
             });
             function checkisfinalize(loginId, selectedValue) {
+                $("#notfinalize").hide();
+                $('#table').hide();
+                $('#tableReimbursement').hide();
+                $('#pendinglist').hide();
+
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("IsFinalizeSheet","Invoice")',
@@ -173,45 +155,13 @@
 
                         console.log(response);
                         if (response.x == true) {
-                            $("#notfinalize").hide();
-                            $('#pendinglist').empty();
-
-                            var date = new Date(selectedValue); // Set the date to the 1st of the month
-
-                            var year = date.getFullYear();
-                            var month = date.getMonth()+1; // Months are zero-based, so add 1
-                            var daysInMonth = new Date(year, month, 0).getDate();
-
-                            // Create table elements
-                            var table = $('<table class="table table-responsive mt-3 p-3"></table>');
-                            var thead = $('<thead><tr><th scope="col">Start Date</th><th scope="col">End Date</th><th scope="col"  >Status</th><th scope="col" > Action</th></tr></thead>');
-                            var tbody = $('<tbody class="table-group-divider mx-5"></tbody>');
-
-                            // Append thead to table
-                            table.append(thead);
-
-                           
-                                var row = '<tr>' +
-                                '<td>' + selectedValue + '</td>' +
-                                '<td>' + year + '-' + month + '-' + daysInMonth + '</td>' +
-                                    '<td>Pending</td>' +
-
-                                '<td><a  class="view-btn btn btn-outline-info" href="/Invoice/TimeSheetAddEdit?PhysicianId=' + loginId + '&StartDate=' + selectedValue + '">Approve</a></td>' +
-
-                                '</tr>';
-                                tbody.append(row);
-                           
-
-                            // Append tbody to table
-                            table.append(tbody);
-
-                            // Append table to the div
-                            $('#pendinglist').append(table);
+                            myFunction(loginId, selectedValue);
                         }
                         else {
 
                             $("#notfinalize").show();
-                            var providerName = $(this).find('option:selected').text();
+                            var providerName = $('#physicianDropdown').find('option:selected').text();
+                            console.log(providerName);
                             // Update the message
                             $("#notfinalize").html(providerName + " has not finalized the timesheet in specified time period.");
                         }
@@ -237,6 +187,7 @@
             }
 
         };
+
         function myFunctionfortimesheetData(loginId, selectedValue) {
 
             $.ajax({
@@ -246,7 +197,9 @@
                 cache: false,
                 success: function (response) {
                     $('#table').empty();
+                    $('#table').show();
                     $('#tableReimbursement').empty();
+                    $('#tableReimbursement').show();
                     if (response == null) {
                         var table = $('<h2 class=" mt-3 p-3">No Record At</h2>');
                         $('#table').append(table);
@@ -340,21 +293,57 @@
 
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("IsFinalizeSheet","Invoice")',
+                url: '@Url.Action("IsApprovedSheet","Invoice")',
                 data: { PhysicianId: loginId, StartDate: selectedValue },
                 cache: false,
                 success: function (response) {
 
                     console.log(response);
                     if (response.x == true) {
-                        $(".Finalize").hide();
+                        myFunctionfortimesheetData(loginId, selectedValue);
                     }
                     else {
-                        $(".Finalize").show();
+                        $('#table').empty();
+                        $("#notfinalize").hide();
+                        $('#pendinglist').empty();
+                        $('#pendinglist').show();
+
+                        var date = new Date(selectedValue); // Set the date to the 1st of the month
+
+                        var year = date.getFullYear();
+                        var month = date.getMonth() + 1; // Months are zero-based, so add 1
+                        var daysInMonth = new Date(year, month, 0).getDate();
+
+                        // Create table elements
+                        var table = $('<table class="table table-responsive mt-3 p-3"></table>');
+                        var thead = $('<thead><tr><th scope="col">Start Date</th><th scope="col">End Date</th><th scope="col"  >Status</th><th scope="col" > Action</th></tr></thead>');
+                        var tbody = $('<tbody class="table-group-divider mx-5"></tbody>');
+
+                        // Append thead to table
+                        table.append(thead);
+
+                        var row = '<tr>' +
+                            '<td>' + selectedValue + '</td>' +
+                            '<td>' + year + '-' + month + '-' + daysInMonth + '</td>' +
+                            '<td>Pending</td>' +
+
+                            '<td><a class="view-btn btn btn-outline-info" href="/Invoice/TimeSheetAddEdit?PhysicianId=' + loginId + '&StartDate=' + selectedValue + '">Approve</a></td>' +
+
+                            '</tr>';
+                        tbody.append(row);
+
+                        // Append tbody to table
+                        table.append(tbody);
+
+                        // Append table to the div
+                        $('#pendinglist').append(table);
                     }
                 },
-                error: function () {
-                    alert("Error while checking date.");
+                error: function (xhr, status, error) {
+                    console.error(xhr);
+                    console.error(status);
+                    console.error(error);
+                    alert("Error occurred while checking the timesheet approval status.");
                 }
             });
         }

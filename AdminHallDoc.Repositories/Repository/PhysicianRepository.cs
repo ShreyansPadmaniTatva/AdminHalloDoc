@@ -379,8 +379,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         public async Task<Physicians> GetPhysicianById(int id)
         {
 
-
-                 Physicians pl = await (from r in _context.Physicians
+            Physicians pl = await (from r in _context.Physicians
                                         join Aspnetuser in _context.Aspnetusers
                                         on r.Aspnetuserid equals Aspnetuser.Id into aspGroup
                                         from asp in aspGroup.DefaultIfEmpty()

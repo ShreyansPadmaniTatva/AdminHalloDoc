@@ -5,6 +5,7 @@ using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using AdminHalloDoc.Repositories.Patient.Repository;
 using AdminHalloDoc.Repositories.Patient.Repository.Interface;
+using Microsoft.AspNetCore.Diagnostics;
 using Rotativa.AspNetCore;
 using System.Net;
 using System.Text.Json.Serialization;
@@ -64,6 +65,24 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseExceptionHandler(
+    options =>
+    {
+        options.Run(
+            async context =>
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                var ex = context.Features.Get<IExceptionHandlerFeature>();
+
+                if (ex != null)
+                {
+                    //await context.Response.WriteAsync(string.Empty); // clear the response body
+                    context.Response.Redirect("/ErrorIndex");
+                }
+            }
+            );
+    }
+        );
 app.UseStatusCodePages(context => {
     var request = context.HttpContext.Request;
     var response = context.HttpContext.Response;
@@ -72,7 +91,11 @@ app.UseStatusCodePages(context => {
     {
         response.Redirect("/PageNoteFound");
     }
-   
+    if (response.StatusCode == 401)
+    {
+        response.Redirect("/PageNoerfteFound");
+    }
+
     return Task.CompletedTask;
 });
 

@@ -182,8 +182,8 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                         Requestid = Request.Requestid,
                         Filename = viewpatientcreaterequest.UploadImage,
                         Createddate = DateTime.Now,
-                        Isdeleted = new BitArray(new[] { false})
-                };
+                        Isdeleted = new BitArray(new[] { false })
+                    };
                     _context.Requestwisefiles.Add(requestwisefile);
                     _context.SaveChanges();
                 }
@@ -205,57 +205,57 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
             {
                 var Request = new Request();
                 var Requestclient = new Requestclient();
-                
-                    Request.Requesttypeid = 3;
-                    Request.Status = 1;
-                    Request.Confirmationnumber = GetConfirmationNumber(viewpatientcreaterequest.State, viewpatientcreaterequest.FirstName, viewpatientcreaterequest.LastName);
-                    Request.Firstname = viewpatientcreaterequest.FirstName;
-                    Request.Lastname = viewpatientcreaterequest.LastName;
-                    Request.Email = viewpatientcreaterequest.Email;
-                    Request.Phonenumber = viewpatientcreaterequest.PhoneNumber;
-                    Request.Relationname = viewpatientcreaterequest.FF_RelationWithPatient;
-                    Request.Isurgentemailsent = new BitArray(1);
-                    Request.Isdeleted = new BitArray(1);
-                    Request.Isdeleted[0] = false;
-                    Request.Createddate = DateTime.Now;
-                    _context.Requests.Add(Request);
-                    await _context.SaveChangesAsync();
 
-                    Requestclient.Requestid = Request.Requestid;
+                Request.Requesttypeid = 3;
+                Request.Status = 1;
+                Request.Confirmationnumber = GetConfirmationNumber(viewpatientcreaterequest.State, viewpatientcreaterequest.FirstName, viewpatientcreaterequest.LastName);
+                Request.Firstname = viewpatientcreaterequest.FirstName;
+                Request.Lastname = viewpatientcreaterequest.LastName;
+                Request.Email = viewpatientcreaterequest.Email;
+                Request.Phonenumber = viewpatientcreaterequest.PhoneNumber;
+                Request.Relationname = viewpatientcreaterequest.FF_RelationWithPatient;
+                Request.Isurgentemailsent = new BitArray(1);
+                Request.Isdeleted = new BitArray(1);
+                Request.Isdeleted[0] = false;
+                Request.Createddate = DateTime.Now;
+                _context.Requests.Add(Request);
+                await _context.SaveChangesAsync();
+
+                Requestclient.Requestid = Request.Requestid;
                 Requestclient.Location = viewpatientcreaterequest.City + "," + viewpatientcreaterequest.State;
                 Requestclient.Firstname = viewpatientcreaterequest.FirstName;
-                    Requestclient.Street = viewpatientcreaterequest.Street;
-                    Requestclient.City = viewpatientcreaterequest.City;
-                    Requestclient.State = viewpatientcreaterequest.State;
-                    Requestclient.Address = viewpatientcreaterequest.Street + "," + viewpatientcreaterequest.City + "," + viewpatientcreaterequest.State + "," + viewpatientcreaterequest.ZipCode;
-                    Requestclient.Lastname = viewpatientcreaterequest.LastName;
+                Requestclient.Street = viewpatientcreaterequest.Street;
+                Requestclient.City = viewpatientcreaterequest.City;
+                Requestclient.State = viewpatientcreaterequest.State;
+                Requestclient.Address = viewpatientcreaterequest.Street + "," + viewpatientcreaterequest.City + "," + viewpatientcreaterequest.State + "," + viewpatientcreaterequest.ZipCode;
+                Requestclient.Lastname = viewpatientcreaterequest.LastName;
                 Requestclient.Notes = viewpatientcreaterequest.Symptoms;
                 Requestclient.Regionid = viewpatientcreaterequest.RegionId;
                 Requestclient.Zipcode = viewpatientcreaterequest.ZipCode;
 
                 Requestclient.Intdate = viewpatientcreaterequest.BirthDate.Value.Day;
-                    Requestclient.Intyear = viewpatientcreaterequest.BirthDate.Value.Year;
-                    Requestclient.Strmonth = viewpatientcreaterequest.BirthDate.Value.Month.ToString();
-                    Requestclient.Email = viewpatientcreaterequest.Email;
-                    Requestclient.Phonenumber = viewpatientcreaterequest.PhoneNumber;
+                Requestclient.Intyear = viewpatientcreaterequest.BirthDate.Value.Year;
+                Requestclient.Strmonth = viewpatientcreaterequest.BirthDate.Value.Month.ToString();
+                Requestclient.Email = viewpatientcreaterequest.Email;
+                Requestclient.Phonenumber = viewpatientcreaterequest.PhoneNumber;
 
-                    _context.Requestclients.Add(Requestclient);
-                    await _context.SaveChangesAsync();
-                     if (viewpatientcreaterequest.UploadFile != null)
-                     {
-                         viewpatientcreaterequest.UploadImage = CM.UploadDoc(viewpatientcreaterequest.UploadFile, Request.Requestid);
+                _context.Requestclients.Add(Requestclient);
+                await _context.SaveChangesAsync();
+                if (viewpatientcreaterequest.UploadFile != null)
+                {
+                    viewpatientcreaterequest.UploadImage = CM.UploadDoc(viewpatientcreaterequest.UploadFile, Request.Requestid);
 
-                         var requestwisefile = new Requestwisefile
-                         {
-                             Requestid = Request.Requestid,
-                             Filename = viewpatientcreaterequest.UploadImage,
-                             Createddate = DateTime.Now,
-                             Isdeleted = new BitArray(new[] { false})
-                         };
-                         _context.Requestwisefiles.Add(requestwisefile);
-                         _context.SaveChanges();
-                     }
-                   
+                    var requestwisefile = new Requestwisefile
+                    {
+                        Requestid = Request.Requestid,
+                        Filename = viewpatientcreaterequest.UploadImage,
+                        Createddate = DateTime.Now,
+                        Isdeleted = new BitArray(new[] { false })
+                    };
+                    _context.Requestwisefiles.Add(requestwisefile);
+                    _context.SaveChanges();
+                }
+
                 return true;
             }
             catch (DbUpdateConcurrencyException)
@@ -365,7 +365,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 elog.Sentdate = DateTime.Now;
                 elog.Recipient = Request.Firstname + ' ' + Request.Lastname;
                 elog.Requestid = id2;
-               
+
                 elog.Action = 6;
                 elog.Roleid = 4;
                 await _requestRepository.EmailLog(elog);
@@ -496,7 +496,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
         #endregion
 
         #region PatientForMe
-        public async Task<bool> PatientForMe(ViewPatientCreateRequest viewpatientcreaterequest,int UserId)
+        public async Task<bool> PatientForMe(ViewPatientCreateRequest viewpatientcreaterequest, int UserId)
         {
             try
             {
@@ -551,7 +551,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                         Requestid = Request.Requestid,
                         Filename = viewpatientcreaterequest.UploadImage,
                         Createddate = DateTime.Now,
-                        Isdeleted = new BitArray(new[] { false})
+                        Isdeleted = new BitArray(new[] { false })
                     };
                     _context.Requestwisefiles.Add(requestwisefile);
                     _context.SaveChanges();
@@ -660,7 +660,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                         Requestid = Request.Requestid,
                         Filename = viewpatientcreaterequest.UploadImage,
                         Createddate = DateTime.Now,
-                        Isdeleted = new BitArray(new[] { false})
+                        Isdeleted = new BitArray(new[] { false })
                     };
                     _context.Requestwisefiles.Add(requestwisefile);
                     _context.SaveChanges();

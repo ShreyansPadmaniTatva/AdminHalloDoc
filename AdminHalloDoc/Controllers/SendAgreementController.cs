@@ -26,6 +26,7 @@ namespace AdminHalloDoc.Controllers
             _viewActionRepository = viewActionRepository;
         }
         #endregion
+
         public IActionResult Index(string RequestID)
         {
             var request = _context.Requests.Find(RequestID.Decode());

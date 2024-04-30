@@ -38,7 +38,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// Get Only Admin Profile Here
         /// </summary>
         /// <param name="UserId"></param>
-        /// <returns></returns>
+        /// <returns> Model For View Profile </returns>
         public async Task<ViewAdminProfile> GetProfileDetails(int UserId)
         {
 
@@ -49,7 +49,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                         where r.Adminid == UserId
                                         select new ViewAdminProfile
                                         {
-                                            
                                             Roleid = r.Roleid,
                                             AdminId = r.Adminid,
                                             UserName = asp.Username,
@@ -73,13 +72,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             List<Regions> regions = new List<Regions>();
 
-          regions =  await _context.Adminregions
-                .Where(r => r.Adminid == UserId )
-                .Select(req => new Regions()
-            {
-                regionid = req.Regionid
-            })
-                .ToListAsync();
+            regions = await _context.Adminregions
+                  .Where(r => r.Adminid == UserId)
+                  .Select(req => new Regions()
+                  {
+                      regionid = req.Regionid
+                  })
+                  .ToListAsync();
 
             v.Regionids = regions;
             return v;
@@ -134,10 +133,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Admin.City = admindata.City;
                     Admin.Zip = admindata.Zipcode;
                     Admin.Altphone = admindata.AltMobile;
-                   
+
                     Admin.Createddate = DateTime.Now;
                     Admin.Createdby = AdminId;
-                     //Admin.Regionid = admindata.Regionid;
+                    //Admin.Regionid = admindata.Regionid;
 
                     _context.Admins.Add(Admin);
                     _context.SaveChanges();
@@ -202,7 +201,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <returns></returns>
 
         #region SavePhysicianInfo
-        public async Task<bool> SaveAdminInfo(ViewAdminProfile  vm)
+        public async Task<bool> SaveAdminInfo(ViewAdminProfile vm)
         {
             try
             {
@@ -341,7 +340,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     var DataForChange = await _context.Admins
                         .Where(W => W.Adminid == vm.AdminId)
                         .FirstOrDefaultAsync();
-                    
+
                     if (DataForChange != null)
                     {
 
@@ -386,7 +385,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             if (U != null)
             {
-                 U.Passwordhash = hasher.HashPassword(null, password); 
+                U.Passwordhash = hasher.HashPassword(null, password);
                 _context.Aspnetusers.Update(U);
                 _context.SaveChanges();
                 return true;

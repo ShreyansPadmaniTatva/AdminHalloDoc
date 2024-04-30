@@ -10,6 +10,7 @@ using System.Web.WebPages;
 using System.Collections.Generic;
 using DocumentFormat.OpenXml.Bibliography;
 using AdminHalloDoc.Repositories.Admin.Repository;
+using AdminHalloDoc.Controllers.Login;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -26,6 +27,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region Index_View
+        [AdminAuth("Provider")]
         public async  Task<IActionResult> Index()
         {
             return View("../AdminViews/Invoice/Index");
@@ -34,6 +36,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region Admin_Index_View
+        [AdminAuth("Admin")]
         public async Task<IActionResult> AdminIndex()
         {
             ViewBag.ProviderComboBox = await _requestRepository.ProviderComboBox();
@@ -62,15 +65,16 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         #region SetToApprove
 
-        public IActionResult SetToApprove(int timesheetid)
+        public async Task<IActionResult> SetToApprove(ViewTimeSheet ts)
         {
-            if (_invoiceRepository.SetToApprove(timesheetid, CV.ID()))
+            if (await _invoiceRepository.SetToApprove(ts, CV.ID()))
             {
-                TempData["Status"] = "Sheet Is Finalize Successfully..!";
+                TempData["Status"] = "Sheet Is Approve Successfully..!";
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("AdminIndex");
         }
         #endregion
+
         #region SetToFinalize
 
         public IActionResult SetToFinalize(int timesheetid)
@@ -105,7 +109,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             if (CV.role() == "Provider" && _invoiceRepository.isFinalizeTimesheet(PhysicianId, StartDate))
             {
                 TempData["Status"] = "Sheet Is Already Finalize";
-                RedirectToAction("Index");
+               return RedirectToAction("Index");
             }
             int AfterDays = StartDate.Day == 1 ? 14 : DateTime.DaysInMonth(StartDate.Year, StartDate.Month)-14; ; 
            var TimesheetDetails =  _invoiceRepository.PostTimesheetDetails(PhysicianId,  StartDate,  AfterDays,CV.ID());

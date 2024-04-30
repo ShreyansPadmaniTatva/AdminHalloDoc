@@ -42,7 +42,7 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public string Street { get; set; }
 
         [Required(ErrorMessage = "City is required")]
-        [StringLength(10, MinimumLength = 2, ErrorMessage = "Enter valid City")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Enter valid City")]
         [RegularExpression(@"^(?=.*\S)[a-zA-Z\s.'-]+$", ErrorMessage = "Enter a valid city name")]
         public string City { get; set; }
         [Required(ErrorMessage = "State is required")]

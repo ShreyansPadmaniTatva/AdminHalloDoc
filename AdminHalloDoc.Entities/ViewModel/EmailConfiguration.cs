@@ -20,6 +20,13 @@ namespace AdminHalloDoc.Entities.ViewModel
         public string Password { get; set; }
 
         #region SendMail
+        /// <summary>
+        /// Only For Pass The Msg And Subject To Admin Or Provider Or User
+        /// </summary>
+        /// <param name="To"></param>
+        /// <param name="Subject"></param>
+        /// <param name="Body"></param>
+        /// <returns></returns>
         public async Task<bool> SendMail(String To, String Subject, String Body)
         {
             //return true;
@@ -51,10 +58,18 @@ namespace AdminHalloDoc.Entities.ViewModel
         }
         #endregion
 
-        #region SendMail
+        #region SendMail_Shift
+        /// <summary>
+        /// Pass Body With Shift Detalis And Associated With google Cal
+        /// </summary>
+        /// <param name="To"></param>
+        /// <param name="Subject"></param>
+        /// <param name="Body"></param>
+        /// <param name="StartDate"></param>
+        /// <param name="EndDate"></param>
+        /// <returns></returns>
         public async Task<bool> SendMailWithShift(String To, String Subject, String Body,DateTime StartDate  , DateTime EndDate)
         {
-            return true;
             try
             {
                 Body = "Mail to: " + To + "<br/>" + Body;
@@ -165,13 +180,21 @@ namespace AdminHalloDoc.Entities.ViewModel
         //}
         //#endregion
 
-        #region SendMail
+        #region SendMail_Attachments
+        /// <summary>
+        /// Pass Body With Attachments Multiple Attachments
+        /// </summary>
+        /// <param name="To"></param>
+        /// <param name="Subject"></param>
+        /// <param name="Body"></param>
+        /// <param name="Attachments"></param>
+        /// <returns></returns>
         public async Task<bool> SendMailAsync(string To, string Subject, string Body, List<string> Attachments)
         {
-            return true;
+            //return true;
             MimeMessage message = new MimeMessage();
             message.From.Add(new MailboxAddress("", From));
-            message.To.Add(new MailboxAddress("", "pehek11482@fashlend.com"));
+            message.To.Add(new MailboxAddress("", "dasete8625@haislot.com"));
             message.Subject = Subject;
 
             // Create the multipart/mixed container to hold the message body and attachments
@@ -220,7 +243,6 @@ namespace AdminHalloDoc.Entities.ViewModel
         }
 
         #endregion
-
 
         #region Encode_Decode
         public string Encode(string encodeMe)

@@ -1,6 +1,7 @@
 ﻿using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+using DocumentFormat.OpenXml.InkML;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -37,8 +38,22 @@ namespace AdminHalloDoc.Controllers.Login
 
             var request = filterContext.HttpContext.Request;
             var toket = request.Cookies["jwt"];
+            if (toket == null)
+            {
+                if (filterContext.HttpContext.Request.Headers.TryGetValue("X-Requested-With", out var requestedWith) && requestedWith.FirstOrDefault() == "XMLHttpRequest")
+                {
+                    filterContext.Result = new BadRequestObjectResult(new ProblemDetails
+                    {
+                        Status = 401
+                    });
+                    return;
+                }
 
-            if(toket == null || !jwtservice.ValidateToken(toket,out JwtSecurityToken jwtSecurityTokenHandler))
+                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "Index" }));
+                return;
+            }
+
+            if (toket == null || !jwtservice.ValidateToken(toket,out JwtSecurityToken jwtSecurityTokenHandler))
             {
                 filterContext.Result = new RedirectResult("~/AdminLogin");
                 return;

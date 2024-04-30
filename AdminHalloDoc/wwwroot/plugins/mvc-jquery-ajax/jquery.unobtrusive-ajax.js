@@ -109,7 +109,11 @@
                 getFunction(element.getAttribute("data-ajax-success"), ["data", "status", "xhr"]).apply(element, arguments);
                 
             },
-            error: function () {
+            error: function (jqXHR) {
+                console.log(5645)
+                if (jqXHR.responseJSON.status == 401) {
+                    window.location.href = '/Login';
+                }
                 getFunction(element.getAttribute("data-ajax-failure"), ["xhr", "status", "error"]).apply(element, arguments);
             }
         });

@@ -357,6 +357,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region
+        /// <summary>
+        /// Check Pass IS Modify With IN 24 Hour Or Not
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public bool IsPasswordModify(string? email)
         {
             if (email != null)

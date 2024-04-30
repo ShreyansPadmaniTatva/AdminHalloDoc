@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
-   // [AdminAuth("Admin,Provider")]
+
     public class AdminDashboardController : Controller
     {
         #region Constructor
@@ -75,6 +75,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [Route("Physician/Viewcase/{id}")]
         [Route("Admin/Viewcase/{id}")]
         // ViewCase For Admin or Physician
+
         public async Task<IActionResult> Viewcase(string id)
         {
             TempData["Status"] = TempData["Status"];

@@ -19,6 +19,6 @@ namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
         Task<List<Timesheetdetailreimbursement>> GetTimesheetBills(List<Timesheetdetail> TimeSheetDetails);
         bool SetToFinalize(int timesheetid, string AdminId);
         bool TimeSheetBillRemove(Timesheetdetailreimbursements trb, string AdminId);
-        bool SetToApprove(int timesheetid, string AdminId);
+        Task<bool> SetToApprove(ViewTimeSheet vts, string AdminId);
     }
 }
