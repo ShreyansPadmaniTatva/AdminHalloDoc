@@ -1,13 +1,8 @@
-﻿using AdminHalloDoc.Entities;
-using AdminHalloDoc.Entities.Data;
-using AdminHalloDoc.Entities.Models;
-using AdminHalloDoc.Entities.ViewModel;
+﻿using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
-using AdminHalloDoc.Models;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using AdminHalloDoc.Repositories.Patient.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections;
 
 namespace AdminHalloDoc.Controllers.PatientControllers
 {
@@ -42,10 +37,10 @@ namespace AdminHalloDoc.Controllers.PatientControllers
             if (_patientRequestRepository.IsEmailBlock(viewdata.Email))
             {
                 ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-                ModelState.AddModelError("Email","This Email Id Is Block Try Another One");
+                ModelState.AddModelError("Email", "This Email Id Is Block Try Another One");
                 return View("../PatientViews/PatientConcierge/Index", viewdata);
             }
-            if (ModelState.IsValid )
+            if (ModelState.IsValid)
             {
                 bool v = await _patientRequestRepository.PatientConcierge(viewdata);
             }
@@ -61,4 +56,4 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         }
         #endregion
     }
-}   
+}

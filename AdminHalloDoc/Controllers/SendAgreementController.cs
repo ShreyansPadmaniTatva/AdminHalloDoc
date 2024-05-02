@@ -1,14 +1,9 @@
 ﻿using AdminHalloDoc.Entities.Data;
-using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
-using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
-using DocumentFormat.OpenXml.InkML;
-using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace AdminHalloDoc.Controllers
 {
@@ -60,7 +55,7 @@ namespace AdminHalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _SendAgreementPost(ViewActions v)
         {
-            if(CV.role() == "Admin")
+            if (CV.role() == "Admin")
             {
                 v.AdminId = Convert.ToInt32(CV.UserID());
             }
@@ -76,7 +71,7 @@ namespace AdminHalloDoc.Controllers
 
             if (CV.role() == "Provider")
             {
-                
+
                 return Redirect("~/Physician/DashBoard");
             }
             return RedirectToAction("Index", "AdminDashboard");
@@ -85,7 +80,7 @@ namespace AdminHalloDoc.Controllers
 
         #endregion
 
-       
+
 
 
         public IActionResult accept(int RequestID)

@@ -1,10 +1,8 @@
-﻿using AdminHalloDoc.Controllers.Login;
-using AdminHalloDoc.Entities.Data;
+﻿using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
 using static AdminHalloDoc.Entities.ViewModel.Constant;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
@@ -73,7 +71,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                         {
                             cell.Style.Fill.BackgroundColor = XLColor.LightGreen;
                         }
-                    }else if (item.RequestTypeID == 3)
+                    }
+                    else if (item.RequestTypeID == 3)
                     {
                         foreach (var cell in currentRow.Cells())
                         {
@@ -103,7 +102,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 //_notyf.Success("data.xlsx file downloaded ...");
                 return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "data.xlsx");
-            }   
+            }
             catch (Exception ex)
             {
                 //_notyf.Warning(ex.Message);

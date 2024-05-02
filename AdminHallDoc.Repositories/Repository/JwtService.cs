@@ -1,18 +1,12 @@
-﻿using AdminHalloDoc.Entities.Data;
-using AdminHalloDoc.Entities.ViewModel;
+﻿using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography.Xml;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -105,7 +99,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 }, out SecurityToken validatedToken);
 
                 // Corrected access to the validatedToken
-                jwtSecurityTokenHandler = (JwtSecurityToken) validatedToken;
+                jwtSecurityTokenHandler = (JwtSecurityToken)validatedToken;
 
                 if (jwtSecurityTokenHandler != null)
                 {

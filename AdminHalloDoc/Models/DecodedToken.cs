@@ -1,5 +1,4 @@
-﻿using ClosedXML.Excel;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 
 namespace AdminHalloDoc.Models
 {
@@ -16,7 +15,7 @@ namespace AdminHalloDoc.Models
         private string encodedPayload;
         private string keyId;
 
-        public DecodedToken(string keyId, string issuer, List<string> audience1, Dictionary<string , string> claims, DateTime validTo, string signatureAlgorithm, string rawData, string subject, DateTime validFrom, string encodedHeader, string encodedPayload)
+        public DecodedToken(string keyId, string issuer, List<string> audience1, Dictionary<string, string> claims, DateTime validTo, string signatureAlgorithm, string rawData, string subject, DateTime validFrom, string encodedHeader, string encodedPayload)
         {
             this.keyId = keyId;
             issuer = issuer;

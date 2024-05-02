@@ -1,13 +1,12 @@
 ﻿using AdminHalloDoc.Controllers.Login;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
-using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
-    
+
     public class AdminProfileController : Controller
     {
         #region Constoter
@@ -16,7 +15,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         private readonly IViewNotesRepository _viewNotesRepository;
         private readonly IMyProfileRepository _myProfileRepository;
         private readonly IPhysicianRepository _physicianRepository;
-        public AdminProfileController(IMyProfileRepository myProfileRepository,IRequestRepository requestRepository, IViewActionRepository viewActionRepository, IViewNotesRepository viewNotesRepository, IPhysicianRepository physicianRepository)
+        public AdminProfileController(IMyProfileRepository myProfileRepository, IRequestRepository requestRepository, IViewActionRepository viewActionRepository, IViewNotesRepository viewNotesRepository, IPhysicianRepository physicianRepository)
         {
 
             _requestRepository = requestRepository;
@@ -43,9 +42,9 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
             else
             {
-            ViewAdminProfile p = await _myProfileRepository.GetProfileDetails( (id !=null ? (int) id: Convert.ToInt32(CV.UserID())) );
+                ViewAdminProfile p = await _myProfileRepository.GetProfileDetails((id != null ? (int)id : Convert.ToInt32(CV.UserID())));
 
-            return  View("../AdminViews/Profile/Index",p);
+                return View("../AdminViews/Profile/Index", p);
             }
         }
         #endregion
@@ -57,7 +56,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         {
 
 
-            bool data =await _myProfileRepository.EditAdminProfileAsync(vm);
+            bool data = await _myProfileRepository.EditAdminProfileAsync(vm);
             if (data)
             {
                 TempData["Status"] = "Administration Information Changed...";

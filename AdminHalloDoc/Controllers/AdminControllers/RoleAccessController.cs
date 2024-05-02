@@ -1,13 +1,9 @@
 ﻿using AdminHalloDoc.Controllers.Login;
 using AdminHalloDoc.Entities.Models;
-using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
-using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -19,7 +15,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         private readonly IMyProfileRepository _myProfileRepository;
         private readonly IPhysicianRepository _physicianRepository;
         private readonly IRoleAccessRepository _roleAccessRepository;
-        public RoleAccessController(IMyProfileRepository myProfileRepository, IPhysicianRepository physicianRepository,IRoleAccessRepository roleAccessRepository, IRequestRepository requestRepository)
+        public RoleAccessController(IMyProfileRepository myProfileRepository, IPhysicianRepository physicianRepository, IRoleAccessRepository roleAccessRepository, IRequestRepository requestRepository)
         {
 
             _physicianRepository = physicianRepository;
@@ -34,10 +30,10 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [Route("Admin/AccountAccess")]
         public async Task<IActionResult> Index()
         {
-            
+
             TempData["Status"] = TempData["Status"];
-          List<Role> v = await  _roleAccessRepository.GetRoleAccessDetails();
-            return View("../AdminViews/RoleAccess/Index",v);
+            List<Role> v = await _roleAccessRepository.GetRoleAccessDetails();
+            return View("../AdminViews/RoleAccess/Index", v);
         }
         #endregion
 
@@ -64,7 +60,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             if (roleid != null)
             {
                 List<ViewRoleByMenu.Menu> vm = new List<ViewRoleByMenu.Menu>();
-                List<int> rm = await _roleAccessRepository.CheckMenuByRole(roleid); 
+                List<int> rm = await _roleAccessRepository.CheckMenuByRole(roleid);
                 foreach (var item in v)
                 {
                     ViewRoleByMenu.Menu menu = new ViewRoleByMenu.Menu();
@@ -89,13 +85,13 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region PostRoleMenu
-        public async Task<IActionResult> PostRoleMenu(ViewRoleByMenu role ,string Menusid)
+        public async Task<IActionResult> PostRoleMenu(ViewRoleByMenu role, string Menusid)
         {
             bool data = false;
 
             if (role.Roleid == 0)
             {
-                data = await _roleAccessRepository.PostRoleMenu(role, Menusid , CV.ID());
+                data = await _roleAccessRepository.PostRoleMenu(role, Menusid, CV.ID());
                 if (data)
                 {
                     TempData["Status"] = "Role Add Successfully...";
@@ -130,7 +126,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
             TempData["Status"] = TempData["Status"];
             List<ViewUserAcces> v = await _roleAccessRepository.GetAllUserDetails(User);
-            if(User != null)
+            if (User != null)
             {
                 return Json(v);
             }
@@ -166,7 +162,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         public async Task<IActionResult> AdminAddEdit(int? id)
         {
-            
+
 
             //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
@@ -276,7 +272,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region ResetPassAdmin
-        public async Task<IActionResult> ResetPassAdmin(string password,int AdminId)
+        public async Task<IActionResult> ResetPassAdmin(string password, int AdminId)
         {
 
 
@@ -301,12 +297,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         public IActionResult CheckUsernameAvailability(string username)
         {
-            
+
             return Json(new
             {
-               
+
                 Message = _myProfileRepository.IsUsernameAvailable(username)
-        });
+            });
         }
         #endregion
     }

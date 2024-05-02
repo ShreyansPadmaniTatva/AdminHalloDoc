@@ -2,23 +2,11 @@
 using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
-using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using Org.BouncyCastle.Asn1.Ocsp;
-using Org.BouncyCastle.Utilities;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using static AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDocuments;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
@@ -100,7 +88,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                            Email = rc.Email,
                                            PhoneNumber = rc.Phonenumber,
                                            DOB = new DateTime((int)rc.Intyear, (int)Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
-                                           Firstanme = rc.Firstname ,
+                                           Firstanme = rc.Firstname,
                                            Lastanme = rc.Lastname,
                                            RequestID = req.Requestid,
                                            RequesClientid = rc.Requestclientid
@@ -125,12 +113,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                        }).ToList();
             doc.documentslist = doclist;
             return doc;
-            
+
         }
         #endregion
 
         #region SendFilEmail
-        public async Task<bool> SendFilEmail(string ids,int Requestid, string email)
+        public async Task<bool> SendFilEmail(string ids, int Requestid, string email)
         {
 
             var v = await GetRequestDetails(Requestid);
@@ -146,11 +134,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 }
             }
 
-           if(await _emailConfig.SendMailAsync(email, "All Document Of Your Request "+v.PatientName,"Heeyy " + v.PatientName+" Kindly Check your Attachments", files))
+            if (await _emailConfig.SendMailAsync(email, "All Document Of Your Request " + v.PatientName, "Heeyy " + v.PatientName + " Kindly Check your Attachments", files))
             {
                 return true;
             }
-            else {
+            else
+            {
                 return false;
             }
 
@@ -188,7 +177,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
                         _context.Requestwisefiles.Update(data);
                         _context.SaveChanges();
-                        
+
                     }
                     else
                     {
@@ -207,22 +196,22 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
 
             return await (from req in _context.Requests
-                        join reqClient in _context.Requestclients
-                        on req.Requestid equals reqClient.Requestid into reqClientGroup
-                        from rc in reqClientGroup.DefaultIfEmpty()
+                          join reqClient in _context.Requestclients
+                          on req.Requestid equals reqClient.Requestid into reqClientGroup
+                          from rc in reqClientGroup.DefaultIfEmpty()
                           join phys in _context.Physicians
                         on req.Physicianid equals phys.Physicianid into physGroup
                           from p in physGroup.DefaultIfEmpty()
                           where req.Requestid == id
-                        select new ViewActions
-                        {
-                            PhoneNumber = rc.Phonenumber,
-                            ProviderId = p.Physicianid,
-                            PatientName = rc.Firstname + rc.Lastname,
-                            RequestID = req.Requestid,
-                            Email = rc.Email
+                          select new ViewActions
+                          {
+                              PhoneNumber = rc.Phonenumber,
+                              ProviderId = p.Physicianid,
+                              PatientName = rc.Firstname + rc.Lastname,
+                              RequestID = req.Requestid,
+                              Email = rc.Email
 
-                        }).FirstAsync();
+                          }).FirstAsync();
         }
         #endregion
 
@@ -299,9 +288,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         public async Task<List<Physician>> ProviderbyRegion(int? regionid)
         {
             var result = (from pr in _context.Physicianregions
-                              join p in _context.Physicians on pr.Physicianid equals p.Physicianid
-                              where pr.Regionid == regionid
-                              select p).ToList();
+                          join p in _context.Physicians on pr.Physicianid equals p.Physicianid
+                          where pr.Regionid == regionid
+                          select p).ToList();
 
             return result;
         }
@@ -310,24 +299,24 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #region Assign_Provider
         public async Task<Boolean> AssignProvider(int RequestId, int ProviderId, string notes)
         {
-            
-                var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == (int)RequestId);
-                request.Physicianid = ProviderId;
-                _context.Requests.Update(request);
-                _context.SaveChanges();
 
-                Requeststatuslog rsl = new Requeststatuslog();
-                rsl.Requestid = RequestId;
-                rsl.Physicianid = ProviderId;
-                rsl.Notes = notes;
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == (int)RequestId);
+            request.Physicianid = ProviderId;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            Requeststatuslog rsl = new Requeststatuslog();
+            rsl.Requestid = RequestId;
+            rsl.Physicianid = ProviderId;
+            rsl.Notes = notes;
             rsl.Createddate = DateTime.Now;
-                rsl.Status = 1;
-                _context.Requeststatuslogs.Update(rsl);
-                _context.SaveChanges();
+            rsl.Status = 1;
+            _context.Requeststatuslogs.Update(rsl);
+            _context.SaveChanges();
 
-                return true;
-           
-            
+            return true;
+
+
         }
         #endregion
 
@@ -360,7 +349,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
         #region CancelCase
 
-        public async Task<bool> CancelCase(ViewActions v,string ReasonTag)
+        public async Task<bool> CancelCase(ViewActions v, string ReasonTag)
         {
             try
             {
@@ -448,7 +437,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         Email = requestData.Email,
                         Reason = v.Notes,
                         Isactive = new BitArray(new[] { true }),
-                    Createddate = DateTime.Now,
+                        Createddate = DateTime.Now,
                         Modifieddate = DateTime.Now
 
 
@@ -531,8 +520,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
 
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == v.RequestID);
-             request.Status = 2;
-             request.Accepteddate = DateTime.Now;
+            request.Status = 2;
+            request.Accepteddate = DateTime.Now;
             _context.Requests.Update(request);
             _context.SaveChanges();
 
@@ -557,7 +546,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.Requestid == v.RequestID);
             request.Physicianid = v.ProviderId;
-           // request.Status = 2;
+            // request.Status = 2;
             _context.Requests.Update(request);
             _context.SaveChanges();
 
@@ -607,22 +596,22 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                 </html>
                                 ";
             Emaillogdata elog = new Emaillogdata();
-           elog.Emailtemplate = emailContent;
-           elog.Subjectname = "Request Agreement";
-           elog.Emailid = v.Email;
-           elog.Createdate = DateTime.Now;
-           elog.Sentdate = DateTime.Now;
-           elog.Adminid = v.AdminId != null ? v.AdminId : null;
-           elog.Requestid = v.RequestID;
-           elog.Physicianid = v.ProviderId != null ? v.ProviderId : null;
-           elog.Action = 4;
+            elog.Emailtemplate = emailContent;
+            elog.Subjectname = "Request Agreement";
+            elog.Emailid = v.Email;
+            elog.Createdate = DateTime.Now;
+            elog.Sentdate = DateTime.Now;
+            elog.Adminid = v.AdminId != null ? v.AdminId : null;
+            elog.Requestid = v.RequestID;
+            elog.Physicianid = v.ProviderId != null ? v.ProviderId : null;
+            elog.Action = 4;
             elog.Recipient = v.PatientName;
             elog.Roleid = 4;
             elog.Senttries = 1;
 
             await _requestRepository.EmailLog(elog);
             //_emailConfig.SendMail(v.Email, "Agreement for your request", emailContent);
-                return true;
+            return true;
         }
         #endregion
 
@@ -750,7 +739,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             var datareq = _context.Requestclients.FirstOrDefault(e => e.Requestid == RequestID);
             var Data = _context.Encounterforms.FirstOrDefault(e => e.Requestid == RequestID);
             int? a = datareq.Intyear != null ? datareq.Intyear : 0001;
-            int? b = Convert.ToInt32(datareq.Strmonth!=null? datareq.Strmonth:1);
+            int? b = Convert.ToInt32(datareq.Strmonth != null ? datareq.Strmonth : 1);
             int? c = datareq.Intdate != null ? (int)datareq.Intdate : 01;
 
             DateTime? fd = new DateTime(datareq.Intyear != null ? (int)datareq.Intyear : 0001, Convert.ToInt32(datareq.Strmonth != null ? datareq.Strmonth : 1), datareq.Intdate != null ? (int)datareq.Intdate : 01) != new DateTime(0001, 01, 01) ? new DateTime((int)datareq.Intyear != 0 ? (int)datareq.Intyear : 1, Convert.ToInt32(datareq.Strmonth != null ? datareq.Strmonth : 1), (int)datareq.Intdate != 0 ? (int)datareq.Intdate : 1) : null;
@@ -765,7 +754,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     BloodPressureS = Data.Bloodpressurediastolic,
                     Chest = Data.Chest,
                     CV = Data.Cv,
-                    DOB = new DateTime(datareq.Intyear != null? (int)datareq.Intyear :0001, Convert.ToInt32(datareq.Strmonth != null ? datareq.Strmonth : 1), datareq.Intdate != null ? (int)datareq.Intdate : 01) != new DateTime(0001,01,01)? new DateTime((int)datareq.Intyear != 0 ? (int)datareq.Intyear : 1, Convert.ToInt32(datareq.Strmonth != null ? datareq.Strmonth : 1), (int)datareq.Intdate != 0 ? (int)datareq.Intdate : 1) : null,
+                    DOB = new DateTime(datareq.Intyear != null ? (int)datareq.Intyear : 0001, Convert.ToInt32(datareq.Strmonth != null ? datareq.Strmonth : 1), datareq.Intdate != null ? (int)datareq.Intdate : 01) != new DateTime(0001, 01, 01) ? new DateTime((int)datareq.Intyear != 0 ? (int)datareq.Intyear : 1, Convert.ToInt32(datareq.Strmonth != null ? datareq.Strmonth : 1), (int)datareq.Intdate != 0 ? (int)datareq.Intdate : 1) : null,
                     Date = DateTime.Now,
                     Diagnosis = Data.Diagnosis,
                     Hr = Data.Hr,
@@ -868,7 +857,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Skin = Data.Skin,
                     Temp = Data.Temp,
                     TreatmentPlan = Data.Treatment,
-                    Adminid = admindata == null ?null : admindata.Adminid,
+                    Adminid = admindata == null ? null : admindata.Adminid,
                     Physicianid = phydata == null ? null : phydata.Physicianid,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
@@ -939,7 +928,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
             try
             {
-               
+
 
 
                 var final = _context.Requests.FirstOrDefault(e => e.Requestid == Requesid);
@@ -953,7 +942,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Requestid = final.Requestid,
                     Status = 6,
                     Createddate = DateTime.Now,
-                   
+
                     Physicianid = id,
 
 
@@ -994,9 +983,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region SubmitCreateRequest_Admin
-        public bool SubmitCreateRequest(ViewAdminCreateRequest model, string Id,int? UserId)
+        public bool SubmitCreateRequest(ViewAdminCreateRequest model, string Id, int? UserId)
         {
-            
+
             var region = _context.Regions.FirstOrDefault(x => x.Regionid == model.region);
             var confirmation = "";
             string month = model.DateOfBirth.ToString("MMMM", CultureInfo.InvariantCulture);
@@ -1014,7 +1003,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Lastname = model.LastName,
                     Email = model.Email,
                     Phonenumber = model.PhoneNumber,
-                    Status = UserId == null ?(short) 1 :(short) 2,
+                    Status = UserId == null ? (short)1 : (short)2,
                     Physicianid = UserId == null ? null : (short)UserId,
                     Isurgentemailsent = new BitArray(1),
                     Createddate = DateTime.Now,
@@ -1051,8 +1040,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Requestid = request.Requestid,
                     Createddate = DateTime.Now,
                     Createdby = Id,
-                    Adminnotes = UserId == null ? model.AdminNotes : null ,
-                    Physiciannotes = UserId == null ? null: model.AdminNotes,
+                    Adminnotes = UserId == null ? model.AdminNotes : null,
+                    Physiciannotes = UserId == null ? null : model.AdminNotes,
                 };
                 _context.Requestnotes.Add(requestnote);
                 _context.SaveChanges();
@@ -1070,16 +1059,16 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #region SendEmailForRequestSupport
         public async Task<bool> SendEmailForRequestSupport(string notes, int AdminId)
         {
-            
+
             try
             {
                 var d = httpContextAccessor.HttpContext.Request.Host;
                 //var res = _context.Requestclients.FirstOrDefault(e => e.Requestid == v.RequestID);
-                
 
-                foreach ( var note in await _schedulingRepository.PhysicianOnCall(null))
+
+                foreach (var note in await _schedulingRepository.PhysicianOnCall(null))
                 {
-                    if(note.onCallStatus != 1)
+                    if (note.onCallStatus != 1)
                     {
                         string emailContent = @"
                                 <!DOCTYPE html>
@@ -1110,7 +1099,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         elog.Adminid = AdminId;
                         await _requestRepository.EmailLog(elog);
                     }
-                    
+
                 }
 
                 return true;

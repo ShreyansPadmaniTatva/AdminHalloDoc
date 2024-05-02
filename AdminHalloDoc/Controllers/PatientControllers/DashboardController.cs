@@ -1,16 +1,7 @@
 ﻿using AdminHalloDoc.Controllers.Login;
-using AdminHalloDoc.Entities.Data;
-using AdminHalloDoc.Entities.ViewModel;
-using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
-using AdminHalloDoc.Models;
 using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Patient.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Npgsql;
-using System.Configuration;
-using System.Data;
 
 namespace AdminHalloDoc.Controllers.PatientControllers
 {
@@ -35,7 +26,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
             //ViewPatientDashboard 
             var result = _patientDashrepo.DashboardData(Convert.ToInt32(CV.UserID()));
 
-            return View("../PatientViews/Dashboard/Index", result);  
+            return View("../PatientViews/Dashboard/Index", result);
         }
         #endregion
     }

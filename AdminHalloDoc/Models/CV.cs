@@ -1,12 +1,4 @@
-﻿using AdminHalloDoc.Entities.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Newtonsoft.Json.Linq;
-using System.IdentityModel.Tokens.Jwt;
-using System.IO;
-using static AdminHalloDoc.Entities.ViewModel.Constant;
-
-namespace AdminHalloDoc.Models.CV
+﻿namespace AdminHalloDoc.Models.CV
 {
     public class CV
     {
@@ -47,8 +39,8 @@ namespace AdminHalloDoc.Models.CV
 
             return role;
         }
-       
-        
+
+
         public static string? UserName()
         {
             string cookieValue;
@@ -93,17 +85,17 @@ namespace AdminHalloDoc.Models.CV
 
             return UserID;
         }
-        public  class MenuItem
+        public class MenuItem
         {
-            public  string DbName { get; set; }
-            public  string Label { get; set; }
-            public  string Url { get; set; }
-            public  string ContollerAction { get; set; }
-            public  List<string> UrlList { get; set; }
-            public  List<MenuItem> Submenu { get; set; }
+            public string DbName { get; set; }
+            public string Label { get; set; }
+            public string Url { get; set; }
+            public string ContollerAction { get; set; }
+            public List<string> UrlList { get; set; }
+            public List<MenuItem> Submenu { get; set; }
         }
 
-        public  List<MenuItem> staticmenu = new List<MenuItem>
+        public List<MenuItem> staticmenu = new List<MenuItem>
         {
             new MenuItem
               {

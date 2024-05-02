@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using AdminHalloDoc.Entities.Models;
+﻿using AdminHalloDoc.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdminHalloDoc.Entities.Data;

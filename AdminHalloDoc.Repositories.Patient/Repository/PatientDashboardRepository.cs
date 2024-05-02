@@ -5,13 +5,7 @@ using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Repositories.Patient.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdminHalloDoc.Repositories.Patient.Repository
 {
@@ -26,12 +20,12 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
             _email = email;
         }
         #endregion
-        
+
         #region DashboardData
         public List<ViewPatientDashboard> DashboardData(int UserID)
         {
             BitArray bt = new BitArray(1);
-            bt.Set(0, false); 
+            bt.Set(0, false);
             List<ViewPatientDashboard> result = _context.Requests
                          .Where(r => r.Userid == UserID && r.Isdeleted == bt)
                          .OrderByDescending(x => x.Createddate)
@@ -65,7 +59,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                                    State = r.State,
                                    City = r.City,
                                    Zipcode = r.Zipcode,
-                                   Birthdate = new DateTime((int)r.Intyear, Convert.ToInt32(r.Strmonth.Trim()), (int)r.Intdate) == null ? null  : new DateTime((int)r.Intyear, Convert.ToInt32(r.Strmonth.Trim()), (int)r.Intdate),
+                                   Birthdate = new DateTime((int)r.Intyear, Convert.ToInt32(r.Strmonth.Trim()), (int)r.Intdate) == null ? null : new DateTime((int)r.Intyear, Convert.ToInt32(r.Strmonth.Trim()), (int)r.Intdate),
                                })
                                .FirstOrDefault();
             return UsersProfile;
@@ -157,7 +151,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                 {
                     return false;
                 }
-                
+
             }
             catch (DbUpdateConcurrencyException)
             {

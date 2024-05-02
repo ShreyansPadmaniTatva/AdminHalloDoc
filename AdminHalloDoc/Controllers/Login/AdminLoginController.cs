@@ -3,9 +3,7 @@ using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 namespace AdminHalloDoc.Controllers.Login
 {
 
@@ -47,7 +45,7 @@ namespace AdminHalloDoc.Controllers.Login
                 // SessionUtils.setLogginUser(HttpContext.Session, admin);
 
                 var jwttoken = _jwtService.GenerateJWTAuthetication(admin);
-                Response.Cookies.Append("jwt",jwttoken);
+                Response.Cookies.Append("jwt", jwttoken);
 
                 if (admin.Role == "Patient")
                 {
@@ -58,7 +56,7 @@ namespace AdminHalloDoc.Controllers.Login
                     await _physicianRepository.GetLocation(admin.UserId);
                     return Redirect("~/Physician/DashBoard");
                 }
-                
+
 
                 return RedirectToAction("Index", "AdminDashboard");
             }

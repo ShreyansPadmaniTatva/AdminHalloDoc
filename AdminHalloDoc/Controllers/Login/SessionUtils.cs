@@ -1,5 +1,4 @@
-﻿using AdminHalloDoc.Entities.Models;
-using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+﻿using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 
 namespace AdminHalloDoc.Controllers.Login
 {
@@ -30,7 +29,7 @@ namespace AdminHalloDoc.Controllers.Login
 
             }
 
-            return ;
+            return;
         }
     }
 }

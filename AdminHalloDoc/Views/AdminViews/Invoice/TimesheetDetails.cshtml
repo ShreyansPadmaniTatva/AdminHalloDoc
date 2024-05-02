@@ -119,7 +119,7 @@
                                 <td> @(TotalWeekend * Model.PayrateWithProvider[0].Payrate)</td>
                                 <td> @(TotalHousecalls * Model.PayrateWithProvider[6].Payrate) </td>
                                 <td> @(TotalPhone * Model.PayrateWithProvider[3].Payrate) </td>
-                                <td>@(TotalHours * Model.PayrateWithProvider[1].Payrate + TotalWeekend * Model.PayrateWithProvider[0].Payrate)</td>
+                                <td>@(TotalHours * Model.PayrateWithProvider[1].Payrate + TotalWeekend * Model.PayrateWithProvider[0].Payrate + TotalHousecalls * Model.PayrateWithProvider[6].Payrate + TotalPhone * Model.PayrateWithProvider[3].Payrate)</td>
 
                             </tr>
                             

@@ -1,5 +1,4 @@
-﻿using AdminHalloDoc.Entities.Data;
-using AdminHalloDoc.Entities.ViewModel;
+﻿using AdminHalloDoc.Entities.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
@@ -9,16 +8,17 @@ namespace AdminHalloDoc.Controllers
     public class SendSmsController : Controller
     {
         private readonly SmsConfiguration _smsConfiguration;
-        public SendSmsController(SmsConfiguration smsConfiguration) { 
+        public SendSmsController(SmsConfiguration smsConfiguration)
+        {
             _smsConfiguration = smsConfiguration;
         }
         public IActionResult Index()
         {
-            return View();  
+            return View();
         }
         public IActionResult SendSMS()
         {
-           
+
 
             TwilioClient.Init(_smsConfiguration.AccountSid, _smsConfiguration.AuthToken);
             var message = MessageResource.Create(

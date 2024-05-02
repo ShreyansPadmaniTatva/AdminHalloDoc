@@ -1,8 +1,6 @@
 ﻿using AdminHalloDoc.Controllers.Login;
 using AdminHalloDoc.Entities.Models;
-using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
-using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +11,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region Constoter
         private readonly IRequestRepository _requestRepository;
         private readonly IViewNotesRepository _viewNotesRepository;
-        public PartnerController( IRequestRepository requestRepository, IViewNotesRepository viewNotesRepository)
+        public PartnerController(IRequestRepository requestRepository, IViewNotesRepository viewNotesRepository)
         {
 
             _requestRepository = requestRepository;
@@ -34,9 +32,9 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region _SearchResult
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> _SearchResult(int? regionId,string? searchvender = null)
+        public async Task<IActionResult> _SearchResult(int? regionId, string? searchvender = null)
         {
-            List<ViewVendorList> r =await _viewNotesRepository.GetPartnersByProfession(regionId, searchvender);
+            List<ViewVendorList> r = await _viewNotesRepository.GetPartnersByProfession(regionId, searchvender);
             return PartialView("../AdminViews/Partner/_List", r);
         }
         #endregion
@@ -54,7 +52,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
             ViewData["Vender"] = "Edit";
             var v = await _viewNotesRepository.GetPartnerById(id);
-            return View("../AdminViews/Partner/PartnerAddEdit",v);
+            return View("../AdminViews/Partner/PartnerAddEdit", v);
         }
         #endregion
 
@@ -69,7 +67,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             {
                 if (model.Vendorid == null)
                 {
-                    
+
 
                     bool data = await _viewNotesRepository.SavePartner(model);
                     if (data)
@@ -85,7 +83,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 }
                 else
                 {
-                    
+
                     bool data = await _viewNotesRepository.SavePartner(model);
                     if (data)
                     {
@@ -118,7 +116,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             //}
             //else
             //{
-               
+
             //    return View("../AdminViews/Partner/PartnerAddEdit", v);
             //}
 

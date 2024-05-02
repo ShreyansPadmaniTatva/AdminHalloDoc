@@ -1,11 +1,10 @@
-﻿using AdminHalloDoc.Entities.Models;
-using AdminHalloDoc.Entities.ViewModel;
+﻿using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository.Interface
 {
     public interface IRequestRepository
-	{
+    {
         Task<List<VenderTypeComboBox>> VenderTypeComboBox();
         Task<List<RegionComboBox>> RegionComboBox();
         Task<List<RegionComboBox>> RegionComboBox(int UserId);

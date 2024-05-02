@@ -1,15 +1,9 @@
 ﻿using AdminHalloDoc.Entities.Data;
-using AdminHalloDoc.Entities.Models;
-using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
-using AdminHalloDoc.Models;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using AdminHalloDoc.Repositories.Patient.Repository.Interface;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using System.Globalization;
 
 namespace AdminHalloDoc.Controllers.PatientControllers
 {
@@ -69,7 +63,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         #endregion
 
         #region Post
-       
+
         public async Task<IActionResult> Post(ViewPatientCreateRequest viewpatientcreaterequest)
         {
             if (_patientRequestRepository.IsEmailBlock(viewpatientcreaterequest.Email))
@@ -81,15 +75,15 @@ namespace AdminHalloDoc.Controllers.PatientControllers
             if (ModelState.IsValid)
             {
 
-               bool v = await _patientRequestRepository.PatientCreateRequest(viewpatientcreaterequest);
+                bool v = await _patientRequestRepository.PatientCreateRequest(viewpatientcreaterequest);
             }
             else
             {
                 ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
                 return View("../PatientViews/PatientCreateRequest/Index", viewpatientcreaterequest);
             }
-                return RedirectToAction("Index", "Dashboard");
-            
+            return RedirectToAction("Index", "Dashboard");
+
         }
         #endregion
     }

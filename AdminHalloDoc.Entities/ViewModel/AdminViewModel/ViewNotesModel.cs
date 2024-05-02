@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
+﻿namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
     public class ViewNotesModel
     {
-        
+
         public int? Requestnotesid { get; set; }
 
 

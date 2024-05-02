@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
     public class ViewEncounter
     {
         public bool? Isfinalize { get; set; }
-        public int EncounterID { get; set; } 
+        public int EncounterID { get; set; }
         public int? Requesid { get; set; }
         public int? RequesClientid { get; set; }
         public string? FirstName { get; set; }
@@ -54,6 +49,6 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         [Required(ErrorMessage = "Follow Up is required")]
 
         public string Followup { get; set; }
-       
+
     }
 }

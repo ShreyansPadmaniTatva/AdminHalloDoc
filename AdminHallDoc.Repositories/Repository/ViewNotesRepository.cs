@@ -2,19 +2,9 @@
 using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
-using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -126,7 +116,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 }
                 allData.transfernotes = md;
                 return allData;
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return null;
             }
@@ -214,8 +205,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             List<VenderComboBox> Vender = await _context.Healthprofessionals.Where(E => E.Profession == id)
                 .Select(r => new VenderComboBox
                 {
-                   VenderId = (int)r.Vendorid,
-                   VenderName = r.Vendorname
+                    VenderId = (int)r.Vendorid,
+                    VenderName = r.Vendorname
                 })
                 .ToListAsync();
 
@@ -267,31 +258,31 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             {
                 return false;
             }
-           
+
         }
         #endregion
 
         #region GetPartnersByProfession
-        public async Task<List<ViewVendorList>> GetPartnersByProfession(int? regionId,string? searchvender)
+        public async Task<List<ViewVendorList>> GetPartnersByProfession(int? regionId, string? searchvender)
         {
 
 
             List<ViewVendorList> pl = await (from r in _context.Healthprofessionals
-                                                 join t in _context.Healthprofessionaltypes on r.Profession equals t.Healthprofessionalid
-                                                 where r.Isdeleted == new BitArray(1) &&
-                                                       (!regionId.HasValue || r.Profession == regionId) &&
-                                                       (searchvender == null || r.Vendorname.ToLower().Contains(searchvender.ToLower()))
-                                                 select new ViewVendorList
-                                                 {
-                                                     VendorID = r.Vendorid,
-                                                     Profession = t.Professionname,
-                                                     BusinessContact = r.Businesscontact ?? "",
-                                                     Email = r.Email,
-                                                     FaxNumber = r.Faxnumber,
-                                                     PhoneNumber = r.Phonenumber,
-                                                     VendorName = r.Vendorname,
+                                             join t in _context.Healthprofessionaltypes on r.Profession equals t.Healthprofessionalid
+                                             where r.Isdeleted == new BitArray(1) &&
+                                                   (!regionId.HasValue || r.Profession == regionId) &&
+                                                   (searchvender == null || r.Vendorname.ToLower().Contains(searchvender.ToLower()))
+                                             select new ViewVendorList
+                                             {
+                                                 VendorID = r.Vendorid,
+                                                 Profession = t.Professionname,
+                                                 BusinessContact = r.Businesscontact ?? "",
+                                                 Email = r.Email,
+                                                 FaxNumber = r.Faxnumber,
+                                                 PhoneNumber = r.Phonenumber,
+                                                 VendorName = r.Vendorname,
 
-                                                 })
+                                             })
                                      .ToListAsync();
 
 
@@ -305,9 +296,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
             try
             {
-                if(SavePartner.Vendorid != null)
+                if (SavePartner.Vendorid != null)
                 {
-                    var UpdateHealthprofessional = await _context.Healthprofessionals.FirstAsync(r=> r.Vendorid == SavePartner.Vendorid);
+                    var UpdateHealthprofessional = await _context.Healthprofessionals.FirstAsync(r => r.Vendorid == SavePartner.Vendorid);
                     UpdateHealthprofessional.Vendorname = SavePartner.Vendorname;
                     UpdateHealthprofessional.Faxnumber = SavePartner.Faxnumber;
                     UpdateHealthprofessional.Email = SavePartner.Email;
@@ -345,9 +336,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     _context.Healthprofessionals.Add(Healthprofessional);
                     await _context.SaveChangesAsync();
                 }
-                
 
-               
+
+
                 return true;
             }
             catch (Exception e)
@@ -386,7 +377,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             {
                 return false;
             }
-          
+
 
         }
         #endregion

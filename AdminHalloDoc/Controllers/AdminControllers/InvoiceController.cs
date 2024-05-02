@@ -1,16 +1,9 @@
-﻿using AdminHalloDoc.Entities.Models;
-using AdminHalloDoc.Entities.ViewModel;
+﻿using AdminHalloDoc.Controllers.Login;
+using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using System.Web.WebPages;
-using System.Collections.Generic;
-using DocumentFormat.OpenXml.Bibliography;
-using AdminHalloDoc.Repositories.Admin.Repository;
-using AdminHalloDoc.Controllers.Login;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -27,8 +20,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region Index_View
-        [AdminAuth("Provider")]
-        public async  Task<IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
             return View("../AdminViews/Invoice/Index");
         }
@@ -91,10 +83,10 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         public async Task<IActionResult> GetTimesheetDetailsDataAsync(int PhysicianId, DateOnly StartDate)
         {
             List<Timesheetdetail> x = _invoiceRepository.PostTimesheetDetails(PhysicianId, StartDate, 0, CV.ID());
-            List<Entities.Models.Timesheetdetailreimbursement> h =  await _invoiceRepository.GetTimesheetBills(x);
+            List<Entities.Models.Timesheetdetailreimbursement> h = await _invoiceRepository.GetTimesheetBills(x);
             var Timesheet = _invoiceRepository.GetTimesheetDetails(x, h, PhysicianId);
-           
-            if(Timesheet == null)
+
+            if (Timesheet == null)
             {
                 return Json(null);
             }
@@ -109,12 +101,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             if (CV.role() == "Provider" && _invoiceRepository.isFinalizeTimesheet(PhysicianId, StartDate))
             {
                 TempData["Status"] = "Sheet Is Already Finalize";
-               return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
-            int AfterDays = StartDate.Day == 1 ? 14 : DateTime.DaysInMonth(StartDate.Year, StartDate.Month)-14; ; 
-           var TimesheetDetails =  _invoiceRepository.PostTimesheetDetails(PhysicianId,  StartDate,  AfterDays,CV.ID());
+            int AfterDays = StartDate.Day == 1 ? 14 : DateTime.DaysInMonth(StartDate.Year, StartDate.Month) - 14; ;
+            var TimesheetDetails = _invoiceRepository.PostTimesheetDetails(PhysicianId, StartDate, AfterDays, CV.ID());
             List<Entities.Models.Timesheetdetailreimbursement> h = await _invoiceRepository.GetTimesheetBills(TimesheetDetails);
-            var Timesheet = _invoiceRepository.GetTimesheetDetails(TimesheetDetails,  h , PhysicianId);
+            var Timesheet = _invoiceRepository.GetTimesheetDetails(TimesheetDetails, h, PhysicianId);
             Timesheet.PhysicianId = PhysicianId;
             return View("../AdminViews/Invoice/TimesheetDetails", Timesheet);
         }
@@ -122,19 +114,19 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
         #region Edit_TimeSheetDetails
 
-        public IActionResult TimeSheetDetailsEdit([FromForm] List<Timesheetdetails> timesheetdetails,int PhysicianId)
+        public IActionResult TimeSheetDetailsEdit([FromForm] List<Timesheetdetails> timesheetdetails, int PhysicianId)
         {
-           if( _invoiceRepository.PutTimesheetDetails(timesheetdetails,CV.ID()) )
+            if (_invoiceRepository.PutTimesheetDetails(timesheetdetails, CV.ID()))
             {
                 TempData["Status"] = "Edit  TimeSheet  Successfully..!";
             }
 
-            return RedirectToAction("TimeSheetAddEdit",new { PhysicianId = PhysicianId, StartDate  = timesheetdetails[0].Timesheetdate});
+            return RedirectToAction("TimeSheetAddEdit", new { PhysicianId = PhysicianId, StartDate = timesheetdetails[0].Timesheetdate });
         }
         #endregion
 
         #region TimeSheetBill_AddEdit
-        public IActionResult TimeSheetBillAddEdit(int? Trid,DateOnly Timesheetdate, IFormFile file, int Timesheetdetailid, int Amount, string Item, int PhysicianId, DateOnly StartDate)
+        public IActionResult TimeSheetBillAddEdit(int? Trid, DateOnly Timesheetdate, IFormFile file, int Timesheetdetailid, int Amount, string Item, int PhysicianId, DateOnly StartDate)
         {
             Timesheetdetailreimbursements timesheetdetailreimbursement = new Timesheetdetailreimbursements();
             timesheetdetailreimbursement.Timesheetdetailid = Timesheetdetailid;

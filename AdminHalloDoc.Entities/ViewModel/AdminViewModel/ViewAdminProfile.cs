@@ -1,11 +1,4 @@
-﻿using AdminHalloDoc.Entities.Models;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
@@ -73,10 +66,11 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 
         public string? Ip { get; set; }
 
-        public class Regions{
+        public class Regions
+        {
             public int? regionid { get; set; }
             public string? regionname { get; set; }
-            
+
         }
 
 

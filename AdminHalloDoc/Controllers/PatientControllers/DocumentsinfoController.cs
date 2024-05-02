@@ -1,15 +1,6 @@
 ﻿using AdminHalloDoc.Controllers.Login;
-using AdminHalloDoc.Entities.Data;
-using AdminHalloDoc.Entities.Models;
-using AdminHalloDoc.Entities.ViewModel;
-using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
-using AdminHalloDoc.Models;
-using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Patient.Repository.Interface;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace AdminHalloDoc.Controllers.PatientControllers
 {
@@ -32,17 +23,17 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         {
             var result = _patientDashrepo.Documentsinfo(id);
 
-            
+
             return View("../PatientViews/Documentsinfo/Index", result);
         }
         #endregion
 
         #region UploadDoc_Files
-        public IActionResult UploadDoc(int Requestid,IFormFile file)
+        public IActionResult UploadDoc(int Requestid, IFormFile file)
         {
-            var result = _patientDashrepo.UploadDoc(Requestid,file);
+            var result = _patientDashrepo.UploadDoc(Requestid, file);
 
-            return RedirectToAction("Index", new { id = Requestid } );
+            return RedirectToAction("Index", new { id = Requestid });
         }
         #endregion
     }

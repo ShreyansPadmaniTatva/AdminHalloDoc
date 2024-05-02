@@ -1,13 +1,8 @@
 ﻿using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
-using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Utilities;
-
-using Rotativa.AspNetCore;
 using ViewAsPdf = Rotativa.AspNetCore.ViewAsPdf;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
@@ -30,7 +25,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region FindVender
         public async Task<IActionResult> FindVender(int? VenderType)
         {
-           var v = await _viewNotesRepository.FindVenderByVenderType(VenderType);
+            var v = await _viewNotesRepository.FindVenderByVenderType(VenderType);
             return Json(v);
         }
         #endregion
@@ -51,7 +46,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             {
                 TempData["Status"] = "Request Orderd save Successfully..!";
             }
-            if(CV.role() == "Provider")
+            if (CV.role() == "Provider")
             {
                 return Redirect("/Physician/DashBoard");
             }
@@ -121,19 +116,19 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 TempData["Status"] = "Form Is Not Finalize";
                 return RedirectToAction("ConcludeCare", new { id = RequestID.Encode() });
             }
-                bool result = _viewNotesRepository.PutNotes(adminnotes, physiciannotes, RequestID, CV.ID());
+            bool result = _viewNotesRepository.PutNotes(adminnotes, physiciannotes, RequestID, CV.ID());
 
-                if ( await _viewActionRepository.CancelCaseByProvider((int)RequestID))
-                {
-                    TempData["Status"] = "Change Successfully..!";
-                    return Redirect("~/Physician/DashBoard");
-                }
-                else
-                {
-                    TempData["Status"] = "Not Close State";
-                    return RedirectToAction("ConcludeCare", new { id = RequestID.Encode() });
-                }
-           
+            if (await _viewActionRepository.CancelCaseByProvider((int)RequestID))
+            {
+                TempData["Status"] = "Change Successfully..!";
+                return Redirect("~/Physician/DashBoard");
+            }
+            else
+            {
+                TempData["Status"] = "Not Close State";
+                return RedirectToAction("ConcludeCare", new { id = RequestID.Encode() });
+            }
+
 
         }
 
@@ -143,9 +138,9 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         public async Task<IActionResult> UpadteRequest(ViewDocuments viewdocuments)
         {
             Viewcase viewcase = new Viewcase();
-            viewcase.Email= viewdocuments.Email;
-            viewcase.PhoneNumber= viewdocuments.PhoneNumber;
-            viewcase.RequesClientid= viewdocuments.RequesClientid;
+            viewcase.Email = viewdocuments.Email;
+            viewcase.PhoneNumber = viewdocuments.PhoneNumber;
+            viewcase.RequesClientid = viewdocuments.RequesClientid;
             if (await _requestRepository.PutViewcase(viewcase))
             {
 
@@ -162,8 +157,8 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         public async Task<IActionResult> Encounter(string id)
         {
 
-            ViewEncounter v =  _viewActionRepository.GetEncounterDetailsByRequestID((int)id.Decode());
-            return View("../AdminViews/ViewAction/Encounter",v);
+            ViewEncounter v = _viewActionRepository.GetEncounterDetailsByRequestID((int)id.Decode());
+            return View("../AdminViews/ViewAction/Encounter", v);
         }
         #endregion
 
@@ -179,7 +174,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
             else
             {
-                TempData["Status"] =  "Encounter Changes Not Saved";
+                TempData["Status"] = "Encounter Changes Not Saved";
             }
 
             return RedirectToAction("Encounter", new { id = model.Requesid.Encode() });
@@ -189,19 +184,19 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region ACTION-Conculde
         public IActionResult Conculde(int requestId, int providerId)
         {
-                bool final = _viewActionRepository.Conculde(requestId, providerId);
-                if (final)
+            bool final = _viewActionRepository.Conculde(requestId, providerId);
+            if (final)
+            {
+                TempData["Status"] = "Case Is Conculde";
+                if (CV.role() == "Provider")
                 {
-                    TempData["Status"] = "Case Is Conculde";
-                    if (CV.role() == "Provider")
-                    {
-                        return Redirect("~/Physician/DashBoard");
-                    }
-                    return RedirectToAction("Index", "AdminDashboard");
+                    return Redirect("~/Physician/DashBoard");
                 }
-                else
-                {
-                    TempData["Status"] = "Case Is not Finalized";
+                return RedirectToAction("Index", "AdminDashboard");
+            }
+            else
+            {
+                TempData["Status"] = "Case Is not Finalized";
                 return Redirect("~/Physician/DashBoard");
             }
 
@@ -215,7 +210,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             bool data = _viewActionRepository.EditEncounterDetails(model, CV.ID());
             if (data)
             {
-                
+
                 bool final = _viewActionRepository.CaseFinalized(model, CV.ID());
                 if (final)
                 {
@@ -232,13 +227,13 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                     return View("../AdminViews/ViewAction/Encounter", model);
                 }
 
-            } 
+            }
             else
             {
                 TempData["Status"] = "Case Is not Finalized";
                 return View("../AdminViews/ViewAction/Encounter", model);
             }
-             
+
         }
         #endregion
 

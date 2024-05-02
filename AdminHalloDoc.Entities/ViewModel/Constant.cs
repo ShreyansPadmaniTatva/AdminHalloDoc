@@ -1,22 +1,15 @@
-﻿using AdminHalloDoc.Entities.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AdminHalloDoc.Entities.ViewModel
+﻿namespace AdminHalloDoc.Entities.ViewModel
 {
     public class Constant
     {
         public enum EmailAction
         {
-            Sendorder = 1, 
-            Request, 
-            SendLink, 
-            SendAgreement, 
-            ResetPassLink, 
-            NewRegistration, 
+            Sendorder = 1,
+            Request,
+            SendLink,
+            SendAgreement,
+            ResetPassLink,
+            NewRegistration,
             ProviderContactEmail,
             ProviderContactBoth,
             ProviderContactSMS,
@@ -107,11 +100,11 @@ namespace AdminHalloDoc.Entities.ViewModel
 
         public static Dictionary<int, List<string>> statusTdHtmlMap = new Dictionary<int, List<string>>
         {
-            { 1, new List<string> { "Name", "Date of Birth", "Requestor", "Requested Date", "Phone" ,"Address", "Notes" ,  "Actions" } }, 
-            { 2, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name",  "Date Of Service", "Phone" ,"Address", "Notes" , "Actions" } }, 
-            { 3, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name", "Date Of Service", "Phone", "Address", "Notes" , "Actions" } }, 
-            { 4, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service", "Phone", "Address" , "Actions" } }, 
-            { 5, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Actions" } }, 
+            { 1, new List<string> { "Name", "Date of Birth", "Requestor", "Requested Date", "Phone" ,"Address", "Notes" ,  "Actions" } },
+            { 2, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name",  "Date Of Service", "Phone" ,"Address", "Notes" , "Actions" } },
+            { 3, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name", "Date Of Service", "Phone", "Address", "Notes" , "Actions" } },
+            { 4, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service", "Phone", "Address" , "Actions" } },
+            { 5, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Actions" } },
             { 6, new List<string> { "Name", "Physician Name", "Date Of Service", "Phone" ,"Address" , "Actions" } }
 
         };

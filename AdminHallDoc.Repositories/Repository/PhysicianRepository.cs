@@ -2,32 +2,12 @@
 using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
-using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Ocsp;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewAdminProfile;
-using static AdminHalloDoc.Entities.ViewModel.Constant;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using System.Net;
-using Org.BouncyCastle.Utilities.Net;
-using System.Net.Sockets;
-using IPAddress = System.Net.IPAddress;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium;
-using System.Diagnostics;
-using System.Web.Helpers;
+using System.Collections;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -68,8 +48,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                      longitude = result.PhysicianLocation.Longitude,
                                      latitude = result.PhysicianLocation.Latitude,
                                      physicianname = result.PhysicianLocation.Physicianname,
-                                    photo = result.Physician.Photo,
-                                    physicianid = result.Physician.Physicianid,
+                                     photo = result.Physician.Photo,
+                                     physicianid = result.Physician.Physicianid,
                                      createddate = result.PhysicianLocation.Createddate,
                                      address = result.PhysicianLocation.Address
 
@@ -99,32 +79,34 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                          on r.Roleid equals role.Roleid into roleGroup
                                          from roles in roleGroup.DefaultIfEmpty()
                                          where r.Isdeleted == new BitArray(1)
-                                         select  new Physicians{
+                                         select new Physicians
+                                         {
                                              notificationid = nof.Id,
-                                            Createddate = r.Createddate,
-                                            Physicianid = r.Physicianid,
-                                            Address1 = r.Address1,
-                                            Address2 = r.Address2,
-                                            Adminnotes = r.Adminnotes,
-                                            Altphone = r.Altphone,
-                                            Businessname = r.Businessname,
-                                            Businesswebsite = r.Businesswebsite,
-                                            City = r.City,
-                                            Firstname = r.Firstname, Lastname = r.Lastname,
-                                            notification = nof.Isnotificationstopped,
-                                            role = roles.Name,
-                                            Status = r.Status,
-                                            Email = r.Email,
-                                           onCallStatus = (from s in _context.Shifts
-                                                          join sd in _context.Shiftdetails on s.Shiftid equals sd.Shiftid into sdGroup
-                                                          where s.Physicianid == r.Physicianid
-                                                          from shiftDetail in sdGroup.Where(sd => sd.Shiftdate.Date == currentDateTime.Date &&
-                                                                                                    s.Physicianid == r.Physicianid &&
-                                                                                                   sd.Starttime <= currentTimeOfDay &&
-                                                                                                   currentTimeOfDay <= sd.Endtime)
-                                                          select shiftDetail).FirstOrDefault() == null ? 0:1 
+                                             Createddate = r.Createddate,
+                                             Physicianid = r.Physicianid,
+                                             Address1 = r.Address1,
+                                             Address2 = r.Address2,
+                                             Adminnotes = r.Adminnotes,
+                                             Altphone = r.Altphone,
+                                             Businessname = r.Businessname,
+                                             Businesswebsite = r.Businesswebsite,
+                                             City = r.City,
+                                             Firstname = r.Firstname,
+                                             Lastname = r.Lastname,
+                                             notification = nof.Isnotificationstopped,
+                                             role = roles.Name,
+                                             Status = r.Status,
+                                             Email = r.Email,
+                                             onCallStatus = (from s in _context.Shifts
+                                                             join sd in _context.Shiftdetails on s.Shiftid equals sd.Shiftid into sdGroup
+                                                             where s.Physicianid == r.Physicianid
+                                                             from shiftDetail in sdGroup.Where(sd => sd.Shiftdate.Date == currentDateTime.Date &&
+                                                                                                       s.Physicianid == r.Physicianid &&
+                                                                                                      sd.Starttime <= currentTimeOfDay &&
+                                                                                                      currentTimeOfDay <= sd.Endtime)
+                                                             select shiftDetail).FirstOrDefault() == null ? 0 : 1
 
-        })
+                                         })
                                         .ToListAsync();
 
             return pl;
@@ -151,32 +133,32 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
                                         join Notifications in _context.Physiciannotifications
                                          on r.Physicianid equals Notifications.Physicianid into aspGroup
-                                         from nof in aspGroup.DefaultIfEmpty()
+                                        from nof in aspGroup.DefaultIfEmpty()
 
-                                         join role in _context.Roles
-                                         on r.Roleid equals role.Roleid into roleGroup
-                                         from roles in roleGroup.DefaultIfEmpty()
+                                        join role in _context.Roles
+                                        on r.Roleid equals role.Roleid into roleGroup
+                                        from roles in roleGroup.DefaultIfEmpty()
 
-                                         where pr.Regionid == region && r.Isdeleted == new BitArray(new[] {false})
-                                         select new Physicians
-                                         {
-                                             Createddate = r.Createddate,
-                                             Physicianid = r.Physicianid,
-                                             Address1 = r.Address1,
-                                             Address2 = r.Address2,
-                                             Adminnotes = r.Adminnotes,
-                                             Altphone = r.Altphone,
-                                             Businessname = r.Businessname,
-                                             Businesswebsite = r.Businesswebsite,
-                                             City = r.City,
-                                             Firstname = r.Firstname,
-                                             Lastname = r.Lastname,
-                                             notification = nof.Isnotificationstopped,
-                                             role = roles.Name,
-                                             Status = r.Status,
-                                             
+                                        where pr.Regionid == region && r.Isdeleted == new BitArray(new[] { false })
+                                        select new Physicians
+                                        {
+                                            Createddate = r.Createddate,
+                                            Physicianid = r.Physicianid,
+                                            Address1 = r.Address1,
+                                            Address2 = r.Address2,
+                                            Adminnotes = r.Adminnotes,
+                                            Altphone = r.Altphone,
+                                            Businessname = r.Businessname,
+                                            Businesswebsite = r.Businesswebsite,
+                                            City = r.City,
+                                            Firstname = r.Firstname,
+                                            Lastname = r.Lastname,
+                                            notification = nof.Isnotificationstopped,
+                                            role = roles.Name,
+                                            Status = r.Status,
 
-                                         })
+
+                                        })
                                         .ToListAsync();
 
 
@@ -201,16 +183,16 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 }
                 else
                 {
-                    
+
 
                     foreach (var item in changedValuesDict)
                     {
-                        var ar =  _context.Physiciannotifications.Where(r => r.Physicianid == item.Key).FirstOrDefault();
+                        var ar = _context.Physiciannotifications.Where(r => r.Physicianid == item.Key).FirstOrDefault();
                         if (ar != null)
                         {
-                            ar.Isnotificationstopped[0] = item.Value ;
+                            ar.Isnotificationstopped[0] = item.Value;
                             _context.Physiciannotifications.Update(ar);
-                             _context.SaveChanges();
+                            _context.SaveChanges();
                         }
                         else
                         {
@@ -223,7 +205,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         }
                     }
 
-                        return true;
+                    return true;
                 }
             }
             catch (Exception ex)
@@ -242,11 +224,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <param name="physiciandata"></param>
         /// <param name="AdminId"></param>
         /// <returns></returns>
-        public async Task<bool> PhysicianAddEdit(Physicians physiciandata,string AdminId)
+        public async Task<bool> PhysicianAddEdit(Physicians physiciandata, string AdminId)
         {
             try
             {
-                if (physiciandata.UserName!=null && physiciandata.PassWord != null)
+                if (physiciandata.UserName != null && physiciandata.PassWord != null)
                 {
                     // ASP_User
                     var Aspnetuser = new Aspnetuser();
@@ -257,7 +239,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Aspnetuser.Email = physiciandata.Email;
                     Aspnetuser.CreatedDate = DateTime.Now;
                     _context.Aspnetusers.Add(Aspnetuser);
-                     _context.SaveChanges();
+                    _context.SaveChanges();
 
                     //aspnet_user_roles
                     var aspnetuserroles = new Aspnetuserrole();
@@ -305,13 +287,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Physician.Adminnotes = physiciandata.Adminnotes;
 
 
-                    Physician.Photo = physiciandata.PhotoFile != null ? Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Photo."+ Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.') : null; 
+                    Physician.Photo = physiciandata.PhotoFile != null ? Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Photo." + Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.') : null;
                     Physician.Signature = physiciandata.SignatureFile != null ? Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Signature.png" : null;
 
-                   
+
 
                     _context.Physicians.Add(Physician);
-                     _context.SaveChanges();
+                    _context.SaveChanges();
 
                     // Add All Doc File
                     CM.UploadProviderDoc(physiciandata.Agreementdoc, Physician.Physicianid, "Agreementdoc.pdf");
@@ -323,28 +305,28 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     CM.UploadProviderDoc(physiciandata.SignatureFile, Physician.Physicianid, Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Signature.png");
                     if (physiciandata.PhotoFile != null)
                     {
-                    CM.UploadProviderDoc(physiciandata.PhotoFile, Physician.Physicianid, Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Photo."+ Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.'));
+                        CM.UploadProviderDoc(physiciandata.PhotoFile, Physician.Physicianid, Physician.Firstname + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Photo." + Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.'));
 
                     }
 
                     // Physician_region
                     List<int> priceList = physiciandata.Regionsid.Split(',').Select(int.Parse).ToList();
                     foreach (var item in priceList)
-                    {       
-                            // Add Region
-                            Physicianregion ar = new Physicianregion();
-                            ar.Regionid = item;
-                            ar.Physicianid = (int)Physician.Physicianid;
-                            _context.Physicianregions.Add(ar);
-                             _context.SaveChanges();
-                        
+                    {
+                        // Add Region
+                        Physicianregion ar = new Physicianregion();
+                        ar.Regionid = item;
+                        ar.Physicianid = (int)Physician.Physicianid;
+                        _context.Physicianregions.Add(ar);
+                        _context.SaveChanges();
+
                     }
 
                     // Payrate
                     List<Payratecategory> df = _context.Payratecategories.ToList();
                     foreach (var item in df)
                     {
-                    var Payratebyprovider = new Payratebyprovider();
+                        var Payratebyprovider = new Payratebyprovider();
                         Payratebyprovider.Payratecategory = item;
                         Payratebyprovider.Physicianid = Physician.Physicianid;
                         Payratebyprovider.Createddate = DateTime.Now;
@@ -355,7 +337,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     }
                     return true;
 
-                    }
+                }
                 else
                 {
                     return false;
@@ -364,10 +346,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             }
             catch (Exception e)
             {
-               
+
             }
             return false;
-         }
+        }
         #endregion
 
         #region GetPhysicianById
@@ -380,56 +362,56 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
 
             Physicians pl = await (from r in _context.Physicians
-                                        join Aspnetuser in _context.Aspnetusers
-                                        on r.Aspnetuserid equals Aspnetuser.Id into aspGroup
-                                        from asp in aspGroup.DefaultIfEmpty()
-                                        join Notifications in _context.Physiciannotifications
-                                         on r.Physicianid equals Notifications.Physicianid into PhyNGroup
-                                         from nof in PhyNGroup.DefaultIfEmpty()
-                                         join role in _context.Roles
-                                         on r.Roleid equals role.Roleid into roleGroup
-                                         from roles in roleGroup.DefaultIfEmpty()
-                                         where r.Physicianid == id
-                                         select new Physicians
-                                         {
-                                             UserName = asp.Username,
-                                             Roleid = r.Roleid,
-                                             Status = r.Status,
-                                             notificationid = nof.Id,
-                                             Createddate = r.Createddate,
-                                             Physicianid = r.Physicianid,
-                                             Address1 = r.Address1,
-                                             Address2 = r.Address2,
-                                             Adminnotes = r.Adminnotes,
-                                             Altphone = r.Altphone,
-                                             Businessname = r.Businessname,
-                                             Businesswebsite = r.Businesswebsite,
-                                             City = r.City,
-                                             Firstname = r.Firstname,
-                                             Lastname = r.Lastname,
-                                             notification = nof.Isnotificationstopped,
-                                             role = roles.Name,
-                                             Email = r.Email,
-                                             Photo = r.Photo,
-                                             Signature = r.Signature,
-                                             Isagreementdoc = r.Isagreementdoc[0],
-                                             Isnondisclosuredoc = r.Isnondisclosuredoc[0],
-                                             Isbackgrounddoc = r.Isbackgrounddoc[0],
-                                             Islicensedoc = r.Islicensedoc[0],
-                                             Istrainingdoc = r.Istrainingdoc[0],
-                                             Medicallicense = r.Medicallicense,
-                                            Npinumber = r.Npinumber,
-                                            Syncemailaddress = r.Syncemailaddress,
-                                            Zipcode = r.Zip,
-                                            Regionid = r.Regionid,
-                                            Mobile = r.Mobile
+                                   join Aspnetuser in _context.Aspnetusers
+                                   on r.Aspnetuserid equals Aspnetuser.Id into aspGroup
+                                   from asp in aspGroup.DefaultIfEmpty()
+                                   join Notifications in _context.Physiciannotifications
+                                    on r.Physicianid equals Notifications.Physicianid into PhyNGroup
+                                   from nof in PhyNGroup.DefaultIfEmpty()
+                                   join role in _context.Roles
+                                   on r.Roleid equals role.Roleid into roleGroup
+                                   from roles in roleGroup.DefaultIfEmpty()
+                                   where r.Physicianid == id
+                                   select new Physicians
+                                   {
+                                       UserName = asp.Username,
+                                       Roleid = r.Roleid,
+                                       Status = r.Status,
+                                       notificationid = nof.Id,
+                                       Createddate = r.Createddate,
+                                       Physicianid = r.Physicianid,
+                                       Address1 = r.Address1,
+                                       Address2 = r.Address2,
+                                       Adminnotes = r.Adminnotes,
+                                       Altphone = r.Altphone,
+                                       Businessname = r.Businessname,
+                                       Businesswebsite = r.Businesswebsite,
+                                       City = r.City,
+                                       Firstname = r.Firstname,
+                                       Lastname = r.Lastname,
+                                       notification = nof.Isnotificationstopped,
+                                       role = roles.Name,
+                                       Email = r.Email,
+                                       Photo = r.Photo,
+                                       Signature = r.Signature,
+                                       Isagreementdoc = r.Isagreementdoc[0],
+                                       Isnondisclosuredoc = r.Isnondisclosuredoc[0],
+                                       Isbackgrounddoc = r.Isbackgrounddoc[0],
+                                       Islicensedoc = r.Islicensedoc[0],
+                                       Istrainingdoc = r.Istrainingdoc[0],
+                                       Medicallicense = r.Medicallicense,
+                                       Npinumber = r.Npinumber,
+                                       Syncemailaddress = r.Syncemailaddress,
+                                       Zipcode = r.Zip,
+                                       Regionid = r.Regionid,
+                                       Mobile = r.Mobile
 
-                                        })
+                                   })
                                         .FirstOrDefaultAsync();
 
             List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians.Regions> regions = new List<AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians.Regions>();
 
-            regions =  _context.Physicianregions
+            regions = _context.Physicianregions
                   .Where(r => r.Physicianid == pl.Physicianid)
                   .Select(req => new AdminHalloDoc.Entities.ViewModel.AdminViewModel.Physicians.Regions()
                   {
@@ -509,7 +491,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
             if (req != null)
             {
-            var U = await _context.Aspnetusers.Where(m => m.Id == req.Aspnetuserid).FirstOrDefaultAsync();
+                var U = await _context.Aspnetusers.Where(m => m.Id == req.Aspnetuserid).FirstOrDefaultAsync();
                 U.Passwordhash = hasher.HashPassword(null, password);
                 _context.Aspnetusers.Update(U);
                 _context.SaveChanges();
@@ -845,19 +827,19 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     {
                         Physicianid = PhysicianId,
                         Createddate = DateTime.Now,
-                        Physicianname = await _context.Physicians.Where(r => r.Physicianid == PhysicianId).Select(r => r.Firstname+" " + r.Lastname).FirstOrDefaultAsync()
+                        Physicianname = await _context.Physicians.Where(r => r.Physicianid == PhysicianId).Select(r => r.Firstname + " " + r.Lastname).FirstOrDefaultAsync()
                     };
 
                     var location = await GetCurrentLocationAsync();
 
                     physicianLocation.Latitude = location.latitude;
-                            physicianLocation.Longitude = location.longitude;
-                            physicianLocation.Address = await ReverseGeocodeAsync(location.latitude, location.longitude);
+                    physicianLocation.Longitude = location.longitude;
+                    physicianLocation.Address = await ReverseGeocodeAsync(location.latitude, location.longitude);
 
-                            // Add new Physicianlocation entity to the context
-                            await _context.Physicianlocations.AddAsync(physicianLocation);
-                        
-                    
+                    // Add new Physicianlocation entity to the context
+                    await _context.Physicianlocations.AddAsync(physicianLocation);
+
+
                 }
                 else
                 {
@@ -867,7 +849,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     dataForChange.Latitude = location.latitude;
                     dataForChange.Longitude = location.longitude;
                     dataForChange.Address = await ReverseGeocodeAsync(location.latitude, location.longitude);
-                     _context.Physicianlocations.Update(dataForChange);
+                    _context.Physicianlocations.Update(dataForChange);
                 }
 
                 // Save changes asynchronously
@@ -919,7 +901,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         string street = jsonData.features[0].properties.street;
                         string housenumber = jsonData.features[0].properties.housenumber;
 
-                        
+
 
                         // Format the address
                         string address = $"{name}, {city}, {suburb}, {state}, {country} - {postcode}";
@@ -961,10 +943,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         dynamic ipInfo = Newtonsoft.Json.JsonConvert.DeserializeObject(responseBody);
 
                         string[] coordinates = ipInfo.loc.ToString().Split(',');
-                         latitude = Convert.ToDecimal(coordinates[0]);
-                         longitude = Convert.ToDecimal(coordinates[1]);
+                        latitude = Convert.ToDecimal(coordinates[0]);
+                        longitude = Convert.ToDecimal(coordinates[1]);
 
-                       
+
                     }
 
 
@@ -973,12 +955,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             }
             catch (Exception ex)
             {
-                
+
                 Console.WriteLine($"Error fetching location: {ex.Message}");
                 return (0, 0); // Default values
             }
 
-            
+
             return (0, 0);
         }
         #endregion
@@ -1027,7 +1009,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                      pl => pl.Physicianid,
                                      r => r.Physicianid,
                                      (pl, r) => new { Payratebyproviders = pl, Physician = r }
-                                 ).Where(r => r.Payratebyproviders.Physicianid == PhysicianId && r.Physician.Isdeleted == new BitArray(new[] {false}))
+                                 ).Where(r => r.Payratebyproviders.Physicianid == PhysicianId && r.Physician.Isdeleted == new BitArray(new[] { false }))
                                  .OrderBy(x => x.Payratebyproviders.Payratecategoryid)
                                  .Select(result => new PhysicianPayrate
                                  {
@@ -1052,7 +1034,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <param name="Payrate"></param>
         /// <param name="AdminId"></param>
         /// <returns></returns>
-        public async Task<bool> SavePayrate(int PayrateId, decimal? Payrate,string AdminId)
+        public async Task<bool> SavePayrate(int PayrateId, decimal? Payrate, string AdminId)
         {
             try
             {
@@ -1073,7 +1055,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             {
                 return false;
             }
-           
+
         }
         #endregion
 

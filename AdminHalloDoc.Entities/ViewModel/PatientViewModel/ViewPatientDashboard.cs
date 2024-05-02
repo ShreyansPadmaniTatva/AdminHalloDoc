@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
+﻿namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
 {
     public class ViewPatientDashboard
     {

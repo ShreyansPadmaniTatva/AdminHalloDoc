@@ -1,11 +1,8 @@
 ﻿using AdminHalloDoc.Controllers.Login;
-using AdminHalloDoc.Entities.Models;
-using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
-using static AdminHalloDoc.Entities.ViewModel.Constant;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -38,7 +35,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         public async Task<IActionResult> _SearchResult(RecordsModel rm)
         {
             RecordsModel r = await _recordsRepository.GetRequestsbyfilterForRecords(rm);
-            return PartialView("../AdminViews/Records/SearchRecords/_List",r);
+            return PartialView("../AdminViews/Records/SearchRecords/_List", r);
         }
         #endregion
         #endregion
@@ -64,7 +61,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region PatientRecords
-        public async Task<IActionResult> PatientRecords(PaginatedViewModel data,int UserId)
+        public async Task<IActionResult> PatientRecords(PaginatedViewModel data, int UserId)
         {
             var r = await _recordsRepository.PatientRecord(UserId, data);
             return View("../AdminViews/Records/PatientHistory/PatientRecord", r);

@@ -1,15 +1,8 @@
-﻿using AdminHalloDoc.Entities.Models;
+﻿using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
-using AdminHalloDoc.Entities.ViewModel;
-using AdminHalloDoc.Repositories.Admin.Repository;
-using AdminHalloDoc.Repositories.Admin.Repository.Interface;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1.Ocsp;
-using Twilio.Types;
-using System.Diagnostics.Metrics;
 using AdminHalloDoc.Models.CV;
+using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -31,27 +24,27 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region Save_Viewcase
         public async Task<IActionResult> SaveViewcase(Viewcase viewcase)
         {
-           
+
             if (await _requestRepository.PutViewcase(viewcase))
             {
 
                 TempData["Status"] = "Update Data Successfully..!";
             }
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-            return RedirectToAction("Viewcase", "AdminDashboard", new { id = viewcase.RequesClientid.Encode()});
+            return RedirectToAction("Viewcase", "AdminDashboard", new { id = viewcase.RequesClientid.Encode() });
         }
         #endregion
 
         #region Send_Link
-        public async Task<IActionResult> SendLink(string firstname,string lastname, string email, string phonenumber)
+        public async Task<IActionResult> SendLink(string firstname, string lastname, string email, string phonenumber)
         {
 
-            if (await _viewActionRepository.SendLink( firstname,  lastname,  email,  phonenumber))
+            if (await _viewActionRepository.SendLink(firstname, lastname, email, phonenumber))
             {
-                
+
                 TempData["Status"] = "Link Send In mail Successfully..!";
             }
-            return RedirectToAction("Index", "AdminDashboard"); 
+            return RedirectToAction("Index", "AdminDashboard");
         }
         #endregion
 
@@ -71,11 +64,11 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region AssignProvider
         public async Task<IActionResult> AssignProvider(int requestid, int ProviderId, string Notes)
         {
-           if( await _viewActionRepository.AssignProvider(requestid, ProviderId, Notes))
+            if (await _viewActionRepository.AssignProvider(requestid, ProviderId, Notes))
             {
                 TempData["Status"] = "Assign Provider Successfully..!";
             }
-            
+
 
             return RedirectToAction("Index", "AdminDashboard");
         }
@@ -176,7 +169,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             return PartialView("../AdminViews/ViewAction/_modelS/_transferrequest", v);
         }
-        
+
 
         #region _TransferToProviderPost
         [HttpPost]
@@ -200,13 +193,13 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         {
             var v = await _viewActionRepository.GetRequestDetails(requestid);
             ViewBag.CaseReasonComboBox = await _requestRepository.CaseReasonComboBox();
-            return PartialView("../AdminViews/ViewAction/_modelS/_cancelcase",v);
+            return PartialView("../AdminViews/ViewAction/_modelS/_cancelcase", v);
         }
 
         #region _CaseReasonPost
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> _CaseReasonPost(ViewActions v,string ReasonTag)
+        public async Task<IActionResult> _CaseReasonPost(ViewActions v, string ReasonTag)
         {
             v.AdminId = Convert.ToInt32(CV.UserID());
             if (await _viewActionRepository.CancelCase(v, ReasonTag))
@@ -221,7 +214,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region _ClearCase
-        
+
         public async Task<IActionResult> _ClearCase(int RequestId)
         {
             if (await _viewActionRepository.ClearCase(RequestId))
@@ -239,7 +232,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             ViewBag.CaseReasonComboBox = await _requestRepository.CaseReasonComboBox();
             return PartialView("../AdminViews/ViewAction/_modelS/_blockcase", v);
         }
-       
+
 
         #region _BlockcasePost
         [HttpPost]
@@ -265,7 +258,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             return PartialView("../AdminViews/ViewAction/_modelS/_assign_case", v);
         }
-        
+
 
         #region _AssignPhysicianPost
         [HttpPost]
@@ -293,7 +286,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #endregion
 
         #region DeleteOnesFile
-        public async Task<IActionResult> DeleteFile(int? id,int? Requestid)
+        public async Task<IActionResult> DeleteFile(int? id, int? Requestid)
         {
             if (await _viewActionRepository.DeleteDocumentByRequest(id.ToString()))
             {
@@ -319,7 +312,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region SendFilEmail
         public async Task<IActionResult> SendFilEmail(string mailids, int? Requestid, string email)
         {
-            if(await _viewActionRepository.SendFilEmail(mailids, (int)Requestid , email))
+            if (await _viewActionRepository.SendFilEmail(mailids, (int)Requestid, email))
             {
 
                 TempData["Status"] = "Send File in Mail Successfully..!";
@@ -341,7 +334,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         {
             if (CV.role() == "Admin")
             {
-                if (_viewActionRepository.SubmitCreateRequest(vr, CV.ID(),null))
+                if (_viewActionRepository.SubmitCreateRequest(vr, CV.ID(), null))
                 {
                     TempData["Status"] = "Add  Request  Successfully..!";
                 }
@@ -349,14 +342,14 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
             else
             {
-                if (_viewActionRepository.SubmitCreateRequest(vr, CV.ID(),Convert.ToInt32(CV.UserID())))
+                if (_viewActionRepository.SubmitCreateRequest(vr, CV.ID(), Convert.ToInt32(CV.UserID())))
                 {
                     TempData["Status"] = "Add  Request  Successfully..!";
                 }
                 return Redirect("/Physician/DashBoard");
             }
-           
-            
+
+
         }
         #endregion
 
@@ -377,7 +370,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [HttpPost]
         public async Task<IActionResult> SendEmailForRequestSupport(string? Notes)
         {
-            if (await _viewActionRepository.SendEmailForRequestSupport(Notes, Convert.ToInt32( CV.UserID())))
+            if (await _viewActionRepository.SendEmailForRequestSupport(Notes, Convert.ToInt32(CV.UserID())))
             {
 
                 TempData["Status"] = "Msg Sent Successfully..!";
@@ -411,7 +404,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 await _requestRepository.EmailLog(elog);
             }
             // _providersRepository.EditPhysicianMyProfile(model, CV.AspNetUserID());
-           
+
 
             return Redirect("~/Physician/Profile");
         }

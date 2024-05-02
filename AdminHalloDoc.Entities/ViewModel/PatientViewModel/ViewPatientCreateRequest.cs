@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
 {
@@ -54,7 +49,7 @@ namespace AdminHalloDoc.Entities.ViewModel.PatientViewModel
         public string? RoomSite { get; set; }
 
         public string? UploadImage { get; set; }
-       
+
         public IFormFile? UploadFile { get; set; }
 
 

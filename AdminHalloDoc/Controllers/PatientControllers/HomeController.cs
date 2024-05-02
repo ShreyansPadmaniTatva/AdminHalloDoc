@@ -1,9 +1,6 @@
 ﻿using AdminHalloDoc.Models;
 using Microsoft.AspNetCore.Mvc;
-using Npgsql;
 using System.Diagnostics;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 
 namespace AdminHalloDoc.Controllers.PatientControllers
@@ -24,8 +21,8 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         #region Index
         public IActionResult Index()
         {
-            
-           return View("../PatientViews/Home/Index");
+
+            return View("../PatientViews/Home/Index");
         }
         #endregion
 

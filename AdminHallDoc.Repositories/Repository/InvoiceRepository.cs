@@ -5,13 +5,6 @@ using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.WebPages;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -41,7 +34,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         public bool isApprovedTimesheet(int PhysicianId, DateOnly StartDate)
         {
             var data = _context.Timesheets.Where(e => e.Physicianid == PhysicianId && e.Startdate == StartDate).FirstOrDefault();
-             if (data.Isapproved == false)
+            if (data.Isapproved == false)
             {
 
                 return false;
@@ -57,13 +50,14 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <param name="PhysicianId"></param>
         /// <param name="StartDate"></param>
         /// <returns></returns>
-        public bool isFinalizeTimesheet(int PhysicianId,DateOnly StartDate)
+        public bool isFinalizeTimesheet(int PhysicianId, DateOnly StartDate)
         {
             var data = _context.Timesheets.Where(e => e.Physicianid == PhysicianId && e.Startdate == StartDate).FirstOrDefault();
-            if(data == null)
+            if (data == null)
             {
                 return false;
-            }else if(data.Isfinalize ==  false)
+            }
+            else if (data.Isfinalize == false)
             {
 
                 return false;
@@ -93,7 +87,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -108,7 +102,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <param name="vts"></param>
         /// <param name="AdminId"></param>
         /// <returns></returns>
-        public async  Task<bool> SetToApprove(ViewTimeSheet vts, string AdminId)
+        public async Task<bool> SetToApprove(ViewTimeSheet vts, string AdminId)
         {
             try
             {
@@ -177,13 +171,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <param name="AfterDays"></param>
         /// <param name="AdminId"></param>
         /// <returns> That Add Or Edit TimesheetDetails List </returns>
-        public List<Timesheetdetail> PostTimesheetDetails(int PhysicianId, DateOnly StartDate,int AfterDays, string AdminId)
+        public List<Timesheetdetail> PostTimesheetDetails(int PhysicianId, DateOnly StartDate, int AfterDays, string AdminId)
         {
-                var Timesheet = new Timesheet();
+            var Timesheet = new Timesheet();
             var data = _context.Timesheets.Where(e => e.Physicianid == PhysicianId && e.Startdate == StartDate).FirstOrDefault();
             if (data == null && AfterDays != 0)
             {
-                DateOnly EndDate = StartDate.AddDays(AfterDays-1);
+                DateOnly EndDate = StartDate.AddDays(AfterDays - 1);
                 Timesheet.Startdate = StartDate;
                 Timesheet.Physicianid = PhysicianId;
                 Timesheet.Isfinalize = false;
@@ -193,7 +187,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 _context.Timesheets.Add(Timesheet);
                 _context.SaveChanges();
 
-                for (DateOnly i = StartDate; i <= EndDate;i=i.AddDays(1))
+                for (DateOnly i = StartDate; i <= EndDate; i = i.AddDays(1))
                 {
                     var Timesheetdetail = new Timesheetdetail();
                     Timesheetdetail.Timesheetid = Timesheet.Timesheetid;
@@ -205,7 +199,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     _context.SaveChanges();
                 }
 
-                 return _context.Timesheetdetails.Where(e => e.Timesheetid == Timesheet.Timesheetid).OrderBy(r => r.Timesheetdate).ToList();
+                return _context.Timesheetdetails.Where(e => e.Timesheetid == Timesheet.Timesheetid).OrderBy(r => r.Timesheetdate).ToList();
             }
             else if (data == null && AfterDays == 0)
             {
@@ -248,9 +242,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             catch (Exception e)
             {
                 return false;
-            } 
-           
-            
+            }
+
+
         }
 
         #endregion
@@ -263,7 +257,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <param name="tr"></param>
         /// <param name="PhysicianId"></param>
         /// <returns></returns>
-        public ViewTimeSheet GetTimesheetDetails(List<Timesheetdetail> td, List<Timesheetdetailreimbursement> tr,int PhysicianId)
+        public ViewTimeSheet GetTimesheetDetails(List<Timesheetdetail> td, List<Timesheetdetailreimbursement> tr, int PhysicianId)
         {
             try
             {
@@ -291,8 +285,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Itemname = e.Itemname,
                     Bill = e.Bill,
                     Createddate = e.Createddate,
-                    Timesheetdate = _context.Timesheetdetails.Where(r => r.Timesheetdetailid == e.Timesheetdetailid ).FirstOrDefault().Timesheetdate,
-                    Timesheetid = _context.Timesheetdetails.Where(r => r.Timesheetdetailid == e.Timesheetdetailid ).FirstOrDefault().Timesheetid,
+                    Timesheetdate = _context.Timesheetdetails.Where(r => r.Timesheetdetailid == e.Timesheetdetailid).FirstOrDefault().Timesheetdate,
+                    Timesheetid = _context.Timesheetdetails.Where(r => r.Timesheetdetailid == e.Timesheetdetailid).FirstOrDefault().Timesheetid,
                     Modifiedby = e.Modifiedby,
                     Timesheetdetailid = e.Timesheetdetailid,
                 }).OrderBy(r => r.Timesheetdetailid).ToList();
@@ -300,16 +294,16 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 TimeSheet.PayrateWithProvider = _context.Payratebyproviders.Where(r => r.Physicianid == PhysicianId).ToList();
                 if (td.Count > 0)
                 {
-                TimeSheet.Timesheeid = TimeSheet.Timesheetdetails[0].Timesheetid;
+                    TimeSheet.Timesheeid = TimeSheet.Timesheetdetails[0].Timesheetid;
                 }
                 TimeSheet.PhysicianId = PhysicianId;
                 return TimeSheet;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return null;
             }
-          
+
 
         }
         #endregion
@@ -321,7 +315,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <param name="PhysicianId"></param>
         /// <param name="Timesheetdate"></param>
         /// <returns></returns>
-        public int FindOnCallProvider( int PhysicianId,DateOnly Timesheetdate)
+        public int FindOnCallProvider(int PhysicianId, DateOnly Timesheetdate)
         {
             int i = 0;
             var s = _context.Shifts.Where(r => r.Physicianid == PhysicianId).ToList();
@@ -339,12 +333,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// </summary>
         /// <param name="TimeSheetDetails"></param>
         /// <returns>List Of TimeSheetBill</returns>
-        public async Task<List<Timesheetdetailreimbursement>> GetTimesheetBills( List<Timesheetdetail> TimeSheetDetails)
+        public async Task<List<Timesheetdetailreimbursement>> GetTimesheetBills(List<Timesheetdetail> TimeSheetDetails)
         {
             try
             {
                 var TimeSheetBills = await _context.Timesheetdetailreimbursements
-                                     .Where(e =>  TimeSheetDetails.Contains(e.Timesheetdetail)  && e.Isdeleted == false)
+                                     .Where(e => TimeSheetDetails.Contains(e.Timesheetdetail) && e.Isdeleted == false)
                                      .OrderBy(r => r.Timesheetdetailid)
                                      .ToListAsync();
 
@@ -366,7 +360,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <param name="trb"></param>
         /// <param name="AdminId"></param>
         /// <returns> true Or false If Add Or Upadted </returns>
-        public bool TimeSheetBillAddEdit(Timesheetdetailreimbursements trb,string AdminId)
+        public bool TimeSheetBillAddEdit(Timesheetdetailreimbursements trb, string AdminId)
         {
             Timesheetdetail data = _context.Timesheetdetails.Where(e => e.Timesheetdetailid == trb.Timesheetdetailid).FirstOrDefault();
             if (data != null && trb.Timesheetdetailreimbursementid == null)
@@ -381,7 +375,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 timesheetdetailreimbursement.Isdeleted = false;
                 _context.Timesheetdetailreimbursements.Add(timesheetdetailreimbursement);
                 _context.SaveChanges();
-               
+
 
                 return true;
             }
@@ -389,7 +383,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             {
                 Timesheetdetailreimbursement timesheetdetailreimbursement = _context.Timesheetdetailreimbursements.Where(r => r.Timesheetdetailreimbursementid == trb.Timesheetdetailreimbursementid).FirstOrDefault(); ;
                 timesheetdetailreimbursement.Amount = (int)trb.Amount;
-               
+
                 timesheetdetailreimbursement.Itemname = trb.Itemname;
                 timesheetdetailreimbursement.Modifieddate = DateTime.Now;
                 timesheetdetailreimbursement.Modifiedby = AdminId;
@@ -417,7 +411,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             Timesheetdetailreimbursement data = _context.Timesheetdetailreimbursements.Where(e => e.Timesheetdetailreimbursementid == trb.Timesheetdetailreimbursementid).FirstOrDefault();
             if (data != null)
             {
-             
+
                 data.Modifieddate = DateTime.Now;
                 data.Modifiedby = AdminId;
                 data.Isdeleted = true;
@@ -427,7 +421,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
                 return true;
             }
-           return false;
+            return false;
 
         }
         #endregion

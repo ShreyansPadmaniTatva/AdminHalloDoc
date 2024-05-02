@@ -3,15 +3,8 @@ using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static AdminHalloDoc.Entities.ViewModel.Constant;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -68,7 +61,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
             return await _context.Roles
                         .Where(r => r.Roleid == roleid)
-                        .Select( r => new ViewRoleByMenu{
+                        .Select(r => new ViewRoleByMenu
+                        {
                             Accounttype = r.Accounttype,
                             Createdby = r.Createdby,
                             Roleid = r.Roleid,
@@ -80,21 +74,21 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         #endregion
 
         #region PostRoleMenu
-        public async Task<bool> PostRoleMenu(ViewRoleByMenu role ,string Menusid,string ID)
+        public async Task<bool> PostRoleMenu(ViewRoleByMenu role, string Menusid, string ID)
         {
             try
             {
-               Role check = await _context.Roles.Where(r => r.Name == role.Name).FirstOrDefaultAsync();
-                if (check == null && role != null && Menusid !=null)
+                Role check = await _context.Roles.Where(r => r.Name == role.Name).FirstOrDefaultAsync();
+                if (check == null && role != null && Menusid != null)
                 {
-                    
+
                     Role r = new Role();
                     r.Name = role.Name;
                     r.Accounttype = role.Accounttype;
                     r.Createdby = ID;
                     r.Createddate = DateTime.Now;
                     r.Isdeleted = new System.Collections.BitArray(1);
-                    r.Isdeleted[0] =false;
+                    r.Isdeleted[0] = false;
                     _context.Roles.Add(r);
                     _context.SaveChanges();
 
@@ -107,17 +101,19 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                         _context.Rolemenus.Add(ar);
 
                     }
-                        _context.SaveChanges();
+                    _context.SaveChanges();
                     return true;
-                }else
+                }
+                else
                 {
                     return false;
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return false;
             }
-               
+
         }
         #endregion
 
@@ -188,7 +184,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
             return await _context.Rolemenus
                         .Where(r => r.Roleid == roleid)
-                        .Select( r => r.Menuid)
+                        .Select(r => r.Menuid)
                         .ToListAsync();
         }
         #endregion
@@ -213,7 +209,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     accounttype = admin != null ? 2 : (physician != null ? 3 : null),
                     status = admin != null ? admin.Status : (physician != null ? physician.Status : null),
                     Mobile = admin != null ? admin.Mobile : (physician != null ? physician.Mobile : null) ?? "-",
-                    OpenRequest = admin != null ? _context.Requests.Count() :  (physician != null ? _context.Requests.Count(r => r.Physicianid == physician.Physicianid) : 0),
+                    OpenRequest = admin != null ? _context.Requests.Count() : (physician != null ? _context.Requests.Count(r => r.Physicianid == physician.Physicianid) : 0),
                     Email = admin != null ? admin.Email : null
                 };
 

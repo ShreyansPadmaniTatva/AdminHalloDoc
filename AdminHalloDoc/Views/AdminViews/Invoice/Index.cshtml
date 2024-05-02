@@ -123,19 +123,14 @@
                 var dateObj = new Date(selectedValue);
 
                 var date = dateObj.getDate();
-                var month = dateObj.getMonth() + 1; // Months are zero-based
                 if (date == 1) {
-                    $("#AfterDays").val(14);
                     var url = '@Url.Action("TimeSheetAddEdit", "Invoice")' + '?PhysicianId=' + loginId + '&StartDate=' + selectedValue;
                 } else {
-                    var daysInMonth = new Date(2024, month, 0).getDate();
-                    $("#AfterDays").val(daysInMonth - 14);
                     var url = '@Url.Action("TimeSheetAddEdit", "Invoice")' + '?PhysicianId=' + loginId + '&StartDate=' + selectedValue;
                 }
 
                 $('#finalizeLink').attr('href', url).show();
 
-                console.log($("#AfterDays").val());
             });
             // Get options and default selection
             var { options, defaultSelection } = generateOptions();

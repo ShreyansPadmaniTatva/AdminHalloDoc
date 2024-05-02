@@ -6,13 +6,6 @@ using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static AdminHalloDoc.Entities.ViewModel.Constant;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -40,7 +33,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
             var user = await _context.Aspnetusers.FirstOrDefaultAsync(u => u.Username == aspNetUser.Username);
 
-            
+
 
             UserInfo admin = new UserInfo();
             if (user != null)
@@ -66,7 +59,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     {
                         var admindata = _context.Admins.FirstOrDefault(u => u.Aspnetuserid == user.Id);
                         admin.UserId = admindata.Adminid;
-                    admin.RoleId = (int)admindata.Roleid;
+                        admin.RoleId = (int)admindata.Roleid;
                     }
                     else if (admin.Role == "Patient")
                     {
@@ -107,12 +100,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             List<MenuItem> StaticSubmenu = new List<MenuItem>();
 
             List<Menu> MenuItemsSub = (from rm in _context.Rolemenus
-                                     join Menus in _context.Menus
-                                     on rm.Menuid equals Menus.Menuid into MenusGroup
-                                     from men in MenusGroup.DefaultIfEmpty()
-                                     where rm.Roleid == roleid && men.Sortorder.ToString().StartsWith(""+menusub+"")
-                                     orderby men.Sortorder
-                                     select men).ToList();
+                                       join Menus in _context.Menus
+                                       on rm.Menuid equals Menus.Menuid into MenusGroup
+                                       from men in MenusGroup.DefaultIfEmpty()
+                                       where rm.Roleid == roleid && men.Sortorder.ToString().StartsWith("" + menusub + "")
+                                       orderby men.Sortorder
+                                       select men).ToList();
             foreach (Menu menu in MenuItemsSub)
             {
                 MenuItem m = new MenuItem();
@@ -122,7 +115,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     StaticSubmenu.Add(m);
                 }
             }
-                return StaticSubmenu;
+            return StaticSubmenu;
         }
         #endregion
 
@@ -144,7 +137,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <summary>
         /// List Out The All Static Menu
         /// </summary>
-        public  List<MenuItem> staticmenu = new List<MenuItem>
+        public List<MenuItem> staticmenu = new List<MenuItem>
         {
             new MenuItem
               {
@@ -321,25 +314,25 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             if (roleid != null)
             {
                 //Set By DataBase
-                MenuItems =  (from rm in _context.Rolemenus
-                                 join Menus in _context.Menus
-                                 on rm.Menuid equals Menus.Menuid into MenusGroup
-                                 from m in MenusGroup.DefaultIfEmpty()
-                                 where rm.Roleid == roleid
-                                 orderby m.Sortorder
-                                 select m).ToList();
+                MenuItems = (from rm in _context.Rolemenus
+                             join Menus in _context.Menus
+                             on rm.Menuid equals Menus.Menuid into MenusGroup
+                             from m in MenusGroup.DefaultIfEmpty()
+                             where rm.Roleid == roleid
+                             orderby m.Sortorder
+                             select m).ToList();
 
                 //Set By DataBase And Static Menu
                 foreach (Menu menu in MenuItems)
                 {
                     MenuItem m = new MenuItem();
                     m = staticmenu.Where(item => item.DbName == menu.Name).FirstOrDefault();
-                   
+
                     if (m != null)
                     {
                         if (m.Submenu != null)
                         {
-                            m.Submenu = SetSubMenu(roleid, (int)menu.Sortorder,m.Submenu);
+                            m.Submenu = SetSubMenu(roleid, (int)menu.Sortorder, m.Submenu);
                         }
                         Staticmenu.Add(m);
                     }

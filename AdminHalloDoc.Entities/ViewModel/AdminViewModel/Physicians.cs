@@ -1,16 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
     public class Physicians
     {
-       
+
         public int? notificationid { get; set; }
         public int? onCallStatus { get; set; } = 0;
         public int? shiftid { get; set; }
@@ -42,7 +37,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 
 
 
-        public bool Isagreementdoc { get; set; } 
+        public bool Isagreementdoc { get; set; }
 
         public bool Isbackgrounddoc { get; set; }
 

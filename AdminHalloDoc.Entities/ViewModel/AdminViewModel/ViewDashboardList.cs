@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-
-namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
+﻿namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
     public class ViewDashboardList
-    {   
+    {
 
         public int? Requestid { get; set; }
         public int? RequestClientid { get; set; }
@@ -31,7 +23,7 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public bool? IsFinalize { get; set; }
 
         public int? ProviderID { get; set; }
-        public string? Physician { get; set;}
+        public string? Physician { get; set; }
         public string? Confirmation { get; set; }
         public DateTime? ConcludedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }

@@ -1,31 +1,15 @@
-﻿using AdminHalloDoc.Models;
-using Humanizer;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Differencing;
-using Microsoft.EntityFrameworkCore;
-using Npgsql;
-using NuGet.Protocol.Plugins;
-using System.Data;
-using System.Net.Mail;
-using System.Net;
-using System.Text.RegularExpressions;
-using AdminHalloDoc.Models.CV;
-using System.Collections;
-using static System.Net.WebRequestMethods;
-using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Globalization;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.SqlServer.Server;
-using Microsoft.CodeAnalysis.Scripting;
-using AdminHalloDoc.Entities.Data;
+﻿using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.Models;
-using AdminHalloDoc.Entities;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections;
+using System.Data;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace AdminHalloDoc.Controllers.PatientControllers
 {
@@ -37,7 +21,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         private readonly ApplicationDbContext _context;
         private readonly IRequestRepository _requestRepository;
         private readonly ILoginRepository _loginRepository;
-        public Login(ApplicationDbContext context, EmailConfiguration emailConfig,IRequestRepository requestRepository, IHttpContextAccessor httpContextAccessor, ILoginRepository loginRepository)
+        public Login(ApplicationDbContext context, EmailConfiguration emailConfig, IRequestRepository requestRepository, IHttpContextAccessor httpContextAccessor, ILoginRepository loginRepository)
         {
             _context = context;
             _emailConfig = emailConfig;
@@ -183,13 +167,13 @@ namespace AdminHalloDoc.Controllers.PatientControllers
         {
             string Decodee = _emailConfig.Decode(email);
             DateTime s = DateTime.ParseExact(_emailConfig.Decode(Datetime), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-            TimeSpan dif =  DateTime.Now - s;
+            TimeSpan dif = DateTime.Now - s;
             if (!_loginRepository.IsPasswordModify(Decodee))
             {
                 ViewBag.URl = "Pass Is Change Only Ones.";
                 return View("../SendAgreement/404");
             }
-                if (dif.Days == 0 && dif.Hours < 24)
+            if (dif.Days == 0 && dif.Hours < 24)
             {
 
                 ViewBag.email = Decodee;
@@ -218,7 +202,7 @@ namespace AdminHalloDoc.Controllers.PatientControllers
                 {
                     Aspnetuser U = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == Email);
                     var hasher = new PasswordHasher<string>();
-                    U.Passwordhash = hasher.HashPassword(null, Password); 
+                    U.Passwordhash = hasher.HashPassword(null, Password);
                     U.Modifieddate = DateTime.Now;
                     _context.Update(U);
                     await _context.SaveChangesAsync();

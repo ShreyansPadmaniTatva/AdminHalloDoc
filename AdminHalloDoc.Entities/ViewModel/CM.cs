@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 namespace AdminHalloDoc.Entities.ViewModel
 {
     public static class CM
@@ -20,7 +15,7 @@ namespace AdminHalloDoc.Entities.ViewModel
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
-                 newfilename = $"{Path.GetFileNameWithoutExtension(UploadFile.FileName)}-{DateTime.Now.ToString("yyyyMMddhhmmss")}.{Path.GetExtension(UploadFile.FileName).Trim('.')}"; ;
+                newfilename = $"{Path.GetFileNameWithoutExtension(UploadFile.FileName)}-{DateTime.Now.ToString("yyyyMMddhhmmss")}.{Path.GetExtension(UploadFile.FileName).Trim('.')}"; ;
 
                 string fileNameWithPath = Path.Combine(path, newfilename);
                 //upload_path = FilePath.Replace("wwwroot\\Upload\\TimeSheet\\", "/Upload/TimeSheet/") + "/" + newfilename;

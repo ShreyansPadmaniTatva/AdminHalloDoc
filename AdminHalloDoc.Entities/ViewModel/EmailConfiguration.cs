@@ -1,8 +1,4 @@
-﻿
-using MailKit.Net.Smtp;
-using MimeKit;
-using System.Net.Mail;
-using System.Net;
+﻿using MimeKit;
 using System.Text;
 //using System.Net.Mail;
 //using System.Net;
@@ -32,7 +28,7 @@ namespace AdminHalloDoc.Entities.ViewModel
             //return true;
             try
             {
-                Body = "Mail to :"+ To+"<br/>"+Body;
+                Body = "Mail to :" + To + "<br/>" + Body;
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("", From));
                 message.To.Add(new MailboxAddress("", "dasete8625@haislot.com"));
@@ -68,7 +64,7 @@ namespace AdminHalloDoc.Entities.ViewModel
         /// <param name="StartDate"></param>
         /// <param name="EndDate"></param>
         /// <returns></returns>
-        public async Task<bool> SendMailWithShift(String To, String Subject, String Body,DateTime StartDate  , DateTime EndDate)
+        public async Task<bool> SendMailWithShift(String To, String Subject, String Body, DateTime StartDate, DateTime EndDate)
         {
             try
             {
@@ -115,7 +111,7 @@ namespace AdminHalloDoc.Entities.ViewModel
                     ContentTransferEncoding = ContentEncoding.Base64,
                     FileName = "shift.ics"
                 };
-                var contentType = new ContentType(type.MediaType,type.MediaType);
+                var contentType = new ContentType(type.MediaType, type.MediaType);
                 contentType.Parameters.Add("name", "shift.ics");
                 builder.Attachments.Add(calendarAttachment);
                 message.Body = builder.ToMessageBody();

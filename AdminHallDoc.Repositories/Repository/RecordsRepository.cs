@@ -6,18 +6,7 @@ using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Helpers;
-using System.Web.WebPages;
-using System.Xml.Linq;
-using Twilio.Types;
-using static AdminHalloDoc.Entities.ViewModel.Constant;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
@@ -48,44 +37,44 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
 
             List<ViewSearchRecord> allData = (from req in _context.Requests
-                                                    join reqClient in _context.Requestclients
-                                                    on req.Requestid equals reqClient.Requestid into reqClientGroup
-                                                    from rc in reqClientGroup.DefaultIfEmpty()
-                                                    join phys in _context.Physicians
-                                                    on req.Physicianid equals phys.Physicianid into physGroup
-                                                    from p in physGroup.DefaultIfEmpty()
-                                                    join reg in _context.Regions
-                                                    on rc.Regionid equals reg.Regionid into RegGroup
-                                                    from rg in RegGroup.DefaultIfEmpty()
-                                                    join nts in _context.Requestnotes
-                                                    on req.Requestid equals nts.Requestid into ntsgrp
-                                                    from nt in ntsgrp.DefaultIfEmpty()
-                                                    where (rm.Status == 0 || req.Status == rm.Status) &&
-                                                          (rm.RequestType == 0 || req.Requesttypeid == rm.RequestType) &&
-                                                          (!rm.Startdate.HasValue || req.Createddate.Date >= rm.Startdate.Value.Date) &&
-                                                          (!rm.Enddate.HasValue || req.Createddate.Date <= rm.Enddate.Value.Date) &&
-                                                          (rm.Patientname.IsNullOrEmpty() || (rc.Firstname + " " + rc.Lastname).ToLower().Contains(rm.Patientname.ToLower())) &&
-                                                          (rm.Physicianname.IsNullOrEmpty() || (p.Firstname + " " + p.Lastname).ToLower().Contains(rm.Physicianname.ToLower())) &&
-                                                          (rm.Email.IsNullOrEmpty() || rc.Email.ToLower().Contains(rm.Email.ToLower())) &&
-                                                          (rm.Phonenumber.IsNullOrEmpty() || rc.Phonenumber.ToLower().Contains(rm.Phonenumber.ToLower())) && ( req.Isdeleted == new BitArray(new[] { false }))
-                                              orderby req.Createddate   
-                                                    select new ViewSearchRecord
-                                                    {
-                                                        Modifieddate = req.Modifieddate,
-                                                        PatientName = req.Firstname + " " + req.Lastname,
-                                                        RequestID = req.Requestid,
-                                                        DateOfService = req.Createddate,
-                                                        PhoneNumber = rc.Phonenumber ?? "-",
-                                                        Email = rc.Email ?? "-",
-                                                        Address = rc.Address + "," + rc.City + " " + rc.Zipcode,
-                                                        RequestTypeID = req.Requesttypeid,
-                                                        Status = req.Status,
-                                                        PhysicianName = p.Firstname + " " + p.Lastname == " " ? "-" : p.Firstname + " " + p.Lastname,
-                                                        AdminNote = nt != null ? nt.Adminnotes ?? "-" : "-",
-                                                        PhysicianNote = nt != null ? nt.Physiciannotes ?? "-" : "-",
-                                                        PatientNote = rc.Notes ?? "-",
-                                                        Zip = rc.Zipcode ?? "-"
-                                                    }).OrderBy(x => x.Modifieddate == null ? x.DateOfService : x.Modifieddate).ToList();
+                                              join reqClient in _context.Requestclients
+                                              on req.Requestid equals reqClient.Requestid into reqClientGroup
+                                              from rc in reqClientGroup.DefaultIfEmpty()
+                                              join phys in _context.Physicians
+                                              on req.Physicianid equals phys.Physicianid into physGroup
+                                              from p in physGroup.DefaultIfEmpty()
+                                              join reg in _context.Regions
+                                              on rc.Regionid equals reg.Regionid into RegGroup
+                                              from rg in RegGroup.DefaultIfEmpty()
+                                              join nts in _context.Requestnotes
+                                              on req.Requestid equals nts.Requestid into ntsgrp
+                                              from nt in ntsgrp.DefaultIfEmpty()
+                                              where (rm.Status == 0 || req.Status == rm.Status) &&
+                                                    (rm.RequestType == 0 || req.Requesttypeid == rm.RequestType) &&
+                                                    (!rm.Startdate.HasValue || req.Createddate.Date >= rm.Startdate.Value.Date) &&
+                                                    (!rm.Enddate.HasValue || req.Createddate.Date <= rm.Enddate.Value.Date) &&
+                                                    (rm.Patientname.IsNullOrEmpty() || (rc.Firstname + " " + rc.Lastname).ToLower().Contains(rm.Patientname.ToLower())) &&
+                                                    (rm.Physicianname.IsNullOrEmpty() || (p.Firstname + " " + p.Lastname).ToLower().Contains(rm.Physicianname.ToLower())) &&
+                                                    (rm.Email.IsNullOrEmpty() || rc.Email.ToLower().Contains(rm.Email.ToLower())) &&
+                                                    (rm.Phonenumber.IsNullOrEmpty() || rc.Phonenumber.ToLower().Contains(rm.Phonenumber.ToLower())) && (req.Isdeleted == new BitArray(new[] { false }))
+                                              orderby req.Createddate
+                                              select new ViewSearchRecord
+                                              {
+                                                  Modifieddate = req.Modifieddate,
+                                                  PatientName = req.Firstname + " " + req.Lastname,
+                                                  RequestID = req.Requestid,
+                                                  DateOfService = req.Createddate,
+                                                  PhoneNumber = rc.Phonenumber ?? "-",
+                                                  Email = rc.Email ?? "-",
+                                                  Address = rc.Address + "," + rc.City + " " + rc.Zipcode,
+                                                  RequestTypeID = req.Requesttypeid,
+                                                  Status = req.Status,
+                                                  PhysicianName = p.Firstname + " " + p.Lastname == " " ? "-" : p.Firstname + " " + p.Lastname,
+                                                  AdminNote = nt != null ? nt.Adminnotes ?? "-" : "-",
+                                                  PhysicianNote = nt != null ? nt.Physiciannotes ?? "-" : "-",
+                                                  PatientNote = rc.Notes ?? "-",
+                                                  Zip = rc.Zipcode ?? "-"
+                                              }).OrderBy(x => x.Modifieddate == null ? x.DateOfService : x.Modifieddate).ToList();
 
 
             if (rm.IsAscending == true)
@@ -106,9 +95,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             }
 
             dm.TotalPages = (int)Math.Ceiling((double)allData.Count() / rm.PageSize);
-            
 
-           
+
+
             if (rm.PageSize == -1)
             {
                 dm.SearchRecordList = allData.ToList();
@@ -156,10 +145,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
 
             List<User> allData = (from user in _context.Users
-                                 where (string.IsNullOrEmpty(rm.Email) || user.Email.ToLower().Contains(rm.Email.ToLower())) &&
-                                 (string.IsNullOrEmpty(rm.Phonenumber) || user.Mobile.ToLower().Contains(rm.Phonenumber.ToLower())) &&
-                                 (string.IsNullOrEmpty(rm.FirstName) || user.Firstname.ToLower().Contains(rm.FirstName.ToLower())) &&
-                                 (string.IsNullOrEmpty(rm.LastName) || user.Lastname.ToLower().Contains(rm.LastName.ToLower()))
+                                  where (string.IsNullOrEmpty(rm.Email) || user.Email.ToLower().Contains(rm.Email.ToLower())) &&
+                                  (string.IsNullOrEmpty(rm.Phonenumber) || user.Mobile.ToLower().Contains(rm.Phonenumber.ToLower())) &&
+                                  (string.IsNullOrEmpty(rm.FirstName) || user.Firstname.ToLower().Contains(rm.FirstName.ToLower())) &&
+                                  (string.IsNullOrEmpty(rm.LastName) || user.Lastname.ToLower().Contains(rm.LastName.ToLower()))
                                   select new User
                                   {
 
@@ -186,13 +175,13 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             dm.PatientHistorybList = allData.ToList();
 
 
-   
+
             dm.PageSize = rm.PageSize;
             dm.CurrentPage = rm.CurrentPage;
             return dm;
         }
 
-        public async Task<PaginatedViewModel> PatientRecord(int UserId,PaginatedViewModel data)
+        public async Task<PaginatedViewModel> PatientRecord(int UserId, PaginatedViewModel data)
         {
 
 
@@ -209,7 +198,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                      where req.Userid == (UserId == null ? data.UserId : UserId)
                                                      select new ViewDashboardList
                                                      {
-                                                         
+
                                                          Physician = p.Firstname + " " + p.Lastname ?? "-",
                                                          RequestClientid = rc.Requestclientid,
                                                          Status = req.Status,
@@ -218,7 +207,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                          Requestor = req.Firstname + " " + req.Lastname,
                                                          PatientName = rc.Firstname + " " + rc.Lastname,
                                                          RequestedDate = req.Createddate,
-                                                         Dob = new DateTime((int)rc.Intyear, (int)Convert.ToInt32(rc.Strmonth), (int)rc.Intdate) ,
+                                                         Dob = new DateTime((int)rc.Intyear, (int)Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
                                                          PhoneNumber = rc.Phonenumber,
                                                          Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.Zipcode,
                                                          Notes = rc.Notes ?? "-",
@@ -261,7 +250,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                        where (rm.AccountType == 0 || req.Roleid == rm.AccountType) &&
                                              (!rm.Startdate.HasValue || req.Createdate.Date == rm.Startdate.Value.Date) &&
                                              (!rm.Enddate.HasValue || req.Sentdate.Value.Date == rm.Enddate.Value.Date) &&
-                                             (rm.ReciverName.IsNullOrEmpty() || req.Recipient.ToLower().Contains(rm.ReciverName.ToLower()) ) &&
+                                             (rm.ReciverName.IsNullOrEmpty() || req.Recipient.ToLower().Contains(rm.ReciverName.ToLower())) &&
                                              (rm.Email.IsNullOrEmpty() || req.Emailid.ToLower().Contains(rm.Email.ToLower()))
                                        select new Emaillogdata
                                        {
@@ -277,7 +266,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                            Subjectname = req.Subjectname,
                                            Action = req.Action
                                        })
-                                       .OrderByDescending(x=>x.Createdate).ToList();
+                                       .OrderByDescending(x => x.Createdate).ToList();
 
 
 
@@ -304,7 +293,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                       where (rm.AccountType == 0 || req.Roleid == rm.AccountType) &&
                                             (!rm.Startdate.HasValue || req.Createdate.Date == rm.Startdate.Value.Date) &&
                                             (!rm.Enddate.HasValue || req.Sentdate.Value.Date == rm.Enddate.Value.Date) &&
-                                            (rm.ReciverName.IsNullOrEmpty() || req.Recipient.ToLower().Contains(rm.ReciverName.ToLower()) ) &&
+                                            (rm.ReciverName.IsNullOrEmpty() || req.Recipient.ToLower().Contains(rm.ReciverName.ToLower())) &&
                                             (rm.Phonenumber.IsNullOrEmpty() || req.Mobilenumber.ToLower().Contains(rm.Phonenumber.ToLower()))
                                       select new SMSLogsData
                                       {
@@ -345,7 +334,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                  (rm.Patientname.IsNullOrEmpty() || _context.Requests.FirstOrDefault(e => e.Requestid == Convert.ToInt32(req.Requestid)).Firstname.ToLower().Contains(rm.Patientname.ToLower())) &&
                                                  (rm.Email.IsNullOrEmpty() || req.Email.ToLower().Contains(rm.Email.ToLower())) &&
                                                  (rm.Phonenumber.IsNullOrEmpty() || req.Phonenumber.ToLower().Contains(rm.Phonenumber.ToLower())) && req.Isactive == new BitArray(new[] { true })
-            select new BlockRequestData
+                                           select new BlockRequestData
                                            {
                                                PatientName = _context.Requests.FirstOrDefault(e => e.Requestid == Convert.ToInt32(req.Requestid)).Firstname,
                                                Email = req.Email,
@@ -354,7 +343,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                Requestid = Convert.ToInt32(req.Requestid),
                                                Phonenumber = req.Phonenumber,
                                                Reason = req.Reason ?? "-"
-                                           }).OrderByDescending(x=>x.Createddate).ToList();
+                                           }).OrderByDescending(x => x.Createddate).ToList();
 
 
 

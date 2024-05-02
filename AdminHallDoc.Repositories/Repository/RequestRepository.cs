@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using AdminHalloDoc.Entities.Data;
+﻿using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Ocsp;
-using Twilio.TwiML.Messaging;
+using System.Collections;
 
 namespace AdminHalloDoc.Repositories.Admin.Repository
 {
     public class RequestRepository : IRequestRepository
-	{
+    {
         #region Constructor
         private readonly ApplicationDbContext _context;
         private readonly EmailConfiguration _emailConfig;
@@ -26,8 +19,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <param name="context"></param>
         /// <param name="emailConfig"></param>
         public RequestRepository(ApplicationDbContext context, EmailConfiguration emailConfig)
-		{
-			_context = context;
+        {
+            _context = context;
             _emailConfig = emailConfig;
         }
         #endregion
@@ -106,10 +99,10 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <returns></returns>
         public async Task<List<Physicians>> ProviderComboBox()
         {
-            return await _context.Physicians.Where(r => r.Isdeleted == new BitArray(new[] { false})).Select(req => new Physicians()
+            return await _context.Physicians.Where(r => r.Isdeleted == new BitArray(new[] { false })).Select(req => new Physicians()
             {
                 Physicianid = req.Physicianid,
-                Firstname = req.Firstname + ' '+req.Lastname
+                Firstname = req.Firstname + ' ' + req.Lastname
             })
                 .ToListAsync();
         }
@@ -182,7 +175,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// <returns></returns>
         public PaginatedViewModel Indexdata(int ProviderId)
         {
-            if(ProviderId < 0)
+            if (ProviderId < 0)
             {
                 return new PaginatedViewModel
                 {
@@ -237,7 +230,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
                 if (requeststatuslog.Adminid != null)
                 {
-                    if (requeststatuslog.Status == 2 )
+                    if (requeststatuslog.Status == 2)
                     {
                         return "Admin " + admin.Firstname + " " + admin.Lastname + " transferred to Physician " + transphysician.Firstname + " " + transphysician.Lastname + " on " + requeststatuslog.Createddate.ToString();
                     }
@@ -247,11 +240,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     }
                 }
 
-              
-                    if (requeststatuslog.Status == 3)
-                    {
-                        return "Physician " + physician.Firstname + " " + physician.Lastname + " cancelled on " + requeststatuslog.Createddate.ToString();
-                    }
+
+                if (requeststatuslog.Status == 3)
+                {
+                    return "Physician " + physician.Firstname + " " + physician.Lastname + " cancelled on " + requeststatuslog.Createddate.ToString();
+                }
                 if (requeststatuslog.Status == 8)
                 {
                     return "Patient  " + physician.Firstname + " " + physician.Lastname + " cancelled on " + requeststatuslog.Createddate.ToString();
@@ -301,44 +294,44 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             List<int> statusdata = status.Split(',').Select(int.Parse).ToList();
 
 
-           List<ViewDashboardList> allData = await (from req in _context.Requests
-                    join reqClient in _context.Requestclients
-                    on req.Requestid equals reqClient.Requestid into reqClientGroup
-                    from rc in reqClientGroup.DefaultIfEmpty()
-                    join phys in _context.Physicians
-                    on req.Physicianid equals phys.Physicianid into physGroup
-                    from p in physGroup.DefaultIfEmpty()
-                    join reg in _context.Regions
-                    on rc.Regionid equals reg.Regionid into RegGroup
-                    from rg in RegGroup.DefaultIfEmpty()
-                    where statusdata.Contains(req.Status) && (data.SearchInput == null ||
-                    rc.Firstname.ToLower().Contains(data.SearchInput.ToLower()) || rc.Lastname.ToLower().Contains(data.SearchInput.ToLower()) ||
-                    req.Firstname.ToLower().Contains(data.SearchInput.ToLower()) || req.Lastname.ToLower().Contains(data.SearchInput.ToLower()) ||
-                    rc.Email.ToLower().Contains(data.SearchInput.ToLower()) || rc.Phonenumber.ToLower().Contains(data.SearchInput.ToLower()) ||
-                    rc.Address.ToLower().Contains(data.SearchInput.ToLower()) || rc.Notes.ToLower().Contains(data.SearchInput.ToLower()) ||
-                    p.Firstname.ToLower().Contains(data.SearchInput.ToLower()) || p.Lastname.ToLower().Contains(data.SearchInput.ToLower()) ||
-                    rg.Name.ToLower().Contains(data.SearchInput.ToLower())) && (data.RegionId == null || rc.Regionid == data.RegionId)
-                     && (data.RequestType == null || req.Requesttypeid == data.RequestType)
-                     select new ViewDashboardList
-                    {
-                        Physician = p.Firstname + " " + p.Lastname,
-                        RequestClientid = rc.Requestclientid,
-                        Status = req.Status,
-                        Requestid = req.Requestid,
-                        RequestTypeID = req.Requesttypeid,
-                        Requestor = req.Firstname + " " + req.Lastname,
-                        PatientName = rc.Firstname + " " + rc.Lastname,
-                        RequestedDate = req.Accepteddate == null ? req.Createddate : req.Accepteddate,
-                        Dob = new DateTime((int)rc.Intyear,(int) Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
-                        PhoneNumber = rc.Phonenumber,
-                        Address = rc.Address ,
-                        ProviderID = req.Physicianid,
-                        RegionID = rc.Regionid,
-                        RequestorPhoneNumber = req.Phonenumber,
-                         ModifiedDate = req.Modifieddate,
-                         IsFinalize = _context.Encounterforms.Any(ef => ef.Requestid == req.Requestid && ef.Isfinalize),
-                     })
-                    .OrderByDescending(x => x.ModifiedDate == null?x.RequestedDate:x.ModifiedDate).ToListAsync();
+            List<ViewDashboardList> allData = await (from req in _context.Requests
+                                                     join reqClient in _context.Requestclients
+                                                     on req.Requestid equals reqClient.Requestid into reqClientGroup
+                                                     from rc in reqClientGroup.DefaultIfEmpty()
+                                                     join phys in _context.Physicians
+                                                     on req.Physicianid equals phys.Physicianid into physGroup
+                                                     from p in physGroup.DefaultIfEmpty()
+                                                     join reg in _context.Regions
+                                                     on rc.Regionid equals reg.Regionid into RegGroup
+                                                     from rg in RegGroup.DefaultIfEmpty()
+                                                     where statusdata.Contains(req.Status) && (data.SearchInput == null ||
+                                                     rc.Firstname.ToLower().Contains(data.SearchInput.ToLower()) || rc.Lastname.ToLower().Contains(data.SearchInput.ToLower()) ||
+                                                     req.Firstname.ToLower().Contains(data.SearchInput.ToLower()) || req.Lastname.ToLower().Contains(data.SearchInput.ToLower()) ||
+                                                     rc.Email.ToLower().Contains(data.SearchInput.ToLower()) || rc.Phonenumber.ToLower().Contains(data.SearchInput.ToLower()) ||
+                                                     rc.Address.ToLower().Contains(data.SearchInput.ToLower()) || rc.Notes.ToLower().Contains(data.SearchInput.ToLower()) ||
+                                                     p.Firstname.ToLower().Contains(data.SearchInput.ToLower()) || p.Lastname.ToLower().Contains(data.SearchInput.ToLower()) ||
+                                                     rg.Name.ToLower().Contains(data.SearchInput.ToLower())) && (data.RegionId == null || rc.Regionid == data.RegionId)
+                                                      && (data.RequestType == null || req.Requesttypeid == data.RequestType)
+                                                     select new ViewDashboardList
+                                                     {
+                                                         Physician = p.Firstname + " " + p.Lastname,
+                                                         RequestClientid = rc.Requestclientid,
+                                                         Status = req.Status,
+                                                         Requestid = req.Requestid,
+                                                         RequestTypeID = req.Requesttypeid,
+                                                         Requestor = req.Firstname + " " + req.Lastname,
+                                                         PatientName = rc.Firstname + " " + rc.Lastname,
+                                                         RequestedDate = req.Accepteddate == null ? req.Createddate : req.Accepteddate,
+                                                         Dob = new DateTime((int)rc.Intyear, (int)Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
+                                                         PhoneNumber = rc.Phonenumber,
+                                                         Address = rc.Address,
+                                                         ProviderID = req.Physicianid,
+                                                         RegionID = rc.Regionid,
+                                                         RequestorPhoneNumber = req.Phonenumber,
+                                                         ModifiedDate = req.Modifieddate,
+                                                         IsFinalize = _context.Encounterforms.Any(ef => ef.Requestid == req.Requestid && ef.Isfinalize),
+                                                     })
+                     .OrderByDescending(x => x.ModifiedDate == null ? x.RequestedDate : x.ModifiedDate).ToListAsync();
 
             foreach (ViewDashboardList item in allData)
             {
@@ -348,31 +341,31 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
             if (data.SortedColumn != null)
             {
                 if (data.IsAscending == true)
-            {
-                allData = data.SortedColumn switch
                 {
-                    "Name" => allData.OrderBy(x => x.PatientName).ToList(),
-                    "Requestor" => allData.OrderBy(x => x.Physician).ToList(),
-                    "Requested" => allData.OrderBy(x => x.RequestedDate).ToList(),
-                    "Physician" => allData.OrderBy(x => x.Physician).ToList()
-                };
-            }
-            else
-            {
-                allData = data.SortedColumn switch
+                    allData = data.SortedColumn switch
+                    {
+                        "Name" => allData.OrderBy(x => x.PatientName).ToList(),
+                        "Requestor" => allData.OrderBy(x => x.Physician).ToList(),
+                        "Requested" => allData.OrderBy(x => x.RequestedDate).ToList(),
+                        "Physician" => allData.OrderBy(x => x.Physician).ToList()
+                    };
+                }
+                else
                 {
-                    "Name" => allData.OrderByDescending(x => x.PatientName).ToList(),
-                    "Requestor" => allData.OrderByDescending(x => x.Physician).ToList(),
-                    "Requested" => allData.OrderByDescending(x => x.RequestedDate).ToList(),
-                    "Physician" => allData.OrderByDescending(x => x.Physician).ToList()
-                };
+                    allData = data.SortedColumn switch
+                    {
+                        "Name" => allData.OrderByDescending(x => x.PatientName).ToList(),
+                        "Requestor" => allData.OrderByDescending(x => x.Physician).ToList(),
+                        "Requested" => allData.OrderByDescending(x => x.RequestedDate).ToList(),
+                        "Physician" => allData.OrderByDescending(x => x.Physician).ToList()
+                    };
+                }
             }
-            }
-            
+
 
             int totalItemCount = allData.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
-            
+
             List<ViewDashboardList> list1 = allData.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();
             if (data.PageSize == -1)
             {
@@ -388,7 +381,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                 SearchInput = data.SearchInput,
                 SortedColumn = data.SortedColumn,
                 IsAscending = data.IsAscending
-        };
+            };
             return paginatedViewModel;
         }
         #endregion
@@ -439,7 +432,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                          RequestedDate = req.Createddate,
                                                          Dob = new DateTime((int)rc.Intyear, (int)Convert.ToInt32(rc.Strmonth), (int)rc.Intdate),
                                                          PhoneNumber = rc.Phonenumber,
-                                                         Address = rc.Address ,
+                                                         Address = rc.Address,
                                                          Notes = rc.Notes,
                                                          ProviderID = req.Physicianid,
                                                          RegionID = rc.Regionid,
@@ -491,11 +484,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     Email = requestclients.Email,
                     Notes = requestclients.Notes,
                     BirthDate = new DateTime(requestclients.Intyear != null ? (int)requestclients.Intyear : 0001, Convert.ToInt32(requestclients.Strmonth != null ? requestclients.Strmonth : 1), requestclients.Intdate != null ? (int)requestclients.Intdate : 01) != new DateTime(0001, 01, 01) ? new DateTime((int)requestclients.Intyear != 0 ? (int)requestclients.Intyear : 1, Convert.ToInt32(requestclients.Strmonth != null ? requestclients.Strmonth : 1), (int)requestclients.Intdate != 0 ? (int)requestclients.Intdate : 1) : null,
-                   // BirthDate = new DateTime((int)requestclients.Intyear, Convert.ToInt32(requestclients.Strmonth), (int)requestclients.Intdate),
-                   Status = requests.Status,
+                    // BirthDate = new DateTime((int)requestclients.Intyear, Convert.ToInt32(requestclients.Strmonth), (int)requestclients.Intdate),
+                    Status = requests.Status,
                     PhoneNumber = requestclients.Phonenumber,
                     Address = requestclients.Address + "," + requestclients.Street + "," + requestclients.City + "," + requestclients.State + "," + requestclients.Zipcode,
-                   
+
                     RegionID = requestclients.Regionid
                 }
             ).FirstOrDefaultAsync();
@@ -517,8 +510,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
 
                 var requestclient = await _context.Requestclients.Where(r => r.Requestclientid == viewcase.RequesClientid).FirstAsync();
                 DateTime dt = new DateTime(2008, 3, 9, 16, 5, 7, 123);
-                DateTime sd = viewcase.BirthDate != null  ? viewcase.BirthDate.Value : dt;
-                
+                DateTime sd = viewcase.BirthDate != null ? viewcase.BirthDate.Value : dt;
+
                 requestclient.Firstname = viewcase.FirstName != null ? viewcase.FirstName : requestclient.Firstname;
                 requestclient.Lastname = viewcase.LastName != null ? viewcase.LastName : requestclient.Lastname;
                 requestclient.Phonenumber = viewcase.PhoneNumber;
@@ -529,15 +522,15 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     requestclient.Intyear = sd.Year;
                     requestclient.Strmonth = sd.Month.ToString();
                 }
-               
+
                 _context.Requestclients.Update(requestclient);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-               
-                    throw;
-                
+
+                throw;
+
             }
             return true;
         }
@@ -549,8 +542,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// </summary>
         /// <param name="elog"></param>
         /// <returns></returns>
-        public async Task<bool> EmailLog(Emaillogdata elog)        {            try            {                Emaillog log = new Emaillog();                //log.Emaillogid = Guid.NewGuid().ToString();                log.Emailtemplate = elog.Emailtemplate;                log.Subjectname = elog.Subjectname;                log.Emailid = elog.Emailid;                log.Roleid = elog.Roleid;                log.Createdate = DateTime.Now;                log.Sentdate = DateTime.Now;                log.Adminid =elog.Adminid;                log.Requestid = elog.Requestid;                log.Physicianid = elog.Physicianid;                log.Action = elog.Action;                log.Recipient = elog.Recipient;                if (elog.Requestid != null)                {
-                    log.Confirmationnumber = _context.Requests.FirstOrDefault(r => r.Requestid == elog.Requestid).Confirmationnumber;                }                if (await _emailConfig.SendMail(elog.Emailid, elog.Subjectname, elog.Emailtemplate))                {                  log.Isemailsent = new BitArray(new[] { true }); ;
+        public async Task<bool> EmailLog(Emaillogdata elog)        {            try            {                Emaillog log = new Emaillog();
+                //log.Emaillogid = Guid.NewGuid().ToString();
+                log.Emailtemplate = elog.Emailtemplate;                log.Subjectname = elog.Subjectname;                log.Emailid = elog.Emailid;                log.Roleid = elog.Roleid;                log.Createdate = DateTime.Now;                log.Sentdate = DateTime.Now;                log.Adminid = elog.Adminid;                log.Requestid = elog.Requestid;                log.Physicianid = elog.Physicianid;                log.Action = elog.Action;                log.Recipient = elog.Recipient;                if (elog.Requestid != null)                {
+                    log.Confirmationnumber = _context.Requests.FirstOrDefault(r => r.Requestid == elog.Requestid).Confirmationnumber;                }                if (await _emailConfig.SendMail(elog.Emailid, elog.Subjectname, elog.Emailtemplate))                {
+                    log.Isemailsent = new BitArray(new[] { true }); ;
                 }
                 else
                 {
@@ -586,11 +582,11 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         /// </summary>
         /// <param name="elog"></param>
         /// <returns></returns>
-        public async Task<bool> EmailLogForShift(Emaillogdata elog, DateTime StartDate , DateTime EndDate)        {            try            {                Emaillog log = new Emaillog();
+        public async Task<bool> EmailLogForShift(Emaillogdata elog, DateTime StartDate, DateTime EndDate)        {            try            {                Emaillog log = new Emaillog();
                 //log.Emaillogid = Guid.NewGuid().ToString();
                 log.Emailtemplate = elog.Emailtemplate;                log.Subjectname = elog.Subjectname;                log.Emailid = elog.Emailid;                log.Roleid = elog.Roleid;                log.Createdate = DateTime.Now;                log.Sentdate = DateTime.Now;                log.Adminid = elog.Adminid;                log.Requestid = elog.Requestid;                log.Physicianid = elog.Physicianid;                log.Action = elog.Action;                log.Recipient = elog.Recipient;                if (elog.Requestid != null)                {
                     log.Confirmationnumber = _context.Requests.FirstOrDefault(r => r.Requestid == elog.Requestid).Confirmationnumber;                }
-                if (await _emailConfig.SendMailWithShift(elog.Emailid ,elog.Subjectname, elog.Emailtemplate, StartDate,EndDate))
+                if (await _emailConfig.SendMailWithShift(elog.Emailid, elog.Subjectname, elog.Emailtemplate, StartDate, EndDate))
                 {
                     log.Isemailsent = new BitArray(new[] { true }); ;
                 }

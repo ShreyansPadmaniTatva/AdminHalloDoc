@@ -1,12 +1,10 @@
 ﻿using AdminHalloDoc.Controllers.Login;
-using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
 {
@@ -30,7 +28,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [Route("Admin/PhysicianLocation")]
         public async Task<IActionResult> PhysicianLocation()
         {
-           ViewBag.Log = await _physicianRepository.FindPhysicianLocation();
+            ViewBag.Log = await _physicianRepository.FindPhysicianLocation();
             return View("../AdminViews/Physician/PhysicianLocation");
         }
         #endregion
@@ -54,7 +52,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 return Json(v);
 
             }
-            return View("../AdminViews/Physician/Index",v);
+            return View("../AdminViews/Physician/Index", v);
         }
         #endregion
 
@@ -72,7 +70,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         #region AddEdit_Profile
         public async Task<IActionResult> PhysicianProfile(string? id)
         {
-            
+
             //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
             ViewBag.userrolecombobox = await _requestRepository.UserRoleComboBox(3);
@@ -85,7 +83,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
                 ViewData["PhysicianAccount"] = "Edit";
                 Physicians v = await _physicianRepository.GetPhysicianById((int)id.Decode());
-                return View("../AdminViews/Physician/PhysicianAddEdit",v);
+                return View("../AdminViews/Physician/PhysicianAddEdit", v);
 
             }
             return View("../AdminViews/Physician/PhysicianAddEdit");
@@ -108,16 +106,16 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 return View("../AdminViews/Physician/PhysicianAddEdit", physicians);
             }
 
-          if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-              await  _physicianRepository.PhysicianAddEdit(physicians, CV.ID());
+                await _physicianRepository.PhysicianAddEdit(physicians, CV.ID());
 
             }
             else
             {
-                return View("../AdminViews/Physician/PhysicianAddEdit",physicians);
+                return View("../AdminViews/Physician/PhysicianAddEdit", physicians);
             }
-           
+
             return RedirectToAction("PhysicianAll");
         }
         #endregion
@@ -137,7 +135,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 elog.Adminid = Convert.ToInt32(CV.UserID());
                 elog.Action = 9;
                 elog.Roleid = 3;
-                elog.Recipient = v.Firstname + " "+v.Lastname;
+                elog.Recipient = v.Firstname + " " + v.Lastname;
                 elog.Senttries = 1;
                 elog.Physicianid = id;
 
@@ -161,7 +159,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
 
                 s = await _requestRepository.EmailLog(elog);
 
-                 //await _emailconfig.SendMail(email, "Check massage" ,"Heyy "+msg);
+                //await _emailconfig.SendMail(email, "Check massage" ,"Heyy "+msg);
             }
             else
             {
@@ -261,7 +259,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             }
             else
             {
-                TempData["Status"] =  "some problem";
+                TempData["Status"] = "some problem";
                 return RedirectToAction("PhysicianProfile", new { id = physicians.Physicianid.Encode() });
             }
         }
@@ -316,7 +314,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             bool data = await _physicianRepository.DeletePhysician(PhysicianID, CV.ID());
             if (data)
             {
-                TempData["Status"] =  "Deleted Successfully...";
+                TempData["Status"] = "Deleted Successfully...";
                 return RedirectToAction("Index");
             }
             else
@@ -332,21 +330,21 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         public async Task<IActionResult> PhysicianPayrate(string? physicianid)
         {
             var v = await _physicianRepository.PhysicianPayrate((int)physicianid.Decode());
-             return View("../AdminViews/Physician/Payrate", v);
+            return View("../AdminViews/Physician/Payrate", v);
 
         }
         #endregion
 
         #region Save_Payrate
-        public async Task<IActionResult> SavePayrate(int PayrateId,decimal? Payrate,int? physicianid)
+        public async Task<IActionResult> SavePayrate(int PayrateId, decimal? Payrate, int? physicianid)
         {
-            if (await _physicianRepository.SavePayrate(PayrateId, Payrate,CV.ID()))
+            if (await _physicianRepository.SavePayrate(PayrateId, Payrate, CV.ID()))
             {
 
                 TempData["Status"] = "Update Data Successfully..!";
             }
 
-            return RedirectToAction("PhysicianPayrate",new { physicianid= physicianid.Encode() });
+            return RedirectToAction("PhysicianPayrate", new { physicianid = physicianid.Encode() });
 
         }
         #endregion

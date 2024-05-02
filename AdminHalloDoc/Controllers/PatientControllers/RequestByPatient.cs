@@ -1,15 +1,9 @@
 ﻿using AdminHalloDoc.Entities.Data;
-using AdminHalloDoc.Entities.Models;
-using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
-using AdminHalloDoc.Models;
 using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using AdminHalloDoc.Repositories.Patient.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections;
-using System.Globalization;
-using System.Linq;
 
 namespace AdminHalloDoc.Controllers.PatientControllers
 {

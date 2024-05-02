@@ -1,14 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
+﻿namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
 {
     public class Schedule
     {
@@ -26,14 +16,14 @@ namespace AdminHalloDoc.Entities.ViewModel.AdminViewModel
         public TimeOnly Starttime { get; set; }
         public TimeOnly Endtime { get; set; }
 
-        public bool Isrepeat { get; set; } 
+        public bool Isrepeat { get; set; }
 
         public string? checkWeekday { get; set; }
 
         public int? Repeatupto { get; set; }
         public short Status { get; set; }
         public List<Schedule> DayList { get; set; }
-        public string? submit { get;set; }
+        public string? submit { get; set; }
 
 
     }

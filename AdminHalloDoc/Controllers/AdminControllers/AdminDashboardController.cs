@@ -1,10 +1,8 @@
 ﻿using AdminHalloDoc.Controllers.Login;
-using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Entities.ViewModel;
-using AdminHalloDoc.Entities.ViewModel.PatientViewModel;
+using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
 using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminHalloDoc.Controllers.AdminControllers
@@ -39,11 +37,11 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             if (CV.role() == "Provider")
             {
                 ViewBag.RegionComboBox = await _requestRepository.RegionComboBox(Convert.ToInt32(CV.UserID()));
-                 sm = _requestRepository.Indexdata(Convert.ToInt32(CV.UserID()));
+                sm = _requestRepository.Indexdata(Convert.ToInt32(CV.UserID()));
 
             }
-           
-            return View("../AdminViews/AdminDashboard/Index",sm);
+
+            return View("../AdminViews/AdminDashboard/Index", sm);
         }
         #endregion
 
@@ -61,12 +59,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 status = "1";
             }
             // Get ONly Provider And that Request
-            if(CV.role() == "Provider")
+            if (CV.role() == "Provider")
             {
-                var pr = await _requestRepository.GetContactAsync(status, data,Convert.ToInt32(CV.UserID()));
+                var pr = await _requestRepository.GetContactAsync(status, data, Convert.ToInt32(CV.UserID()));
                 return PartialView("../AdminViews/AdminDashboard/_PList", pr);
             }
-            var r = await _requestRepository.GetContactAsync(status,data);
+            var r = await _requestRepository.GetContactAsync(status, data);
             return PartialView("../AdminViews/AdminDashboard/_List", r);
         }
         #endregion
@@ -84,12 +82,12 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 return Redirect("/PageNoteFound");
             }
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
-            Viewcase v =  await _requestRepository.GetRequestDetails(id.Decode());
+            Viewcase v = await _requestRepository.GetRequestDetails(id.Decode());
             if (v == null)
             {
                 return Redirect("/PageNoteFound");
             }
-            return View("../AdminViews/ViewAction/Viewcase",v);
+            return View("../AdminViews/ViewAction/Viewcase", v);
         }
         #endregion
 
@@ -102,11 +100,11 @@ namespace AdminHalloDoc.Controllers.AdminControllers
                 return Redirect("/PageNoteFound");
             }
             var n = await _viewNotesRepository.GetNotesByRequest((int)id.Decode());
-            if ( n == null)
+            if (n == null)
             {
                 return Redirect("/PageNoteFound");
             }
-            return View("../AdminViews/ViewAction/ViewNotes",n);
+            return View("../AdminViews/ViewAction/ViewNotes", n);
         }
         #endregion
 
@@ -117,7 +115,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         {
             if (adminnotes != null || physiciannotes != null)
             {
-                bool result = _viewNotesRepository.PutNotes(adminnotes, physiciannotes, RequestID,CV.ID());
+                bool result = _viewNotesRepository.PutNotes(adminnotes, physiciannotes, RequestID, CV.ID());
 
                 if (result)
                 {
@@ -167,10 +165,10 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             ViewBag.VenderTypeComboBox = await _requestRepository.VenderTypeComboBox();
             ViewOrder v = new ViewOrder();
             v.RequestId = (int)id.Decode();
-            return View("../AdminViews/ViewAction/ViewOrder",v);
+            return View("../AdminViews/ViewAction/ViewOrder", v);
         }
         #endregion
-        
+
         #region ProviderbyRegion
         public async Task<IActionResult> ProviderbyRegion(int? Regionid)
         {
