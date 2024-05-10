@@ -18,7 +18,7 @@
     color:white!important;
 }
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif !important;
 }
 .bg-2 {
     background-color: #60BC60 !important;
@@ -515,10 +515,15 @@ tr {
     border-color: bisque!important;
 }
 th:nth-child(7) {
-  width: 10%;
+    width: 10%;
 }
-th:nth-child(6) {
-  width: 10%;
+
+th:nth-child(8) {
+    width: 10%;
+}
+
+th:nth-child(9) {
+    width: 10%;
 }
 .colored-toast {
     background-color: #a5dc86 !important;
@@ -1745,3 +1750,124 @@ div.dt-scroll-body > table.dataTable > thead > tr > td {
         cursor: pointer;
         width: 100%;
     }
+.mockchat .reply {
+    transform-origin: 100% 50%;
+    margin: 0.25em 0 0.25em 1.5em !important;
+    width: calc(100% - 3em);
+    background: white;
+    border-radius: 1.5em;
+    position: relative;
+    padding: 0.75em 1em;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.08);
+    opacity: 0;
+    transform: translateY(2em) scale(0.5);
+    animation: mockchat-reply-pop cubic-bezier(0, 0.81, 0.58, 1.2) 0.4s;
+    animation-fill-mode: forwards;
+    text-align: right;
+    transition: all 0.3s;
+    max-height: 0;
+}
+.mockchat .reply-sender {
+    transform-origin: 100% 50%;
+    margin: 0.25em 0 0.25em 1.5em !important;
+    width: calc(100% - 3em);
+    background: white;
+    border-radius: 1.5em;
+    position: relative;
+    padding: 0.75em 1em;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.08);
+    opacity: 0;
+    transform: translateY(2em) scale(0.5);
+    animation: mockchat-reply-pop cubic-bezier(0, 0.81, 0.58, 1.2) 0.4s;
+    animation-fill-mode: forwards;
+    text-align: right;
+    transition: all 0.3s;
+    max-height: 0;
+}
+    .mockchat .reply-sender {
+        transform-origin: 0 50%;
+        margin: 0.25em 1.5em 0.25em 1.5em !important;
+        width: calc(100% - 3em);
+        background: #1446a0;
+        color: white;
+        text-align: left;
+    }
+
+        .mockchat .reply-sender:after {
+            display: block;
+            content: "";
+            background: #58d68d;
+            position: absolute;
+            height: 0.75em;
+            width: 0.75em;
+            left: -1.5em;
+            top: 1.375em;
+            border-radius: 99999px;
+            font-size: 0.75em;
+            display: flex;
+            flex-wrap: wrap;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            line-height: 1;
+            font-weight: bold;
+        }
+
+    .mockchat .reply.dots {
+        transform-origin: 50% 50%;
+        margin: 0.25em 35% 0.25em 35% !important;
+        max-width: 30%;
+        text-align: center;
+        font-size: 1rem;
+        line-height: 1;
+    }
+
+        .mockchat .reply.dots:after {
+            display: none;
+        }
+
+        .mockchat .reply.dots span {
+            display: block;
+            height: 4px;
+            width: 4px;
+            background: currentColor;
+            display: inline-block;
+            border-radius: 99999px;
+            margin: 0.25em 0.15em;
+            opacity: 0;
+            animation: mockchat-dots 0.5s infinite alternate;
+            transform: translateY(0.25em);
+        }
+
+            .mockchat .reply.dots span:nth-child(2) {
+                animation-delay: 0.1s;
+            }
+
+            .mockchat .reply.dots span:nth-child(3) {
+                animation-delay: 0.2s;
+            }
+.first-replay {
+    padding: 0.75em 1em;
+}
+
+@keyframes mockchat-dots {
+    to {
+        transform: translateY(-0.2em);
+        opacity: 1;
+    }
+}
+
+@keyframes mockchat-blink {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes mockchat-reply-pop {
+    to {
+        transform: none;
+        font-size: 1rem;
+        opacity: 1;
+        max-height: 200px;
+    }
+}

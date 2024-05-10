@@ -70,7 +70,7 @@
     <main role="main" class="pb-3 container min-vh-100">
         @RenderBody()
     </main>
-
+    <div id="modal-placeholder"></div>
     <footer>
         <div class=" justify-content-end position-static  w-100 align-self-end d-flex left-0 bg-dark text-light px-2 align-items-end  bottom-0 py-3 fs-7 align-text-bottom align-items-end">
             <div class="text-center">
@@ -98,10 +98,17 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="@Url.Content("~/plugins/mvc-jquery-validate/jquery.validate.js")"></script>
     <script src="@Url.Content("~/plugins/mvc-jquery-validate/jquery.validate.unobtrusive.js")"></script>
+    <script src="@Url.Content("~/js/custom2/UI_Bootbox.js")"></script>
+    <script src="@Url.Content("~/js/custom2/UI_ModalEvents.js")"></script>
+    <script src="@Url.Content("~/js/custom2/UI_BlockUI.js")"></script>
+    <script src="@Url.Content("~/js/custom2/InitMain.js")"></script>
     <script src="~/js/main.js" asp-append-version="true"></script>
     <script src="~/js/custom.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/chatsettings.js"></script>
 </body>
 </html>

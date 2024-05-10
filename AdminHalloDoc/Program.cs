@@ -1,5 +1,6 @@
 using AdminHalloDoc.Entities.Data;
 using AdminHalloDoc.Entities.ViewModel;
+using AdminHalloDoc.ChatHub;
 using AdminHalloDoc.Repositories.Admin.Repository;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using AdminHalloDoc.Repositories.Patient.Repository;
@@ -9,13 +10,14 @@ using Rotativa.AspNetCore;
 using System.Net;
 using System.Text.Json.Serialization;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddSignalR();
 builder.Services.AddSession(
 options =>
 {
@@ -110,5 +112,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.MapHub<ChatHub>("/chatHub");
 app.Run();

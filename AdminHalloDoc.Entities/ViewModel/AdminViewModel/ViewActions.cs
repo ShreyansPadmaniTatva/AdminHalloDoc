@@ -3,6 +3,10 @@
     public class ViewActions
     {
         public int? RequestID { get; set; }
+        public string? PhysicianAspId { get; set; }
+        public string? PhysicianConnectionId { get; set; }
+        public string? PatientAspId { get; set; }
+        public string? PatientConnectionId { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Notes { get; set; }

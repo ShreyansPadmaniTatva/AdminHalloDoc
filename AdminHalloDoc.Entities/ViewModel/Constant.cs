@@ -101,20 +101,20 @@
         public static Dictionary<int, List<string>> statusTdHtmlMap = new Dictionary<int, List<string>>
         {
             { 1, new List<string> { "Name", "Date of Birth", "Requestor", "Requested Date", "Phone" ,"Address", "Notes" ,  "Actions" } },
-            { 2, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name",  "Date Of Service", "Phone" ,"Address", "Notes" , "Actions" } },
-            { 3, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name", "Date Of Service", "Phone", "Address", "Notes" , "Actions" } },
-            { 4, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service", "Phone", "Address" , "Actions" } },
-            { 5, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Actions" } },
-            { 6, new List<string> { "Name", "Physician Name", "Date Of Service", "Phone" ,"Address" , "Actions" } }
+            { 2, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name",  "Date Of Service", "Phone" ,"Address", "Notes" , "Chat", "Actions" } },
+            { 3, new List<string> { "Name", "Date of Birth", "Requestor", "Physician Name", "Date Of Service", "Phone", "Address", "Notes" , "Chat", "Actions" } },
+            { 4, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service", "Phone", "Address" , "Chat", "Actions" } },
+            { 5, new List<string> { "Name", "Date of Birth", "Physician Name", "Date Of Service" ,"Address", "Notes" , "Chat", "Actions" } },
+            { 6, new List<string> { "Name", "Physician Name", "Date Of Service", "Phone" ,"Address", "Chat", "Actions" } }
 
         };
 
         public static Dictionary<int, List<string>> PstatusTdHtmlMap = new Dictionary<int, List<string>>
         {
-            { 1, new List<string> { "Name",  "Phone" ,"Address", "Actions" } },
-            { 2, new List<string> { "Name",  "Phone" ,"Address", "Actions" } },
-            { 3, new List<string> { "Name",  "Phone" ,"Address", "Status", "Actions" } },
-            { 4, new List<string>  { "Name",  "Phone" ,"Address", "Actions" } }
+            { 1, new List<string> { "Name",  "Phone" ,"Address", "Chat", "Actions" } },
+            { 2, new List<string> { "Name",  "Phone" ,"Address", "Chat", "Actions" } },
+            { 3, new List<string> { "Name",  "Phone" ,"Address", "Status", "Chat", "Actions" } },
+            { 4, new List<string>  { "Name",  "Phone" ,"Address", "Chat", "Actions" } }
 
         };
     }

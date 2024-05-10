@@ -31,6 +31,7 @@ namespace AdminHalloDoc.Repositories.Patient.Repository
                          .OrderByDescending(x => x.Createddate)
                          .Select(r => new ViewPatientDashboard
                          {
+                             PhysicianAspId = _context.Physicians.Where(x => x.Physicianid == r.Physicianid).FirstOrDefault().Aspnetuserid,
                              Requestid = r.Requestid,
                              Createddate = r.Createddate,
                              Status = r.Status,

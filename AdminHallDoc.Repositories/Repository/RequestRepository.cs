@@ -315,6 +315,8 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                      select new ViewDashboardList
                                                      {
                                                          Physician = p.Firstname + " " + p.Lastname,
+                                                         PhysicianAspId = p.Aspnetuserid,
+                                                         PatientAspId =req.Userid != null ? _context.Users.Where(r => r.Userid == req.Userid).FirstOrDefault().Aspnetuserid : null,
                                                          RequestClientid = rc.Requestclientid,
                                                          Status = req.Status,
                                                          Requestid = req.Requestid,
@@ -422,7 +424,9 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                                                       && (data.RequestType == null || req.Requesttypeid == data.RequestType) && req.Physicianid == ProviderId
                                                      select new ViewDashboardList
                                                      {
+                                                         PatientAspId = req.Userid != null ? _context.Users.Where(r => r.Userid == req.Userid).FirstOrDefault().Aspnetuserid : null,
                                                          Physician = p.Firstname + " " + p.Lastname,
+                                                         PhysicianAspId = p.Aspnetuserid,
                                                          RequestClientid = rc.Requestclientid,
                                                          Status = req.Status,
                                                          Requestid = req.Requestid,

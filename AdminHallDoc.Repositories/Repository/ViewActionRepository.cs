@@ -200,16 +200,19 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                           on req.Requestid equals reqClient.Requestid into reqClientGroup
                           from rc in reqClientGroup.DefaultIfEmpty()
                           join phys in _context.Physicians
-                        on req.Physicianid equals phys.Physicianid into physGroup
+                          on req.Physicianid equals phys.Physicianid into physGroup
                           from p in physGroup.DefaultIfEmpty()
                           where req.Requestid == id
                           select new ViewActions
                           {
+
                               PhoneNumber = rc.Phonenumber,
                               ProviderId = p.Physicianid,
                               PatientName = rc.Firstname + rc.Lastname,
                               RequestID = req.Requestid,
-                              Email = rc.Email
+                              PhysicianAspId = p != null ? p.Aspnetuserid : null,
+                              Email = rc.Email,
+                              PatientAspId = req.Userid != null ? _context.Users.Where(r => r.Userid == req.Userid).FirstOrDefault().Aspnetuserid:null
 
                           }).FirstAsync();
         }

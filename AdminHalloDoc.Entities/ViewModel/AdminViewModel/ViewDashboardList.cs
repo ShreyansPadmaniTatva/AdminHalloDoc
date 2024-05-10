@@ -23,6 +23,8 @@
         public bool? IsFinalize { get; set; }
 
         public int? ProviderID { get; set; }
+        public string? PhysicianAspId { get; set; }
+        public string? PatientAspId { get; set; }
         public string? Physician { get; set; }
         public string? Confirmation { get; set; }
         public DateTime? ConcludedDate { get; set; }

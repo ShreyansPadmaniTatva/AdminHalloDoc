@@ -1,5 +1,6 @@
 ﻿using AdminHalloDoc.Entities.ViewModel;
 using AdminHalloDoc.Entities.ViewModel.AdminViewModel;
+using AdminHalloDoc.Models;
 using AdminHalloDoc.Models.CV;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -249,6 +250,33 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
+        #endregion
+
+        #region _Chatbox
+        public async Task<IActionResult> _Chatbox(int? requestid)
+        {
+            var v = await _viewActionRepository.GetRequestDetails(requestid);
+            string s = ConnectedUsers.myConnectedUsers.Where(r => r.UserId == v.PhysicianAspId).FirstOrDefault().ConnectionId ;
+            if (s != null)
+            {
+                v.PhysicianConnectionId = ConnectedUsers.myConnectedUsers.Where(r => r.UserId == v.PhysicianAspId).FirstOrDefault().ConnectionId;
+            }
+            return PartialView("../AdminViews/ViewAction/_modelS/_chatbox", v);
+        }
+        #endregion
+
+        #region _ChatboxforPatient
+        public async Task<IActionResult> _ChatboxforPatient(int? requestid)
+        {
+            var v = await _viewActionRepository.GetRequestDetails(requestid);
+            string s = ConnectedUsers.myConnectedUsers.Where(r => r.UserId == v.PatientAspId).FirstOrDefault().ConnectionId;
+            if (s != null)
+            {
+                //this PhysicianConnectionId work as PatientConnectionId
+                v.PhysicianConnectionId = ConnectedUsers.myConnectedUsers.Where(r => r.UserId == v.PatientAspId).FirstOrDefault().ConnectionId;
+            }
+            return PartialView("../AdminViews/ViewAction/_modelS/_chatbox", v);
+        }
         #endregion
 
         #region _AssignPhysician

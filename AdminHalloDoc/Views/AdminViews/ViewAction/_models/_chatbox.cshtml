@@ -1,0 +1,42 @@
+﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewActions
+<div class="modal-header  bg-info text-white">
+    <img alt="" src="" />
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Provider chat</h1>
+    <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
+        <i class="bi bi-x-circle"></i>
+    </button>
+</div>
+
+<div class=" modal-body bg-light bg-gradient">
+    <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> @Model.PatientName </span></h3>
+    <div class="row">
+        <div class="col-md-12 mockchat">
+            <div class="app" id="messagesList"></div>
+        </div>
+    </div>
+    <input type="hidden" asp-for="RequestID" />
+    <input type="text" class="form-control d-none" value="@Model.PhysicianConnectionId" id="userInput" />
+    <div class="row">
+        <div class="col-md-10"><input type="text" class="form-control" id="messageInput" /></div>
+        <div class="col-md-2 text-start">
+            <button id="sendButton" class="btn btn-info text-white">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+
+</div>
+<script>
+
+    
+    document.getElementById("sendButton").addEventListener("click", function (event) {
+        var user = document.getElementById("userInput").value;
+        var message = document.getElementById("messageInput").value;
+        document.getElementById("messageInput").value = "";
+        connection.invoke("SendMessage", user, message).catch(function (err) {
+            return console.error(err.toString());
+        });
+        event.preventDefault();
+    });
+</script>
