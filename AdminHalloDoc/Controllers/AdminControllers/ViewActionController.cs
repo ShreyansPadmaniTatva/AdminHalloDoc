@@ -15,7 +15,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         private readonly IRoleAccessRepository _roleAccessRepository;
         public ViewActionController(IRequestRepository requestRepository, IViewActionRepository viewActionRepository, IRoleAccessRepository roleAccessRepository)
         {
-
             _requestRepository = requestRepository;
             _viewActionRepository = viewActionRepository;
             _roleAccessRepository = roleAccessRepository;
@@ -250,33 +249,6 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         }
         #endregion
 
-        #endregion
-
-        #region _Chatbox
-        public async Task<IActionResult> _Chatbox(int? requestid)
-        {
-            var v = await _viewActionRepository.GetRequestDetails(requestid);
-            string s = ConnectedUsers.myConnectedUsers.Where(r => r.UserId == v.PhysicianAspId).FirstOrDefault().ConnectionId ;
-            if (s != null)
-            {
-                v.PhysicianConnectionId = ConnectedUsers.myConnectedUsers.Where(r => r.UserId == v.PhysicianAspId).FirstOrDefault().ConnectionId;
-            }
-            return PartialView("../AdminViews/ViewAction/_modelS/_chatbox", v);
-        }
-        #endregion
-
-        #region _ChatboxforPatient
-        public async Task<IActionResult> _ChatboxforPatient(int? requestid)
-        {
-            var v = await _viewActionRepository.GetRequestDetails(requestid);
-            string s = ConnectedUsers.myConnectedUsers.Where(r => r.UserId == v.PatientAspId).FirstOrDefault().ConnectionId;
-            if (s != null)
-            {
-                //this PhysicianConnectionId work as PatientConnectionId
-                v.PhysicianConnectionId = ConnectedUsers.myConnectedUsers.Where(r => r.UserId == v.PatientAspId).FirstOrDefault().ConnectionId;
-            }
-            return PartialView("../AdminViews/ViewAction/_modelS/_chatbox", v);
-        }
         #endregion
 
         #region _AssignPhysician

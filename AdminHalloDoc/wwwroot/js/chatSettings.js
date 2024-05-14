@@ -50,7 +50,7 @@ if (!("Notification" in window)) {
     console.error("This browser does not support desktop notification");
 } else if (Notification.permission === "granted") {
     // If notification permission is already granted
-    initConnection();
+   
 } else if (Notification.permission !== "denied") {
     // If notification permission is not denied, request permission
     Notification.requestPermission().then(function (permission) {

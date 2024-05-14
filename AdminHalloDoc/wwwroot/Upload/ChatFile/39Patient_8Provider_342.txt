@@ -1,0 +1,3 @@
+{"AdminId":0,"PhysicianId":8,"RequestId":342,"Message":"e3e","Datetime":"2024-05-14T14:18:59.0489937+05:30"}
+{"AdminId":0,"PhysicianId":8,"RequestId":342,"Message":"r4r","Datetime":"2024-05-14T14:19:26.2328459+05:30"}
+{"AdminId":0,"PhysicianId":8,"RequestId":342,"Message":"from paitent","Datetime":"2024-05-14T14:20:42.3121224+05:30"}

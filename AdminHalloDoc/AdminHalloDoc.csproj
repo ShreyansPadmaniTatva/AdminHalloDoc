@@ -37,6 +37,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\Rotativa\" />
     <Folder Include="wwwroot\Upload\59\" />
+    <Folder Include="wwwroot\Upload\ChatFile\" />
   </ItemGroup>
 
   <ItemGroup>

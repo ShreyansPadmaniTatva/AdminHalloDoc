@@ -1,4 +1,6 @@
-﻿using AdminHalloDoc.Entities.Models;
+﻿using System;
+using System.Collections.Generic;
+using AdminHalloDoc.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdminHalloDoc.Entities.Data;
@@ -29,6 +31,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Business> Businesses { get; set; }
 
     public virtual DbSet<Casetag> Casetags { get; set; }
+
+    public virtual DbSet<Chatlog> Chatlogs { get; set; }
 
     public virtual DbSet<Concierge> Concierges { get; set; }
 
@@ -156,6 +160,13 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder.Entity<Casetag>(entity =>
         {
             entity.HasKey(e => e.Casetagid).HasName("casetag_pkey");
+        });
+
+        modelBuilder.Entity<Chatlog>(entity =>
+        {
+            entity.HasKey(e => e.Chatlogid).HasName("chatlog_pkey");
+
+            entity.Property(e => e.Createddate).HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
         modelBuilder.Entity<Concierge>(entity =>

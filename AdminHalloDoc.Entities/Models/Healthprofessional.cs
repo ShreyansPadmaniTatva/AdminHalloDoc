@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdminHalloDoc.Entities.Models;
 
@@ -9,7 +12,7 @@ public partial class Healthprofessional
 {
     [Key]
     [Column("vendorid")]
-    public int Vendorid { get; set; }
+    public int? Vendorid { get; set; }
 
     [Column("vendorname")]
     [StringLength(100)]

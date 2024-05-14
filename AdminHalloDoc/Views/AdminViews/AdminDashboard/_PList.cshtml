@@ -262,17 +262,17 @@
                             {
                                 <td scope="col">
                                     <a data-form-id="formEdit_UMS"
-                                       data-url='@Url.Action("_Chatbox", "ViewAction", new {requestid = @item.Requestid})'
+                                       data-url='@Url.Action("_Chatbox", "ChatHub", new {requestid = @item.Requestid})'
                                        data-modal-size="lg me-2" class="m-1 dropdown-item js-stkModal-btn border border-1 p-1 rounded-2 text-center w-75 py-1"><i class="bi bi-person-workspace"></i> Provider </a>
 
 
                                     @{
-                                        bool onlinepatient = ConnectedUsers.myConnectedUsers.Any(r => r.UserId == item.PatientAspId);
-                                        if (ConnectedUsers.myConnectedUsers.Any(r => r.UserId == item.PatientAspId))
+                                        bool onlinepatient = ConnectedUsers.myConnectedUsers.Any(r => r.SenderAspId == item.PatientAspId);
+                                        if (ConnectedUsers.myConnectedUsers.Any(r => r.SenderAspId == item.PatientAspId))
                                         {
                                             <a data-form-id="formEdit_UMS"
-                                               data-url='@Url.Action("_ChatboxforPatient", "ViewAction", new {requestid = @item.Requestid})'
-                                               data-modal-size="h-100 me-2 @ConnectedUsers.myConnectedUsers.Where(r => r.UserId == item.PatientAspId).FirstOrDefault().ConnectionId " class="m-1 dropdown-item js-stkModal-btn border position-relative border-1 p-1 rounded-2 text-center w-75 py-1">
+                                               data-url='@Url.Action("_ChatboxforPatient", "ChatHub", new {requestid = @item.Requestid})'
+                                               data-modal-size="h-100 me-2 @ConnectedUsers.myConnectedUsers.Where(r => r.SenderAspId == item.PatientAspId).FirstOrDefault().ConnectionId " class="m-1 dropdown-item js-stkModal-btn border position-relative border-1 p-1 rounded-2 text-center w-75 py-1">
                                                 <i class="bi bi-person-workspace"></i> Patient
                                                 <span class="position-absolute top-0 start-100 translate-middle p-1 bg-success bg-gradient border border-light rounded-circle">
                                                     <span class="visually-hidden">New alerts</span>
@@ -282,7 +282,7 @@
                                         else
                                         {
                                             <a data-form-id="formEdit_UMS"
-                                               data-url='@Url.Action("_ChatboxforPatient", "ViewAction", new {requestid = @item.Requestid})'
+                                               data-url='@Url.Action("_ChatboxforPatient", "ChatHub", new {requestid = @item.Requestid})'
                                                data-modal-size="h-100 me-2" class="m-1 dropdown-item js-stkModal-btn border position-relative border-1 p-1 rounded-2 text-center w-75 py-1">
                                                 <i class="bi bi-person-workspace"></i> Patient
                                                 <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">

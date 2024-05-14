@@ -1,4 +1,5 @@
 ﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewActions
+@using AdminHalloDoc.Models.CV;
 <div class="modal-header  bg-info text-white">
     <img alt="" src="" />
     <h1 class="modal-title fs-5" id="exampleModalLabel">Provider chat</h1>
@@ -14,7 +15,10 @@
             <div class="app" id="messagesList"></div>
         </div>
     </div>
-    <input type="hidden" asp-for="RequestID" />
+    <input type="hidden" id="requestId" asp-for="RequestID" />
+    <input type="hidden" id="receiverId" asp-for="ProviderId" />
+    <input type="hidden" id="receiverName" asp-for="PhysicianName" />
+    <input type="hidden" id="receiverType" asp-for="ReceiverType" />
     <input type="text" class="form-control d-none" value="@Model.PhysicianConnectionId" id="userInput" />
     <div class="row">
         <div class="col-md-10"><input type="text" class="form-control" id="messageInput" /></div>
@@ -29,14 +33,81 @@
 </div>
 <script>
 
-    
+    // Invoking CheckHistory method
+    connection.invoke("CheckHistory",
+        document.getElementById("userInput").value,         // user
+        document.getElementById("messageInput").value,      // message
+        parseInt(document.getElementById("requestId").value),         // requestId
+        parseInt(document.getElementById("receiverId").value),        // RecieverId
+        document.getElementById("receiverName").value,      // RecieverName
+        document.getElementById("receiverType").value)                                            // RecieverType
+        .then(function (chatHistory) {
+            console.log(chatHistory);
+            // Display the chat history
+            chatHistory.forEach(function (chat) {
+                console.log(chat);
+                if ("@CV.role().ToString()" == "Provider" && chat.physicianId != 0) {
+                var li = document.createElement("div");
+                var span = document.createElement("span");
+                    span.textContent = `you : ${chat.message}`;
+                li.appendChild(span);
+                document.getElementById("messagesList").appendChild(li);
+                li.classList.add("text-end");
+                li.classList.add("first-replay");
+                span.classList.add("reply");
+                } else if ("@CV.role().ToString()" == "Admin" && chat.adminId != 0) {
+                    var li = document.createElement("div");
+                    var span = document.createElement("span");
+                    span.textContent = `you : ${chat.message}`;
+                    li.appendChild(span);
+                    document.getElementById("messagesList").appendChild(li);
+                    li.classList.add("text-end");
+                    li.classList.add("first-replay");
+                    span.classList.add("reply");
+            }
+                else if ("@CV.role().ToString()" == "Patient" && (chat.adminId == 0 || chat.physicianId == 0)) {
+                    var li = document.createElement("div");
+                    var span = document.createElement("span");
+                    span.textContent = `you : ${chat.message}`;
+                    li.appendChild(span);
+                    document.getElementById("messagesList").appendChild(li);
+                    li.classList.add("text-end");
+                    li.classList.add("first-replay");
+                    span.classList.add("reply");
+            }else{
+                    var li = document.createElement("div");
+                    var span = document.createElement("span");
+                    span.textContent = `${user} says ${chat.message}`;
+                    li.appendChild(span);
+                    document.getElementById("messagesList").appendChild(li);
+                    li.classList.add("text-start");
+                    li.classList.add("first-replay");
+                    span.classList.add("reply-sender");
+                }
+
+            });
+            
+        })
+        .catch(function (err) {
+            console.error(err.toString());
+        });
+
+    // Event listener for sending a message
     document.getElementById("sendButton").addEventListener("click", function (event) {
         var user = document.getElementById("userInput").value;
         var message = document.getElementById("messageInput").value;
         document.getElementById("messageInput").value = "";
-        connection.invoke("SendMessage", user, message).catch(function (err) {
-            return console.error(err.toString());
-        });
+        // Invoking SendMessage method
+        connection.invoke("SendMessage",
+            user,                       // user
+            message,                    // message
+            parseInt(document.getElementById("requestId").value),         // requestId
+            parseInt(document.getElementById("receiverId").value),        // RecieverId
+            document.getElementById("receiverName").value,      // RecieverName
+            document.getElementById("receiverType").value)                    // RecieverType
+            .catch(function (err) {
+                return console.error(err.toString());
+            });
         event.preventDefault();
     });
 </script>

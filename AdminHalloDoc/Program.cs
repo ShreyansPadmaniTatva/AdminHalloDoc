@@ -51,6 +51,7 @@ builder.Services.AddScoped<IRoleAccessRepository, RoleAccessRepository>();
 builder.Services.AddScoped<ISchedulingRepository, SchedulingRepository>();
 builder.Services.AddScoped<IRecordsRepository, RecordsRepository>();
 builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>(); 
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
 
 //Patient Repository
 builder.Services.AddScoped<IPatientDashboardRepository, PatientDashboardRepository>();
