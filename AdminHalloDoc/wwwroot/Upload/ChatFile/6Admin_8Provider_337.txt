@@ -1,0 +1,2 @@
+{"AdminId":6,"PhysicianId":0,"RequestId":337,"Message":"ferf","Datetime":"2024-05-14T16:51:07.4155142+05:30"}
+{"AdminId":0,"PhysicianId":6,"RequestId":337,"Message":"dew","Datetime":"2024-05-14T16:51:33.4674963+05:30"}

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using AdminHalloDoc.Entities.Models;
 using AdminHalloDoc.Repositories.Admin.Repository.Interface;
+using Newtonsoft.Json.Linq;
 
 namespace AdminHalloDoc.ChatHub
 {
@@ -41,16 +42,44 @@ namespace AdminHalloDoc.ChatHub
                 await Clients.All.SendAsync("ReceiveMessage", Context.ConnectionId, user, message);
             else
             {
-                await Clients.Client(user).SendAsync("ReceiveMessage", Context.ConnectionId, user, message);
-                await Clients.Client(Context.ConnectionId).SendAsync("ReceiveMessage", Context.ConnectionId, user, message);
+                
                 ChatUser ChatUser = ConnectedUsers.myConnectedUsers.Where(u => u.SenderAspId == CV.ID()).FirstOrDefault();
                 ChatUser.ReceiverType = RecieverType;
                 ChatUser.RecieverId = RecieverId;
                 ChatUser.RecieverName = RecieverName;
                 ChatUser.RequestId = requestId;
+                ChatUser.SenderId = Convert.ToInt32(CV.UserID());
+                ChatUser.SenderName = CV.UserName();
                 _chatRepository.AddText(ChatUser , message);
+                if (user != null)
+                {
+                await Clients.Client(user).SendAsync("ReceiveMessage", Context.ConnectionId, user, message, requestId);
+                }
+                await Clients.Client(Context.ConnectionId).SendAsync("ReceiveMessage", Context.ConnectionId, user, message, requestId);
             }
+            // Send web notification
+            //await SendWebNotification(user, message);
         }
+        //private async Task SendWebNotification(string user, string message)
+        //{
+        //    // Create a new push notification instance
+        //    var push = new PushBroker();
+
+        //    // Configure the web push channel
+        //    var webPushChannel = new WebPushChannelSettings();
+        //    webPushChannel.PackageName = "com.example.app";
+        //    webPushChannel.AuthenticationToken = "YourAuthToken";
+
+        //    // Register the web push channel
+        //    push.RegisterWebPushChannel(webPushChannel);
+
+        //    // Send the notification
+        //    push.QueueNotification(new WebNotification
+        //    {
+        //        DeviceToken = "WebDeviceToken",
+        //        Payload = JObject.Parse($"{{ \"notification\": {{ \"title\": \"New Message\", \"body\": \"{message}\" }} }}")
+        //    });
+        //}
         public async Task<List<ChatJsonObject>> CheckHistory(string user, string message, int requestId, int RecieverId, string RecieverName, string RecieverType)
         {
             try

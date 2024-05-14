@@ -110,5 +110,29 @@
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
     <script src="~/js/chatsettings.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-messaging.js"></script>
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4OnSsbgxT5aC2WVL9hHGvUWKCbqvRiDs",
+            authDomain: "core-computer-416304.firebaseapp.com",
+            projectId: "core-computer-416304",
+            storageBucket: "core-computer-416304.appspot.com",
+            messagingSenderId: "62116323995",
+            appId: "1:62116323995:web:4aa574b2360363558b5c3e",
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // Get registration token
+        const messaging = firebase.messaging();
+        messaging.requestPermission().then(() => {
+            return messaging.getToken();
+        }).then((token) => {
+            console.log("Registration token:", token);
+        }).catch((err) => {
+            console.log("Error getting registration token:", err);
+        });
+    </script>
 </body>
 </html>

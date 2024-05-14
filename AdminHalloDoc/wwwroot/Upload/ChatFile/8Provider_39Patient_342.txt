@@ -1,3 +1,0 @@
-{"AdminId":0,"PhysicianId":8,"RequestId":342,"Message":"e3","Datetime":"2024-05-14T14:19:01.5720256+05:30"}
-{"AdminId":0,"PhysicianId":8,"RequestId":342,"Message":"erre","Datetime":"2024-05-14T14:19:16.1145886+05:30"}
-{"AdminId":0,"PhysicianId":8,"RequestId":342,"Message":"from provider","Datetime":"2024-05-14T14:20:24.7134859+05:30"}

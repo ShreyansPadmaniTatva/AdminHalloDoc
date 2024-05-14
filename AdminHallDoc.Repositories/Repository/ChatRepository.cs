@@ -72,8 +72,14 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
             try
             {
-                string fileName = user.SenderId + user.SenderType + "_" + user.RecieverId + user.ReceiverType + "_" + user.RequestId + ".txt";
-                string FilePath = "wwwroot\\Upload\\ChatFile\\" + fileName;
+                var data = _context.Chatlogs
+                           .Where(
+                           e => e.Requestid == user.RequestId && e.Recieverid == user.RecieverId && e.Senderid == user.SenderId
+                                                                        ||
+                               e.Requestid == user.RequestId && e.Recieverid == user.SenderId && e.Senderid == user.RecieverId
+                           ).FirstOrDefault();
+
+               
 
                 ChatJsonObject chatJsonObject = new ChatJsonObject
                 {
@@ -82,20 +88,20 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                     RequestId = user.RequestId
                 };
 
-                if (user.SenderType == "Admin" || user.ReceiverType == "Admin")
+                if (user.SenderType == "Admin" )
                 {
-                    chatJsonObject.AdminId = user.SenderType == "Admin" ? user.SenderId : user.RecieverId;
+                    chatJsonObject.AdminId = user.SenderId ;
                 }
-                 if (user.SenderType == "Provider" || user.ReceiverType == "Provider")
+                 if (user.SenderType == "Provider" )
                 {
-                    chatJsonObject.PhysicianId = user.SenderType == "Provider" ? user.SenderId : user.RecieverId;
+                    chatJsonObject.PhysicianId = user.RecieverId;
                 }
 
                 // Serialize the ChatJsonObject to JSON
                 string json = JsonConvert.SerializeObject(chatJsonObject);
 
                 // Append the JSON data to the file
-                using (StreamWriter sw = File.AppendText(FilePath))
+                using (StreamWriter sw = File.AppendText("wwwroot\\Upload\\ChatFile\\" + data.Filepath))
                 {
                     sw.WriteLine(json);
                 }
@@ -111,7 +117,12 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
         {
             try
             {
-                var data = _context.Chatlogs.Where(e => e.Requestid == user.RequestId && e.Recieverid == user.RecieverId && e.Senderid == user.SenderId).FirstOrDefault();
+                var data = _context.Chatlogs
+                            .Where(
+                            e => e.Requestid == user.RequestId && e.Recieverid == user.RecieverId && e.Senderid == user.SenderId 
+                                                                         ||
+                                e.Requestid == user.RequestId && e.Recieverid == user.SenderId && e.Senderid == user.RecieverId
+                            ).FirstOrDefault();
                 if (data == null)
                 {
                     var Chatlog = new Chatlog();

@@ -20,47 +20,53 @@ connection.start().then(function () {
 });
 
 
-connection.on("ReceiveMessage", function (ConnectionId, user, message) {
-    showNotification(user, message);
+connection.on("ReceiveMessage", function (ConnectionId, user, message, requestId) {
+    //showNotification(user, message);
     console.log(user + ' ' + ConnectionId + ' ' + message);
-    if (ConnectionId == loginconnectionId) {
-        var li = document.createElement("div");
-        var span = document.createElement("span");
-        span.textContent = `you : ${message}`;
-        li.appendChild(span);
-        document.getElementById("messagesList").appendChild(li);
-        li.classList.add("text-end");
-        li.classList.add("first-replay");
-        span.classList.add("reply"); 
-    } else {
-        var li = document.createElement("div");
-        var span = document.createElement("span");
-        span.textContent = `${user} says ${message}`;
-        li.appendChild(span);
-        document.getElementById("messagesList").appendChild(li);
-        li.classList.add("text-start" );
-        li.classList.add("first-replay" );
-        span.classList.add("reply-sender"); 
+    var request = document.getElementById("requestId");
+    if (request != null && requestId == request.value)  {
+        if (ConnectionId == loginconnectionId ) {
+            var li = document.createElement("div");
+            var span = document.createElement("span");
+            span.textContent = `you : ${message}`;
+            li.appendChild(span);
+            document.getElementById("messagesList").appendChild(li);
+            li.classList.add("text-end");
+            li.classList.add("first-replay");
+            span.classList.add("reply");
+        } else {
+            var li = document.createElement("div");
+            var span = document.createElement("span");
+            span.textContent = ` says ${message}`;
+            li.appendChild(span);
+            document.getElementById("messagesList").appendChild(li);
+            li.classList.add("text-start");
+            li.classList.add("first-replay");
+            span.classList.add("reply-sender");
+        }
+       
     }
+    var messagesList = document.getElementById("messagesList");
+    messagesList.scrollTop = messagesList.scrollHeight;
    
     console.log(li.textContent);
 });
 
-if (!("Notification" in window)) {
-    console.error("This browser does not support desktop notification");
-} else if (Notification.permission === "granted") {
-    // If notification permission is already granted
+//if (!("Notification" in window)) {
+//    console.error("This browser does not support desktop notification");
+//} else if (Notification.permission === "granted") {
+//    // If notification permission is already granted
    
-} else if (Notification.permission !== "denied") {
-    // If notification permission is not denied, request permission
-    Notification.requestPermission().then(function (permission) {
-        if (permission === "granted") {
+//} else if (Notification.permission !== "denied") {
+//    // If notification permission is not denied, request permission
+//    Notification.requestPermission().then(function (permission) {
+//        if (permission === "granted") {
            
-        }
-    });
-}
-function showNotification(sender, message) {
-    var notification = new Notification(sender, {
-        body: message
-    });
-}
+//        }
+//    });
+//}
+//function showNotification(sender, message) {
+//    var notification = new Notification(sender, {
+//        body: message
+//    });
+//}

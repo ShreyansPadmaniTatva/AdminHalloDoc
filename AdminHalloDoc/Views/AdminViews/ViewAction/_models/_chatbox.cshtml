@@ -28,8 +28,6 @@
             </button>
         </div>
     </div>
-
-
 </div>
 <script>
 
@@ -44,54 +42,65 @@
         .then(function (chatHistory) {
             console.log(chatHistory);
             // Display the chat history
+            var previousDate = null;
+
             chatHistory.forEach(function (chat) {
-                console.log(chat);
-                if ("@CV.role().ToString()" == "Provider" && chat.physicianId != 0) {
+                var dateObj = new Date(chat.datetime);
+                var currentDate = dateObj.getDate();
+                var currentMonth = dateObj.toLocaleString('default', { month: 'long' });
+                var currentYear = dateObj.getFullYear();
+                var dateString = currentDate + ", " + currentMonth + ", " + currentYear;
+
+                if (dateString !== previousDate) {
+                    // Print date if it's different from the previous message's date
+                    var dateDiv = document.createElement("h5");
+                    dateDiv.textContent = dateString;
+                    dateDiv.classList.add("date");
+                    document.getElementById("messagesList").appendChild(dateDiv);
+                    previousDate = dateString;
+                }
+
                 var li = document.createElement("div");
                 var span = document.createElement("span");
-                    span.textContent = `you : ${chat.message}`;
+                var div2 = document.createElement("div");
+
+                span.textContent = ` says ${chat.message}`;
+                div2.textContent = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
                 li.appendChild(span);
+                li.appendChild(div2);
                 document.getElementById("messagesList").appendChild(li);
-                li.classList.add("text-end");
+
+                div2.style.fontSize = "0.8rem"; // Add font-size style
                 li.classList.add("first-replay");
-                span.classList.add("reply");
+
+                if ("@CV.role().ToString()" == "Provider" && chat.physicianId != 0) {
+                    li.classList.add("text-end");
+                    span.classList.add("reply");
                 } else if ("@CV.role().ToString()" == "Admin" && chat.adminId != 0) {
-                    var li = document.createElement("div");
-                    var span = document.createElement("span");
-                    span.textContent = `you : ${chat.message}`;
-                    li.appendChild(span);
-                    document.getElementById("messagesList").appendChild(li);
                     li.classList.add("text-end");
-                    li.classList.add("first-replay");
                     span.classList.add("reply");
-            }
-                else if ("@CV.role().ToString()" == "Patient" && (chat.adminId == 0 || chat.physicianId == 0)) {
-                    var li = document.createElement("div");
-                    var span = document.createElement("span");
-                    span.textContent = `you : ${chat.message}`;
-                    li.appendChild(span);
-                    document.getElementById("messagesList").appendChild(li);
+                } else if ("@CV.role().ToString()" == "Patient" && (chat.adminId == 0 && chat.physicianId == 0)) {
                     li.classList.add("text-end");
-                    li.classList.add("first-replay");
                     span.classList.add("reply");
-            }else{
-                    var li = document.createElement("div");
-                    var span = document.createElement("span");
-                    span.textContent = `${user} says ${chat.message}`;
-                    li.appendChild(span);
-                    document.getElementById("messagesList").appendChild(li);
+                } else {
                     li.classList.add("text-start");
-                    li.classList.add("first-replay");
                     span.classList.add("reply-sender");
                 }
 
+                div2.classList.add("mt-2");
+                div2.classList.add("ms-3");
+                div2.classList.add("font-monospace");
             });
+            var messagesList = document.getElementById("messagesList");
+            messagesList.scrollTop = messagesList.scrollHeight;
             
         })
         .catch(function (err) {
             console.error(err.toString());
         });
-
+    var messagesList = document.getElementById("messagesList");
+    messagesList.scrollTop = messagesList.scrollHeight;
     // Event listener for sending a message
     document.getElementById("sendButton").addEventListener("click", function (event) {
         var user = document.getElementById("userInput").value;
