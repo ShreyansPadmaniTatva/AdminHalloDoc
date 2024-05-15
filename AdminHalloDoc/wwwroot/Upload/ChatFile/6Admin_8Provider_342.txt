@@ -7,3 +7,6 @@
 {"AdminId":6,"PhysicianId":0,"RequestId":342,"Message":"dwe","Datetime":"2024-05-14T16:50:56.582433+05:30"}
 {"AdminId":6,"PhysicianId":0,"RequestId":342,"Message":"dew","Datetime":"2024-05-14T16:54:14.6437409+05:30"}
 {"AdminId":6,"PhysicianId":0,"RequestId":342,"Message":"dwe","Datetime":"2024-05-14T16:54:45.5232197+05:30"}
+{"AdminId":6,"PhysicianId":0,"RequestId":342,"Message":"dwe","Datetime":"2024-05-15T10:10:41.395454+05:30"}
+{"AdminId":6,"PhysicianId":0,"RequestId":342,"Message":"yh75","Datetime":"2024-05-15T10:10:43.5420574+05:30"}
+{"AdminId":0,"PhysicianId":6,"RequestId":342,"Message":"32e","Datetime":"2024-05-15T10:11:32.7221748+05:30"}

@@ -1,15 +1,14 @@
 ﻿@model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewActions
 @using AdminHalloDoc.Models.CV;
 <div class="modal-header  bg-info text-white">
-    <img alt="" src="" />
-    <h1 class="modal-title fs-5" id="exampleModalLabel">Provider chat</h1>
+    <img style="width: 60px;" alt="" src="~/Upload/Physician/@Model.ProviderId/@Model.PhysicianPhoto" />
+    <h1 class="modal-title fs-5" id="exampleModalLabel">@Model.PhysicianName</h1>
     <button type="button" class="btn btn-transparent btn-icon btn-lg text-light" data-bs-dismiss="modal" aria-label="Close">
         <i class="bi bi-x-circle"></i>
     </button>
 </div>
 
 <div class=" modal-body bg-light bg-gradient">
-    <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info" id="patientname"> @Model.PatientName </span></h3>
     <div class="row">
         <div class="col-md-12 mockchat">
             <div class="app" id="messagesList"></div>

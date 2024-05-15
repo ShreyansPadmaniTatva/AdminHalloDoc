@@ -14,6 +14,7 @@
         public string? PhysicianNotes { get; set; }
         public string? PatientName { get; set; }
         public string? PhysicianName { get; set; }
+        public string? PhysicianPhoto { get; set; }
         public string? ReceiverType { get; set; }
         public int? RegionID { get; set; }
         public int? ReasonID { get; set; }

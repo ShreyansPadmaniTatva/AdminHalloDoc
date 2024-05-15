@@ -205,6 +205,7 @@ namespace AdminHalloDoc.Repositories.Admin.Repository
                           where req.Requestid == id
                           select new ViewActions
                           {
+                              PhysicianPhoto = p != null ? p.Photo : null,
                               PhysicianName = p != null ? p.Firstname +" "+ p.Lastname : null,
                               PatientId = req.Userid != null ? req.Userid : null,
                               PhoneNumber = rc.Phonenumber,

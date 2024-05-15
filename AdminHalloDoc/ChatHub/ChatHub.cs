@@ -38,11 +38,7 @@ namespace AdminHalloDoc.ChatHub
 
         public async Task SendMessage(string user, string message,int requestId, int RecieverId, string RecieverName, string RecieverType)
         {
-            if (string.IsNullOrEmpty(user))
-                await Clients.All.SendAsync("ReceiveMessage", Context.ConnectionId, user, message);
-            else
-            {
-                
+               
                 ChatUser ChatUser = ConnectedUsers.myConnectedUsers.Where(u => u.SenderAspId == CV.ID()).FirstOrDefault();
                 ChatUser.ReceiverType = RecieverType;
                 ChatUser.RecieverId = RecieverId;
@@ -51,12 +47,12 @@ namespace AdminHalloDoc.ChatHub
                 ChatUser.SenderId = Convert.ToInt32(CV.UserID());
                 ChatUser.SenderName = CV.UserName();
                 _chatRepository.AddText(ChatUser , message);
-                if (user != null)
+                if (user != null || user == "")
                 {
                 await Clients.Client(user).SendAsync("ReceiveMessage", Context.ConnectionId, user, message, requestId);
                 }
                 await Clients.Client(Context.ConnectionId).SendAsync("ReceiveMessage", Context.ConnectionId, user, message, requestId);
-            }
+            
             // Send web notification
             //await SendWebNotification(user, message);
         }
