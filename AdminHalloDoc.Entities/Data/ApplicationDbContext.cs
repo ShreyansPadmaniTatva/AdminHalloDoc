@@ -60,6 +60,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Physicianregion> Physicianregions { get; set; }
 
+    public virtual DbSet<Pushnotificationdatum> Pushnotificationdata { get; set; }
+
     public virtual DbSet<Region> Regions { get; set; }
 
     public virtual DbSet<Request> Requests { get; set; }
@@ -290,6 +292,11 @@ public partial class ApplicationDbContext : DbContext
             entity.HasOne(d => d.Region).WithMany(p => p.Physicianregions)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("physicianregion_regionid_fkey");
+        });
+
+        modelBuilder.Entity<Pushnotificationdatum>(entity =>
+        {
+            entity.HasKey(e => e.Pushnotificationid).HasName("pushnotificationdata_pkey");
         });
 
         modelBuilder.Entity<Region>(entity =>
