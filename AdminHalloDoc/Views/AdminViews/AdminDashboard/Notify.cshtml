@@ -1,0 +1,49 @@
+﻿
+@model List<AdminHalloDoc.Entities.ViewModel.PushNotification>
+@{
+    
+    ViewData["Title"] = "Notify";
+}
+
+<h1>Notify</h1>
+<div class="mb-4">
+    <input class="form-control" placeholder="message...." id="message"/>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+            <th scope="col">ClientName</th>
+            <th scope="col">ClientName</th>
+      <th scope="col">Send</th>
+    </tr>
+  </thead>
+  <tbody>
+      @foreach (var item in Model)
+      {
+        <tr>
+                <td>@item.ClientName</td>
+                <td>@item.Auth</td>
+          <td><button data-endPoint="@item.EndPoint" data-p256dh="@item.P256dh" data-auth="@item.Auth" class="btn btn-primary" onclick="fnSendNotification(this)">Send</button></td>
+        </tr>      
+      }
+    
+  </tbody>
+</table>
+<script>
+    function fnSendNotification(event) {
+       
+        console.log(event)
+        var auth = $(event).data("auth");
+        var endPoint = $(event).data("endpoint");
+        var p256dh = $(event).data("p256dh");
+        $.ajax({
+            method: "POST",
+            url: "/pushnotification/sendnotification",
+            data: { message: $('#message').val(), endPoint: endPoint, p256dh: p256dh, auth: auth },
+            success: function (html) {
+                alert("Notification is sent!");
+            }
+        });
+    }
+</script>
+

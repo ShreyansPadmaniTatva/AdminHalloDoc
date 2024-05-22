@@ -25,6 +25,7 @@ namespace AdminHalloDoc.ChatHub
             v.ReceiverType = "Provider";
 
             var s = ConnectedUsers.myConnectedUsers.Where(r => r.SenderAspId == v.PhysicianAspId).FirstOrDefault();
+
             if (s != null)
             {
                 v.PhysicianConnectionId = ConnectedUsers.myConnectedUsers.Where(r => r.SenderAspId == v.PhysicianAspId).FirstOrDefault().ConnectionId;
@@ -38,6 +39,7 @@ namespace AdminHalloDoc.ChatHub
         {
             var v = await _viewActionRepository.GetRequestDetails(requestid);
             var s = ConnectedUsers.myConnectedUsers.Where(r => r.SenderAspId == v.PatientAspId).FirstOrDefault();
+            v.PhysicianAspId = v.PatientAspId;
             v.ProviderId = v.PatientId;
             v.PhysicianName = v.PatientName;
             v.ReceiverType = "Patient";
@@ -56,6 +58,7 @@ namespace AdminHalloDoc.ChatHub
             var v = new ViewActions();
             var s = ConnectedUsers.myConnectedUsers.Where(r => r.SenderAspId == "48bac8e3-7a5c-46eb-8270-e91954afe098").FirstOrDefault();
             v.ProviderId =6;
+            v.PhysicianAspId = "48bac8e3-7a5c-46eb-8270-e91954afe098";
             v.PhysicianName = "shreyans Padmani";
             v.ReceiverType = "Admin";
             v.RequestID = requestid;

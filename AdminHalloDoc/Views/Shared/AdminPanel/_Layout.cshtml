@@ -73,29 +73,97 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <script src="~/js/chatsettings.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-messaging.js"></script>
     <script>
-        // Initialize Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyA4OnSsbgxT5aC2WVL9hHGvUWKCbqvRiDs",
-            authDomain: "core-computer-416304.firebaseapp.com",
-            projectId: "core-computer-416304",
-            storageBucket: "core-computer-416304.appspot.com",
-            messagingSenderId: "62116323995",
-            appId: "1:62116323995:web:4aa574b2360363558b5c3e",
-        };
-        firebase.initializeApp(firebaseConfig);
 
-        // Get registration token
-        const messaging = firebase.messaging();
-        messaging.requestPermission().then(() => {
-            return messaging.getToken();
-        }).then((token) => {
-            console.log("Registration token:", token);
-        }).catch((err) => {
-            console.log("Error getting registration token:", err);
+        $(document).ready(function () {
+
+            //Push notification - check if user has already allow for notification or not
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register("/js/PushNotificationHandler.js")
+                    .then((reg) => {
+                        if (Notification.permission === "granted") {
+                            getSubscription(reg);
+                        } else if (Notification.permission === "blocked") {
+                           
+                            requestNotificationAccess(reg);
+                        } else {
+                            requestNotificationAccess(reg);
+                        }
+                    });
+            } else {
+
+            }
         });
+
+        //This function will open a modal to ask for allow notification
+        function requestNotificationAccess(reg) {
+            console.log(reg);
+            Notification.requestPermission(function (status) {
+                if (status == "granted") {
+                    getSubscription(reg);
+
+                } else {
+
+                    alert("Not allowed");
+                }
+            });
+        }
+
+        //This function will suscribe the user and provide the identifiers - endpoint, p256dh, auth
+        function getSubscription(reg) {
+            reg.pushManager.getSubscription().then(function (sub) {
+                console.log(sub);
+                if (sub === null) {
+                    reg.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: $('#publicKey').val()
+
+                    }).then(function (sub) {
+                        console.log("2 "+sub);
+                        var auth = arrayBufferToBase64(sub.getKey("auth"));
+                        var endpoint = sub.endpoint;
+                        var p256dh = arrayBufferToBase64(sub.getKey("p256dh"));
+                        $.ajax({
+                            method: "POST",
+                            url: "/pushnotification/index",
+                            data: { endpoint: endpoint, p256dh: p256dh, auth: auth },
+                            success: function (html) {
+
+                            }
+                        });
+                    }).catch(function (e) {
+                        console.error("Unable to subscribe to push", e);
+                    });
+                } else {
+                    var auth = arrayBufferToBase64(sub.getKey("auth"));
+                    var endpoint = sub.endpoint;
+                    var p256dh = arrayBufferToBase64(sub.getKey("p256dh"));
+                    $.ajax({
+                        method: "POST",
+                        url: "/pushnotification/index",
+                        data: { endpoint: endpoint, p256dh: p256dh, auth: auth },
+                        success: function (html) {
+
+                        }
+                    });
+                }
+
+            });
+        }
+
+        function arrayBufferToBase64(buffer) {
+            var binary = '';
+            var bytes = new Uint8Array(buffer);
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+
     </script>
+
+
+    
 </body>
 </html>

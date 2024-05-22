@@ -52,6 +52,7 @@ builder.Services.AddScoped<ISchedulingRepository, SchedulingRepository>();
 builder.Services.AddScoped<IRecordsRepository, RecordsRepository>();
 builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>(); 
 builder.Services.AddScoped<IChatRepository, ChatRepository>();
+builder.Services.AddScoped<IPushNotificationRepository, PushNotificationRepository>();
 
 //Patient Repository
 builder.Services.AddScoped<IPatientDashboardRepository, PatientDashboardRepository>();
@@ -67,40 +68,40 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseExceptionHandler(
-    options =>
-    {
-        options.Run(
-            async context =>
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                var ex = context.Features.Get<IExceptionHandlerFeature>();
+//app.UseExceptionHandler(
+//    options =>
+//    {
+//        options.Run(
+//            async context =>
+//            {
+//                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+//                var ex = context.Features.Get<IExceptionHandlerFeature>();
 
-                if (ex != null)
-                {
-                    //await context.Response.WriteAsync(string.Empty); // clear the response body
-                    context.Response.Redirect("/ErrorIndex");
-                }
-            }
-            );
-    }
-        );
-app.UseStatusCodePages(context =>
-{
-    var request = context.HttpContext.Request;
-    var response = context.HttpContext.Response;
+//                if (ex != null)
+//                {
+//                    //await context.Response.WriteAsync(string.Empty); // clear the response body
+//                    context.Response.Redirect("/ErrorIndex");
+//                }
+//            }
+//            );
+//    }
+//        );
+//app.UseStatusCodePages(context =>
+//{
+//    var request = context.HttpContext.Request;
+//    var response = context.HttpContext.Response;
 
-    if (response.StatusCode == 404)
-    {
-        response.Redirect("/PageNoteFound");
-    }
-    if (response.StatusCode == 401)
-    {
-        response.Redirect("/PageNoerfteFound");
-    }
+//    if (response.StatusCode == 404)
+//    {
+//        response.Redirect("/PageNoteFound");
+//    }
+//    if (response.StatusCode == 401)
+//    {
+//        response.Redirect("/PageNoerfteFound");
+//    }
 
-    return Task.CompletedTask;
-});
+//    return Task.CompletedTask;
+//});
 
 //app.UseHttpsRedirection();
 app.UseSession();

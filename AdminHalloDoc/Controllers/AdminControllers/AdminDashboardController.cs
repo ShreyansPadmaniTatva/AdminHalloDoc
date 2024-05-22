@@ -14,12 +14,16 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         private readonly IRequestRepository _requestRepository;
         private readonly IViewActionRepository _viewActionRepository;
         private readonly IViewNotesRepository _viewNotesRepository;
-        public AdminDashboardController(IRequestRepository requestRepository, IViewActionRepository viewActionRepository, IViewNotesRepository viewNotesRepository)
-        {
+        private readonly IConfiguration Configuration;
+        private readonly IPushNotificationRepository _pushNotificationRepository;
 
+        public AdminDashboardController(IConfiguration Configuration, IRequestRepository requestRepository, IViewActionRepository viewActionRepository, IViewNotesRepository viewNotesRepository, IPushNotificationRepository pushNotificationRepository)
+        {
+            this.Configuration = Configuration;
             _requestRepository = requestRepository;
             _viewActionRepository = viewActionRepository;
             _viewNotesRepository = viewNotesRepository;
+            _pushNotificationRepository = pushNotificationRepository;
         }
         #endregion
 
@@ -29,6 +33,7 @@ namespace AdminHalloDoc.Controllers.AdminControllers
         [Route("Admin/DashBoard")]
         public async Task<IActionResult> Index()
         {
+            ViewBag.applicationServerKey = Configuration["Vapid:publicKey"]; //VAPID pwa Public key for push notification
             TempData["Status"] = TempData["Status"];
             PaginatedViewModel sm = _requestRepository.Indexdata(-1);
             ViewBag.RegionComboBox = await _requestRepository.RegionComboBox();
@@ -44,6 +49,18 @@ namespace AdminHalloDoc.Controllers.AdminControllers
             return View("../AdminViews/AdminDashboard/Index", sm);
         }
         #endregion
+
+
+        /// <summary>
+        /// Send notification get method
+        /// </summary>
+        /// <returns></returns>
+      //  [Route("pushnotification/notify", Name = "Pushnotification_Notify")]
+        public async Task<IActionResult> Notify()
+        {
+            var UserDataList = await _pushNotificationRepository.GetUserDataList();
+            return View("../AdminViews/AdminDashboard/Notify", UserDataList);
+        }
 
         #region _SearchResult
         [HttpPost]

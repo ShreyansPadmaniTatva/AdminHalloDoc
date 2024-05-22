@@ -18,6 +18,7 @@
     <input type="hidden" id="receiverId" asp-for="ProviderId" />
     <input type="hidden" id="receiverName" asp-for="PhysicianName" />
     <input type="hidden" id="receiverType" asp-for="ReceiverType" />
+    <input type="hidden" id="PhysicianAspId" asp-for="PhysicianAspId" />
     <input type="text" class="form-control d-none" value="@Model.PhysicianConnectionId" id="userInput" />
     <div class="row">
         <div class="col-md-10"><input type="text" class="form-control" id="messageInput" /></div>
@@ -104,7 +105,7 @@
     document.getElementById("sendButton").addEventListener("click", function (event) {
         var user = document.getElementById("userInput").value;
         var message = document.getElementById("messageInput").value;
-        document.getElementById("messageInput").value = "";
+       
         // Invoking SendMessage method
         connection.invoke("SendMessage",
             user,                       // user
@@ -117,5 +118,19 @@
                 return console.error(err.toString());
             });
         event.preventDefault();
+        fnSendNotification();
+        document.getElementById("messageInput").value = "";
     });
+    function fnSendNotification() {
+
+      
+        $.ajax({
+            method: "POST",
+            url: "/pushnotification/sendnotification",
+            data: { message: $('#messageInput').val(), aspid: document.getElementById("PhysicianAspId").value },
+            success: function (html) {
+                alert("Notification is sent!");
+            }
+        });
+    }
 </script>

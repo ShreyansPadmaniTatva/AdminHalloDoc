@@ -15,6 +15,15 @@
         
     }
 }
+<div id="dashboard">
+    <input hidden value="@ViewBag.applicationServerKey" id="publicKey" />
+    <div class="content container-fluid">
+        <input id="endpoint" name="endpoint" hidden />
+        <input id="p256dh" name="p256dh" hidden />
+        <input id="auth" name="auth" hidden />
+    </div>
+</div>
+
 <partial name="../ViewAction/_models/_sendlink.cshtml" />
 <div class="container-fluid ">
     @*<a asp-action="SendSMS" class="btn btn-danger" asp-controller="SendSms">send sms</a>*@
