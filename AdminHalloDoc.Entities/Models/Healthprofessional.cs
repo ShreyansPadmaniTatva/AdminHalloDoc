@@ -12,7 +12,7 @@ public partial class Healthprofessional
 {
     [Key]
     [Column("vendorid")]
-    public int? Vendorid { get; set; }
+    public int Vendorid { get; set; }
 
     [Column("vendorname")]
     [StringLength(100)]
